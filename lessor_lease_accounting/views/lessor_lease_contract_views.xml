@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit lessor lease contract form view to add down payment invoice button -->
+    <record id="view_lessor_lease_contract_form_accounting" model="ir.ui.view">
+        <field name="name">lessor.lease.contract.form.accounting</field>
+        <field name="model">lessor.lease.contract</field>
+        <field name="inherit_id" ref="lessor_lease_scheduling.view_lessor_lease_contract_form"/>
+        <field name="arch" type="xml">
+            
+            <!-- Add smart buttons in button box -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                
+                <!-- Monthly Invoices Section -->
+                <button name="action_view_draft_invoices" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-pencil"
+                        invisible="draft_invoice_count == 0">
+                    <field name="draft_invoice_count" widget="statinfo" string="Draft Invoices"/>
+                </button>
+                
+                <button name="action_view_unpaid_invoices" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-money"
+                        invisible="unpaid_invoice_count == 0">
+                    <field name="unpaid_invoice_count" widget="statinfo" string="Unpaid Invoices"/>
+                </button>
+                
+                <button name="action_view_paid_invoices" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-check-circle"
+                        invisible="paid_invoice_count == 0">
+                    <field name="paid_invoice_count" widget="statinfo" string="Paid Invoices"/>
+                </button>
+                
+                <!-- Monthly Journal Entries Section -->
+                <button name="action_view_draft_entries" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-edit"
+                        invisible="draft_entry_count == 0">
+                    <field name="draft_entry_count" widget="statinfo" string="Draft Entries"/>
+                </button>
+                
+                <button name="action_view_posted_entries" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-check"
+                        invisible="posted_entry_count == 0">
+                    <field name="posted_entry_count" widget="statinfo" string="Posted Entries"/>
+                </button>
+                
+                <!-- VAT Recognition Entries -->
+                <button name="action_view_draft_vat_entries" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-percent"
+                        invisible="draft_vat_entry_count == 0">
+                    <field name="draft_vat_entry_count" widget="statinfo" string="Draft VAT"/>
+                </button>
+                
+                <button name="action_view_posted_vat_entries" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-check-square"
+                        invisible="posted_vat_entry_count == 0">
+                    <field name="posted_vat_entry_count" widget="statinfo" string="Posted VAT"/>
+                </button>
+                
+                <!-- Interest Recognition Entries -->
+                <button name="action_view_draft_interest_entries" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-line-chart"
+                        invisible="draft_interest_entry_count == 0">
+                    <field name="draft_interest_entry_count" widget="statinfo" string="Draft Interest"/>
+                </button>
+                
+                <button name="action_view_posted_interest_entries" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-check-circle-o"
+                        invisible="posted_interest_entry_count == 0">
+                    <field name="posted_interest_entry_count" widget="statinfo" string="Posted Interest"/>
+                </button>
+                
+                <!-- Down Payment Invoice -->
+                <button name="action_view_down_payment_invoice" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-file-text-o"
+                        invisible="not down_payment_invoice_id">
+                    <field name="down_payment_invoice_state" widget="label_selection" 
+                           options="{'classes': {'draft': 'info', 'posted': 'success'}}"/>
+                    <span>Down Payment<br/>Invoice</span>
+                </button>
+                
+                <!-- Initial Recognition Entries -->
+                <button name="action_view_initial_recognition" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-book"
+                        invisible="not initial_recognition_move_id">
+                    <field name="initial_recognition_state" widget="label_selection" 
+                           options="{'classes': {'draft': 'warning', 'posted': 'success'}}"/>
+                    <span>Initial<br/>Recognitions</span>
+                </button>
+            </xpath>
+            
+            <!-- Add Create Down Payment Invoice button in header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_create_down_payment_invoice" 
+                        string="Create Down Payment Invoice" 
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'confirmed' or down_payment_invoice_id or accounting_start_date or down_payment_percent == 0"
+                        help="Create customer invoice for down payment"/>
+                
+                <button name="action_post_initial_recognition" 
+                        string="Post Initial Recognition" 
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'active' or initial_recognition_move_id or accounting_start_date"
+                        help="Post initial recognition at commencement date (when asset is delivered and available to lessee)"/>
+            </xpath>
+            
+            <!-- Add accounting_start_date field to Dates & Term group -->
+            <xpath expr="//group[@name='dates']" position="inside">
+                <field name="accounting_start_date"
+                       invisible="state not in ['confirmed', 'active']"/>
+            </xpath>
+            
+            <!-- Add down payment status alerts after title -->
+            <xpath expr="//div[@class='oe_title']" position="after">
+                <!-- Full Financing Alert (0% down payment) -->
+                <div class="alert alert-info" 
+                     role="status"
+                     invisible="state != 'confirmed' or down_payment_percent != 0">
+                    <strong>✓ Full Financing (0% Down Payment)</strong><br/>
+                    No down payment required. Contract can be activated immediately after confirmation.
+                </div>
+                
+                <!-- Down Payment Required Alert -->
+                <div class="alert alert-warning" 
+                     role="alert"
+                     invisible="state != 'confirmed' or down_payment_percent == 0 or down_payment_invoice_id">
+                    <strong>⚠ Down Payment Required</strong><br/>
+                    Down payment: <field name="down_payment_percent" readonly="1"/>% 
+                    (<field name="down_payment_amount" readonly="1" widget="monetary"/>)<br/>
+                    Please create the down payment invoice before activating this contract.
+                </div>
+                
+                <!-- Invoice Created Alert -->
+                <div class="alert alert-success" 
+                     role="status"
+                     invisible="state != 'confirmed' or not down_payment_invoice_id">
+                    <strong>✓ Down Payment Invoice Created</strong><br/>
+                    Invoice: <field name="down_payment_invoice_id" readonly="1"/> 
+                    (State: <field name="down_payment_invoice_state" readonly="1"/>)<br/>
+                    Contract can be activated once invoice is posted.
+                </div>
+            </xpath>
+            
+            <!-- Add accounting fields in notebook for tracking -->
+            <xpath expr="//notebook" position="inside">
+                <page name="accounting" string="Accounting" invisible="not down_payment_invoice_id and not initial_recognition_move_id">
+                    <group>
+                        <group name="down_payment_group" string="Down Payment">
+                            <field name="down_payment_invoice_id" readonly="1"/>
+                            <field name="down_payment_invoice_state" readonly="1"/>
+                        </group>
+                        <group name="initial_recognition_group" string="Initial Recognition">
+                            <field name="initial_recognition_move_id" readonly="1"/>
+                            <field name="initial_recognition_state" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            
+        </field>
+    </record>
+</odoo>

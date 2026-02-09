@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Cron Job: Process Periodic Accounting for Active Leases -->
+    <record id="ir_cron_process_periodic_accounting" model="ir.cron">
+        <field name="name">Lessor Lease: Process Periodic Accounting</field>
+        <field name="model_id" ref="lessor_lease_scheduling.model_lessor_lease_contract"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_process_periodic_accounting()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+         <field name="user_id" ref="base.user_root"/>
+        <field name="active" eval="True"/>
+        <field name="priority">10</field>
+    </record>
+</odoo>

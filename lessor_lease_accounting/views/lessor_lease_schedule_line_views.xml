@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit schedule line list view to add payment button -->
+    <record id="view_lessor_lease_schedule_line_list_payment" model="ir.ui.view">
+        <field name="name">lessor.lease.schedule.line.list.payment</field>
+        <field name="model">lessor.lease.schedule.line</field>
+        <field name="inherit_id" ref="lessor_lease_scheduling.view_lessor_lease_schedule_line_list"/>
+        <field name="arch" type="xml">
+            <!-- Add payment state columns -->
+            <xpath expr="//field[@name='is_paid']" position="after">
+                <field name="is_collected"/>
+                <field name="payment_state"/>
+                <field name="accounting_processed"/>
+                <field name="payment_date"/>
+                <button name="action_smart_payment_button" string="Collect Payment" type="object" class="btn-link" icon="fa-money"/>
+            </xpath>
+            <xpath expr="//list" position="attributes">
+                <attribute name="decoration-danger">(payment_date &lt; current_date) and (not is_collected or payment_state in ['cancelled', 'canceled'])</attribute>
+                <attribute name="decoration-warning">payment_state in ['draft', 'in_process']</attribute>
+                <attribute name="decoration-success">is_collected == True</attribute>
+            </xpath>
+
+            <!-- Enable multi_edit for batch operations -->
+            <xpath expr="//list" position="attributes">
+                <attribute name="multi_edit">1</attribute>
+            </xpath>
+
+            <!-- Add button header for batch operations -->
+            <xpath expr="//list" position="inside">
+                <header>
+                    <button name="action_collect_payment"
+                            string="Collect Payment"
+                            type="object"
+                            class="btn-primary"
+                            invisible="context.get('default_contract_id') == None"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit schedule line form view to add payment button and accounting status -->
+    <record id="view_lessor_lease_schedule_line_form_payment" model="ir.ui.view">
+        <field name="name">lessor.lease.schedule.line.form.payment</field>
+        <field name="model">lessor.lease.schedule.line</field>
+        <field name="inherit_id" ref="lessor_lease_scheduling.view_lessor_lease_schedule_line_form"/>
+        <field name="arch" type="xml">
+            <!-- Add stat buttons box before the sheet (at the top of form) -->
+            <xpath expr="//form/sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <!-- Single smart button for payment collection/viewing -->
+                    <button name="action_smart_payment_button"
+                            type="object"
+                            class="btn-primary oe_stat_button"
+                            icon="fa-money">
+                        <field name="is_collected" widget="boolean"
+                               readonly="1"
+                               options="{'terminology': {
+                                   'true': 'View Payment',
+                                   'false': 'Collect Payment'
+                               }}"/>
+                    </button>
+                    <button name="action_view_vat_move"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-percent"
+                            invisible="not vat_move_id">
+                        <span>VAT Entry</span>
+                    </button>
+                    <button name="action_view_interest_move"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-line-chart"
+                            invisible="not interest_move_id">
+                        <span>Interest Entry</span>
+                    </button>
+                </div>
+            </xpath>
+
+            <!-- Replace accounting status group with payment-focused group -->
+            <xpath expr="//group[@name='accounting_status']" position="replace">
+                <group name="payment_status" string="Payment &amp; Accounting Status">
+                    <group string="Payment Collection">
+                        <field name="is_collected" readonly="1"/>
+                        <field name="payment_state" readonly="1"/>
+                    </group>
+                </group>
+                <group>
+                    <group string="Accounting Entries (VAT &amp; Interest)">
+                        <field name="accounting_processed" readonly="1"/>
+                        <field name="vat_move_id" readonly="1"/>
+                        <button name="action_view_vat_move"
+                                string="View VAT Entry"
+                                type="object"
+                                class="btn-link"
+                                invisible="not vat_move_id"/>
+                        <field name="interest_move_id" readonly="1"/>
+                        <button name="action_view_interest_move"
+                                string="View Interest Entry"
+                                type="object"
+                                class="btn-link"
+                                invisible="not interest_move_id"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit calendar view to show payment collection status -->
+    <record id="view_lessor_lease_schedule_line_calendar_payment" model="ir.ui.view">
+        <field name="name">lessor.lease.schedule.line.calendar.payment</field>
+        <field name="model">lessor.lease.schedule.line</field>
+        <field name="inherit_id" ref="lessor_lease_scheduling.view_lessor_lease_schedule_line_calendar"/>
+        <field name="arch" type="xml">
+            <xpath expr="//calendar" position="attributes">
+                <attribute name="color">is_collected</attribute>
+            </xpath>
+            <xpath expr="//calendar" position="inside">
+                <field name="is_collected"/>
+                <field name="payment_state"/>
+                <field name="accounting_processed"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

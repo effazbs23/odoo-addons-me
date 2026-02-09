@@ -1,0 +1,114 @@
+/* Lease Contract Dashboard Styles */
+
+.o_lease_contract_dashboard {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.o_lease_contract_dashboard .alert {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.o_lease_contract_dashboard .alert:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.o_lease_contract_dashboard .alert h4 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+.o_lease_contract_dashboard .alert p {
+    font-size: 12px;
+    margin: 0;
+}
+
+.o_lease_contract_dashboard .alert i.fa-2x {
+    opacity: 0.7;
+}
+
+/* Odoo Progressbar Widget Customization */
+.o_lease_contract_dashboard .o_field_progressbar .o_progressbar {
+    height: 30px;
+    align-items: center;
+}
+
+.o_lease_contract_dashboard .o_field_progressbar .o_progress {
+    width: 200px;
+    height: 20px;
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.o_lease_contract_dashboard .o_field_progressbar .o_progress .bg-primary {
+    background-color: #28a745 !important;
+    border-radius: 3px;
+}
+
+.o_lease_contract_dashboard .o_field_progressbar .o_progressbar_value {
+    font-size: 16px;
+    font-weight: bold;
+    color: #495057;
+    min-width: 60px;
+}
+
+.o_lease_contract_dashboard .o_field_progressbar .o_progressbar_value span {
+    font-weight: bold;
+}
+
+.o_lease_contract_dashboard .badge {
+    font-size: 13px;
+    padding: 8px 12px;
+    margin: 4px;
+    border-radius: 4px;
+}
+
+.o_lease_contract_dashboard .badge i {
+    margin-right: 4px;
+}
+
+/* Stat card specific styles */
+.o_lease_contract_dashboard .alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.o_lease_contract_dashboard .alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.o_lease_contract_dashboard .alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+}
+
+.o_lease_contract_dashboard .alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+.o_lease_contract_dashboard .alert-light {
+    background-color: #ffffff;
+    border-color: #e9ecef;
+    color: #495057;
+}
+
+/* Make dashboard responsive */
+@media (max-width: 768px) {
+    .o_lease_contract_dashboard .col-3 {
+        width: 50%;
+        margin-bottom: 10px;
+    }
+}

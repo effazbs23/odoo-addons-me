@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_lessor_lease_contract_user,lessor.lease.contract.user,model_lessor_lease_contract,group_lessor_lease_user,1,1,1,0
+access_lessor_lease_contract_manager,lessor.lease.contract.manager,model_lessor_lease_contract,group_lessor_lease_manager,1,1,1,1
+access_lessor_lease_schedule_line_user,lessor.lease.schedule.line.user,model_lessor_lease_schedule_line,group_lessor_lease_user,1,1,1,0
+access_lessor_lease_schedule_line_manager,lessor.lease.schedule.line.manager,model_lessor_lease_schedule_line,group_lessor_lease_manager,1,1,1,1

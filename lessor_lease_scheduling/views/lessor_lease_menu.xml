@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_lessor_lease_root"
+              name="Lessor Lease"
+              web_icon="lessor_lease_scheduling,static/description/icon.png"
+              sequence="50"/>
+
+    <!-- Contracts Menu -->
+    <menuitem id="menu_lessor_lease_contracts"
+              name="Contracts"
+              parent="menu_lessor_lease_root"
+              sequence="10"/>
+
+    <menuitem id="menu_lessor_lease_contract"
+              name="Lease Contracts"
+              parent="menu_lessor_lease_contracts"
+              action="action_lessor_lease_contract"
+              sequence="10"/>
+
+    <!-- Schedule Menu -->
+    <menuitem id="menu_lessor_lease_schedules"
+              name="Schedules"
+              parent="menu_lessor_lease_root"
+              sequence="20"/>
+
+    <menuitem id="menu_lessor_lease_schedule_line"
+              name="Schedule Lines"
+              parent="menu_lessor_lease_schedules"
+              action="action_lessor_lease_schedule_line"
+              sequence="10"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_lessor_lease_configuration"
+              name="Configuration"
+              parent="menu_lessor_lease_root"
+              sequence="100"
+              groups="group_lessor_lease_manager"/>
+</odoo>

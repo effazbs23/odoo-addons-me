@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Simplified Kanban Dashboard View -->
+    <record id="view_lessor_lease_contract_kanban_dashboard" model="ir.ui.view">
+        <field name="name">lessor.lease.contract.kanban.dashboard</field>
+        <field name="model">lessor.lease.contract</field>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard" create="false">
+                <field name="id"/>
+                <field name="state"/>
+                <field name="accounting_method"/>
+                <field name="total_gross_amount"/>
+                <field name="lessee_id"/>
+                <field name="term_months"/>
+                <field name="cost_price"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                    </div>
+                                    <span class="badge float-end" t-attf-class="badge-#{record.state.raw_value == 'active' ? 'success' : record.state.raw_value == 'confirmed' ? 'info' : 'secondary'}">
+                                        <field name="state"/>
+                                    </span>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <i class="fa fa-user" title="Lessee" aria-label="Lessee"/> <field name="lessee_id"/>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-6">
+                                            <span class="text-muted">Gross Amount:</span><br/>
+                                            <strong><field name="total_gross_amount" widget="monetary"/></strong>
+                                        </div>
+                                        <div class="col-6">
+                                            <span class="text-muted">Term:</span><br/>
+                                            <field name="term_months"/> months
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-6">
+                                            <span class="text-muted">Method:</span><br/>
+                                            <field name="accounting_method"/>
+                                        </div>
+                                        <div class="col-6">
+                                            <span class="text-muted">Asset Cost:</span><br/>
+                                            <field name="cost_price" widget="monetary"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    
+    <!-- Dashboard Action -->
+    <record id="action_lessor_lease_dashboard" model="ir.actions.act_window">
+        <field name="name">Lease Dashboard</field>
+        <field name="res_model">lessor.lease.contract</field>
+        <field name="view_mode">kanban,graph,pivot,list,form</field>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Lease Management Dashboard
+            </p>
+            <p>
+                Overview of all lease contracts, payments, and recognition entries.
+            </p>
+        </field>
+    </record>
+    
+    <!-- Dashboard Menu (First in Leasing menu) -->
+    <menuitem id="menu_lessor_lease_dashboard"
+              name="Dashboard"
+              parent="lessor_lease_scheduling.menu_lessor_lease_root"
+              action="action_lessor_lease_dashboard"
+              sequence="1"/>
+    
+    <!-- Add Graph View for Dashboard -->
+    <record id="view_lessor_lease_contract_graph_dashboard" model="ir.ui.view">
+        <field name="name">lessor.lease.contract.graph.dashboard</field>
+        <field name="model">lessor.lease.contract</field>
+        <field name="arch" type="xml">
+            <graph string="Lease Analysis" type="bar" stacked="True">
+                <field name="state" type="row"/>
+                <field name="accounting_method" type="col"/>
+                <field name="total_gross_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Add Pivot View for Dashboard -->
+    <record id="view_lessor_lease_contract_pivot_dashboard" model="ir.ui.view">
+        <field name="name">lessor.lease.contract.pivot.dashboard</field>
+        <field name="model">lessor.lease.contract</field>
+        <field name="arch" type="xml">
+            <pivot string="Lease Analysis" disable_linking="True">
+                <field name="state" type="row"/>
+                <field name="accounting_method" type="row"/>
+                <field name="total_gross_amount" type="measure"/>
+                <field name="cost_price" type="measure"/>
+                <field name="down_payment_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    
+</odoo>

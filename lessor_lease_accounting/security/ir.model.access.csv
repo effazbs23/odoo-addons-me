@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_lessor_lease_contract_accounting_user,lessor.lease.contract.accounting.user,lessor_lease_scheduling.model_lessor_lease_contract,account.group_account_invoice,1,1,0,0
+access_lessor_lease_contract_accounting_manager,lessor.lease.contract.accounting.manager,lessor_lease_scheduling.model_lessor_lease_contract,account.group_account_manager,1,1,1,1
