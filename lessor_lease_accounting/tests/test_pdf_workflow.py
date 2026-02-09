@@ -42,6 +42,11 @@ class TestPDFWorkflow(TransactionCase):
         # Get test company
         self.company = self.env.company
 
+        # Ensure company has a country (required for tax in 19.0)
+        if not self.company.account_fiscal_country_id and not self.company.country_id:
+            country = self.env.ref('base.us', raise_if_not_found=False) or self.env['res.country'].search([], limit=1)
+            self.company.write({'country_id': country.id})
+
         # Create test partner (lessee)
         self.lessee = self.env['res.partner'].create({
             'name': 'Test Lessee Customer',
@@ -66,7 +71,8 @@ class TestPDFWorkflow(TransactionCase):
             })
 
         # Get company's fiscal country - needed to avoid tax country incompatibility
-        fiscal_country_id = self.company.account_fiscal_country_id.id if self.company.account_fiscal_country_id else self.company.country_id.id
+        # In 19.0, country_id is required on account.tax
+        fiscal_country_id = self.company.account_fiscal_country_id.id or self.company.country_id.id
 
         # Create 7% VAT tax for this test
         # IMPORTANT: Tax must be configured with repartition lines to post correctly
@@ -174,6 +180,7 @@ class TestPDFWorkflow(TransactionCase):
             # 113101: Accounts Receivable - MUST be asset_receivable type
             self.accounts_receivable = self.env['account.account'].create({
                 'name': 'Accounts Receivable',
+                'code': '113101',
                 'account_type': 'asset_receivable',
                 'reconcile': True,
             })
@@ -188,6 +195,7 @@ class TestPDFWorkflow(TransactionCase):
             # PDF Critical Rule: "Do not set 113104 as Receivable type"
             self.hire_purchase_receivable = self.env['account.account'].create({
                 'name': 'Hire Purchase Receivable',
+                'code': '113104',
                 'account_type': 'asset_current',  # CRITICAL: NOT asset_receivable!
                 'reconcile': True,
             })
@@ -201,6 +209,7 @@ class TestPDFWorkflow(TransactionCase):
             # 114104: Asset for Sale
             self.asset_for_sale = self.env['account.account'].create({
                 'name': 'Asset for Sale',
+                'code': '114104',
                 'account_type': 'asset_current',
             })
 
@@ -213,6 +222,7 @@ class TestPDFWorkflow(TransactionCase):
             # 215101: Output VAT
             self.output_vat = self.env['account.account'].create({
                 'name': 'Output VAT',
+                'code': '215101',
                 'account_type': 'liability_current',
             })
 
@@ -225,6 +235,7 @@ class TestPDFWorkflow(TransactionCase):
             # 215102: Undue Sales VAT
             self.undue_vat = self.env['account.account'].create({
                 'name': 'Undue Sales VAT',
+                'code': '215102',
                 'account_type': 'liability_current',
             })
 
@@ -237,6 +248,7 @@ class TestPDFWorkflow(TransactionCase):
             # 216103: Deferred Interest – HP
             self.deferred_interest = self.env['account.account'].create({
                 'name': 'Deferred Interest – Hire Purchase',
+                'code': '216103',
                 'account_type': 'liability_current',
             })
 
@@ -249,6 +261,7 @@ class TestPDFWorkflow(TransactionCase):
             # 410101: Lease Sales
             self.lease_sales = self.env['account.account'].create({
                 'name': 'Lease Sales',
+                'code': '410101',
                 'account_type': 'income',
             })
 
@@ -261,6 +274,7 @@ class TestPDFWorkflow(TransactionCase):
             # 410102: Interest Income
             self.interest_income = self.env['account.account'].create({
                 'name': 'Interest Income',
+                'code': '410102',
                 'account_type': 'income',
             })
 
@@ -273,6 +287,7 @@ class TestPDFWorkflow(TransactionCase):
             # 500103: Cost of Goods Sold
             self.cogs = self.env['account.account'].create({
                 'name': 'Cost of Goods Sold - Leased Assets',
+                'code': '500103',
                 'account_type': 'expense_direct_cost',
             })
 
@@ -332,6 +347,19 @@ class TestPDFWorkflow(TransactionCase):
             'lessor_lease_accounting.lease_journal_id',
             str(journal.id)
         )
+
+        # Ensure a sale journal exists (required by account.move in 19.0 for invoices)
+        sale_journal = self.env['account.journal'].search([
+            ('type', '=', 'sale'),
+            ('company_id', '=', company.id),
+        ], limit=1)
+        if not sale_journal:
+            self.env['account.journal'].create({
+                'name': 'Test Sales Journal',
+                'code': 'TSALE',
+                'type': 'sale',
+                'company_id': company.id,
+            })
 
     # ========================================================================
     # PDF TC001: Down Payment Invoice (Phase A1)

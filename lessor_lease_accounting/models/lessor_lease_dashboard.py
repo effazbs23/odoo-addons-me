@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
-from odoo.tools import SQL
 
 
-class LessorLeaseDashboard(models.Model):
+class LessorLeaseDashboard(models.AbstractModel):
     _name = 'lessor.lease.dashboard'
     _description = 'Lessor Lease Dashboard'
-    _auto = False
     
     # This is a SQL view model for dashboard analytics
     

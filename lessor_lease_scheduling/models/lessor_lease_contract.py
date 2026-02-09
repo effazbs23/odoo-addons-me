@@ -390,24 +390,26 @@ class LessorLeaseContract(models.Model):
                 raise UserError(_('Only confirmed contracts can be activated.'))
             
             # Check for down payment invoice if required
+            # (down_payment_invoice_id is defined in lessor_lease_accounting)
             if record.down_payment_percent and record.down_payment_percent > 0:
-                if not record.down_payment_invoice_id:
-                    raise UserError(_(
-                        'Cannot activate contract: Down payment invoice must be created first.\n\n'
-                        'Down payment: %s%% (%s %s)\n\n'
-                        'Please create the down payment invoice before activating the contract.'
-                    ) % (
-                        record.down_payment_percent,
-                        '{:,.2f}'.format(record.down_payment_amount),
-                        record.currency_id.name
-                    ))
-                
-                # Optional: Check if invoice is posted
-                if record.down_payment_invoice_id.state == 'draft':
-                    raise UserError(_(
-                        'Cannot activate contract: Down payment invoice is still in draft state.\n\n'
-                        'Please post the down payment invoice before activating:\n%s'
-                    ) % record.down_payment_invoice_id.name)
+                if 'down_payment_invoice_id' in self._fields:
+                    if not record.down_payment_invoice_id:
+                        raise UserError(_(
+                            'Cannot activate contract: Down payment invoice must be created first.\n\n'
+                            'Down payment: %s%% (%s %s)\n\n'
+                            'Please create the down payment invoice before activating the contract.'
+                        ) % (
+                            record.down_payment_percent,
+                            '{:,.2f}'.format(record.down_payment_amount),
+                            record.currency_id.name
+                        ))
+                    
+                    # Optional: Check if invoice is posted
+                    if record.down_payment_invoice_id.state == 'draft':
+                        raise UserError(_(
+                            'Cannot activate contract: Down payment invoice is still in draft state.\n\n'
+                            'Please post the down payment invoice before activating:\n%s'
+                        ) % record.down_payment_invoice_id.name)
             
             record.state = 'active'
     

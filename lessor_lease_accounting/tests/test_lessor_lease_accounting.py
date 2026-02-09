@@ -36,7 +36,11 @@ class TestLessorLeaseAccounting(TransactionCase):
             })
 
         # Get company's fiscal country - needed to avoid tax country incompatibility
-        fiscal_country_id = self.company.account_fiscal_country_id.id if self.company.account_fiscal_country_id else self.company.country_id.id
+        # In 19.0, country_id is required on account.tax
+        if not self.company.account_fiscal_country_id and not self.company.country_id:
+            country = self.env.ref('base.us', raise_if_not_found=False) or self.env['res.country'].search([], limit=1)
+            self.company.write({'country_id': country.id})
+        fiscal_country_id = self.company.account_fiscal_country_id.id or self.company.country_id.id
 
         # Create 7% VAT tax
         self.vat_7 = self.env['account.tax'].create({
@@ -118,6 +122,19 @@ class TestLessorLeaseAccounting(TransactionCase):
                 'name': 'Test Lessor Lease Journal',
                 'code': 'TEST-LLJ',
                 'type': 'general',
+                'company_id': self.company.id,
+            })
+
+        # Ensure a sale journal exists (required by account.move in 19.0 for invoices)
+        sale_journal = self.env['account.journal'].search([
+            ('type', '=', 'sale'),
+            ('company_id', '=', self.company.id),
+        ], limit=1)
+        if not sale_journal:
+            self.env['account.journal'].create({
+                'name': 'Test Sales Journal',
+                'code': 'TSALE',
+                'type': 'sale',
                 'company_id': self.company.id,
             })
 

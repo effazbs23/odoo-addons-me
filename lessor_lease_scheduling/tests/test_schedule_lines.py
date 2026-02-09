@@ -19,6 +19,17 @@ class TestLessorLeaseScheduleLines(TransactionCase):
             'name': 'Test Lessee Company',
             'customer_rank': 1,
         })
+
+        # Ensure company has a country (required for tax in 19.0)
+        company = cls.env.company
+        if not company.account_fiscal_country_id and not company.country_id:
+            country = cls.env.ref('base.us', raise_if_not_found=False) or cls.env['res.country'].search([], limit=1)
+            company.write({'country_id': country.id})
+        fiscal_country_id = company.account_fiscal_country_id.id or company.country_id.id
+
+        tax_group = cls.env['account.tax.group'].search([], limit=1)
+        if not tax_group:
+            tax_group = cls.env['account.tax.group'].create({'name': 'VAT'})
         
         # Create VAT tax 7% (Thailand standard)
         cls.vat_tax_7 = cls.env['account.tax'].create({
@@ -26,6 +37,8 @@ class TestLessorLeaseScheduleLines(TransactionCase):
             'type_tax_use': 'sale',
             'amount': 7.0,
             'amount_type': 'percent',
+            'country_id': fiscal_country_id,
+            'tax_group_id': tax_group.id,
         })
         
         # Create contract with CLIENT'S EXACT DATA
@@ -38,6 +51,7 @@ class TestLessorLeaseScheduleLines(TransactionCase):
             'annual_interest_rate': 15.00,  # Manual input
             'term_months': 48,  # Manual input
             'start_date': '2026-01-10',
+            'vat_rate_id': cls.vat_tax_7.id,
             'accounting_method': 'gross',
         })
         
