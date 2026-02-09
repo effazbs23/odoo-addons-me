@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.lessor.lease</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//app[@name='account']" position="after">
+                <app string="Lessor Lease Accounting" name="lessor_lease_accounting">
+                    
+                    <block title="Lessor Lease GL Accounts">
+                        
+                        <setting string="Journal"
+                                 help="Journal used for lease journal entries">
+                            <field name="lessor_lease_journal_id"/>
+                        </setting>
+
+                        <setting string="Vat Rate"
+                                 help="vat rate used for lessor lease contract">
+                            <field name="lessor_lease_vat_rate_id"/>
+                        </setting>
+
+                        <setting string="Hire Purchase Receivable Account (Gross Method)"
+                                 help="Asset account for total future receivables">
+                            <field name="lessor_hire_purchase_receivable_account_id"/>
+                        </setting>
+                        
+                        <setting string="Lease Sales Revenue Account (Gross Method)"
+                                 help="Revenue account for net sales">
+                            <field name="lessor_lease_sales_revenue_account_id"/>
+                        </setting>
+                        
+                        <setting string="Deferred Interest Account (Gross Method)"
+                                 help="Liability account for unearned interest">
+                            <field name="lessor_deferred_interest_account_id"/>
+                        </setting>
+                        
+                        <setting string="Undue Output VAT Account (Gross Method)"
+                                 help="Liability account for future VAT on installments">
+                            <field name="lessor_undue_output_vat_account_id"/>
+                        </setting>
+                        
+                        <setting string="Output VAT Payable Account (Gross Method)"
+                                 help="Liability account for recognized VAT">
+                            <field name="lessor_output_vat_account_id"/>
+                        </setting>
+                        
+                        <setting string="Interest Income Account (Gross Method)"
+                                 help="Revenue account for finance income">
+                            <field name="lessor_interest_income_account_id"/>
+                        </setting>
+                        
+                        <setting string="Lease Receivable Account (Net Method)"
+                                 help="Asset account for PV of lease payments"
+                                 invisible="1">
+                            <field name="lessor_lease_receivable_account_id"/>
+                        </setting>
+                        
+                        <setting string="Finance Income Account (Net Method)"
+                                 help="Revenue account for interest"
+                                 invisible="1">
+                            <field name="lessor_finance_income_account_id"/>
+                        </setting>
+                        
+                        <setting string="Gain/Loss on Disposal Account (Net Method)"
+                                 help="Account for gain/loss on asset disposal"
+                                 invisible="1">
+                            <field name="lessor_gain_loss_disposal_account_id"/>
+                        </setting>
+                        
+                        <setting string="Cost of Goods Sold Account"
+                                 help="Expense account for asset cost">
+                            <field name="lessor_cost_of_goods_sold_account_id"/>
+                        </setting>
+                        
+                        <setting string="Asset for Sale Account"
+                                 help="Asset account to derecognize">
+                            <field name="lessor_asset_for_sale_account_id"/>
+                        </setting>
+                        
+                    </block>
+                </app>
+            </xpath>
+            
+        </field>
+    </record>
+
+    <record id="action_lessor_lease_accounting_configuration" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'lessor_lease_accounting'}</field>
+    </record>
+
+    <menuitem
+        id="menu_lessor_lease_configuration_settings"
+        name="Settings"
+        parent="lessor_lease_accounting.menu_lessor_lease_configuration"
+        action="action_lessor_lease_accounting_configuration"
+        sequence="1"
+    />
+</odoo>

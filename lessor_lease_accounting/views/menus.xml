@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <menuitem
+        id="menu_lessor_lease_configuration"
+        name="Configuration"
+        parent="lessor_lease_scheduling.menu_lessor_lease_root"
+        sequence="199"
+        groups="lessor_lease_scheduling.group_lessor_lease_manager"
+    />
+
+</odoo>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Pivot View -->
+    <record id="view_lessor_lease_schedule_line_pivot" model="ir.ui.view">
+        <field name="name">lessor.lease.schedule.line.pivot</field>
+        <field name="model">lessor.lease.schedule.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Lease Schedule Analysis" disable_linking="True">
+                <!-- Default row grouping by payment date -->
+                <field name="payment_date" interval="month" type="row"/>
+                
+                <!-- Payment Breakdown Measures -->
+                <field name="gross_payment" type="measure"/>
+                <field name="net_payment" type="measure"/>
+                <field name="vat" type="measure"/>
+                
+                <!-- Amortization Measures -->
+                <field name="principal" type="measure"/>
+                <field name="interest" type="measure"/>
+                
+                <!-- NPV/Balance Measures -->
+                <field name="opening_npv" type="measure"/>
+                <field name="closing_npv" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph View -->
+    <record id="view_lessor_lease_schedule_line_graph" model="ir.ui.view">
+        <field name="name">lessor.lease.schedule.line.graph</field>
+        <field name="model">lessor.lease.schedule.line</field>
+        <field name="arch" type="xml">
+            <graph string="Schedule Chart" type="line">
+                <field name="month"/>
+                <field name="principal" type="measure"/>
+                <field name="interest" type="measure"/>
+                <field name="closing_npv" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Calendar View -->
+    <record id="view_lessor_lease_schedule_line_calendar" model="ir.ui.view">
+        <field name="name">lessor.lease.schedule.line.calendar</field>
+        <field name="model">lessor.lease.schedule.line</field>
+        <field name="arch" type="xml">
+            <calendar string="Payment Schedule" date_start="payment_date" color="contract_id" mode="month" event_open_popup="true">
+                <field name="contract_id"/>
+                <field name="month"/>
+                <field name="gross_payment"/>
+                <field name="net_payment"/>
+                <field name="vat"/>
+                <field name="is_invoiced"/>
+                <field name="is_paid"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- list View -->
+    <record id="view_lessor_lease_schedule_line_list" model="ir.ui.view">
+        <field name="name">lessor.lease.schedule.line.list</field>
+        <field name="model">lessor.lease.schedule.line</field>
+        <field name="arch" type="xml">
+            <list string="Schedule Lines" create="false" delete="false">
+                <field name="name" column_invisible="1"/>
+                <field name="month"/>
+                <field name="gross_payment" string="Total VAT" sum="Total Gross"/>
+                <field name="net_payment" string="Before VAT" sum="Total Net"/>
+                <field name="vat" string="VAT" sum="Total VAT"/>
+                <field name="interest" string="Interest" sum="Total Interest"/>
+                <field name="principal" string="AR" sum="Total Principal"/>
+                <field name="closing_npv" string="NPV" sum="Final Balance"/>
+                <field name="payment_date" column_invisible="1"/>
+                <field name="opening_npv" column_invisible="1"/>
+                <field name="is_invoiced" column_invisible="1"/>
+                <field name="is_paid" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_lessor_lease_schedule_line_form" model="ir.ui.view">
+        <field name="name">lessor.lease.schedule.line.form</field>
+        <field name="model">lessor.lease.schedule.line</field>
+        <field name="arch" type="xml">
+            <form string="Schedule Line" create="false" delete="false">
+                <sheet>
+                    <group>
+                        <group name="period_info" string="Period Information">
+                            <field name="contract_id" readonly="1"/>
+                            <field name="month" readonly="1"/>
+                            <field name="payment_date" readonly="1"/>
+                        </group>
+                        <group name="amounts" string="Amounts">
+                            <field name="opening_npv" readonly="1"/>
+                            <field name="interest" readonly="1"/>
+                            <field name="principal" readonly="1"/>
+                            <field name="closing_npv" readonly="1"/>
+                            <field name="net_payment" readonly="1"/>
+                            <field name="vat" readonly="1"/>
+                            <field name="gross_payment" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group name="accounting_status" string="Accounting Status">
+                            <field name="is_invoiced"/>
+                            <field name="is_paid"/>
+                            <field name="invoice_id" readonly="1"/>
+                            <field name="payment_id" readonly="1"/>
+                            <field name="move_id" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_lessor_lease_schedule_line" model="ir.actions.act_window">
+        <field name="name">Schedule Lines</field>
+        <field name="res_model">lessor.lease.schedule.line</field>
+        <field name="view_mode">pivot,graph,calendar,list,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No schedule lines found
+            </p>
+            <p>
+                Schedule lines are automatically generated when you confirm a lease contract.
+            </p>
+        </field>
+    </record>
+</odoo>

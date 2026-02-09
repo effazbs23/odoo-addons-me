@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- list View -->
+    <record id="view_lessor_lease_contract_list" model="ir.ui.view">
+        <field name="name">lessor.lease.contract.list</field>
+        <field name="model">lessor.lease.contract</field>
+        <field name="arch" type="xml">
+            <list string="Lease Contracts">
+                <field name="name"/>
+                <field name="lessee_id"/>
+                <field name="asset_name"/>
+                <field name="accounting_method"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="monthly_installment"/>
+                <field name="state" decoration-info="state == 'draft'" 
+                       decoration-warning="state == 'confirmed'" 
+                       decoration-success="state == 'active'" 
+                       decoration-muted="state in ('closed','cancelled')" 
+                       widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_lessor_lease_contract_form" model="ir.ui.view">
+        <field name="name">lessor.lease.contract.form</field>
+        <field name="model">lessor.lease.contract</field>
+        <field name="arch" type="xml">
+            <form string="Lease Contract">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" 
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_activate" string="Activate" type="object" 
+                            class="oe_highlight" invisible="state != 'confirmed'"/>
+                    <button name="action_close" string="Close" type="object" 
+                            invisible="state not in ('confirmed','active')"
+                            confirm="This will close the contract. All schedule lines must be processed before closing. Are you sure you want to close this contract?"/>
+                    <button name="action_cancel" string="Cancel" type="object" 
+                            invisible="state not in ('draft','confirmed')"
+                            confirm="This will cancel the contract. If any invoices or journal entries exist, you must cancel them first or this action will fail."/>
+                    <button name="action_set_to_draft" string="Set to Draft" type="object" 
+                            invisible="state == 'draft'"
+                            confirm="This will revert the contract to draft and delete the schedule. Make sure all invoices and journal entries are cancelled first, or this action will fail."/>
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="draft,confirmed,active,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_schedule" type="object" 
+                                class="oe_stat_button" icon="fa-list-ol">
+                            <field name="schedule_line_count" widget="statbutton" 
+                                   string="Schedule"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group name="contract_info" string="Contract Information">
+                            <field name="lessee_id" 
+                                   readonly="state != 'draft'"/>
+                            <field name="asset_name" 
+                                   readonly="state != 'draft'"/>
+                            <field name="company_id" groups="base.group_multi_company" 
+                                   readonly="state != 'draft'"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group name="dates" string="Dates &amp; Term">
+                            <field name="start_date" 
+                                   readonly="state != 'draft'"/>
+                            <field name="end_date"/>
+                            <field name="term_months" 
+                                   readonly="state != 'draft'"/>
+                            <field name="accounting_method" 
+                                   readonly="True"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group name="financial_inputs" string="Manual Input Fields">
+                            <field name="cost_price" 
+                                   readonly="state != 'draft'"
+                                   force_save="1"/>
+                            <field name="total_gross_amount" 
+                                   readonly="state != 'draft'"
+                                   force_save="1"/>
+                            <field name="down_payment_percent" 
+                                   readonly="state != 'draft'"
+                                   force_save="1"/>
+                            <field name="annual_interest_rate" 
+                                   readonly="state != 'draft'"
+                                   force_save="1"/>
+                            <field name="vat_rate_id" 
+                                   readonly="state != 'draft'"
+                                   force_save="1"/>
+                        </group>
+                        <group name="calculated_fields" string="Auto-Calculated Fields">
+                            <field name="total_net_amount" readonly="1" force_save="1"/>
+                            <field name="total_vat" readonly="1" force_save="1"/>
+                            <field name="margin" invisible="1" readonly="1" force_save="1"/>
+                            <field name="margin_percent" readonly="1" force_save="1"/>
+                            <field name="down_payment_amount" readonly="1" force_save="1"/>
+                            <field name="gross_asset_value_financed" readonly="1" force_save="1"
+                                   help="Thai Market: Gross Amount - Down Payment"/>
+                            <field name="monthly_interest_rate" readonly="1" widget="percentage" force_save="1"/>
+                            <field name="monthly_installment" readonly="1" force_save="1"/>
+                            <field name="outstanding_balance" readonly="1" force_save="1"
+                                   help="Total future payments (Monthly Installment × Months)"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="schedule" string="Amortization Schedule">
+                            <field name="schedule_line_ids" nolabel="1" 
+                                   readonly="1">
+                                <list string="Schedule Lines"
+                                      decoration-success="is_paid == True"
+                                      decoration-info="is_invoiced == True">
+                                    <field name="month"/>
+                                    <field name="payment_date"/>
+                                    <field name="gross_payment" sum="Total Gross"/>
+                                    <field name="vat" sum="Total VAT"/>
+                                    <field name="net_payment" sum="Total Net"/>
+                                    <field name="interest" sum="Total Interest"/>
+                                    <field name="principal" sum="Total Principal"/>
+                                    <field name="closing_npv"/>
+                                    <field name="is_invoiced" column_invisible="1"/>
+                                    <field name="is_paid" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter reload_on_post="True"/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_lessor_lease_contract_search" model="ir.ui.view">
+        <field name="name">lessor.lease.contract.search</field>
+        <field name="model">lessor.lease.contract</field>
+        <field name="arch" type="xml">
+            <search string="Lease Contracts">
+                <field name="name" string="Contract Number"/>
+                <field name="lessee_id"/>
+                <field name="asset_name"/>
+                <field name="state"/>
+                <separator/>
+                <filter string="Draft" name="draft" domain="[('state','=','draft')]"/>
+                <filter string="Confirmed" name="confirmed" domain="[('state','=','confirmed')]"/>
+                <filter string="Active" name="active" domain="[('state','=','active')]"/>
+                <filter string="Closed" name="closed" domain="[('state','=','closed')]"/>
+                <separator/>
+                <filter string="Net Method" name="net_method" domain="[('accounting_method','=','net')]"/>
+                <filter string="Gross Method" name="gross_method" domain="[('accounting_method','=','gross')]"/>
+                <separator/>
+                <group name="group_by" expand="0" string="Group By">
+                    <filter string="Lessee" name="group_lessee" context="{'group_by':'lessee_id'}"/>
+                    <filter string="Accounting Method" name="group_method" context="{'group_by':'accounting_method'}"/>
+                    <filter string="State" name="group_state" context="{'group_by':'state'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_lessor_lease_contract" model="ir.actions.act_window">
+        <field name="name">Lease Contracts</field>
+        <field name="res_model">lessor.lease.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first lessor lease contract
+            </p>
+            <p>
+                Manage finance lease contracts with automated schedule generation
+                and support for both Net Method (IFRS 16) and Gross Method (Hire-Purchase).
+            </p>
+        </field>
+    </record>
+</odoo>
