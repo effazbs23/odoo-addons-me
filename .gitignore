@@ -1,3 +1,6 @@
 *.pyc
 __pycache__/
 .idea/
+odoo17.conf
+odoo18.conf
+odoo19.conf
