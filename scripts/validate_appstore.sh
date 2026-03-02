@@ -49,9 +49,9 @@ for manifest in $(find . -name "__manifest__.py" -type f | sort); do
         ISSUES+=("Missing 'author' field")
     fi
 
-    # Check for correct author name (Brain Station 23)
+    # Check for correct author name (Brain Station 23) - accepts both single and double quotes
     if ! grep -E "['\"]author['\"]:\s*['\"]Brain Station 23['\"]" "$manifest" > /dev/null 2>&1; then
-        if grep "author" "$manifest" > /dev/null 2>&1; then
+        if grep -E "['\"]author['\"]:" "$manifest" > /dev/null 2>&1; then
             ISSUES+=("Wrong author: must be exactly 'Brain Station 23'")
         fi
     fi
