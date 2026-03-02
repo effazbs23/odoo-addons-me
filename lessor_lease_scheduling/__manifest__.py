@@ -20,6 +20,7 @@ Note: Net Method (IFRS 16) support is currently under development.
     'author': 'Brain Station 23',
     'website': 'https://brainstation-23.com',
     'license': 'LGPL-3',
+    'support': 'erp23@brainstation-23.com',
     'price': 199.00,
     'currency': 'USD',
     'depends': [
