@@ -21,6 +21,7 @@ Note: Net Method (IFRS 16) support is currently under development.
     'license': 'LGPL-3',
     'price': 249.00,
     'currency': 'USD',
+    'support': 'erp23@brainstation-23.com',
     'depends': [
         'lessor_lease_scheduling',
     ],

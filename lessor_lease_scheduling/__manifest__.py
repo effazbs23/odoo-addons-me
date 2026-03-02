@@ -46,4 +46,5 @@ Note: Net Method (IFRS 16) support is currently under development.
     'external_dependencies': {
         'python': [],
     },
+    "support": "erp23@brainstation-23.com",
 }
