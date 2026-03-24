@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Web User Menu Visible</title>
+    <style>
+        :root {
+            --accent: #148a78;
+            --accent-soft: #e9f7f4;
+            --dark: #203447;
+            --muted: #66788a;
+            --card: #ffffff;
+            --line: #d7e3ec;
+            --bg: #f4f8fb;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 24px;
+            font-family: "Lato", "Open Sans", Arial, Helvetica, sans-serif;
+            color: #243746;
+            background: linear-gradient(180deg, #f7fbfd 0%, #eef4f8 100%);
+        }
+
+        .wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+        }
+
+        .hero,
+        .section {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(15, 35, 55, 0.06);
+        }
+
+        .hero {
+            padding: 28px;
+            text-align: center;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 16px 0 0 0;
+            font-size: 34px;
+            line-height: 1.2;
+            color: var(--dark);
+        }
+
+        .subtitle {
+            max-width: 760px;
+            margin: 14px auto 0 auto;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .badges {
+            margin-top: 18px;
+        }
+
+        .badge {
+            display: inline-block;
+            margin: 0 8px 8px 0;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: #f2f7fb;
+            border: 1px solid #d7e3ec;
+            color: var(--dark);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .hero-strip {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 24px;
+            text-align: left;
+        }
+
+        .hero-card {
+            padding: 16px;
+            border-radius: 14px;
+            background: #fbfdff;
+            border: 1px solid #dce8f1;
+        }
+
+        .hero-card strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .hero-card span {
+            color: #4d6274;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-top: 20px;
+            padding: 22px;
+        }
+
+        .section h2 {
+            margin: 0 0 14px 0;
+            text-align: center;
+            color: var(--dark);
+            font-size: 24px;
+        }
+
+        .lead {
+            margin: 0;
+            text-align: center;
+            color: #425466;
+            line-height: 1.7;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            padding: 16px;
+            border-radius: 14px;
+            background: #fbfdff;
+            border: 1px solid #dce8f1;
+        }
+
+        .card h3 {
+            margin: 0 0 10px 0;
+            color: var(--dark);
+            font-size: 18px;
+        }
+
+        .card p,
+        .card li {
+            color: #425466;
+            line-height: 1.6;
+        }
+
+        ul,
+        ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .good {
+            background: #ecfbf6;
+            border-color: #cceee2;
+        }
+
+        .warning {
+            background: #fff8e8;
+            border-color: #f0dfb8;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .support {
+            background: #34495e;
+            color: #fff;
+        }
+
+        .support h2,
+        .support p {
+            color: #fff;
+        }
+
+        .contact-box {
+            border-radius: 14px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .contact-box a {
+            color: #cfeee5;
+        }
+
+        .shot {
+            overflow: hidden;
+        }
+
+        .shot img {
+            width: 100%;
+            display: block;
+            border-radius: 12px;
+            border: 1px solid #d7e3ec;
+        }
+
+        .caption {
+            margin-top: 12px;
+            text-align: center;
+            color: #4d6274;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .quick {
+            margin-top: 14px;
+            padding: 14px;
+            border-radius: 12px;
+            background: #f6fbff;
+            border: 1px dashed #bfd3e0;
+            color: #4a6072;
+            line-height: 1.7;
+        }
+
+        footer {
+            margin-top: 18px;
+            text-align: center;
+            color: #6a7f90;
+            font-size: 13px;
+        }
+
+        @media (max-width: 860px) {
+            .hero-strip,
+            .grid-2,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <section class="hero">
+        <h1>Web User Menu Visible</h1>
+        <div class="subtitle">
+            Keep the logged-in user name visible in the Odoo top bar at all times. This lightweight web module removes
+            the default debug-only limitation and makes the user identity consistently visible without changing the
+            standard user-menu behavior.
+        </div>
+        <div class="badges">
+            <span class="badge">LGPL-3</span>
+            <span class="badge">Depends: web</span>
+            <span class="badge">No Configuration Needed</span>
+        </div>
+        <div class="hero-strip">
+            <div class="hero-card">
+                <strong>Always Show User Name</strong>
+                <span>The user name remains visible in the top navigation bar, even when debug mode is off.</span>
+            </div>
+            <div class="hero-card">
+                <strong>Keep Native Layout</strong>
+                <span>The module follows Odoo's default top-bar structure and preserves the standard interface style.</span>
+            </div>
+            <div class="hero-card">
+                <strong>Minimal Frontend Change</strong>
+                <span>A focused web template override delivers the feature without extra menus, settings, or complexity.</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>Overview</h2>
+        <p class="lead">
+            By default, Odoo shows the user name in the top bar only in debug mode. <strong>Web User Menu Visible</strong>
+            adjusts that behavior so users can always see which account is currently active. This is especially useful in
+            shared environments, support sessions, training instances, and multi-user back-office teams.
+        </p>
+    </section>
+
+    <section class="section">
+        <h2>Key Features</h2>
+        <div class="grid-2">
+            <div class="card">
+                <h3>Consistent User Identity</h3>
+                <ul>
+                    <li>Always displays the logged-in user name in the top bar.</li>
+                    <li>Improves clarity when multiple users work in the same environment.</li>
+                    <li>Reduces confusion during screen sharing or user support sessions.</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Standard Odoo Experience</h3>
+                <ul>
+                    <li>Keeps the default Odoo user-menu location and overall look.</li>
+                    <li>Database name remains limited to debug mode.</li>
+                    <li>No new settings or menus are introduced.</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>How It Works</h2>
+        <div class="grid-2">
+            <div class="card">
+                <h3>Default Odoo Behavior</h3>
+                <p>
+                    In standard Odoo, the top-bar user name is tied to debug mode visibility. When debug mode is off,
+                    the name is hidden and only the avatar remains visible.
+                </p>
+            </div>
+            <div class="card">
+                <h3>Module Behavior</h3>
+                <p>
+                    This module updates the web user-menu template so the user name remains visible at all times, while
+                    preserving the existing debug-only display of the database name.
+                </p>
+            </div>
+        </div>
+        <div class="quick">
+            <strong>Usage:</strong> install the module and refresh the backend interface.<br/>
+            <strong>Result:</strong> the logged-in user name is always visible in the top bar.<br/>
+            <strong>Configuration:</strong> none
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>Screenshot</h2>
+        <div class="card shot">
+            <img src="ss.png" alt="Web User Menu Visible screenshot"/>
+            <div class="caption">The username stays visible in the Odoo top bar without enabling debug mode</div>
+        </div>
+    </section>
+
+    <section class="section support">
+        <h2>Contact &amp; Support</h2>
+        <p class="lead">
+            For sales, support, or implementation inquiries, please contact one of our regional offices below.
+        </p>
+        <div class="contact-grid">
+            <div class="contact-box">
+                <strong>Bangladesh</strong>
+                <p>8th Floor, 2 Bir Uttam AK Khandakar Road,<br/>Mohakhali C/A, Dhaka 1212</p>
+                <div><a href="mailto:sales@nop-station.com">sales@nop-station.com</a></div>
+                <div>+8801719-304086</div>
+            </div>
+            <div class="contact-box">
+                <strong>Germany</strong>
+                <p>Bad Zwischenahn</p>
+                <div><a href="mailto:sales@brainstation-23.de">sales@brainstation-23.de</a></div>
+                <div>+4944036999839</div>
+            </div>
+            <div class="contact-box">
+                <strong>USA</strong>
+                <p>7426 Alban Station Blvd, Suite a101,<br/>Springfield, VA 22150</p>
+                <div><a href="mailto:sales@brainstation-23.com">sales@brainstation-23.com</a></div>
+                <div>+1 201 534 7200</div>
+            </div>
+            <div class="contact-box">
+                <strong>UAE</strong>
+                <p>903, 9th Floor, DAMAC XL Tower,<br/>Business Bay, Dubai</p>
+                <div><a href="mailto:sales@brainstation-23.com">sales@brainstation-23.com</a></div>
+                <div>+971 42420223</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        Author: Brain Station 23 PLC.
+    </footer>
+</div>
+</body>
+</html>
