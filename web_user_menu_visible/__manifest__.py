@@ -12,6 +12,9 @@
     "version": "19.0.1.0.0",
     "depends": ["web"],
     "data": [],
+    "images": [
+        "static/description/banner.gif",
+    ],
     "assets": {
         "web.assets_backend": [
             "web_user_menu_visible/static/src/xml/user_menu.xml",
