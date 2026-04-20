@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="naturalfood_new_arrival" name="New Arrivals">
+        <section class="s_new_arrivals oe_structure oe_website_sale">
+            <div class="container">
+                <div class="wrapper">
+
+                    <!-- Get products from configuration -->
+                    <t t-set="new_arrival"
+                       t-value="request.env['new.arrival'].sudo().search([], limit=1)"/>
+
+                    <t t-set="new_arrival_products"
+                       t-value="new_arrival.product_tmpl_ids"/>
+                    <t t-set="current_pricelist" t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
+                    <t t-set="display_currency"
+                       t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
+
+                    <!-- Section Heading -->
+                    <div class="main_heading">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h2 class="oe_editable mb-0">
+                                New Arrivals
+                            </h2>
+                            <div class="carousel-navigation products-navigation d-flex gap-2">
+                                <button class="carousel-prev products-prev btn btn-outline-organic rounded-circle p-2" type="button" aria-label="Previous products" id="prev-new-arrival">
+                                    <i class="bi bi-chevron-left"></i>
+                                </button>
+                                <button class="carousel-next products-next btn btn-outline-organic rounded-circle p-2" type="button" aria-label="Next products" id="next-new-arrival">
+                                    <i class="bi bi-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="oe_editable">
+                            Fresh products this week
+                        </p>
+                    </div>
+
+                    <!-- Product Cards -->
+                    <div class="swiper carousel-swiper products-swiper new_arrival_products" id="swiper-new-arrival">
+                        <div class="swiper-wrapper">
+
+                        <t t-foreach="new_arrival_products" t-as="product">
+                            <div class="swiper-slide">
+                            <t t-set="contextual_price"
+                               t-value="(current_pricelist and product.with_context(pricelist=current_pricelist.id)._get_contextual_price()) or product._get_contextual_price()"/>
+                            <div t-att-data-product-id="product.id">
+
+                                <div class="product-card shadow-hover border-0 h-100">
+
+                                    <!-- Product Image -->
+                                    <div class="product-card-image position-relative">
+                                        <a t-att-href="'/shop/product/%s' % product.id">
+                                            <img
+                                                t-att-src="'/web/image/product.template/%s/image_512' % product.id"
+                                                t-att-alt="product.name"
+                                                class="img-fluid w-100"
+                                            />
+                                        </a>
+                                        <div class="product-badge badge-new">New</div>
+
+                                        <!-- Action Buttons -->
+                                        <div class="product-actions position-absolute top-0 end-0 m-2 d-flex flex-column gap-1 opacity-0">
+                                            <button type="button"
+                                                    class="btn btn-light btn-sm rounded-circle shadow-sm"
+                                                    t-att-onclick="'event.stopPropagation(); addToWishlist(%s);' % product.id"
+                                                    title="Add to Wishlist">
+                                                <i class="bi bi-heart"></i>
+                                            </button>
+                                            <button type="button"
+                                                    class="btn btn-light btn-sm rounded-circle shadow-sm"
+                                                    t-att-onclick="'event.stopPropagation(); quickView(%s);' % product.id"
+                                                    title="Quick View">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Product Info -->
+                                    <div class="p-3">
+                                        <h6 class="fw-semibold text-dark mb-2">
+                                            <t t-esc="product.name"/>
+                                        </h6>
+
+                                        <!-- Price -->
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="h6 text-danger fw-bold">
+                                                <t t-out="contextual_price"
+                                                   t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
+                                            </span>
+
+                                            <button type="button"
+                                                    class="btn btn-sm btn-organic rounded-pill s_add_to_cart_btn"
+                                                    t-att-data-product-template-id="product.id"
+                                                    t-att-data-product-variant-id="product.product_variant_id.id"
+                                                    t-att-data-product-type="product.type"
+                                                    data-action="add_to_cart"
+                                                    data-show-quantity="False">
+                                                <i class="bi bi-cart3"/> Add
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            </div>
+                        </t>
+
+                        <!-- Empty State -->
+                        <t t-if="not new_arrival_products">
+                            <div class="text-center w-100 py-5 swiper-slide">
+                                <i class="bi bi-basket text-muted" style="font-size: 3rem;"/>
+                                <p class="text-muted mt-3">
+                                    No new arrivals at the moment. Check back soon!
+                                </p>
+                            </div>
+                        </t>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

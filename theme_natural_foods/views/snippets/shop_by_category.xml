@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="naturalfood_shop_by_category" name="Shop by Category">
+        <section class="category-carousel py-5 bg-white oe_structure">
+            <div class="container">
+                <div class="categories carousel-wrapper">
+                    <!-- Section Heading -->
+                    <div class="row align-items-center mb-2">
+                        <div class="col text-left text-md-center">
+                            <h2 class="h2 fw-bold text-dark oe_editable">
+                                <t t-esc="section_title or 'Shop by Category'"/>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="navigation-container">
+                        <div class="carousel-navigation products-navigation d-flex justify-content-end gap-2">
+                            <button
+                                class="carousel-prev products-prev shop-category-prev btn btn-outline-organic rounded-circle p-2"
+                                type="button"
+                                aria-label="Previous"
+                            >
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button
+                                class="carousel-next products-next shop-category-next btn btn-outline-organic rounded-circle p-2"
+                                type="button"
+                                aria-label="Next"
+                            >
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Swiper Carousel -->
+                    <div class="swiper carousel-swiper shop-category-swiper">
+                        <div class="swiper-wrapper">
+                            <t t-foreach="request.env['product.public.category'].sudo().search([])" t-as="category">
+                                <div class="swiper-slide col-6 col-md-4 col-lg-2">
+                                    <a t-att-href="'/shop/category/%s' % category.id"
+                                       class="text-decoration-none">
+                                        <div class="organic-card text-center p-3 h-100 shadow-hover bg-light border-0">
+                                            <!-- Image -->
+                                            <div class="display-4 mb-3">
+                                                <t t-if="category.image_128">
+                                                    <img
+                                                        t-att-src="'/web/image/product.public.category/%s/image_128' % category.id"
+                                                        t-att-alt="category.name"
+                                                        class="display-4 mw-100"
+                                                    />
+                                                </t>
+                                            </div>
+                                            <h6 class="fw-bold text-dark mb-2">
+                                                <t t-esc="category.name"/>
+                                            </h6>
+                                            <!-- Product Count -->
+                                            <span class="badge bg-organic-700 text-white rounded-pill small">
+                                                <t t-set="count"
+                                                   t-value="request.env['product.template'].sudo().search_count([('public_categ_ids','in',category.id)])"/>
+                                                <t t-esc="count"/> products
+                                            </span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

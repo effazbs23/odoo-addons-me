@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_new_arrival,access.new.arrival,model_new_arrival,base.group_user,1,1,1,1
+access_featured_products_manager,access.featured.products.manager,model_featured_products,base.group_system,1,1,1,1
+access_featured_products_user,access.featured.products.user,model_featured_products,base.group_user,1,0,0,0
+access_best_seller_user,access.best.seller.user,model_best_seller,base.group_user,1,1,1,1
+access_featured_recipes,access_featured_recipes,model_featured_recipes,base.group_user,1,1,1,1
+access_natural_deals_of_day,natural.deals.of.day,model_natural_deals_of_day,base.group_user,1,1,1,1

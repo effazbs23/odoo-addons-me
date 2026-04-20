@@ -1,0 +1,257 @@
+/* Enhanced Product Cards for Home Page */
+.enhanced-product-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 0;
+    transition: all 0.4s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.enhanced-product-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+}
+
+.enhanced-product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border-color: #10b981;
+}
+
+.enhanced-product-card:hover::before {
+    left: 100%;
+}
+
+/* Additional animation styles */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+}
+
+/* Quick View Modal Styles */
+.quick-view-backdrop {
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.quick-view-modal {
+    background: white;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-animate-in {
+    animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.quick-view-image-container {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+}
+
+/* Cart Dropdown Styles */
+#cart-popup {
+    background: white;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: dropdownSlideIn 0.2s ease-out;
+    max-height: 500px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+#cart-popup::-webkit-scrollbar {
+    width: 4px;
+}
+
+#cart-popup::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+#cart-popup::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 2px;
+}
+
+#cart-popup::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Additional Modal Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes dropdownSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Line clamp utility */
+.line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Promotional Banners Styling */
+.promotional-banner {
+    min-height: 200px;
+    position: relative;
+    overflow: hidden;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+}
+
+.promotional-banner:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.promotional-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.promotional-banner:hover::before {
+    opacity: 1;
+}
+
+.promotional-banner .text-6xl {
+    filter: blur(1px);
+    transform: rotate(-15deg);
+}
+
+@media (max-width: 768px) {
+    .promotional-banner {
+        min-height: 160px;
+    }
+    
+    .promotional-banner h3 {
+        font-size: 1.25rem !important;
+        line-height: 1.3;
+    }
+    
+    .promotional-banner .absolute.right-4 img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* Animation for banner elements */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.promotional-banner > div > div > div {
+    animation: slideInUp 0.6s ease-out;
+}
+
+.promotional-banner:nth-child(1) > div > div > div {
+    animation-delay: 0.1s;
+}
+
+.promotional-banner:nth-child(2) > div > div > div {
+    animation-delay: 0.2s;
+}
+
+.promotional-banner:nth-child(3) > div > div > div {
+    animation-delay: 0.3s;
+}
+
+/* Product tabs styling */
+.tab-button {
+    color: #6b7280;
+    background: transparent;
+}
+
+.tab-button.active {
+    background: #ffffff;
+    color: #16a34a;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Tab image height alignment with product boxes */
+.tab-image-height {
+    height: 400px;
+    min-height: 400px;
+    object-fit: cover;
+}
+
+@media (max-width: 1024px) {
+    .tab-image-height {
+        height: 300px;
+        min-height: 300px;
+    }
+}
+
+@media (max-width: 640px) {
+    .tab-image-height {
+        height: 250px;
+        min-height: 250px;
+    }
+}

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="naturalfood_service_features" name="Service Features">
+        <section class="py-5">
+            <div class="container">
+                <div class="row g-4">
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="text-center">
+                            <div class="bg-organic-100 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                 style="width: 4rem; height: 4rem">
+                                <i class="bi bi-truck text-organic-600 fs-3"/>
+                            </div>
+                            <h5 class="fw-bold text-dark">Free Delivery</h5>
+                            <p class="text-muted small">Free shipping on orders over $50</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="text-center">
+                            <div class="bg-organic-100 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                 style="width: 4rem; height: 4rem">
+                                <i class="bi bi-shield-check text-organic-600 fs-3"/>
+                            </div>
+                            <h5 class="fw-bold text-dark">100% Organic</h5>
+                            <p class="text-muted small">Certified organic products only</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="text-center">
+                            <div class="bg-organic-100 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                 style="width: 4rem; height: 4rem">
+                                <i class="bi bi-clock text-organic-600 fs-3"/>
+                            </div>
+                            <h5 class="fw-bold text-dark">Fresh Daily</h5>
+                            <p class="text-muted small">New arrivals every morning</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="text-center">
+                            <div class="bg-organic-100 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                 style="width: 4rem; height: 4rem">
+                                <i class="bi bi-headset text-organic-600 fs-3"/>
+                            </div>
+                            <h5 class="fw-bold text-dark">24/7 Support</h5>
+                            <p class="text-muted small">Customer service always ready</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </template>
+
+</odoo>

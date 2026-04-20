@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Natural Foods Theme</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    :root {
+      --nf-primary: #2f8f46;
+      --nf-primary-dark: #1f6b33;
+      --nf-secondary: #0f766e;
+      --nf-bg: #f5faf6;
+      --nf-surface: #ffffff;
+      --nf-border: #d2e4d6;
+      --nf-text: #1c2b22;
+      --nf-muted: #5c6f64;
+      --nf-shadow: 0 14px 28px -22px rgba(15, 23, 42, 0.35);
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(180deg, var(--nf-bg) 0%, #ffffff 420px);
+      color: var(--nf-text);
+      line-height: 1.6;
+    }
+
+    .nf-container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 14px 48px;
+    }
+
+    .nf-card {
+      background: var(--nf-surface);
+      border: 1px solid var(--nf-border);
+      border-radius: 16px;
+      box-shadow: var(--nf-shadow);
+      padding: 24px;
+      margin-top: 18px;
+    }
+
+    .nf-hero {
+      background: linear-gradient(135deg, #e8f3eb 0%, #e8f1ef 58%, #eaf1f7 100%);
+      border: 1px solid var(--nf-border);
+      border-radius: 18px;
+      box-shadow: var(--nf-shadow);
+      padding: 36px 28px;
+    }
+
+    .nf-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      border-radius: 999px;
+      border: 1px solid rgba(47, 143, 70, 0.24);
+      background: rgba(47, 143, 70, 0.12);
+      color: var(--nf-primary-dark);
+      padding: 6px 10px;
+      margin: 0 8px 8px 0;
+    }
+
+    .nf-title {
+      font-size: 34px;
+      font-weight: 700;
+      color: #153423;
+      margin: 10px 0 8px;
+    }
+
+    .nf-subtitle {
+      margin: 0;
+      color: var(--nf-muted);
+      font-size: 17px;
+      max-width: 920px;
+    }
+
+    .nf-h2 {
+      font-size: 26px;
+      color: #163823;
+      margin: 0 0 10px;
+      font-weight: 700;
+    }
+
+    .nf-text {
+      margin: 0;
+      color: var(--nf-muted);
+    }
+
+    .nf-meta {
+      height: 100%;
+      border: 1px solid var(--nf-border);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f1f8f3 0%, #f8fcf9 100%);
+      padding: 14px 16px;
+    }
+
+    .nf-meta .k {
+      margin: 0 0 4px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      font-weight: 700;
+      color: var(--nf-primary-dark);
+    }
+
+    .nf-meta .v {
+      margin: 0;
+      font-size: 15px;
+      color: var(--nf-text);
+    }
+
+    .nf-feature {
+      height: 100%;
+      border: 1px solid #d9e7dc;
+      border-radius: 12px;
+      padding: 18px;
+      background: #ffffff;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .nf-feature:hover {
+      transform: translateY(-2px);
+      border-color: #bbd7c1;
+      box-shadow: 0 12px 24px -18px rgba(15, 23, 42, 0.35);
+    }
+
+    .nf-feature-icon {
+      display: inline-flex;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(47, 143, 70, 0.12);
+      color: var(--nf-primary);
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .nf-feature h5 {
+      font-size: 18px;
+      color: var(--nf-primary-dark);
+      margin-bottom: 8px;
+    }
+
+    .nf-feature p {
+      margin: 0;
+      color: var(--nf-muted);
+      font-size: 15px;
+    }
+
+    .nf-kpi {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--nf-border);
+      border-radius: 999px;
+      padding: 7px 12px;
+      margin: 4px 6px 4px 0;
+      font-size: 13px;
+      color: #244b34;
+      background: #f4faf5;
+    }
+
+    .nf-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nf-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin-bottom: 8px;
+      color: var(--nf-muted);
+      font-size: 15px;
+    }
+
+    .nf-list li i {
+      color: var(--nf-primary);
+      margin-top: 2px;
+    }
+
+    .nf-showcase {
+      border: 1px solid var(--nf-border);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #f3f8f4 0%, #f9fcfa 100%);
+      padding: 22px;
+      height: 100%;
+    }
+
+    .nf-showcase h4 {
+      color: #183a24;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .nf-showcase p {
+      margin: 0;
+      color: var(--nf-muted);
+    }
+
+    .nf-service {
+      height: 100%;
+      border: 1px solid var(--nf-border);
+      border-radius: 12px;
+      background: #ffffff;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .nf-service .icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(47, 143, 70, 0.12);
+      color: var(--nf-primary);
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .nf-service h6 {
+      margin: 0;
+      color: var(--nf-text);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .nf-link {
+      color: var(--nf-primary-dark);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .nf-link:hover {
+      color: var(--nf-primary);
+      text-decoration: underline;
+    }
+
+    .nf-company-logo {
+      max-height: 34px;
+      width: auto;
+      margin-bottom: 10px;
+    }
+
+    .nf-company-center {
+      text-align: center;
+    }
+
+    .nf-footer {
+      margin-top: 14px;
+      text-align: center;
+      color: var(--nf-muted);
+      font-size: 14px;
+    }
+
+    .nf-unified-section {
+      background: linear-gradient(180deg, #f3f8f4 0%, #f9fcfa 100%);
+      border: 1px solid var(--nf-border);
+      border-radius: 16px;
+      padding: 32px;
+    }
+
+    .nf-unified-content {
+      padding: 20px;
+    }
+
+    .nf-unified-title {
+      margin: 0;
+      font-size: 40px;
+      line-height: 1.15;
+      color: #183a24;
+      font-weight: 700;
+    }
+
+    .nf-unified-title span {
+      display: inline-block;
+      width: 100%;
+    }
+
+    .nf-unified-copy {
+      margin: 0;
+      color: var(--nf-muted);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.65;
+    }
+
+    .nf-unified-list {
+      list-style: none;
+      margin: 24px 0 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .nf-unified-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--nf-muted);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .nf-unified-icon {
+      color: var(--nf-primary);
+      font-size: 16px;
+    }
+
+    .nf-unified-image {
+      width: 100%;
+      border-radius: 24px;
+      object-fit: cover;
+    }
+
+    .nf-unified-image-soft {
+      border-radius: 16px;
+    }
+
+    .nf-supports {
+      margin: 30px 0;
+      padding: 22px 24px;
+      border: 1px solid #0b3a76;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #001844 0%, #0a2b57 100%);
+      box-shadow: 0 14px 28px -18px rgba(0, 24, 68, 0.55);
+    }
+
+    .nf-support-logo {
+      width: auto;
+      height: 44px;
+      max-width: 100%;
+    }
+
+    .nf-support-row {
+      margin-top: 10px;
+    }
+
+    .nf-support-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nf-support-label {
+      font-size: 14px;
+      color: #dbeafe;
+      font-weight: 600;
+      margin-right: 6px;
+    }
+
+    .nf-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: 122px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border: 1px solid transparent;
+      text-align: center;
+    }
+
+    .nf-pill-support {
+      background: rgba(59, 130, 246, 0.18);
+      color: #eaf2ff;
+      border-color: rgba(147, 197, 253, 0.42);
+    }
+
+    .nf-pill-availability {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .nf-pill-unavailable {
+      color: #fecaca;
+      border-color: rgba(248, 113, 113, 0.5);
+      background: rgba(127, 29, 29, 0.35);
+    }
+
+    .nf-pill-available {
+      color: #bbf7d0;
+      border-color: rgba(74, 222, 128, 0.45);
+      background: rgba(20, 83, 45, 0.35);
+    }
+
+    .nf-pill i {
+      color: inherit;
+    }
+
+    @media (max-width: 991px) {
+      .nf-unified-section {
+        padding: 22px;
+      }
+
+      .nf-unified-title {
+        font-size: 32px;
+      }
+
+      .nf-unified-image {
+        height: auto;
+      }
+
+      .nf-support-wrap {
+        justify-content: flex-start;
+      }
+
+      .nf-support-label {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  
+  <div class="nf-container">
+
+        <!-- support-header -->
+
+        <div class="supports nf-supports">
+          <div class="row justify-content-between">
+            <div class="col-12 col-lg-4">
+              <div class="my-3">
+                <img src="./img/erp-23.png"
+                  class="nf-support-logo">
+              </div>
+            </div>
+            <div class="col-12 col-lg-8">
+              <div class="row nf-support-row">
+    
+                <div class="my-3 nf-support-wrap">
+                  <span class="nf-support-label">Supports:</span>
+                  <div class="text-center nf-pill nf-pill-support">
+                    Enterprise
+                  </div>
+                  <div class="text-center nf-pill nf-pill-support">
+                    Community
+                  </div>
+                </div>
+              </div>
+              <div class="row nf-support-row">
+                <div class="nf-support-wrap">
+                  <span class="nf-support-label">Availability:</span>
+                  <div class="text-center nf-pill nf-pill-availability nf-pill-unavailable">
+                    <i class="bi bi-x-circle-fill"></i> Odoo Online
+                  </div>
+                  <div class="text-center nf-pill nf-pill-availability nf-pill-available">
+                    <i class="bi bi-check-circle-fill"></i> Odoo.sh
+                  </div>
+                  <div class="text-center nf-pill nf-pill-availability nf-pill-available">
+                    <i class="bi bi-check-circle-fill"></i> On Premise
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <!--  -->
+    
+        <!-- banner-section -->
+        <div class="my-5">
+          <div class="">
+            <img src="./img/ads.png" class="img-fluid" style="border-radius: 10px; width:1250px;">
+          </div>
+        </div>
+
+    <!-- hero-section -->
+    <section class="nf-hero">
+      <span class="nf-badge"><i class="bi bi-shop"></i> Odoo Theme</span>
+      <span class="nf-badge"><i class="bi bi-cart3"></i> Website Sale</span>
+      <span class="nf-badge"><i class="bi bi-basket2"></i> Food & Grocery</span>
+      <h1 class="nf-title">Natural Foods Theme</h1>
+      <p class="nf-subtitle">A premium Odoo storefront theme for organic and grocery businesses with conversion-focused homepage sections, category-driven product discovery, and polished cart/wishlist interactions.</p>
+    </section>
+
+    <!-- product-information-section -->
+    <section class="nf-card">
+      <h2 class="nf-h2">Product Information</h2>
+      <p class="nf-text mb-3">Natural Foods delivers a complete website experience with a custom topbar, header, footer, dynamic homepage snippets, enhanced shop layout, and backend-manageable product highlights.</p>
+      <div class="row g-3">
+        <div class="col-md-4"><div class="nf-meta"><p class="k">Technical Name</p><p class="v">natural_foods</p></div></div>
+        <div class="col-md-4"><div class="nf-meta"><p class="k">Version</p><p class="v">19.0.1.0</p></div></div>
+        <div class="col-md-4"><div class="nf-meta"><p class="k">License</p><p class="v">LGPL-3</p></div></div>
+      </div>
+    </section>
+
+    <!-- core-features-section -->
+    <section class="nf-card">
+      <h2 class="nf-h2">Core Features</h2>
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-4"><div class="nf-feature"><span class="nf-feature-icon"><i class="bi bi-layout-text-window-reverse"></i></span><h5>Custom Storefront Layout</h5><p>Purpose-built topbar, header, footer, and shop presentation for food and grocery brands.</p></div></div>
+        <div class="col-md-6 col-lg-4"><div class="nf-feature"><span class="nf-feature-icon"><i class="bi bi-grid-1x2"></i></span><h5>Homepage Snippet Set</h5><p>Ready-to-use blocks for banners, categories, products, promotions, recipes, and brands.</p></div></div>
+        <div class="col-md-6 col-lg-4"><div class="nf-feature"><span class="nf-feature-icon"><i class="bi bi-stars"></i></span><h5>Dynamic Product Sections</h5><p>Backend-powered New Arrivals, Best Seller, Featured Products, and Deals of the Day.</p></div></div>
+        <div class="col-md-6 col-lg-4"><div class="nf-feature"><span class="nf-feature-icon"><i class="bi bi-translate"></i></span><h5>Language & Currency</h5><p>Native Odoo language selector compatibility with pricelist-based currency handling.</p></div></div>
+        <div class="col-md-6 col-lg-4"><div class="nf-feature"><span class="nf-feature-icon"><i class="bi bi-heart"></i></span><h5>Wishlist & Cart UX</h5><p>Integrated counters and quick cart interactions for smoother shopping flow.</p></div></div>
+        <div class="col-md-6 col-lg-4"><div class="nf-feature"><span class="nf-feature-icon"><i class="bi bi-phone"></i></span><h5>Responsive Ready</h5><p>Optimized visual hierarchy and spacing across desktop, tablet, and mobile.</p></div></div>
+      </div>
+    </section>
+
+    <!-- theme-highlights-section -->
+    <section class="nf-card">
+      <h2 class="nf-h2">Theme Highlights</h2>
+      <div class="row g-3">
+        <div class="col-md-6"><div class="nf-showcase"><h4>Stunning Homepage Sections</h4><p>Showcase organic products with banners, category blocks, deal sections, and featured content in a clean visual flow.</p></div></div>
+        <div class="col-md-6"><div class="nf-showcase"><h4>Elegant Shop Presentation</h4><p>Product cards, pricing areas, and action buttons are designed for clarity, engagement, and conversion.</p></div></div>
+        <div class="col-md-6"><div class="nf-showcase"><h4>Improved Cart Experience</h4><p>Theme includes cart-focused UI improvements for quicker review and smoother checkout guidance.</p></div></div>
+        <div class="col-md-6"><div class="nf-showcase"><h4>Clean Content Blocks</h4><p>Feature, newsletter, and recipe sections support engaging storytelling for food-focused brands.</p></div></div>
+      </div>
+    </section>
+
+    <!-- included-snippets-section -->
+    <section class="nf-card">
+      <h2 class="nf-h2">Included Snippets</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="nf-list">
+            <li><i class="bi bi-check-circle-fill"></i>Natural Food Banner</li>
+            <li><i class="bi bi-check-circle-fill"></i>New Arrival</li>
+            <li><i class="bi bi-check-circle-fill"></i>Shop by Category</li>
+            <li><i class="bi bi-check-circle-fill"></i>Promo Banners</li>
+            <li><i class="bi bi-check-circle-fill"></i>Deals of the Day</li>
+            <li><i class="bi bi-check-circle-fill"></i>Two Banners</li>
+            <li><i class="bi bi-check-circle-fill"></i>Our Products</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <ul class="nf-list">
+            <li><i class="bi bi-check-circle-fill"></i>Promo Banner New</li>
+            <li><i class="bi bi-check-circle-fill"></i>Our Brands</li>
+            <li><i class="bi bi-check-circle-fill"></i>Service Features</li>
+            <li><i class="bi bi-check-circle-fill"></i>Newsletter</li>
+            <li><i class="bi bi-check-circle-fill"></i>Best Seller</li>
+            <li><i class="bi bi-check-circle-fill"></i>Featured Products</li>
+            <li><i class="bi bi-check-circle-fill"></i>Featured Recipes</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- dependencies-section -->
+    <section class="nf-card" style="margin-bottom: 15px;">
+      <h2 class="nf-h2">Dependencies</h2>
+      <span class="nf-kpi"><i class="bi bi-box-seam"></i>website</span>
+      <span class="nf-kpi"><i class="bi bi-box-seam"></i>website_sale</span>
+      <span class="nf-kpi"><i class="bi bi-box-seam"></i>website_sale_wishlist</span>
+      <span class="nf-kpi"><i class="bi bi-box-seam"></i>website_blog</span>
+      <span class="nf-kpi"><i class="bi bi-box-seam"></i>product</span>
+    </section>
+
+
+
+    <!-- page-experience-section -->
+    <section class="mb-5 nf-unified-section">
+      <div class="row d-flex align-items-center">
+        <div class="col col-12 col-md-12 col-lg-6">
+          <div class="nf-unified-content">
+            <h4 class="nf-unified-title">
+              <span>Beautiful Pages,</span><br>
+              <span>Smooth Shopping Journey</span>
+            </h4>
+
+            <div class="mt-4">
+              <p class="nf-unified-copy">Natural Foods Theme is an Attractive Theme for Your Odoo Store.
+                This Theme Will Change Improve Your Experience With Odoo.
+                This is a Minimalist and Elegant Frontend Theme for Odoo And Can Offer a
+                Perfect Choice for Your Odoo Frontend. .</p>
+              <ul class="nf-unified-list">
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Modified Structure for All Pages</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>New Style for Buttons</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>New Color Combination</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>New Look for All Pages</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>A Clean layout and New Font Style</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col col-12 col-md-12 col-lg-6">
+          <div>
+            <div>
+              <img class="img-fluid nf-unified-image" src="./img/ads-2.png">
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+
+    <!-- responsive-layout-section -->
+    <section class="nf-unified-section">
+      <div class="row d-flex align-items-center">
+        <div class="col col-12 col-md-12 col-lg-6">
+          <div>
+            <div>
+              <img class="img-fluid nf-unified-image nf-unified-image-soft" src="./img/ads-2.png">
+            </div>
+
+          </div>
+        </div>
+        <div class="col col-12 col-md-12 col-lg-6">
+          <div class="nf-unified-content">
+            <h4 class="nf-unified-title">
+              <span>Fully Responsive</span><br>
+              <span>Layout</span>
+            </h4>
+
+            <div class="mt-4">
+              <p class="nf-unified-copy">Now take advantage of everything your dashboard has to offer even on the go. Our
+                design is now fully responsive, enabling you to view and manage everything comfortably.</p>
+              <ul class="nf-unified-list">
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Interactive Elements</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Fast Loading Speed</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Customizable Fonts and Colors</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!--  -->
+  <!-- odoo19-shop-snippet-section -->
+  <section class="mb-5 nf-unified-section">
+      <div class="row d-flex align-items-center">
+        <div class="col col-12 col-md-12 col-lg-6">
+          <div class="nf-unified-content">
+            <h4 class="nf-unified-title">
+      
+              <span>Snippet Showcase</span>
+            </h4>
+
+            <div class="mt-4">
+              <p class="nf-unified-copy">This section highlights the Odoo 19 shop snippet layout with a real screenshot-based preview.
+                Product cards, pricing, wishlist, and cart actions are arranged in a clean structure
+                so users can quickly scan items and complete purchases with a better storefront experience.</p>
+              <ul class="nf-unified-list">
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Built for Odoo 19 website snippets</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Screenshot-driven product preview block</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Clear CTA placement for cart and wishlist</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Modern spacing and typography for better readability</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Consistent style with the full Natural Foods page</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col col-12 col-md-12 col-lg-6">
+          <div>
+            <div>
+              <img class="img-fluid nf-unified-image" src="./img/snippet.png" alt="Odoo 19 shop snippet screenshot">
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--  -->
+    <!-- product-presentation-section -->
+    <section class="nf-unified-section">
+      <div class="row d-flex align-items-center">
+        <div class="col col-12 col-md-12 col-lg-6">
+          <div>
+            <div>
+              <img class="img-fluid nf-unified-image nf-unified-image-soft" src="./img/ads-2.png">
+            </div>
+
+          </div>
+        </div>
+        <div class="col col-12 col-md-12 col-lg-6">
+          <div class="nf-unified-content">
+            <h4 class="nf-unified-title">
+              <span>Classy</span><br>
+              <span>Presentation</span>
+            </h4>
+
+            <div class="mt-4">
+              <p class="nf-unified-copy">Highlight your products with captivating visuals
+                and detailed descriptions that engage customers and boost sales.
+                A well-crafted product presentation builds trust
+                and enhances the shopping experience.</p>
+              <ul class="nf-unified-list">
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>High-Quality Images</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Engaging Descriptions</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Interactive Features</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- cart-page-section -->
+    <section class="mb-5 nf-unified-section">
+      <div class="row d-flex align-items-center">
+        <div class="col col-12 col-md-12 col-lg-6">
+          <div class="nf-unified-content">
+            <h4 class="nf-unified-title">
+              <span>Attractive Cart page</span><br>
+
+            </h4>
+
+            <div class="mt-4">
+              <p class="nf-unified-copy">The Natural Foods Theme Gives You a Fully
+                Modified Cart View, and This Table Design is Also Have
+                Awesome Design, and it Gives You More Beauty for Your Odoo Frontend.
+                It will Give You a Clean Layout with the New Color Combination and a Modified Font. .</p>
+              <ul class="nf-unified-list">
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Modified Table Style</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>New Color Combination</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Shows discount percentage and discounted price</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Buttons with New Colors</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col col-12 col-md-12 col-lg-6">
+          <div>
+            <div>
+              <img class="img-fluid nf-unified-image" src="./img/cart.png">
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- contact-style-section -->
+    <section class="nf-unified-section">
+      <div class="row d-flex align-items-center">
+        <div class="col col-12 col-md-12 col-lg-6">
+          <div>
+            <div>
+              <img class="img-fluid nf-unified-image nf-unified-image-soft" src="./img/ads-2.png">
+            </div>
+
+          </div>
+        </div>
+        <div class="col col-12 col-md-12 col-lg-6">
+          <div class="nf-unified-content">
+            <h4 class="nf-unified-title">
+              <span>Keep in touch</span><br>
+              <span>in new style</span>
+            </h4>
+
+            <div class="mt-4">
+              <p class="nf-unified-copy">Natural Foods Theme Gives You a Fully Modified Contact View with a
+                Full-Screen Experience. It will Give You a Clean Layout
+                with the New OutLook and a Modified Font. .</p>
+              <ul class="nf-unified-list">
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Modified Style</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Full-Screen View</span></li>
+                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>New Looks for Button</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  <!-- -->
+
+
+    <div class="my-5">
+      <!-- banner card -->
+
+
+
+      <!-- service-section -->
+
+      <!-- our-services-section -->
+      <section class="nf-card">
+        <h2 class="nf-h2">Our Services</h2>
+        <div class="row g-3">
+          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-sliders2"></i></span><h6>Odoo Customization</h6></div></div>
+          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-tools"></i></span><h6>Odoo Implementation</h6></div></div>
+          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-life-preserver"></i></span><h6>Odoo Support</h6></div></div>
+          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-arrow-repeat"></i></span><h6>Odoo Migration</h6></div></div>
+          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-puzzle"></i></span><h6>Odoo Integration</h6></div></div>
+          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-person-workspace"></i></span><h6>Odoo Consultancy</h6></div></div>
+          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-patch-check"></i></span><h6>Odoo Licensing</h6></div></div>
+          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-person-plus"></i></span><h6>Hire Odoo Developer</h6></div></div>
+        </div>
+      </section>
+  
+      <!-- support-company-section -->
+      <section class="nf-card nf-company-center">
+        <h2 class="nf-h2">Support & Company</h2>
+        <img class="nf-company-logo" src="./img/erp23.png" alt="erp23 logo">
+        <p class="nf-text mb-2">Developed and maintained by nopStation.</p>
+        <p class="mb-0">Website: <a class="nf-link" href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer">https://www.erp-23.com/</a></p>
+      </section>
+  
+      <p class="nf-footer">Natural Foods Theme - Premium Odoo storefront experience for food eCommerce.</p>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var iconMap = {
+      "feature-star.svg": "bi bi-stars",
+      "check.svg": "bi bi-check-circle-fill",
+      "gear.svg": "bi bi-gear-fill",
+      "wrench-icon.svg": "bi bi-tools",
+      "life-ring-icon.svg": "bi bi-life-preserver",
+      "arrows-repeat.svg": "bi bi-arrow-repeat",
+      "puzzle-piece-icon.svg": "bi bi-puzzle-fill",
+      "odoo-consultancy.svg": "bi bi-person-workspace",
+      "odoo-licencing.svg": "bi bi-patch-check-fill",
+      "hire-odoo.svg": "bi bi-person-plus-fill"
+    };
+
+    document.querySelectorAll("img[src$='.svg']").forEach(function (img) {
+      if (img.classList.contains("nf-company-logo")) {
+        return;
+      }
+      var src = img.getAttribute("src") || "";
+      var iconClass = "bi bi-circle-fill";
+      Object.keys(iconMap).some(function (key) {
+        if (src.indexOf(key) !== -1) {
+          iconClass = iconMap[key];
+          return true;
+        }
+        return false;
+      });
+      var icon = document.createElement("i");
+      icon.className = iconClass;
+      icon.style.color = "#2e7d32";
+      icon.style.fontSize = src.indexOf("check.svg") !== -1 ? "16px" : "22px";
+      img.replaceWith(icon);
+    });
+  });
+</script>
+</body>
+</html>

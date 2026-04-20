@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="naturalfood_our_brands" name="Our Brands">
+        <section class="brands-carousel bg-white">
+            <div class="container py-5">
+                <div class="carousel-wrapper">
+                    <div class="row align-items-center mb-2">
+                        <div class="col">
+                            <h2 class="h2 fw-bold text-dark">Our Brands</h2>
+                        </div>
+                    </div>
+                    <!-- Navigation -->
+                    <div class="navigation-container">
+                        <div class="carousel-navigation d-flex justify-content-end gap-2">
+                            <button class="btn btn-outline-organic rounded-circle p-2"
+                                    type="button" id="prev-brands">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-outline-organic rounded-circle p-2"
+                                    type="button" id="next-brands">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Swiper -->
+                    <div class="swiper carousel-swiper" id="swiper-brands">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="organic-card text-center p-3 shadow-hover">
+                                    <img src="/theme_natural_foods/static/src/img/0000416_kelloggs_420.webp" class="img-fluid"/>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="organic-card text-center p-3 shadow-hover">
+                                    <img src="/theme_natural_foods/static/src/img/0001539_rocers_420.png" class="img-fluid"/>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="organic-card text-center p-3 shadow-hover">
+                                    <img src="/theme_natural_foods/static/src/img/0001542_food-emporium_420.png" class="img-fluid"/>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="organic-card text-center p-3 shadow-hover">
+                                    <img src="/theme_natural_foods/static/src/img/0001821_season3_420.png" class="img-fluid"/>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="organic-card text-center p-3 shadow-hover">
+                                    <img src="/theme_natural_foods/static/src/img/0000205_groceries-to-you-door_420.png" class="img-fluid"/>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="organic-card text-center p-3 shadow-hover">
+                                    <img src="/theme_natural_foods/static/src/img/0000207_refresh-foods_420.png" class="img-fluid"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

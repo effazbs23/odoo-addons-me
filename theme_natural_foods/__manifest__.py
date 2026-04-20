@@ -1,0 +1,84 @@
+{
+    'name': 'Theme Natural Foods - Premium Organic E-Commerce Store',
+    'summary': 'Premium Organic Food E-Commerce Theme - Perfect for Farmers Markets, Sustainable Grocery Stores & Farm-to-Table Businesses',
+    'description': '''
+    Theme Natural Foods is a modern, SEO-optimized Odoo website theme designed for organic food retailers, 
+    farmers markets, and sustainable grocery e-commerce businesses. This premium responsive theme features 
+    beautiful product showcases, advanced filtering capabilities, and seamless integration with Odoo's 
+    e-commerce platform. Perfect for selling fresh vegetables, organic fruits, dairy products, meat, seafood, 
+    bakery items, and pantry essentials. Includes built-in loyalty features, wishlist functionality, 
+    multi-language support, and optimized checkout flow for maximum conversion rates. The theme emphasizes 
+    farm-to-table values with visually appealing hero banners, featured products sections, customer testimonials, 
+    blog integration for recipe sharing, and service feature highlights. Fully mobile-responsive with improved 
+    performance, accessibility compliance, and SEO best practices for better search engine rankings.
+    ''',
+    'category': 'Theme/eCommerce',
+    'version': '19.0.1.1',
+    'author': 'ERP 23',
+    'company': 'nopCommerce, Brainstation 23 PLC',
+    'maintainer': 'ERP 23',
+    'website': 'https://www.erp-23.com',
+    'depends': [
+        'website',
+        'website_sale',
+        'website_sale_wishlist',
+        'website_blog',
+        'product'
+    ],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/topbar.xml',
+        'views/header.xml',
+        'views/footer.xml',
+        'views/new_arrival_views.xml',
+        'views/featured_products_views.xml',
+        'views/best_seller_views.xml',
+        'views/featured_recipes.xml',
+        'views/snippets/naturalfood_banner.xml',
+        'views/snippets/new_arrival_template.xml',
+        'views/snippets/shop_by_category.xml',
+        'views/snippets/promo_banners.xml',
+        'views/snippets/deals_of_the_day.xml',
+        'views/snippets/two_banner.xml',
+        'views/snippets/our_products.xml',
+        'views/snippets/promo_banner_new.xml',
+        'views/snippets/best_seller_snippet.xml',
+        'views/snippets/featured_products_snippet.xml',
+        'views/snippets/brands_snippet.xml',
+        'views/snippets/service_features.xml',
+        'views/snippets/newsletter.xml',
+        'views/snippets/featured_recipes_snippet.xml',
+        'views/deals_of_day_views.xml',
+        'views/snippets/snippet.xml',
+
+    ],
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+    'assets': {
+        'web.assets_frontend': [
+            # CSS
+            'theme_natural_foods/static/src/css/bootstrap-icons.css',
+            'theme_natural_foods/static/src/css/bootstrap-organic-theme.css',
+            'theme_natural_foods/static/src/css/common-carousel.css',
+            'theme_natural_foods/static/src/css/custom.css',
+            'theme_natural_foods/static/src/css/custom-bootstrap.css',
+            'theme_natural_foods/static/src/css/custome-globals.css',
+            'theme_natural_foods/static/src/css/home-enhanced.css',
+            'theme_natural_foods/static/src/css/home-styles.css',
+            'theme_natural_foods/static/src/css/products-filters.css',
+            'theme_natural_foods/static/src/css/products-styles.css',
+            'theme_natural_foods/static/src/css/swiper-bundle.min.css',
+            'theme_natural_foods/static/src/js/cart-dropdown-live.js',
+        ],
+    },
+    'images': [
+        'static/description/banner.gif',
+        'static/description/theme_screenshot.gif',
+    ],
+    'license': 'LGPL-3',
+    'installable': True,
+    'auto_install': False,
+    "price": "00.0",
+    'currency': 'USD',
+}

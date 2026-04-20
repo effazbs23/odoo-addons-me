@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="naturalfood_deals_of_the_day" name="Deals of the Day">
+        <section class="product-carousel py-5 deals-container oe_structure oe_website_sale">
+
+            <div class="container">
+                <t t-set="current_pricelist" t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
+                <t t-set="display_currency"
+                   t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
+
+                <!-- Get Deal -->
+                <t t-set="deal"
+                   t-value="request.env['natural.deals.of.day'].sudo().search([('is_active','=',True)], limit=1, order='sequence asc')"/>
+
+                <!-- Section Header -->
+                <div class="text-center mb-3">
+
+                    <div class="d-flex flex-column flex-lg-row align-items-start justify-content-center gap-3 mb-3">
+
+                        <h2 class="h2 fw-bold text-dark mb-0">
+                            Deals of the Day
+                        </h2>
+
+                        <!-- Countdown -->
+                        <t t-if="deal and deal.deal_end_time">
+                            <div class="d-flex align-items-center gap-2">
+
+                                <i class="bi bi-clock text-danger fs-4"/>
+
+                                <div class="d-flex gap-1 text-danger"
+                                     t-att-data-end="deal.deal_end_time"
+                                     id="deal-countdown">
+
+                                    <div class="text-center">
+                                        <div class="fw-bold" id="deal-days">00</div>
+                                        <div class="small text-muted">Days</div>
+                                    </div>
+
+                                    <span class="fw-bold">:</span>
+
+                                    <div class="text-center">
+                                        <div class="fw-bold" id="deal-hours">00</div>
+                                        <div class="small text-muted">Hours</div>
+                                    </div>
+
+                                    <span class="fw-bold">:</span>
+
+                                    <div class="text-center">
+                                        <div class="fw-bold" id="deal-minutes">00</div>
+                                        <div class="small text-muted">Min</div>
+                                    </div>
+
+                                    <span class="fw-bold">:</span>
+
+                                    <div class="text-center">
+                                        <div class="fw-bold" id="deal-seconds">00</div>
+                                        <div class="small text-muted">Sec</div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </t>
+
+                    </div>
+
+                    <div class="navigation-container">
+                        <div class="carousel-navigation products-navigation d-flex justify-content-end gap-2">
+                            <button
+                                    class="carousel-prev products-prev btn btn-outline-organic rounded-circle p-2"
+                                    type="button"
+                                    aria-label="Previous products"
+                                    id="prev-dil"
+                            >
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button
+                                    class="carousel-next products-next btn btn-outline-organic rounded-circle p-2"
+                                    type="button"
+                                    aria-label="Next products"
+                                    id="next-dil"
+                            >
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Products -->
+                <div class="swiper carousel-swiper" id="swiper-dil">
+                    <div class="swiper-wrapper">
+
+                        <t t-if="deal">
+                            <t t-foreach="deal.product_tmpl_ids" t-as="product">
+                                <t t-set="contextual_price"
+                                   t-value="(current_pricelist and product.with_context(pricelist=current_pricelist.id)._get_contextual_price()) or product._get_contextual_price()"/>
+
+                                <div class="swiper-slide col-6 col-md-4 col-lg-2-4">
+                                    <div class="product-card shadow-hover border shadow-sm">
+
+                                        <!-- Image -->
+                                        <div class="product-card-image position-relative">
+                                            <a t-att-href="'/shop/product/%s' % product.id">
+                                                <img t-att-src="'/web/image/product.template/%s/image_512' % product.id"
+                                                     class="img-fluid"/>
+                                            </a>
+
+                                            <t t-if="product.list_price > product.standard_price">
+                                                <div class="product-badge badge-sale">
+                                                    <t t-esc="int((1 - product.standard_price/product.list_price) * 100)"/>
+                                                    %
+                                                    OFF
+                                                </div>
+                                            </t>
+
+                                            <!-- Action Buttons -->
+                                            <div class="product-actions position-absolute top-0 end-0 m-2 d-flex flex-column gap-1 opacity-0">
+                                                <button type="button"
+                                                        class="btn btn-light btn-sm rounded-circle shadow-sm"
+                                                        t-att-onclick="'event.stopPropagation(); addToWishlist(%s);' % product.id"
+                                                        title="Add to Wishlist">
+                                                    <i class="bi bi-heart"></i>
+                                                </button>
+                                                <button type="button"
+                                                        class="btn btn-light btn-sm rounded-circle shadow-sm"
+                                                        t-att-onclick="'event.stopPropagation(); quickView(%s);' % product.id"
+                                                        title="Quick View">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Content -->
+                                        <div class="p-3">
+                                            <h6 class="fw-semibold">
+                                                <t t-esc="product.name"/>
+                                            </h6>
+
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="text-danger fw-bold">
+                                                    <t t-out="contextual_price"
+                                                       t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
+                                                </span>
+
+                                                <button type="button"
+                                                        class="btn btn-sm btn-organic s_add_to_cart_btn"
+                                                        t-att-data-product-template-id="product.id"
+                                                        t-att-data-product-variant-id="product.product_variant_id.id"
+                                                        t-att-data-product-type="product.type"
+                                                        data-action="add_to_cart"
+                                                        data-show-quantity="False">
+                                                    <i class="bi bi-cart3"/>
+                                                    Add
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </t>
+                        </t>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </template>
+
+</odoo>
