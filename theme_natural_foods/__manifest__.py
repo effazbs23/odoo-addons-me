@@ -18,6 +18,7 @@
     'company': 'nopCommerce, Brainstation 23 PLC',
     'maintainer': 'ERP 23',
     'website': 'https://www.erp-23.com',
+    'support': 'erp23@brainstation-23.com',
     'depends': [
         'website',
         'website_sale',
