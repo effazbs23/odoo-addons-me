@@ -78,8 +78,6 @@
         'static/description/theme_screenshot.gif',
     ],
     'license': 'LGPL-3',
-    'installable': True,
-    'auto_install': False,
-    "price": "00.0",
+    'price': '00.0',
     'currency': 'USD',
 }
