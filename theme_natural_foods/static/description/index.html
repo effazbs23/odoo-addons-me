@@ -7,165 +7,153 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <style>
-    :root {
-      --nf-primary: #2f8f46;
-      --nf-primary-dark: #1f6b33;
-      --nf-secondary: #0f766e;
-      --nf-bg: #f5faf6;
-      --nf-surface: #ffffff;
-      --nf-border: #d2e4d6;
-      --nf-text: #1c2b22;
-      --nf-muted: #5c6f64;
-      --nf-shadow: 0 14px 28px -22px rgba(15, 23, 42, 0.35);
-    }
-
     body {
       margin: 0;
-      font-family: Inter, "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(180deg, var(--nf-bg) 0%, #ffffff 420px);
-      color: var(--nf-text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #fafbfc;
+      color: #1a1a1a;
       line-height: 1.6;
     }
 
     .nf-container {
-      max-width: 1120px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 24px 14px 48px;
+      padding: 40px 20px 80px;
     }
 
     .nf-card {
-      background: var(--nf-surface);
-      border: 1px solid var(--nf-border);
+      background: #ffffff;
+      border: 1px solid #e0e0e0;
       border-radius: 16px;
-      box-shadow: var(--nf-shadow);
-      padding: 24px;
-      margin-top: 18px;
+      padding: 40px;
+      margin-top: 28px;
     }
 
     .nf-hero {
-      background: linear-gradient(135deg, #e8f3eb 0%, #e8f1ef 58%, #eaf1f7 100%);
-      border: 1px solid var(--nf-border);
-      border-radius: 18px;
-      box-shadow: var(--nf-shadow);
-      padding: 36px 28px;
+      background: linear-gradient(135deg, #e8f5eb 0%, #f0f9ff 100%);
+      border: 1px solid #e0e0e0;
+      border-radius: 16px;
+      padding: 60px 48px;
+      margin-bottom: 20px;
     }
 
     .nf-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      font-weight: 700;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
-      border-radius: 999px;
-      border: 1px solid rgba(47, 143, 70, 0.24);
-      background: rgba(47, 143, 70, 0.12);
-      color: var(--nf-primary-dark);
-      padding: 6px 10px;
-      margin: 0 8px 8px 0;
+      letter-spacing: 0.5px;
+      border-radius: 8px;
+      border: 1px solid #2f8f46;
+      background: #e8f5eb;
+      color: #1f6b33;
+      padding: 8px 14px;
+      margin: 0 8px 12px 0;
     }
 
     .nf-title {
-      font-size: 34px;
+      font-size: 48px;
       font-weight: 700;
-      color: #153423;
-      margin: 10px 0 8px;
+      color: #1a1a1a;
+      margin: 16px 0 12px;
+      line-height: 1.2;
     }
 
     .nf-subtitle {
       margin: 0;
-      color: var(--nf-muted);
-      font-size: 17px;
-      max-width: 920px;
+      color: #666666;
+      font-size: 18px;
+      max-width: 800px;
+      line-height: 1.7;
     }
 
     .nf-h2 {
-      font-size: 26px;
-      color: #163823;
-      margin: 0 0 10px;
+      font-size: 32px;
+      color: #1a1a1a;
+      margin: 0 0 16px;
       font-weight: 700;
     }
 
     .nf-text {
       margin: 0;
-      color: var(--nf-muted);
+      color: #666666;
+      font-size: 16px;
+      line-height: 1.6;
     }
 
     .nf-meta {
-      height: 100%;
-      border: 1px solid var(--nf-border);
+      border: 1px solid #e0e0e0;
       border-radius: 12px;
-      background: linear-gradient(180deg, #f1f8f3 0%, #f8fcf9 100%);
-      padding: 14px 16px;
+      background: #fafbfc;
+      padding: 24px;
+      height: 100%;
     }
 
     .nf-meta .k {
-      margin: 0 0 4px;
-      font-size: 12px;
+      margin: 0 0 8px;
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.5px;
       font-weight: 700;
-      color: var(--nf-primary-dark);
+      color: #2f8f46;
     }
 
     .nf-meta .v {
       margin: 0;
-      font-size: 15px;
-      color: var(--nf-text);
+      font-size: 18px;
+      color: #1a1a1a;
+      font-weight: 600;
     }
 
     .nf-feature {
-      height: 100%;
-      border: 1px solid #d9e7dc;
+      border: 1px solid #e0e0e0;
       border-radius: 12px;
-      padding: 18px;
+      padding: 28px;
       background: #ffffff;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-
-    .nf-feature:hover {
-      transform: translateY(-2px);
-      border-color: #bbd7c1;
-      box-shadow: 0 12px 24px -18px rgba(15, 23, 42, 0.35);
+      height: 100%;
     }
 
     .nf-feature-icon {
       display: inline-flex;
-      width: 42px;
-      height: 42px;
+      width: 50px;
+      height: 50px;
       border-radius: 10px;
       align-items: center;
       justify-content: center;
-      background: rgba(47, 143, 70, 0.12);
-      color: var(--nf-primary);
-      font-size: 20px;
-      margin-bottom: 8px;
+      background: #e8f5eb;
+      color: #2f8f46;
+      font-size: 24px;
+      margin-bottom: 16px;
     }
 
     .nf-feature h5 {
       font-size: 18px;
-      color: var(--nf-primary-dark);
-      margin-bottom: 8px;
+      color: #1a1a1a;
+      margin: 12px 0 10px;
+      font-weight: 700;
     }
 
     .nf-feature p {
       margin: 0;
-      color: var(--nf-muted);
+      color: #666666;
       font-size: 15px;
+      line-height: 1.6;
     }
 
     .nf-kpi {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      border: 1px solid var(--nf-border);
-      border-radius: 999px;
-      padding: 7px 12px;
-      margin: 4px 6px 4px 0;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin: 6px 8px 6px 0;
       font-size: 13px;
-      color: #244b34;
-      background: #f4faf5;
+      color: #1f6b33;
+      background: #f0f8f2;
+      font-weight: 600;
     }
 
     .nf-list {
@@ -177,81 +165,86 @@
     .nf-list li {
       display: flex;
       align-items: flex-start;
-      gap: 9px;
-      margin-bottom: 8px;
-      color: var(--nf-muted);
-      font-size: 15px;
+      gap: 12px;
+      margin-bottom: 12px;
+      color: #666666;
+      font-size: 16px;
+      line-height: 1.6;
     }
 
     .nf-list li i {
-      color: var(--nf-primary);
-      margin-top: 2px;
+      color: #2f8f46;
+      margin-top: 4px;
+      font-size: 16px;
     }
 
     .nf-showcase {
-      border: 1px solid var(--nf-border);
-      border-radius: 14px;
-      background: linear-gradient(180deg, #f3f8f4 0%, #f9fcfa 100%);
-      padding: 22px;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      background: #fafbfc;
+      padding: 32px;
       height: 100%;
     }
 
     .nf-showcase h4 {
-      color: #183a24;
+      color: #1a1a1a;
       font-size: 22px;
       font-weight: 700;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .nf-showcase p {
       margin: 0;
-      color: var(--nf-muted);
+      color: #666666;
+      font-size: 15px;
+      line-height: 1.7;
     }
 
     .nf-service {
-      height: 100%;
-      border: 1px solid var(--nf-border);
+      border: 1px solid #e0e0e0;
       border-radius: 12px;
       background: #ffffff;
-      padding: 16px;
+      padding: 32px 24px;
       text-align: center;
+      height: 100%;
     }
 
     .nf-service .icon-wrap {
-      width: 52px;
-      height: 52px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: rgba(47, 143, 70, 0.12);
-      color: var(--nf-primary);
-      font-size: 22px;
-      margin-bottom: 10px;
+      background: #e8f5eb;
+      color: #2f8f46;
+      font-size: 24px;
+      margin-bottom: 16px;
     }
 
     .nf-service h6 {
       margin: 0;
-      color: var(--nf-text);
+      color: #1a1a1a;
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 700;
+      line-height: 1.4;
     }
 
     .nf-link {
-      color: var(--nf-primary-dark);
+      color: #2f8f46;
       text-decoration: none;
       font-weight: 600;
     }
 
     .nf-link:hover {
-      color: var(--nf-primary);
+      color: #1f6b33;
       text-decoration: underline;
     }
 
     .nf-company-logo {
-      max-height: 34px;
+      max-height: 48px;
       width: auto;
-      margin-bottom: 10px;
+      margin-bottom: 16px;
     }
 
     .nf-company-center {
@@ -259,42 +252,42 @@
     }
 
     .nf-footer {
-      margin-top: 14px;
+      margin-top: 20px;
       text-align: center;
-      color: var(--nf-muted);
+      color: #999999;
       font-size: 14px;
     }
 
     .nf-unified-section {
-      background: linear-gradient(180deg, #f3f8f4 0%, #f9fcfa 100%);
-      border: 1px solid var(--nf-border);
+      background: #fafbfc;
+      border: 1px solid #e0e0e0;
       border-radius: 16px;
-      padding: 32px;
+      padding: 60px 48px;
+      margin-bottom: 40px;
     }
 
     .nf-unified-content {
-      padding: 20px;
+      padding: 0;
     }
 
     .nf-unified-title {
       margin: 0;
       font-size: 40px;
-      line-height: 1.15;
-      color: #183a24;
+      line-height: 1.25;
+      color: #1a1a1a;
       font-weight: 700;
     }
 
     .nf-unified-title span {
-      display: inline-block;
-      width: 100%;
+      display: block;
     }
 
     .nf-unified-copy {
-      margin: 0;
-      color: var(--nf-muted);
+      margin: 16px 0 0;
+      color: #666666;
       font-size: 16px;
-      font-weight: 400;
-      line-height: 1.65;
+      line-height: 1.75;
+      max-width: 600px;
     }
 
     .nf-unified-list {
@@ -309,20 +302,21 @@
     .nf-unified-list li {
       display: flex;
       align-items: center;
-      gap: 8px;
-      color: var(--nf-muted);
-      font-size: 16px;
-      line-height: 1.5;
+      gap: 10px;
+      color: #666666;
+      font-size: 15px;
+      line-height: 1.6;
     }
 
     .nf-unified-icon {
-      color: var(--nf-primary);
-      font-size: 16px;
+      color: #2f8f46;
+      font-size: 18px;
+      flex-shrink: 0;
     }
 
     .nf-unified-image {
       width: 100%;
-      border-radius: 24px;
+      border-radius: 16px;
       object-fit: cover;
     }
 
@@ -330,100 +324,120 @@
       border-radius: 16px;
     }
 
-    .nf-supports {
-      margin: 30px 0;
-      padding: 22px 24px;
-      border: 1px solid #0b3a76;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #001844 0%, #0a2b57 100%);
-      box-shadow: 0 14px 28px -18px rgba(0, 24, 68, 0.55);
-    }
-
-    .nf-support-logo {
-      width: auto;
-      height: 44px;
-      max-width: 100%;
-    }
-
-    .nf-support-row {
-      margin-top: 10px;
-    }
-
-    .nf-support-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .nf-support-label {
-      font-size: 14px;
-      color: #dbeafe;
-      font-weight: 600;
-      margin-right: 6px;
-    }
-
-    .nf-pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      min-width: 122px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 6px 12px;
-      border: 1px solid transparent;
-      text-align: center;
-    }
-
-    .nf-pill-support {
-      background: rgba(59, 130, 246, 0.18);
-      color: #eaf2ff;
-      border-color: rgba(147, 197, 253, 0.42);
-    }
-
-    .nf-pill-availability {
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .nf-pill-unavailable {
-      color: #fecaca;
-      border-color: rgba(248, 113, 113, 0.5);
-      background: rgba(127, 29, 29, 0.35);
-    }
-
-    .nf-pill-available {
-      color: #bbf7d0;
-      border-color: rgba(74, 222, 128, 0.45);
-      background: rgba(20, 83, 45, 0.35);
-    }
-
-    .nf-pill i {
-      color: inherit;
-    }
-
     @media (max-width: 991px) {
+      .nf-container {
+        padding: 20px 12px 40px;
+      }
+
+      .nf-card {
+        padding: 24px;
+      }
+
+      .nf-hero {
+        padding: 40px 24px;
+      }
+
+      .nf-title {
+        font-size: 36px;
+      }
+
+      .nf-h2 {
+        font-size: 24px;
+      }
+
       .nf-unified-section {
-        padding: 22px;
+        padding: 32px 20px;
       }
 
       .nf-unified-title {
-        font-size: 32px;
+        font-size: 28px;
+      }
+    }
+
+    .nf-supports {
+      margin: 30px 0;
+      padding: 40px;
+      border: 1px solid #e0e0e0;
+      border-radius: 16px;
+      background: #ffffff;
+    }
+
+    .nf-support-logo {
+      height: 60px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .nf-support-title {
+      margin: 0 0 12px;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #2f8f46;
+    }
+
+    .nf-badge-support {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      background: #2f8f46;
+      color: #ffffff;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .nf-badge-available {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: #f1f8f4;
+      color: #2f8f46;
+      border: 1px solid #c8e6c9;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .nf-badge-unavailable {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: #ffebee;
+      color: #d32f2f;
+      border: 1px solid #ffcdd2;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .nf-badge-support i,
+    .nf-badge-available i,
+    .nf-badge-unavailable i {
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .nf-supports {
+        padding: 24px 16px;
       }
 
-      .nf-unified-image {
-        height: auto;
+      .nf-support-logo {
+        height: 50px;
       }
 
-      .nf-support-wrap {
-        justify-content: flex-start;
+      .nf-support-title {
+        font-size: 12px;
       }
 
-      .nf-support-label {
-        width: 100%;
-        margin-right: 0;
+      .nf-badge-support,
+      .nf-badge-available,
+      .nf-badge-unavailable {
+        font-size: 12px;
+        padding: 6px 12px;
       }
     }
   </style>
@@ -434,46 +448,39 @@
   <div class="nf-container">
 
         <!-- support-header -->
-
-        <div class="supports nf-supports">
-          <div class="row justify-content-between">
-            <div class="col-12 col-lg-4">
-              <div class="my-3">
-                <img src="./img/erp-23.png"
-                  class="nf-support-logo">
-              </div>
+        <div class="nf-supports">
+          <div class="row g-4 align-items-center">
+            <div class="col-12 col-md-3 text-center">
+              <img src="./img/erp-23.png" class="nf-support-logo" alt="ERP Support">
             </div>
-            <div class="col-12 col-lg-8">
-              <div class="row nf-support-row">
-    
-                <div class="my-3 nf-support-wrap">
-                  <span class="nf-support-label">Supports:</span>
-                  <div class="text-center nf-pill nf-pill-support">
-                    Enterprise
-                  </div>
-                  <div class="text-center nf-pill nf-pill-support">
-                    Community
+            <div class="col-12 col-md-9">
+              <div class="row g-4">
+                <!-- Supports -->
+                <div class="col-12 col-sm-6">
+                  <div>
+                    <h6 class="nf-support-title">Supports</h6>
+                    <div class="d-flex gap-2 flex-wrap">
+                      <span class="nf-badge-support">Enterprise</span>
+                      <span class="nf-badge-support">Community</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="row nf-support-row">
-                <div class="nf-support-wrap">
-                  <span class="nf-support-label">Availability:</span>
-                  <div class="text-center nf-pill nf-pill-availability nf-pill-unavailable">
-                    <i class="bi bi-x-circle-fill"></i> Odoo Online
-                  </div>
-                  <div class="text-center nf-pill nf-pill-availability nf-pill-available">
-                    <i class="bi bi-check-circle-fill"></i> Odoo.sh
-                  </div>
-                  <div class="text-center nf-pill nf-pill-availability nf-pill-available">
-                    <i class="bi bi-check-circle-fill"></i> On Premise
+                <!-- Availability -->
+                <div class="col-12 col-sm-6">
+                  <div>
+                    <h6 class="nf-support-title">Availability</h6>
+                    <div class="d-flex gap-2 flex-wrap">
+                      <span class="nf-badge-unavailable"><i class="bi bi-x-circle"></i> Online</span>
+                      <span class="nf-badge-available"><i class="bi bi-check-circle"></i> Odoo.sh</span>
+                      <span class="nf-badge-available"><i class="bi bi-check-circle"></i> Premise</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-    
+
         <!--  -->
     
         <!-- banner-section -->
@@ -488,19 +495,8 @@
       <span class="nf-badge"><i class="bi bi-shop"></i> Odoo Theme</span>
       <span class="nf-badge"><i class="bi bi-cart3"></i> Website Sale</span>
       <span class="nf-badge"><i class="bi bi-basket2"></i> Food & Grocery</span>
-      <h1 class="nf-title">Natural Foods Theme</h1>
+      <h1 class="nf-title">Theme Natural Foods</h1>
       <p class="nf-subtitle">A premium Odoo storefront theme for organic and grocery businesses with conversion-focused homepage sections, category-driven product discovery, and polished cart/wishlist interactions.</p>
-    </section>
-
-    <!-- product-information-section -->
-    <section class="nf-card">
-      <h2 class="nf-h2">Product Information</h2>
-      <p class="nf-text mb-3">Natural Foods delivers a complete website experience with a custom topbar, header, footer, dynamic homepage snippets, enhanced shop layout, and backend-manageable product highlights.</p>
-      <div class="row g-3">
-        <div class="col-md-4"><div class="nf-meta"><p class="k">Technical Name</p><p class="v">natural_foods</p></div></div>
-        <div class="col-md-4"><div class="nf-meta"><p class="k">Version</p><p class="v">19.0.1.0</p></div></div>
-        <div class="col-md-4"><div class="nf-meta"><p class="k">License</p><p class="v">LGPL-3</p></div></div>
-      </div>
     </section>
 
     <!-- core-features-section -->
@@ -812,43 +808,6 @@
   
       <p class="nf-footer">Natural Foods Theme - Premium Odoo storefront experience for food eCommerce.</p>
     </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    var iconMap = {
-      "feature-star.svg": "bi bi-stars",
-      "check.svg": "bi bi-check-circle-fill",
-      "gear.svg": "bi bi-gear-fill",
-      "wrench-icon.svg": "bi bi-tools",
-      "life-ring-icon.svg": "bi bi-life-preserver",
-      "arrows-repeat.svg": "bi bi-arrow-repeat",
-      "puzzle-piece-icon.svg": "bi bi-puzzle-fill",
-      "odoo-consultancy.svg": "bi bi-person-workspace",
-      "odoo-licencing.svg": "bi bi-patch-check-fill",
-      "hire-odoo.svg": "bi bi-person-plus-fill"
-    };
-
-    document.querySelectorAll("img[src$='.svg']").forEach(function (img) {
-      if (img.classList.contains("nf-company-logo")) {
-        return;
-      }
-      var src = img.getAttribute("src") || "";
-      var iconClass = "bi bi-circle-fill";
-      Object.keys(iconMap).some(function (key) {
-        if (src.indexOf(key) !== -1) {
-          iconClass = iconMap[key];
-          return true;
-        }
-        return false;
-      });
-      var icon = document.createElement("i");
-      icon.className = iconClass;
-      icon.style.color = "#2e7d32";
-      icon.style.fontSize = src.indexOf("check.svg") !== -1 ? "16px" : "22px";
-      img.replaceWith(icon);
-    });
-  });
-</script>
+  </div>
 </body>
 </html>
