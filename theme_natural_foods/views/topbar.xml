@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="natural_foods_topbar" inherit_id="website.layout">
+
+        <xpath expr="//header" position="before">
+
+            <div class="organic-topbar bg-organic-700 py-1">
+
+                <div class="container">
+
+                    <div class="mobile-center d-flex justify-content-between align-items-center">
+
+                        <!-- Left Text -->
+                        <div class="d-flex align-items-center gap-3">
+                            <span>Free shipping on orders over $50</span>
+                        </div>
+
+                        <!-- Right Menu -->
+                        <div class="utility-links d-flex align-items-center gap-3">
+
+                            <div class="d-flex align-items-center gap-1 bg-opacity-10 rounded-pill px-2 py-1">
+
+                                <t t-set="website_sale_pricelists"
+                                   t-value="website.get_pricelist_available(show_visible=True)"/>
+
+                                <t t-set="current_pricelist"
+                                   t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
+
+                                <!-- SAFE CHECK -->
+                                <t t-set="valid_pricelist"
+                                   t-value="current_pricelist if current_pricelist and current_pricelist.exists() else False"/>
+
+                                <div t-if="website_sale_pricelists and len(website_sale_pricelists) &gt; 1 and valid_pricelist"
+                                     class="dropdown d-flex align-items-center">
+
+                                    <button class="btn p-0 border-0 bg-transparent text-white d-flex align-items-center gap-1 dropdown-toggle"
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-haspopup="true"
+                                            aria-expanded="false">
+
+                                        <span class="small text-white">
+                                            <t t-esc="valid_pricelist.currency_id.name"/>
+                                            (<t t-esc="valid_pricelist.currency_id.symbol"/>)
+                                        </span>
+
+                                    </button>
+
+                                    <div class="dropdown-menu dropdown-menu-end" role="menu">
+                                        <t t-foreach="website_sale_pricelists" t-as="pl">
+                                            <a t-att-href="'/shop/change_pricelist/%s' % pl.id"
+                                               t-attf-class="dropdown-item #{valid_pricelist and pl.id == valid_pricelist.id and 'active' or ''}"
+                                               role="menuitem">
+
+                                                <span>
+                                                    <t t-esc="pl.currency_id.name"/>
+                                                    (<t t-esc="pl.currency_id.symbol"/>)
+                                                </span>
+
+                                            </a>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- fallback -->
+                                <span t-else="" class="small text-white">
+                                    <t t-if="valid_pricelist">
+                                        <t t-esc="valid_pricelist.currency_id.name"/>
+                                        (<t t-esc="valid_pricelist.currency_id.symbol"/>)
+                                    </t>
+                                </span>
+
+                            </div>
+
+                            <div class="d-flex align-items-center gap-1 bg-opacity-10 rounded-pill px-2 py-1">
+
+                                <!-- Odoo Default Language Selector -->
+                                <t t-call="website.placeholder_header_language_selector"
+                                   _item_class.f="list-unstyled m-0"
+                                   _div_classes.f="d-flex align-items-center"
+                                   _btn_class.f="btn p-0 border-0 bg-transparent text-white d-flex align-items-center gap-1"
+                                   _txt_class.f="small"
+                                   _dropdown_menu_class.f="dropdown-menu-end"/>
+
+                            </div>
+
+
+                            <!--                            <a href="#" class="text-white text-decoration-none">Help</a>-->
+                            <!--                            <a href="#" class="text-white text-decoration-none">Track Order</a>-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </xpath>
+
+    </template>
+
+</odoo>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="naturalfood_promo_banner_new" name="Promo Banner New">
+        <section class="py-5 bg-white oe_structure">
+            <div class="container">
+                <div class="row g-4">
+
+                    <!-- ✅ Banner 1 -->
+                    <div class="col-lg-6">
+                        <div class="promo-banner-new position-relative overflow-hidden rounded-4 p-0 h-100 bg-organic-100">
+                            <div class="row h-100 align-items-center">
+
+                                <!-- Left Content -->
+                                <div class="col-md-6">
+                                    <div class="promo-content p-5">
+                                        <h2 class="fw-bold text-dark mb-2 oe_editable">
+                                            Unlock Up <br/>
+                                            To 15% OFF
+                                        </h2>
+                                        <p class="text-muted mb-3 fw-medium oe_editable">
+                                            On Fruits &amp; Vegetables
+                                        </p>
+                                        <a href="/shop"
+                                           class="btn btn-primary fw-bold rounded-2 px-4 py-2 d-inline-flex align-items-center gap-2">
+                                            Buy Now
+                                            <i class="bi bi-arrow-right"/>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Right Image -->
+                                <div class="col-md-6 p-0 position-relative">
+                                    <img src="/theme_natural_foods/static/src/img/promo-banner-orange.png"
+                                         alt="Fresh Fruits and Vegetables"
+                                         class="img-fluid w-100"/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ✅ Banner 2 -->
+                    <div class="col-lg-6">
+                        <div class="promo-banner-new position-relative overflow-hidden rounded-4 p-0 h-100 bg-organic-100">
+                            <div class="row h-100 align-items-center">
+
+                                <!-- Left Content -->
+                                <div class="col-md-6">
+                                    <div class="promo-content p-5">
+                                        <h2 class="fw-bold text-dark mb-2 oe_editable">
+                                            Unlock Up To <br/>
+                                            20% OFF
+                                        </h2>
+                                        <p class="text-muted mb-3 fw-medium oe_editable">
+                                            On Bakery Products
+                                        </p>
+                                        <a href="/shop"
+                                           class="btn btn-primary fw-bold rounded-2 px-4 py-2 d-inline-flex align-items-center gap-2">
+                                            Buy Now
+                                            <i class="bi bi-arrow-right"/>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Right Image -->
+                                <div class="col-md-6 p-0 position-relative">
+                                    <img src="/theme_natural_foods/static/src/img/ads-green.png"
+                                         alt="Fresh Bakery Products"
+                                         class="img-fluid w-100"/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

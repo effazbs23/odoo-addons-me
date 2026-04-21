@@ -1,0 +1,205 @@
+/* Simple Filter Sections */
+.filter-section {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.filter-section:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.filter-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 16px;
+}
+
+.filter-content {
+    padding-top: 0;
+}
+
+.filter-content.collapsed {
+    display: none;
+}
+
+.category-pill {
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: 1px solid #e5e7eb;
+    background: white;
+    color: #6b7280;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.category-pill:hover {
+    border-color: #10b981;
+    color: #10b981;
+}
+
+.category-pill.active {
+    background: #10b981;
+    color: white;
+    border-color: #10b981;
+}
+
+.price-range-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    outline: none;
+}
+
+.price-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #10b981;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.price-range-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: #10b981;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+.view-toggle-btn {
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #6b7280;
+    transition: all 0.2s ease;
+}
+
+.view-toggle-btn.active {
+    background: #10b981;
+    color: white;
+    border-color: #10b981;
+}
+
+.view-toggle-btn:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.view-toggle-btn:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-left: none;
+}
+
+/* Enhanced Product Cards */
+.enhanced-product-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 0;
+    transition: all 0.4s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.enhanced-product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: #10b981;
+}
+
+/* List View Styles */
+.list-view {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: white;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.list-view:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #10b981;
+}
+
+.list-view img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-right: 24px;
+}
+
+.list-view-content {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-view-info {
+    flex: 1;
+}
+
+.list-view-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Simple sidebar */
+.simple-sidebar {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+/* Quick view modal enhancements */
+.quick-view-backdrop {
+    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.quick-view-modal {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid rgba(34, 197, 94, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.quick-view-image-container {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-animate-in {
+    animation: modalSlideIn 0.3s ease-out;
+}

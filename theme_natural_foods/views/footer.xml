@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="naturalfood_footer"
+              inherit_id="website.layout"
+              name="Natural Foods Footer">
+
+        <xpath expr="//footer" position="replace">
+
+            <footer>
+
+                <!-- Footer -->
+                <div class="footer-main py-5">
+                    <div class="container">
+                        <div class="row g-5">
+
+                            <!-- Brand & About Section -->
+                            <div class="col-lg-4">
+                                <div class="footer-brand">
+                                    <div class="d-flex align-items-center mb-4">
+                                        <div class="d-flex align-items-center logo">
+                                            <img t-att-src="'/theme_natural_foods/static/src/img/fotter-logo.png'"
+                                                 alt="Vegetables"
+                                                 class="w-100"/>
+                                        </div>
+                                    </div>
+
+                                    <p class="text-muted mb-4 lh-lg">
+                                        Your trusted source for premium organic groceries,
+                                        sourced directly from local farms and delivered fresh to your door.
+                                        We're committed to sustainability and your health.
+                                    </p>
+
+                                    <!-- Social Media -->
+                                    <div class="social-media">
+                                        <h6 class="text-white fw-semibold mb-3">
+                                            Follow Our Journey
+                                        </h6>
+
+                                        <div class="d-flex gap-3">
+                                            <a href="#" class="social-link" data-platform="facebook">
+                                                <i class="bi bi-facebook"/>
+                                            </a>
+                                            <a href="#" class="social-link" data-platform="instagram">
+                                                <i class="bi bi-instagram"/>
+                                            </a>
+                                            <a href="#" class="social-link" data-platform="twitter">
+                                                <i class="bi bi-twitter"/>
+                                            </a>
+                                            <a href="#" class="social-link" data-platform="youtube">
+                                                <i class="bi bi-youtube"/>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Links Grid -->
+                            <div class="col-lg-8">
+                                <div class="row g-4">
+
+                                    <!-- Shop -->
+                                    <div class="col-md-3 col-6">
+                                        <div class="footer-section">
+                                            <h6 class="text-white fw-bold mb-3 d-flex align-items-center">
+                                                <i class="bi bi-basket me-2 text-organic-400"/>
+                                                Shop
+                                            </h6>
+
+                                            <ul class="footer-links">
+                                                <li>
+                                                    <a href="#">All Products</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Fresh Vegetables</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Organic Fruits</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Dairy Products</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Meat &amp; Seafood</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Fresh Bakery</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Pantry Essentials</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <!-- Support -->
+                                    <div class="col-md-3 col-6">
+                                        <div class="footer-section">
+                                            <h6 class="text-white fw-bold mb-3 d-flex align-items-center">
+                                                <i class="bi bi-headset me-2 text-organic-400"/>
+                                                Support
+                                            </h6>
+
+                                            <ul class="footer-links">
+                                                <li>
+                                                    <a href="#">Help Center</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Track Your Order</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Shipping &amp; Delivery</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Returns &amp; Refunds</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Size Guide</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Product Care</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Bulk Orders</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <!-- Company -->
+                                    <div class="col-md-3 col-6">
+                                        <div class="footer-section">
+                                            <h6 class="text-white fw-bold mb-3 d-flex align-items-center">
+                                                <i class="bi bi-building me-2 text-organic-400"/>
+                                                Company
+                                            </h6>
+
+                                            <ul class="footer-links">
+                                                <li>
+                                                    <a href="#">About Us</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Our Story</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Sustainability</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Farm Partners</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Careers</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Press Kit</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Investor Relations</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <!-- Resources -->
+                                    <div class="col-md-3 col-6">
+                                        <div class="footer-section">
+                                            <h6 class="text-white fw-bold mb-3 d-flex align-items-center">
+                                                <i class="bi bi-book me-2 text-organic-400"/>
+                                                Resources
+                                            </h6>
+
+                                            <ul class="footer-links">
+                                                <li>
+                                                    <a href="#">Healthy Recipes</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Nutrition Guide</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Organic Certification</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Seasonal Calendar</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Blog &amp; Tips</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Mobile App</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">API for Developers</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Bottom -->
+                <div class="footer-bottom py-4">
+                    <div class="container">
+                        <div class="row align-items-center">
+
+                            <div class="col-lg-6 mb-3 mb-lg-0">
+                                <div class="d-flex align-items-center flex-wrap gap-3">
+                                    <p class="text-muted mb-0">
+                                        © 2024 Natural Foods. All rights reserved.
+                                    </p>
+
+                                    <div class="payment-methods d-flex align-items-center gap-2">
+                                        <span class="text-muted small">We accept:</span>
+                                        <i class="bi bi-credit-card text-muted"/>
+                                        <i class="bi bi-paypal text-muted"/>
+                                        <i class="bi bi-apple text-muted"/>
+                                        <i class="bi bi-google text-muted"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="d-flex justify-content-lg-end align-items-center gap-4 flex-wrap">
+                                    <a href="#" class="footer-legal-link">Privacy Policy</a>
+                                    <a href="#" class="footer-legal-link">Terms of Service</a>
+                                    <a href="#" class="footer-legal-link">Cookie Policy</a>
+                                    <a href="#" class="footer-legal-link">Accessibility</a>
+
+                                    <button class="btn btn-sm btn-outline-organic back-to-top"
+                                            onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                                        <i class="bi bi-arrow-up me-2"/>
+                                        Back to Top
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </footer>
+
+        </xpath>
+
+    </template>
+
+</odoo>

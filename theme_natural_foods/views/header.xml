@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="natural_foods_header" inherit_id="website.layout">
+
+        <xpath expr="//header" position="replace">
+
+            <header class="organic-header bg-white shadow-sm">
+                <div class="container py-3"> 
+                <!-- Main Header Row -->
+                    <div class="d-flex align-items-center justify-content-between Main-header"> 
+                     <div class="mobile-menu-toggle d-lg-none me-2">
+            <button class="btn btn-outline-organic" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu">
+              <i class="bi bi-list"></i>
+            </button>
+          </div>  
+                    
+                    <!-- Logo -->
+                        <t t-call="website.placeholder_header_brand">
+                            <t t-set="_link_class" t-valuef="d-flex align-items-center"/>
+                            <t t-set="_img_class" t-valuef="img-fluid logo-img"/>
+                        </t>
+                        <div class="organic-search d-none d-lg-block">
+                            <form action="/shop" method="get" class="position-relative">
+                                <input type="search" name="search" class="form-control o_searchbar_input"
+                                       placeholder="Search products..." t-att-value="request.params.get('search','')"/>
+                                <button type="submit"
+                                        class="organic-search-btn border-0 position-absolute top-50 end-0 translate-middle-y me-2">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </form>
+                        </div> <!-- Enhanced Header actions -->
+                        <div class="d-flex align-items-center gap-3">
+                            <!-- Account -->
+                            <a t-att-href=" '/my' if request.session.uid else '/web/login' "
+                               class="btn btn-light rounded-pill shadow-sm d-flex align-items-center gap-2 ">
+                                <i class="bi bi-person-circle"></i>
+                                <span class="d-none d-sm-inline">
+                                    <t t-if="request.session.uid">My Account</t>
+                                    <t t-else="">Login</t>
+                                </span>
+                            </a>
+                            <!-- Wishlist & Cart Wrapper -->
+                            <div class="d-flex align-items-center gap-2">
+                                <!-- Wishlist -->
+                                <t t-if="is_view_active('website_sale_wishlist.add_to_wishlist')">
+                                    <t t-nocache="wishlist depends on user">
+
+                                        <t t-set="wishlist_count"
+                                           t-value="len(request.env['product.wishlist'].current())"/>
+
+                                        <t t-set="show_wishes"
+                                           t-value="website.has_ecommerce_access()"/>
+
+                                        <div t-attf-class="o_wsale_my_wish #{not show_wishes and 'd-none'}">
+
+                                            <a t-att-href="show_wishes and '/shop/wishlist' or '/web/login'"
+                                               class="btn btn-light d-flex align-items-center gap-2 rounded-pill position-relative bg-white shadow-sm hover-organic" >
+
+                                                <i class="bi bi-heart text-danger"></i>
+                                                <span class="d-none d-sm-inline fw-medium">Wishlist</span>
+
+                                                <!-- Use Odoo native `my_wish_quantity` class and ensure it's always in DOM for AJAX to work -->
+                                                <span t-attf-class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger my_wish_quantity #{not wishlist_count and 'd-none' or ''}"
+                                                      t-esc="wishlist_count or '0'"/>
+
+                                            </a>
+
+                                        </div>
+
+                                    </t>
+                                </t>
+
+                          
+                                <li class="o_wsale_my_cart list-unstyled d-inline-block position-relative cart-dropdown-container">
+                                    <t t-set="cart_quantity"
+                                       t-value="request.session.get('website_sale_cart_quantity', request.cart.cart_quantity) or 0"/>
+
+                                    <a href="/shop/cart"
+                                       class="btn btn-light d-flex align-items-center gap-2 rounded-pill hover-organic position-relative bg-white shadow-sm"
+                                       aria-label="Shopping cart"
+                                       onmouseenter="showCartDropdown()"
+                                       onmouseleave="hideCartDropdown()"
+                                       onclick="if (window.matchMedia('(max-width: 991px)').matches) { return true; } showCartDropdown(); return false;">
+
+                                        <i class="bi bi-cart3"></i>
+                                        <span class="d-none d-sm-inline fw-medium">Cart</span>
+
+                                        <!--  IMPORTANT: use my_cart_quantity -->
+                                        <span t-attf-class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success shadow-sm my_cart_quantity #{not cart_quantity and 'd-none' or ''}"
+                                              t-esc="cart_quantity or 0"/>
+
+                                    </a>
+                                    <div id="cart-dropdown"
+                                         class="position-absolute top-100 end-0 mt-2 bg-white rounded-3 shadow-lg border p-3 d-none"
+                                         onmouseenter="keepCartDropdown()"
+                                         onmouseleave="hideCartDropdown()"
+                                         style="min-width: 380px; z-index: 1055;">
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <h6 class="mb-0 fw-bold">Shopping Cart</h6>
+                                            <span class="text-muted small" id="cart-dropdown-items-count">0 items</span>
+                                        </div>
+
+                                        <div id="cart-dropdown-items"></div>
+
+                                        <div id="cart-dropdown-empty" class="text-center py-3 text-muted small d-none">
+                                            Your cart is empty
+                                        </div>
+
+                                        <hr class="my-3"/>
+
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <span class="fw-bold">Total:</span>
+                                            <span class="fw-bold text-organic-600" id="cart-dropdown-total">$0.00</span>
+                                        </div>
+
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <a href="/shop/cart" class="btn btn-outline-organic btn-lg w-100 rounded-5">
+                                                    View Cart
+                                                </a>
+                                            </div>
+                                            <div class="col-6">
+                                                <a href="/shop/checkout" class="btn btn-organic btn-lg w-100 rounded-5">
+                                                    Checkout
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </div>
+                        </div>
+                    </div>
+                    <nav class="organic-nav d-none d-lg-block">
+                        <ul class="nav d-flex align-items-center gap-3 justify-content-center">
+                            <t t-foreach="request.env['product.public.category'].search([])" t-as="cat">
+                                <li class="nav-item">
+                                    <a t-att-href="'/shop/category/%s' % cat.id" class="nav-link">
+                                        <t t-esc="cat.name"/>
+                                    </a>
+                                </li>
+                            </t>
+                        </ul>
+                    </nav>
+                </div>
+            </header>
+
+            <!-- Mobile Menu Offcanvas -->
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu" aria-labelledby="mobileMenuLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title w-100" id="mobileMenuLabel">
+                        <t t-call="website.placeholder_header_brand">
+                            <t t-set="_link_class" t-valuef="d-flex align-items-center justify-content-center"/>
+                            <t t-set="_img_class" t-valuef="img-fluid logo-img"/>
+                        </t>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+
+                <div class="utility-links d-flex align-items-center gap-3 bg-organic-100 p-2">
+                    <div class="d-flex align-items-center gap-1 bg-opacity-10 rounded-pill px-2 py-1">
+                        <i class="bi bi-currency-dollar"></i>
+                        <t t-set="website_sale_pricelists" t-value="website.get_pricelist_available(show_visible=True)"/>
+                        <t t-set="current_pricelist" t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
+                        <select class="form-select form-select-sm border-0 bg-transparent"
+                                style="font-size: 0.8rem; width: auto"
+                                t-att-disabled="not website_sale_pricelists or len(website_sale_pricelists) &lt;= 1"
+                                onchange="if (this.value) { window.location.href = '/shop/change_pricelist/' + this.value; }">
+                            <t t-foreach="website_sale_pricelists" t-as="pl">
+                                <option t-att-value="pl.id"
+                                        t-att-selected="current_pricelist and pl.id == current_pricelist.id">
+                                    <t t-esc="pl.currency_id.name"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-1 bg-opacity-10 rounded-pill px-2 py-1">
+                        <i class="bi bi-globe"></i>
+                        <t t-set="current_lang_url_code"
+                           t-value="request.env['res.lang']._get_data(code=request.env.lang).url_code or request.env.lang"/>
+                        <select class="form-select form-select-sm border-0 bg-transparent"
+                                style="font-size: 0.8rem; width: auto"
+                                onchange="if (this.value) { var redirectUrl = window.location.pathname + window.location.search + window.location.hash; window.location.href = '/website/lang/' + this.value + '?r=' + encodeURIComponent(redirectUrl); }"
+                                >
+                            <t t-foreach="request.env['res.lang'].sudo().search([('active','=',True)])" t-as="lang">
+                                <option t-att-value="lang.url_code or lang.code"
+                                        t-att-selected="(lang.url_code or lang.code) == current_lang_url_code">
+                                    <t t-esc="lang.name"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="offcanvas-body p-0">
+                    <nav class="mobile-nav">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a href="/" class="nav-link mobile-nav-link">
+                                    <span>Home</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="/shop" class="nav-link mobile-nav-link d-flex justify-content-between align-items-center"
+                                   data-submenu-target="#mobileShopCategoriesSubmenu" aria-expanded="false">
+                                    <span class="fw-semibold">Shop by Category</span>
+                                    <i class="bi bi-chevron-down ms-1 small"></i>
+                                </a>
+                                <div class="collapse" id="mobileShopCategoriesSubmenu">
+                                    <div class="mobile-mega-menu-content p-3">
+                                        <ul class="list-unstyled mb-0">
+                                            <t t-foreach="request.env['product.public.category'].search([])" t-as="cat">
+                                                <li>
+                                                    <a t-att-href="'/shop/category/%s' % cat.id"
+                                                       class="text-decoration-none d-block py-1 hover-organic-link mobile-mega-link">
+                                                        <t t-esc="cat.name"/>
+                                                    </a>
+                                                </li>
+                                            </t>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="/shop/cart" class="nav-link mobile-nav-link">
+                                    <span class="fw-semibold">Cart</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a t-att-href="'/my' if request.session.uid else '/web/login'" class="nav-link mobile-nav-link">
+                                    <span class="fw-semibold">
+                                        <t t-if="request.session.uid">My Account</t>
+                                        <t t-else="">Login</t>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div class="offcanvas-footer d-lg-none p-3 border-top"></div>
+                </div>
+            </div>
+
+        </xpath>
+
+    </template>
+
+    <!-- JS LOAD -->
+    <template id="natural_foods_js" inherit_id="website.layout">
+        <xpath expr="//body" position="inside">
+            <div id="loading-screen" class="loading-screen">
+                <div class="loading-content">
+                    <img src="/theme_natural_foods/static/src/img/loader.png" alt="Loading..." class="loading-spinner"/>
+                </div>
+            </div>
+            <script src="/theme_natural_foods/static/src/js/swiper-bundle.min.js"/>
+            <script src="/theme_natural_foods/static/src/js/allswiper.js"/>
+            <script src="/theme_natural_foods/static/src/js/mobile-menu-enhancement.js"/>
+            <script src="/theme_natural_foods/static/src/js/product-tabs.js"/>
+            <script src="/theme_natural_foods/static/src/js/action-buttons.js"/>
+            <script src="/theme_natural_foods/static/src/js/loading-screen.js"/>
+
+
+        </xpath>
+    </template>
+
+
+
+</odoo>

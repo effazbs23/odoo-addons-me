@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List View -->
+    <record id="view_deals_of_day_list" model="ir.ui.view">
+        <field name="name">natural.deals.of.day.list</field>
+        <field name="model">natural.deals.of.day</field>
+        <field name="arch" type="xml">
+            <list string="Deals of the Day" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="product_tmpl_ids" widget="many2many_tags"/>
+                <field name="deal_end_time"/>
+                <field name="is_active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_deals_of_day_form" model="ir.ui.view">
+        <field name="name">natural.deals.of.day.form</field>
+        <field name="model">natural.deals.of.day</field>
+        <field name="arch" type="xml">
+            <form string="Deal of the Day">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="is_active"/>
+                            <field name="sequence"/>
+                            <field name="deal_end_time"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products">
+                            <field name="product_tmpl_ids"
+                                   domain="[('sale_ok', '=', True), ('is_published', '=', True)]">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="list_price" string="Price"/>
+                                    <field name="categ_id" string="Category"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_deals_of_day" model="ir.actions.act_window">
+        <field name="name">Deals of the Day</field>
+        <field name="res_model">natural.deals.of.day</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <menuitem id="menu_deals_of_day"
+              name="Deals of the Day"
+              parent="website.menu_website_global_configuration"
+              action="action_deals_of_day"
+              sequence="10"/>
+
+</odoo>

@@ -1,0 +1,1055 @@
+/* Bootstrap 5.0 Organic Green Theme for Natural Foods */
+
+/* ===== CSS CUSTOM PROPERTIES ===== */
+:root {
+  /* Organic Green Palette */
+  --organic-green-50: #f0fdf4;
+  --organic-green-100: #dcfce7;
+  --organic-green-200: #bbf7d0;
+  --organic-green-300: #86efac;
+  --organic-green-400: #4ade80;
+  --organic-green-500: #2cc464;
+  --organic-green-600: #29c662;
+  --organic-green-700: #22c55e;
+  --organic-green-800: #166534;
+  --organic-green-900: #14532d;
+  
+  /* Emerald Palette */
+  --emerald-50: #ecfdf5;
+  --emerald-100: #d1fae5;
+  --emerald-200: #a7f3d0;
+  --emerald-300: #6ee7b7;
+  --emerald-400: #34d399;
+  --emerald-500: #10b981;
+  --emerald-600: #059669;
+  --emerald-700: #4caf50;
+  --emerald-800: #065f46;
+  --emerald-900: #064e3b;
+  
+  /* Custom Spacing */
+  --bs-border-radius-2xl: 1rem;
+  --bs-border-radius-3xl: 1.5rem;
+  
+  /* Shadows */
+  --shadow-organic: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-organic-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-organic-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* ===== BOOTSTRAP THEME OVERRIDES ===== */
+
+/* Primary Color Override */
+.btn-primary {
+  background-color: var(--organic-green-600) !important;
+  border-color: var(--organic-green-600) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--organic-green-700) !important;
+  border-color: var(--organic-green-700) !important;
+}
+
+.btn-primary:focus, .btn-primary.focus {
+  box-shadow: 0 0 0 0.2rem rgba(44, 196, 100, 0.25) !important;
+}
+
+/* Success Color Enhancement */
+.btn-success {
+  background-color: var(--organic-green-600);
+  border-color: var(--organic-green-600);
+}
+
+.btn-success:hover {
+  background-color: var(--organic-green-700);
+  border-color: var(--organic-green-700);
+}
+
+.bg-success {
+  background-color: var(--organic-green-600) !important;
+}
+
+.text-success {
+  color: var(--organic-green-600) !important;
+}
+
+.border-success {
+  border-color: var(--organic-green-600) !important;
+}
+
+/* ===== CUSTOM ORGANIC UTILITIES ===== */
+
+/* Background Colors */
+.bg-organic-50 { background-color: var(--organic-green-50) !important; }
+.bg-organic-100 { background-color: var(--organic-green-100) !important; }
+.bg-organic-200 { background-color: var(--organic-green-200) !important; }
+.bg-organic-600 { background-color: var(--organic-green-600) !important; }
+.bg-organic-700 { background-color: var(--organic-green-700) !important; }
+
+.bg-emerald-50 { background-color: var(--emerald-50) !important; }
+.bg-emerald-100 { background-color: var(--emerald-100) !important; }
+.bg-emerald-700 { background-color: var(--emerald-700) !important; }
+
+/* Text Colors */
+.text-organic-100 { color: var(--organic-green-100) !important; }
+.text-organic-600 { color: var(--organic-green-600) !important; }
+.text-organic-700 { color: var(--organic-green-700) !important; }
+.text-organic-800 { color: var(--organic-green-800) !important; }
+
+/* Border Colors */
+.border-organic-200 { border-color: var(--organic-green-200) !important; }
+.border-organic-600 { border-color: var(--organic-green-600) !important; }
+
+/* Custom Border Radius */
+.rounded-2xl { border-radius: var(--bs-border-radius-2xl) !important; }
+.rounded-3xl { border-radius: var(--bs-border-radius-3xl) !important; }
+
+/* Custom Shadows */
+.shadow-organic { box-shadow: var(--shadow-organic) !important; }
+.shadow-organic-lg { box-shadow: var(--shadow-organic-lg) !important; }
+.shadow-organic-xl { box-shadow: var(--shadow-organic-xl) !important; }
+
+/* ===== COMPONENT SPECIFIC STYLES ===== */
+
+/* Header Styles */
+.organic-header {
+  background: white;
+  /* border-bottom: 1px solid #e5e7eb; */
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  box-shadow: 2px 3px 8px rgba(0,0,0,.08);
+}
+
+.organic-topbar {
+  background-color: #09953d !important;
+  color: white;
+  font-size: 0.875rem;
+}
+
+.organic-logo {
+  background-color: var(--organic-green-600);
+  color: white;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+  box-shadow: var(--shadow-organic-lg);
+}
+
+.organic-search {
+  position: relative;
+  max-width: 40rem;
+  flex: 1;
+  margin: 0 2rem;
+}
+
+.organic-search input {
+  width: 100%;
+  padding: 0.75rem 1.5rem 0.75rem 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 2rem;
+  transition: border-color 0.15s ease;
+}
+
+.organic-search input:focus {
+  border-color: var(--organic-green-500);
+  box-shadow: 0 0 0 0.2rem rgba(44, 196, 100, 0.25);
+  outline: none;
+}
+
+.organic-search-btn {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--organic-green-600);
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-organic);
+  transition: background-color 0.15s ease;
+}
+
+.organic-search-btn:hover {
+  background-color: var(--organic-green-700);
+}
+
+/* Navigation Styles */
+.organic-nav {
+  padding-top: 1rem;
+  position: relative;
+}
+
+.organic-nav .nav-link {
+  color: #374151;
+  font-weight: 500;
+  padding: 0 0.75rem;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.organic-nav .nav-link:hover {
+  color: var(--organic-green-700);
+}
+
+.organic-nav .nav-link.active {
+  color: var(--organic-green-700);
+}
+
+/* Button Styles */
+.btn-organic {
+  background-color: var(--organic-green-600);
+  border-color: var(--organic-green-600);
+  color: white;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.15s ease;
+}
+
+.btn-organic:hover {
+  background-color: var(--organic-green-700);
+  border-color: var(--organic-green-700);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-organic-lg);
+}
+
+.btn-organic-outline {
+  background-color: transparent;
+  border-color: var(--organic-green-600);
+  color: var(--organic-green-600);
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.15s ease;
+}
+
+.btn-organic-outline:hover {
+  background-color: var(--organic-green-600);
+  border-color: var(--organic-green-600);
+  color: white;
+}
+
+/* Card Styles */
+.organic-card {
+  background: white;
+  border-radius: var(--bs-border-radius-2xl);
+  border: 1px solid #e5e7eb;
+  box-shadow: var(--shadow-organic);
+  transition: all 0.15s ease;
+}
+
+.organic-card:hover {
+  box-shadow: var(--shadow-organic-lg);
+  transform: translateY(-2px);
+}
+
+.organic-card-header {
+  background: linear-gradient(135deg, var(--organic-green-50) 0%, var(--emerald-50) 100%);
+  border-bottom: 1px solid var(--organic-green-200);
+  border-radius: var(--bs-border-radius-2xl) var(--bs-border-radius-2xl) 0 0;
+  padding: 2rem;
+}
+
+/* Product Card Styles */
+.product-card {
+  background: white;
+  border-radius: var(--bs-border-radius-2xl);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.product-card:hover {
+  box-shadow: var(--shadow-organic-xl);
+  transform: translateY(-4px);
+  border-color: var(--organic-green-200);
+}
+
+.product-card-image {
+  position: relative;
+  overflow: hidden;
+  height: 12rem;
+}
+
+.product-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-card-image img {
+  transform: scale(1.05);
+}
+
+.product-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+}
+
+.badge-sale {
+  background-color: #dc2626;
+  color: white;
+}
+
+.badge-new {
+  background-color: #2563eb;
+  color: white;
+}
+
+.badge-organic {
+  background-color: var(--organic-green-600);
+  color: white;
+}
+
+/* Hero Section */
+.hero-section {
+  padding-bottom: 0;
+  border-radius: var(--bs-border-radius-2xl);
+}
+
+/* Footer Styles */
+.organic-footer {
+  background-color: #1f2937;
+  color: #d1d5db;
+  padding: 3rem 0 1rem;
+}
+
+.organic-footer h5 {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.organic-footer a {
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.organic-footer a:hover {
+  color: var(--organic-green-400);
+}
+
+/* ===== MEGA MENU STYLES ===== */
+.mega-menu-dropdown {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-organic-xl);
+  border-radius: var(--bs-border-radius-2xl);
+  min-width: 50rem;
+  z-index: 1050;
+}
+
+
+.mega-menu-category h6 {
+  color: #1f2937;
+  font-weight: 700;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mega-menu-item {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: #374151;
+  display: block;
+}
+
+.mega-menu-item:hover {
+  background-color: rgba(44, 196, 100, 0.05);
+  border-color: rgba(44, 196, 100, 0.2);
+  color: var(--organic-green-600);
+  transform: translateY(-1px);
+}
+
+.mega-menu-featured {
+  background: linear-gradient(135deg, var(--organic-green-50) 0%, var(--emerald-50) 100%);
+  border: 1px solid var(--organic-green-200);
+  border-radius: var(--bs-border-radius-2xl);
+}
+
+/* ===== RESPONSIVE UTILITIES ===== */
+@media (max-width: 768px) {
+  .organic-search {
+    margin: 1rem 0;
+    max-width: 100%;
+  }
+  
+  .mega-menu-dropdown {
+    min-width: 95vw;
+    left: -200px;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  
+  .product-card-image {
+    height: 10rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section {
+    padding: 2rem 0;
+  }
+  
+  .organic-card-header {
+    padding: 1.5rem;
+  }
+}
+
+/* ===== ANIMATION CLASSES ===== */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== UTILITY CLASSES ===== */
+.text-xs { font-size: 0.75rem; }
+.text-sm { font-size: 0.875rem; }
+.text-lg { font-size: 1.125rem; }
+.text-xl { font-size: 1.25rem; }
+.text-2xl { font-size: 1.5rem; }
+.text-3xl { font-size: 1.875rem; }
+.text-4xl { font-size: 2.25rem; }
+
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+
+.leading-relaxed { line-height: 1.625; }
+
+.space-y-1 > * + * { margin-top: 0.25rem; }
+.space-y-2 > * + * { margin-top: 0.5rem; }
+.space-y-3 > * + * { margin-top: 0.75rem; }
+.space-y-4 > * + * { margin-top: 1rem; }
+
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+
+/* ===== MODERN ENHANCEMENTS ===== */
+
+/* Enhanced animations and transitions */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 10px rgba(44, 196, 100, 0.3);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 20px rgba(44, 196, 100, 0.6);
+    transform: scale(1.02);
+  }
+}
+
+/* Enhanced glass morphism effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Enhanced gradients */
+.bg-gradient-organic {
+  background: linear-gradient(135deg, var(--organic-green-600) 0%, var(--organic-green-700) 100%);
+}
+
+.bg-gradient-organic-light {
+  background: linear-gradient(135deg, var(--organic-green-50) 0%, var(--organic-green-100) 100%);
+}
+
+/* Modern shadow enhancements */
+.shadow-hover {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.shadow-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-organic-xl);
+}
+
+/* Enhanced topbar selectors */
+.organic-topbar select {
+  background: transparent !important;
+  border: none !important;
+  color: #000;
+  font-size: 0.8rem !important;
+  padding: 0.25rem 0.5rem !important;
+}
+
+.organic-topbar select:focus {
+  box-shadow: none !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.organic-topbar select option {
+  background: var(--organic-green-600) !important;
+  color: white !important;
+}
+
+.hover-pointer {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hover-pointer:hover {
+  color: var(--organic-green-200) !important;
+  transform: translateY(-1px);
+}
+
+/* Enhanced Product Tab Section */
+.btn-check:checked + .btn-outline-success {
+  background: linear-gradient(135deg, var(--organic-green-600), var(--organic-green-700)) !important;
+  border-color: var(--organic-green-600) !important;
+  color: white !important;
+  transform: scale(1.05);
+  box-shadow: var(--shadow-organic-lg);
+}
+
+/* Product Tab Category Images */
+.bg-gradient-to-top {
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+}
+
+.object-fit-cover {
+  object-fit: cover;
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+/* Enhanced Product Cards - NO RED BORDERS for deals */
+.product-card {
+  background: white;
+  border-radius: var(--bs-border-radius-2xl);
+  border: 1px solid #e5e7eb; /* Consistent light border for all cards */
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  height: 100%;
+}
+
+.product-card:hover {
+  box-shadow: var(--shadow-organic-xl);
+  transform: translateY(-8px);
+  border-color: var(--organic-green-200); /* Green accent on hover, not red */
+}
+
+/* Enhanced badges with gradients */
+.badge-sale {
+  background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+  color: white;
+  border-radius: 1rem !important;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+}
+
+.badge-new {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  color: white;
+  border-radius: 1rem !important;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+}
+
+.badge-organic {
+  background: linear-gradient(135deg, var(--organic-green-600), var(--organic-green-700)) !important;
+  color: white;
+  border-radius: 1rem !important;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  box-shadow: 0 2px 4px rgba(34, 197, 94, 0.3);
+}
+
+/* Enhanced button styles */
+.btn-organic {
+  background: linear-gradient(135deg, var(--organic-green-600), var(--organic-green-700));
+  border: none;
+  color: white;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: var(--shadow-organic);
+}
+
+.btn-organic:hover {
+  background: linear-gradient(135deg, var(--organic-green-700), var(--organic-green-800));
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-organic-lg);
+}
+
+/* Enhanced header actions */
+.hover-organic {
+  transition: all 0.3s ease;
+  border-radius: 2rem !important;
+}
+
+.hover-organic:hover {
+  background-color: var(--organic-green-50) !important;
+  color: var(--organic-green-700) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-organic);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--organic-green-600), var(--organic-green-700));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--organic-green-700), var(--organic-green-800));
+}
+
+/* Enhanced selection color */
+::selection {
+  background: var(--organic-green-600);
+  color: white;
+}
+
+/* Enhanced focus states */
+*:focus-visible {
+  outline: 2px solid var(--organic-green-600);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ===== ENHANCED 5-COLUMN LAYOUT ===== */
+/* Custom 5-column grid for product displays */
+@media (min-width: 992px) {
+  .col-lg-2-4 {
+    flex: 0 0 auto;
+    width: 20%; /* 100% / 5 = 20% */
+  }
+}
+
+/* Product card action buttons enhancements */
+.product-card:hover .product-actions {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  transition: all 0.3s ease;
+}
+
+.product-actions {
+  transition: all 0.3s ease;
+  transform: translateY(-10px);
+}
+
+.product-actions .btn {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+}
+
+.product-actions .btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== ENHANCED CART DROPDOWN ===== */
+.cart-dropdown-container {
+  position: relative;
+}
+
+#cart-dropdown {
+  max-width: 350px;
+  min-width: 320px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+#cart-dropdown .btn-outline-organic {
+  border-color: var(--organic-green-600);
+  color: var(--organic-green-600);
+}
+
+#cart-dropdown .btn-outline-organic:hover {
+  background-color: var(--organic-green-600);
+  color: white;
+}
+
+/* ===== ENHANCED MEGA MENU ===== */
+.mega-menu-dropdown {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 1rem;
+  z-index: 1050;
+}
+
+
+
+.hover-organic-link {
+  color: #374151;
+  transition: all 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.hover-organic-link:hover {
+  background-color: var(--organic-green-50);
+  color: var(--organic-green-700);
+  transform: translateX(4px);
+  text-decoration: none;
+}
+
+/* ===== ENHANCED ANIMATIONS ===== */
+.fade-in {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Navigation dropdown chevron animation */
+.nav-link i.bi-chevron-down {
+  transition: transform 0.2s ease;
+}
+@media (min-width: 992px) {
+.nav-item:hover .nav-link i.bi-chevron-down {
+  transform: rotate(180deg);
+}
+
+/* Enhanced product card hover effects */
+.shadow-hover {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.shadow-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-organic-xl);
+}
+
+/* Enhanced badge styling */
+.product-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ===== PROMOTIONAL BANNERS ===== */
+.promo-banner {
+  min-height: 180px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.promo-banner:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.promo-banner-green {
+  background: linear-gradient(135deg, #008832 0%, #16a34a 100%);
+}
+
+.promo-banner-orange {
+  background: linear-gradient(135deg, #4f3100 0%, #d97706 100%);
+}
+
+.promo-banner-red {
+  background: linear-gradient(135deg, #900 0%, #dc2626 100%);
+}
+
+.promo-bg-pattern {
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+}
+
+.promo-content {
+  z-index: 2;
+}
+
+.promo-image {
+  z-index: 1;
+  opacity: 0.3;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: -20px;
+  margin-bottom: -20px;
+}
+
+.promo-banner .btn {
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.promo-banner .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Z-index utilities */
+.z-index-1 { z-index: 1; }
+.z-index-2 { z-index: 2; }
+.z-index-3 { z-index: 3; }
+
+/* ===== JAVASCRIPT FUNCTIONALITY FIXES ===== */
+
+/* Ensure dropdowns have proper z-index */
+.dropdown-menu,
+.mega-menu-dropdown,
+#cart-dropdown {
+  z-index: 1055 !important;
+}
+
+/* Fix for Bootstrap dropdown positioning */
+.position-relative {
+  position: relative !important;
+}
+
+/* Enhanced cart dropdown styling */
+.cart-dropdown-container .btn:hover + #cart-dropdown,
+.cart-dropdown-container #cart-dropdown:hover {
+  display: block !important;
+}
+
+/* Fix for mega menu hover states */
+.nav-item.dropdown:hover .mega-menu-dropdown {
+  display: block !important;
+}
+
+/* Quick view modal enhancements */
+.modal {
+  z-index: 1060 !important;
+}
+
+.modal-backdrop {
+  z-index: 1055 !important;
+}
+
+/* Enhanced quick view button styling */
+.product-actions .btn {
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+}
+
+/* Fix for hover effects timing */
+.cart-dropdown-container,
+.nav-item.dropdown {
+  transition: none !important;
+}
+
+/* Toast notifications styling */
+.toast-container {
+  z-index: 1070 !important;
+}
+
+.toast {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Category Images Enhancement */
+.category-image {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.category-overlay {
+  background: rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.category-card:hover .category-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.category-card:hover .category-image img {
+  transform: scale(1.1);
+}
+
+/* CRITICAL FIXES FOR JAVASCRIPT FUNCTIONALITY */
+
+/* Force show mega menus on hover */
+.nav-item.dropdown:hover .mega-menu-dropdown {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Force show cart dropdown on hover */
+.cart-dropdown-container:hover #cart-dropdown {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Quick View Modal Fixes */
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+
+.modal {
+  z-index: 1050 !important;
+}
+
+/* Enhanced hover states for debugging */
+.mega-menu-dropdown,
+#cart-dropdown {
+  transition: all 0.2s ease !important;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.mega-menu-dropdown.show,
+#cart-dropdown.show {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+/* Product Actions - Ensure buttons are clickable */
+.product-actions {
+  z-index: 10 !important;
+}
+
+.product-actions .btn {
+  pointer-events: all !important;
+  cursor: pointer !important;
+}
+
+/* Ensure all interactive elements work */
+button,
+.btn,
+a {
+  pointer-events: all !important;
+  cursor: pointer !important;
+}
+
+/* Debug styles - remove in production */
+.nav-item.dropdown:hover::after {
+  content: 'HOVER DETECTED';
+  position: absolute;
+  top: -20px;
+  left: 0;
+  background: red;
+  color: white;
+  padding: 2px 5px;
+  font-size: 10px;
+  z-index: 9999;
+  display: none; /* Enable for debugging */
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 768px) {
+  .promo-banner {
+    min-height: 150px;
+    text-align: center;
+  }
+  
+  .promo-image {
+    display: none;
+  }
+  
+  .mega-menu-dropdown {
+    position: fixed !important;
+    top: 60px !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+  
+  #cart-dropdown {
+    position: fixed !important;
+    top: 60px !important;
+    right: 10px !important;
+    left: 10px !important;
+    width: auto !important;
+  }
+
+  .category-image img {
+    width: 60px !important;
+    height: 60px !important;
+  }
+}}

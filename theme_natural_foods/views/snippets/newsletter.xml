@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="naturalfood_newsletter" name="Newsletter Section">
+        <section class="newsletter bg-emerald-700 oe_structure">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xxl-6 col-lg-8 text-center">
+                        <div class="rounded-3 p-5 d-flex flex-column justify-content-center">
+
+
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <div class="w-100">
+                                    <h2 class="fw-bold text-white text-center mb-1 oe_editable">
+                                        Stay Fresh with Our Newsletter
+                                    </h2>
+                                    <p class="text-organic-100 mb-0 text-center oe_editable">
+                                        Get updates on organic deals and seasonal produce
+                                    </p>
+                                </div>
+                            </div>
+
+
+                            <div class="row justify-content-md-start">
+                                <div class="col-md-12">
+                                    <div class="input-group input-group-lg gap-3 justify-content-between">
+                                        <input type="email"
+                                               class="form-control rounded"
+                                               placeholder="Enter your email address"
+                                               id="newsletter-email"/>
+                                        <button class="btn bg-white rounded px-4 text-organic-600 fw-bold"
+                                                type="button"
+                                                id="newsletter-btn">
+                                           <i class="bi bi-send me-2"></i>
+                                            Subscribe
+                                        </button>
+                                    </div>
+                                    <small class="text-white mt-2 d-block oe_editable">
+                                        Join 10,000+ happy subscribers • Unsubscribe anytime
+                                    </small>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

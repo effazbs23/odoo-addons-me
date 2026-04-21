@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- Promo Banners Snippet Template -->
+    <template id="naturalfood_promo_banners" name="Promo Banners">
+        <section class="py-5 bg-white oe_structure">
+            <div class="container">
+                <div class="row g-4">
+
+                    <!-- Banner 1 - Top Offers -->
+                    <div class="col-md-4">
+                        <div class="promo-banner promo-banner-green position-relative overflow-hidden rounded-3 p-4 h-100"
+                             style="cursor: pointer;">
+                            <div class="promo-content position-relative z-index-2">
+                                <div class="promo-label mb-2">
+                                    <span class="badge bg-white text-success fw-bold px-3 py-2 rounded-pill oe_editable">
+                                        TOP OFFERS
+                                    </span>
+                                </div>
+                                <h3 class="text-white fw-bold mb-2 oe_editable">
+                                    Eat Green<br/>Best For Family
+                                </h3>
+                                <p class="text-white mb-3 opacity-90 oe_editable">
+                                    Free Shipping 05km
+                                </p>
+                                <a href="/shop"
+                                   class="btn btn-light fw-bold rounded-pill px-4">
+                                    Shop Now
+                                </a>
+                            </div>
+                            <div class="promo-image position-absolute end-0 bottom-0">
+                                <img src="/theme_natural_foods/static/src/img/ads-green.png"
+                                     alt="Fresh vegetables"
+                                     class="img-fluid"/>
+                            </div>
+                            <div class="promo-bg-pattern position-absolute top-0 end-0 w-100 h-100"/>
+                        </div>
+                    </div>
+
+                    <!--  Banner 2 - Weekend Deals -->
+                    <div class="col-md-4">
+                        <div class="promo-banner promo-banner-orange position-relative overflow-hidden rounded-3 p-4 h-100"
+                             style="cursor: pointer;">
+                            <div class="promo-content position-relative z-index-2">
+                                <div class="promo-label mb-2">
+                                    <span class="badge bg-white text-warning fw-bold px-3 py-2 rounded-pill oe_editable">
+                                        WEEKEND DEALS
+                                    </span>
+                                </div>
+                                <h3 class="text-white fw-bold mb-2 oe_editable">
+                                    Fresh Food<br/>Restore Health
+                                </h3>
+                                <p class="text-white mb-3 opacity-90 oe_editable">
+                                    Top Quality Products
+                                </p>
+                                <a href="/shop"
+                                   class="btn btn-light fw-bold rounded-pill px-4">
+                                    Shop Now
+                                </a>
+                            </div>
+                            <div class="promo-image position-absolute end-0 bottom-0">
+                                <img src="/theme_natural_foods/static/src/img/promo-banner-orange.png"
+                                     alt="Fresh vegetables"
+                                     class="img-fluid"/>
+                            </div>
+                            <div class="promo-bg-pattern position-absolute top-0 end-0 w-100 h-100"/>
+                        </div>
+                    </div>
+
+                    <!-- Banner 3 - Top Seller -->
+                    <div class="col-md-4">
+                        <div class="promo-banner promo-banner-red position-relative overflow-hidden rounded-3 p-4 h-100"
+                             style="cursor: pointer;">
+                            <div class="promo-content position-relative z-index-2">
+                                <div class="promo-label mb-2">
+                                    <span class="badge bg-white text-danger fw-bold px-3 py-2 rounded-pill oe_editable">
+                                        TOP SELLER
+                                    </span>
+                                </div>
+                                <h3 class="text-white fw-bold mb-2 oe_editable">
+                                    Healthy<br/>Fresh Free Bread
+                                </h3>
+                                <p class="text-white mb-3 opacity-90 oe_editable">
+                                    Limited Time: Online Only!
+                                </p>
+                                <a href="/shop"
+                                   class="btn btn-light fw-bold rounded-pill px-4">
+                                    Shop Now
+                                </a>
+                            </div>
+                            <div class="promo-image position-absolute end-0 bottom-0">
+                                <img src="/theme_natural_foods/static/src/img/slider-one.png"
+                                     alt="Fresh vegetables"
+                                     class="img-fluid"/>
+                            </div>
+                            <div class="promo-bg-pattern position-absolute top-0 end-0 w-100 h-100"/>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </template>
+
+
+
+
+</odoo>

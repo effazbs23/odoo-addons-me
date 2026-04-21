@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="naturalfood_two_banners" name="Two Promo Banners">
+        <section class="py-5 bg-white oe_structure">
+            <div class="container">
+                <div class="row g-4">
+
+                    <div class="col-lg-6">
+                        <a href="/shop">
+                            <img src="/theme_natural_foods/static/src/img/0001515_Group 1048.webp"
+                                 class="w-100 img-fluid"
+                                 alt="Vegetables"/>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <a href="/shop">
+                            <img src="/theme_natural_foods/static/src/img/0001513_Group 1047.webp"
+                                 class="w-100 img-fluid"
+                                 alt="Bakery"/>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </template>
+
+</odoo>
