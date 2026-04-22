@@ -6,807 +6,424 @@
   <title>Natural Foods Theme</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background: #fafbfc;
-      color: #1a1a1a;
-      line-height: 1.6;
-    }
-
-    .nf-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 20px 80px;
-    }
-
-    .nf-card {
-      background: #ffffff;
-      border: 1px solid #e0e0e0;
-      border-radius: 16px;
-      padding: 40px;
-      margin-top: 28px;
-    }
-
-    .nf-hero {
-      background: linear-gradient(135deg, #e8f5eb 0%, #f0f9ff 100%);
-      border: 1px solid #e0e0e0;
-      border-radius: 16px;
-      padding: 60px 48px;
-      margin-bottom: 20px;
-    }
-
-    .nf-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border-radius: 8px;
-      border: 1px solid #2f8f46;
-      background: #e8f5eb;
-      color: #1f6b33;
-      padding: 8px 14px;
-      margin: 0 8px 12px 0;
-    }
-
-    .nf-title {
-      font-size: 48px;
-      font-weight: 700;
-      color: #1a1a1a;
-      margin: 16px 0 12px;
-      line-height: 1.2;
-    }
-
-    .nf-subtitle {
-      margin: 0;
-      color: #666666;
-      font-size: 18px;
-      max-width: 800px;
-      line-height: 1.7;
-    }
-
-    .nf-h2 {
-      font-size: 32px;
-      color: #1a1a1a;
-      margin: 0 0 16px;
-      font-weight: 700;
-    }
-
-    .nf-text {
-      margin: 0;
-      color: #666666;
-      font-size: 16px;
-      line-height: 1.6;
-    }
-
-    .nf-meta {
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      background: #fafbfc;
-      padding: 24px;
-      height: 100%;
-    }
-
-    .nf-meta .k {
-      margin: 0 0 8px;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 700;
-      color: #2f8f46;
-    }
-
-    .nf-meta .v {
-      margin: 0;
-      font-size: 18px;
-      color: #1a1a1a;
-      font-weight: 600;
-    }
-
-    .nf-feature {
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 28px;
-      background: #ffffff;
-      height: 100%;
-    }
-
-    .nf-feature-icon {
-      display: inline-flex;
-      width: 50px;
-      height: 50px;
-      border-radius: 10px;
-      align-items: center;
-      justify-content: center;
-      background: #e8f5eb;
-      color: #2f8f46;
-      font-size: 24px;
-      margin-bottom: 16px;
-    }
-
-    .nf-feature h5 {
-      font-size: 18px;
-      color: #1a1a1a;
-      margin: 12px 0 10px;
-      font-weight: 700;
-    }
-
-    .nf-feature p {
-      margin: 0;
-      color: #666666;
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    .nf-kpi {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 10px 16px;
-      margin: 6px 8px 6px 0;
-      font-size: 13px;
-      color: #1f6b33;
-      background: #f0f8f2;
-      font-weight: 600;
-    }
-
-    .nf-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .nf-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      margin-bottom: 12px;
-      color: #666666;
-      font-size: 16px;
-      line-height: 1.6;
-    }
-
-    .nf-list li i {
-      color: #2f8f46;
-      margin-top: 4px;
-      font-size: 16px;
-    }
-
-    .nf-showcase {
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      background: #fafbfc;
-      padding: 32px;
-      height: 100%;
-    }
-
-    .nf-showcase h4 {
-      color: #1a1a1a;
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .nf-showcase p {
-      margin: 0;
-      color: #666666;
-      font-size: 15px;
-      line-height: 1.7;
-    }
-
-    .nf-service {
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      background: #ffffff;
-      padding: 32px 24px;
-      text-align: center;
-      height: 100%;
-    }
-
-    .nf-service .icon-wrap {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #e8f5eb;
-      color: #2f8f46;
-      font-size: 24px;
-      margin-bottom: 16px;
-    }
-
-    .nf-service h6 {
-      margin: 0;
-      color: #1a1a1a;
-      font-size: 16px;
-      font-weight: 700;
-      line-height: 1.4;
-    }
-
-    .nf-link {
-      color: #2f8f46;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .nf-link:hover {
-      color: #1f6b33;
-      text-decoration: underline;
-    }
-
-    .nf-company-logo {
-      max-height: 48px;
-      width: auto;
-      margin-bottom: 16px;
-    }
-
-    .nf-company-center {
-      text-align: center;
-    }
-
-    .nf-footer {
-      margin-top: 20px;
-      text-align: center;
-      color: #999999;
-      font-size: 14px;
-    }
-
-    .nf-unified-section {
-      background: #fafbfc;
-      border: 1px solid #e0e0e0;
-      border-radius: 16px;
-      padding: 60px 48px;
-      margin-bottom: 40px;
-    }
-
-    .nf-unified-content {
-      padding: 0;
-    }
-
-    .nf-unified-title {
-      margin: 0;
-      font-size: 40px;
-      line-height: 1.25;
-      color: #1a1a1a;
-      font-weight: 700;
-    }
-
-    .nf-unified-title span {
-      display: block;
-    }
-
-    .nf-unified-copy {
-      margin: 16px 0 0;
-      color: #666666;
-      font-size: 16px;
-      line-height: 1.75;
-      max-width: 600px;
-    }
-
-    .nf-unified-list {
-      list-style: none;
-      margin: 24px 0 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .nf-unified-list li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #666666;
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    .nf-unified-icon {
-      color: #2f8f46;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    .nf-unified-image {
-      width: 100%;
-      border-radius: 16px;
-      object-fit: cover;
-    }
-
-    .nf-unified-image-soft {
-      border-radius: 16px;
-    }
-
-    @media (max-width: 991px) {
-      .nf-container {
-        padding: 20px 12px 40px;
-      }
-
-      .nf-card {
-        padding: 24px;
-      }
-
-      .nf-hero {
-        padding: 40px 24px;
-      }
-
-      .nf-title {
-        font-size: 36px;
-      }
-
-      .nf-h2 {
-        font-size: 24px;
-      }
-
-      .nf-unified-section {
-        padding: 32px 20px;
-      }
-
-      .nf-unified-title {
-        font-size: 28px;
-      }
-    }
-
-    .nf-supports {
-      margin: 30px 0;
-      padding: 40px;
-      border: 1px solid #e0e0e0;
-      border-radius: 16px;
-      background: #ffffff;
-    }
-
-    .nf-support-logo {
-      height: 60px;
-      width: auto;
-      object-fit: contain;
-    }
-
-    .nf-support-title {
-      margin: 0 0 12px;
-      font-size: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #2f8f46;
-    }
-
-    .nf-badge-support {
-      display: inline-flex;
-      align-items: center;
-      padding: 8px 16px;
-      background: #2f8f46;
-      color: #ffffff;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .nf-badge-available {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      background: #f1f8f4;
-      color: #2f8f46;
-      border: 1px solid #c8e6c9;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .nf-badge-unavailable {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      background: #ffebee;
-      color: #d32f2f;
-      border: 1px solid #ffcdd2;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .nf-badge-support i,
-    .nf-badge-available i,
-    .nf-badge-unavailable i {
-      font-size: 14px;
-    }
-
-    @media (max-width: 768px) {
-      .nf-supports {
-        padding: 24px 16px;
-      }
-
-      .nf-support-logo {
-        height: 50px;
-      }
-
-      .nf-support-title {
-        font-size: 12px;
-      }
-
-      .nf-badge-support,
-      .nf-badge-available,
-      .nf-badge-unavailable {
-        font-size: 12px;
-        padding: 6px 12px;
-      }
-    }
-  </style>
 </head>
-<body>
+<body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#fafbfc;color:#1a1a1a;line-height:1.6;">
 
-  
-  <div class="nf-container">
+  <div style="max-width:1200px;margin:0 auto;padding:40px 20px 80px;">
 
-        <!-- support-header -->
-        <div class="nf-supports">
-          <div class="row g-4 align-items-center">
-            <div class="col-12 col-md-3 text-center">
-              <img src="./img/erp-23.png" class="nf-support-logo" alt="ERP Support">
-            </div>
-            <div class="col-12 col-md-9">
-              <div class="row g-4">
-                <!-- Supports -->
-                <div class="col-12 col-sm-6">
-                  <div>
-                    <h6 class="nf-support-title">Supports</h6>
-                    <div class="d-flex gap-2 flex-wrap">
-                      <span class="nf-badge-support">Enterprise</span>
-                      <span class="nf-badge-support">Community</span>
-                    </div>
-                  </div>
+    <!-- support-header -->
+    <div style="margin:30px 0;padding:40px;border:1px solid #e0e0e0;border-radius:16px;background:#ffffff;">
+      <div class="row g-4 align-items-center">
+        <div class="col-12 col-md-3 text-center">
+          <img src="./img/erp-23.png" style="height:60px;width:auto;object-fit:contain;" alt="ERP Support">
+        </div>
+        <div class="col-12 col-md-9">
+          <div class="row g-4">
+            <div class="col-12 col-sm-6">
+              <div>
+                <h6 style="margin:0 0 12px;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#2f8f46;">Supports</h6>
+                <div class="d-flex gap-2 flex-wrap">
+                  <span style="display:inline-flex;align-items:center;padding:8px 16px;background:#2f8f46;color:#ffffff;border-radius:8px;font-size:13px;font-weight:600;">Enterprise</span>
+                  <span style="display:inline-flex;align-items:center;padding:8px 16px;background:#2f8f46;color:#ffffff;border-radius:8px;font-size:13px;font-weight:600;">Community</span>
                 </div>
-                <!-- Availability -->
-                <div class="col-12 col-sm-6">
-                  <div>
-                    <h6 class="nf-support-title">Availability</h6>
-                    <div class="d-flex gap-2 flex-wrap">
-                      <span class="nf-badge-unavailable"><i class="bi bi-x-circle"></i> Online</span>
-                      <span class="nf-badge-available"><i class="bi bi-check-circle"></i> Odoo.sh</span>
-                      <span class="nf-badge-available"><i class="bi bi-check-circle"></i> Premise</span>
-                    </div>
-                  </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6">
+              <div>
+                <h6 style="margin:0 0 12px;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#2f8f46;">Availability</h6>
+                <div class="d-flex gap-2 flex-wrap">
+                  <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#ffebee;color:#d32f2f;border:1px solid #ffcdd2;border-radius:8px;font-size:13px;font-weight:600;"><i class="bi bi-x-circle" style="font-size:14px;"></i> Online</span>
+                  <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#f1f8f4;color:#2f8f46;border:1px solid #c8e6c9;border-radius:8px;font-size:13px;font-weight:600;"><i class="bi bi-check-circle" style="font-size:14px;"></i> Odoo.sh</span>
+                  <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#f1f8f4;color:#2f8f46;border:1px solid #c8e6c9;border-radius:8px;font-size:13px;font-weight:600;"><i class="bi bi-check-circle" style="font-size:14px;"></i> Premise</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <!--  -->
-    
-        <!-- banner-section -->
-        <div class="my-5">
-          <div class="">
-            <img src="./img/ads.png" class="img-fluid" style="border-radius: 10px; width:1250px;">
-          </div>
-        </div>
+    <!-- banner-section -->
+    <div style="margin-top:3rem;margin-bottom:3rem;">
+      <div>
+        <img src="./img/ads.png" class="img-fluid" style="border-radius:10px;width:1250px;">
+      </div>
+    </div>
 
     <!-- hero-section -->
-    <section class="nf-hero">
-      <span class="nf-badge"><i class="bi bi-shop"></i> Odoo Theme</span>
-      <span class="nf-badge"><i class="bi bi-cart3"></i> Website Sale</span>
-      <span class="nf-badge"><i class="bi bi-basket2"></i> Food & Grocery</span>
-      <h1 class="nf-title">Theme Natural Foods</h1>
-      <p class="nf-subtitle">A premium Odoo storefront theme for organic and grocery businesses with conversion-focused homepage sections, category-driven product discovery, and polished cart/wishlist interactions.</p>
+    <section style="background:linear-gradient(135deg,#e8f5eb 0%,#f0f9ff 100%);border:1px solid #e0e0e0;border-radius:16px;padding:60px 48px;margin-bottom:20px;">
+      <span style="display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #2f8f46;background:#e8f5eb;color:#1f6b33;padding:8px 14px;margin:0 8px 12px 0;"><i class="bi bi-shop"></i> Odoo Theme</span>
+      <span style="display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #2f8f46;background:#e8f5eb;color:#1f6b33;padding:8px 14px;margin:0 8px 12px 0;"><i class="bi bi-cart3"></i> Website Sale</span>
+      <span style="display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #2f8f46;background:#e8f5eb;color:#1f6b33;padding:8px 14px;margin:0 8px 12px 0;"><i class="bi bi-basket2"></i> Food &amp; Grocery</span>
+      <h1 style="font-size:48px;font-weight:700;color:#1a1a1a;margin:16px 0 12px;line-height:1.2;">Theme Natural Foods</h1>
+      <p style="margin:0;color:#666666;font-size:18px;max-width:800px;line-height:1.7;">A premium Odoo storefront theme for organic and grocery businesses with conversion-focused homepage sections, category-driven product discovery, and polished cart/wishlist interactions.</p>
     </section>
 
     <!-- core-features-section -->
-    <section class="nf-card">
-      <h2 class="nf-h2">Core Features</h2>
+    <section style="background:#ffffff;border:1px solid #e0e0e0;border-radius:16px;padding:40px;margin-top:28px;">
+      <h2 style="font-size:32px;color:#1a1a1a;margin:0 0 16px;font-weight:700;">Core Features</h2>
       <div class="row g-3">
-        <div class="col-md-6 col-lg-4"><div class="nf-feature"><span class="nf-feature-icon"><i class="bi bi-layout-text-window-reverse"></i></span><h5>Custom Storefront Layout</h5><p>Purpose-built topbar, header, footer, and shop presentation for food and grocery brands.</p></div></div>
-        <div class="col-md-6 col-lg-4"><div class="nf-feature"><span class="nf-feature-icon"><i class="bi bi-grid-1x2"></i></span><h5>Homepage Snippet Set</h5><p>Ready-to-use blocks for banners, categories, products, promotions, recipes, and brands.</p></div></div>
-        <div class="col-md-6 col-lg-4"><div class="nf-feature"><span class="nf-feature-icon"><i class="bi bi-stars"></i></span><h5>Dynamic Product Sections</h5><p>Backend-powered New Arrivals, Best Seller, Featured Products, and Deals of the Day.</p></div></div>
-        <div class="col-md-6 col-lg-4"><div class="nf-feature"><span class="nf-feature-icon"><i class="bi bi-translate"></i></span><h5>Language & Currency</h5><p>Native Odoo language selector compatibility with pricelist-based currency handling.</p></div></div>
-        <div class="col-md-6 col-lg-4"><div class="nf-feature"><span class="nf-feature-icon"><i class="bi bi-heart"></i></span><h5>Wishlist & Cart UX</h5><p>Integrated counters and quick cart interactions for smoother shopping flow.</p></div></div>
-        <div class="col-md-6 col-lg-4"><div class="nf-feature"><span class="nf-feature-icon"><i class="bi bi-phone"></i></span><h5>Responsive Ready</h5><p>Optimized visual hierarchy and spacing across desktop, tablet, and mobile.</p></div></div>
+        <div class="col-md-6 col-lg-4">
+          <div style="border:1px solid #e0e0e0;border-radius:12px;padding:28px;background:#ffffff;height:100%;">
+            <span style="display:inline-flex;width:50px;height:50px;border-radius:10px;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-layout-text-window-reverse"></i></span>
+            <h5 style="font-size:18px;color:#1a1a1a;margin:12px 0 10px;font-weight:700;">Custom Storefront Layout</h5>
+            <p style="margin:0;color:#666666;font-size:15px;line-height:1.6;">Purpose-built topbar, header, footer, and shop presentation for food and grocery brands.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div style="border:1px solid #e0e0e0;border-radius:12px;padding:28px;background:#ffffff;height:100%;">
+            <span style="display:inline-flex;width:50px;height:50px;border-radius:10px;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-grid-1x2"></i></span>
+            <h5 style="font-size:18px;color:#1a1a1a;margin:12px 0 10px;font-weight:700;">Homepage Snippet Set</h5>
+            <p style="margin:0;color:#666666;font-size:15px;line-height:1.6;">Ready-to-use blocks for banners, categories, products, promotions, recipes, and brands.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div style="border:1px solid #e0e0e0;border-radius:12px;padding:28px;background:#ffffff;height:100%;">
+            <span style="display:inline-flex;width:50px;height:50px;border-radius:10px;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-stars"></i></span>
+            <h5 style="font-size:18px;color:#1a1a1a;margin:12px 0 10px;font-weight:700;">Dynamic Product Sections</h5>
+            <p style="margin:0;color:#666666;font-size:15px;line-height:1.6;">Backend-powered New Arrivals, Best Seller, Featured Products, and Deals of the Day.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div style="border:1px solid #e0e0e0;border-radius:12px;padding:28px;background:#ffffff;height:100%;">
+            <span style="display:inline-flex;width:50px;height:50px;border-radius:10px;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-translate"></i></span>
+            <h5 style="font-size:18px;color:#1a1a1a;margin:12px 0 10px;font-weight:700;">Language &amp; Currency</h5>
+            <p style="margin:0;color:#666666;font-size:15px;line-height:1.6;">Native Odoo language selector compatibility with pricelist-based currency handling.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div style="border:1px solid #e0e0e0;border-radius:12px;padding:28px;background:#ffffff;height:100%;">
+            <span style="display:inline-flex;width:50px;height:50px;border-radius:10px;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-heart"></i></span>
+            <h5 style="font-size:18px;color:#1a1a1a;margin:12px 0 10px;font-weight:700;">Wishlist &amp; Cart UX</h5>
+            <p style="margin:0;color:#666666;font-size:15px;line-height:1.6;">Integrated counters and quick cart interactions for smoother shopping flow.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div style="border:1px solid #e0e0e0;border-radius:12px;padding:28px;background:#ffffff;height:100%;">
+            <span style="display:inline-flex;width:50px;height:50px;border-radius:10px;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-phone"></i></span>
+            <h5 style="font-size:18px;color:#1a1a1a;margin:12px 0 10px;font-weight:700;">Responsive Ready</h5>
+            <p style="margin:0;color:#666666;font-size:15px;line-height:1.6;">Optimized visual hierarchy and spacing across desktop, tablet, and mobile.</p>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- theme-highlights-section -->
-    <section class="nf-card">
-      <h2 class="nf-h2">Theme Highlights</h2>
+    <section style="background:#ffffff;border:1px solid #e0e0e0;border-radius:16px;padding:40px;margin-top:28px;">
+      <h2 style="font-size:32px;color:#1a1a1a;margin:0 0 16px;font-weight:700;">Theme Highlights</h2>
       <div class="row g-3">
-        <div class="col-md-6"><div class="nf-showcase"><h4>Stunning Homepage Sections</h4><p>Showcase organic products with banners, category blocks, deal sections, and featured content in a clean visual flow.</p></div></div>
-        <div class="col-md-6"><div class="nf-showcase"><h4>Elegant Shop Presentation</h4><p>Product cards, pricing areas, and action buttons are designed for clarity, engagement, and conversion.</p></div></div>
-        <div class="col-md-6"><div class="nf-showcase"><h4>Improved Cart Experience</h4><p>Theme includes cart-focused UI improvements for quicker review and smoother checkout guidance.</p></div></div>
-        <div class="col-md-6"><div class="nf-showcase"><h4>Clean Content Blocks</h4><p>Feature, newsletter, and recipe sections support engaging storytelling for food-focused brands.</p></div></div>
+        <div class="col-md-6">
+          <div style="border:1px solid #e0e0e0;border-radius:12px;background:#fafbfc;padding:32px;height:100%;">
+            <h4 style="color:#1a1a1a;font-size:22px;font-weight:700;margin-bottom:12px;">Stunning Homepage Sections</h4>
+            <p style="margin:0;color:#666666;font-size:15px;line-height:1.7;">Showcase organic products with banners, category blocks, deal sections, and featured content in a clean visual flow.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div style="border:1px solid #e0e0e0;border-radius:12px;background:#fafbfc;padding:32px;height:100%;">
+            <h4 style="color:#1a1a1a;font-size:22px;font-weight:700;margin-bottom:12px;">Elegant Shop Presentation</h4>
+            <p style="margin:0;color:#666666;font-size:15px;line-height:1.7;">Product cards, pricing areas, and action buttons are designed for clarity, engagement, and conversion.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div style="border:1px solid #e0e0e0;border-radius:12px;background:#fafbfc;padding:32px;height:100%;">
+            <h4 style="color:#1a1a1a;font-size:22px;font-weight:700;margin-bottom:12px;">Improved Cart Experience</h4>
+            <p style="margin:0;color:#666666;font-size:15px;line-height:1.7;">Theme includes cart-focused UI improvements for quicker review and smoother checkout guidance.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div style="border:1px solid #e0e0e0;border-radius:12px;background:#fafbfc;padding:32px;height:100%;">
+            <h4 style="color:#1a1a1a;font-size:22px;font-weight:700;margin-bottom:12px;">Clean Content Blocks</h4>
+            <p style="margin:0;color:#666666;font-size:15px;line-height:1.7;">Feature, newsletter, and recipe sections support engaging storytelling for food-focused brands.</p>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- included-snippets-section -->
-    <section class="nf-card">
-      <h2 class="nf-h2">Included Snippets</h2>
+    <section style="background:#ffffff;border:1px solid #e0e0e0;border-radius:16px;padding:40px;margin-top:28px;">
+      <h2 style="font-size:32px;color:#1a1a1a;margin:0 0 16px;font-weight:700;">Included Snippets</h2>
       <div class="row">
         <div class="col-md-6">
-          <ul class="nf-list">
-            <li><i class="bi bi-check-circle-fill"></i>Natural Food Banner</li>
-            <li><i class="bi bi-check-circle-fill"></i>New Arrival</li>
-            <li><i class="bi bi-check-circle-fill"></i>Shop by Category</li>
-            <li><i class="bi bi-check-circle-fill"></i>Promo Banners</li>
-            <li><i class="bi bi-check-circle-fill"></i>Deals of the Day</li>
-            <li><i class="bi bi-check-circle-fill"></i>Two Banners</li>
-            <li><i class="bi bi-check-circle-fill"></i>Our Products</li>
+          <ul style="list-style:none;margin:0;padding:0;">
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>Natural Food Banner</li>
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>New Arrival</li>
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>Shop by Category</li>
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>Promo Banners</li>
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>Deals of the Day</li>
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>Two Banners</li>
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>Our Products</li>
           </ul>
         </div>
         <div class="col-md-6">
-          <ul class="nf-list">
-            <li><i class="bi bi-check-circle-fill"></i>Promo Banner New</li>
-            <li><i class="bi bi-check-circle-fill"></i>Our Brands</li>
-            <li><i class="bi bi-check-circle-fill"></i>Service Features</li>
-            <li><i class="bi bi-check-circle-fill"></i>Newsletter</li>
-            <li><i class="bi bi-check-circle-fill"></i>Best Seller</li>
-            <li><i class="bi bi-check-circle-fill"></i>Featured Products</li>
-            <li><i class="bi bi-check-circle-fill"></i>Featured Recipes</li>
+          <ul style="list-style:none;margin:0;padding:0;">
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>Promo Banner New</li>
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>Our Brands</li>
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>Service Features</li>
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>Newsletter</li>
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>Best Seller</li>
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>Featured Products</li>
+            <li style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;color:#666666;font-size:16px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;margin-top:4px;font-size:16px;"></i>Featured Recipes</li>
           </ul>
         </div>
       </div>
     </section>
 
     <!-- dependencies-section -->
-    <section class="nf-card" style="margin-bottom: 15px;">
-      <h2 class="nf-h2">Dependencies</h2>
-      <span class="nf-kpi"><i class="bi bi-box-seam"></i>website</span>
-      <span class="nf-kpi"><i class="bi bi-box-seam"></i>website_sale</span>
-      <span class="nf-kpi"><i class="bi bi-box-seam"></i>website_sale_wishlist</span>
-      <span class="nf-kpi"><i class="bi bi-box-seam"></i>website_blog</span>
-      <span class="nf-kpi"><i class="bi bi-box-seam"></i>product</span>
+    <section style="background:#ffffff;border:1px solid #e0e0e0;border-radius:16px;padding:40px;margin-top:28px;margin-bottom:15px;">
+      <h2 style="font-size:32px;color:#1a1a1a;margin:0 0 16px;font-weight:700;">Dependencies</h2>
+      <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #e0e0e0;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#1f6b33;background:#f0f8f2;font-weight:600;"><i class="bi bi-box-seam"></i>website</span>
+      <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #e0e0e0;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#1f6b33;background:#f0f8f2;font-weight:600;"><i class="bi bi-box-seam"></i>website_sale</span>
+      <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #e0e0e0;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#1f6b33;background:#f0f8f2;font-weight:600;"><i class="bi bi-box-seam"></i>website_sale_wishlist</span>
+      <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #e0e0e0;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#1f6b33;background:#f0f8f2;font-weight:600;"><i class="bi bi-box-seam"></i>website_blog</span>
+      <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #e0e0e0;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#1f6b33;background:#f0f8f2;font-weight:600;"><i class="bi bi-box-seam"></i>product</span>
     </section>
-
-
 
     <!-- page-experience-section -->
-    <section class="mb-5 nf-unified-section">
+    <section style="background:#fafbfc;border:1px solid #e0e0e0;border-radius:16px;padding:60px 48px;margin-bottom:40px;">
       <div class="row d-flex align-items-center">
         <div class="col col-12 col-md-12 col-lg-6">
-          <div class="nf-unified-content">
-            <h4 class="nf-unified-title">
-              <span>Beautiful Pages,</span><br>
-              <span>Smooth Shopping Journey</span>
+          <div style="padding:0;">
+            <h4 style="margin:0;font-size:40px;line-height:1.25;color:#1a1a1a;font-weight:700;">
+              <span style="display:block;">Beautiful Pages,</span><br>
+              <span style="display:block;">Smooth Shopping Journey</span>
             </h4>
-
-            <div class="mt-4">
-              <p class="nf-unified-copy">Natural Foods Theme is an Attractive Theme for Your Odoo Store.
+            <div style="margin-top:1rem;">
+              <p style="margin:16px 0 0;color:#666666;font-size:16px;line-height:1.75;max-width:600px;">Natural Foods Theme is an Attractive Theme for Your Odoo Store.
                 This Theme Will Change Improve Your Experience With Odoo.
                 This is a Minimalist and Elegant Frontend Theme for Odoo And Can Offer a
-                Perfect Choice for Your Odoo Frontend. .</p>
-              <ul class="nf-unified-list">
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Modified Structure for All Pages</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>New Style for Buttons</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>New Color Combination</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>New Look for All Pages</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>A Clean layout and New Font Style</span></li>
+                Perfect Choice for Your Odoo Frontend.</p>
+              <ul style="list-style:none;margin:24px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;">
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Modified Structure for All Pages</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>New Style for Buttons</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>New Color Combination</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>New Look for All Pages</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>A Clean layout and New Font Style</span></li>
               </ul>
             </div>
           </div>
         </div>
         <div class="col col-12 col-md-12 col-lg-6">
           <div>
-            <div>
-              <img class="img-fluid nf-unified-image" src="./img/ads-2.png">
-            </div>
-
+            <img class="img-fluid" src="./img/ads-2.png" style="width:100%;border-radius:16px;object-fit:cover;">
           </div>
         </div>
       </div>
     </section>
-
-    <!-- 2 -->
 
     <!-- responsive-layout-section -->
-    <section class="nf-unified-section">
+    <section style="background:#fafbfc;border:1px solid #e0e0e0;border-radius:16px;padding:60px 48px;margin-bottom:40px;">
       <div class="row d-flex align-items-center">
         <div class="col col-12 col-md-12 col-lg-6">
           <div>
-            <div>
-              <img class="img-fluid nf-unified-image nf-unified-image-soft" src="./img/ads-2.png">
-            </div>
-
+            <img class="img-fluid" src="./img/ads-2.png" style="width:100%;border-radius:16px;object-fit:cover;">
           </div>
         </div>
         <div class="col col-12 col-md-12 col-lg-6">
-          <div class="nf-unified-content">
-            <h4 class="nf-unified-title">
-              <span>Fully Responsive</span><br>
-              <span>Layout</span>
+          <div style="padding:0;">
+            <h4 style="margin:0;font-size:40px;line-height:1.25;color:#1a1a1a;font-weight:700;">
+              <span style="display:block;">Fully Responsive</span><br>
+              <span style="display:block;">Layout</span>
             </h4>
-
-            <div class="mt-4">
-              <p class="nf-unified-copy">Now take advantage of everything your dashboard has to offer even on the go. Our
+            <div style="margin-top:1rem;">
+              <p style="margin:16px 0 0;color:#666666;font-size:16px;line-height:1.75;max-width:600px;">Now take advantage of everything your dashboard has to offer even on the go. Our
                 design is now fully responsive, enabling you to view and manage everything comfortably.</p>
-              <ul class="nf-unified-list">
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Interactive Elements</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Fast Loading Speed</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Customizable Fonts and Colors</span></li>
+              <ul style="list-style:none;margin:24px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;">
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Interactive Elements</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Fast Loading Speed</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Customizable Fonts and Colors</span></li>
               </ul>
             </div>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!--  -->
-  <!-- odoo19-shop-snippet-section -->
-  <section class="mb-5 nf-unified-section">
+    <!-- odoo19-shop-snippet-section -->
+    <section style="background:#fafbfc;border:1px solid #e0e0e0;border-radius:16px;padding:60px 48px;margin-bottom:40px;">
       <div class="row d-flex align-items-center">
         <div class="col col-12 col-md-12 col-lg-6">
-          <div class="nf-unified-content">
-            <h4 class="nf-unified-title">
-      
-              <span>Snippet Showcase</span>
+          <div style="padding:0;">
+            <h4 style="margin:0;font-size:40px;line-height:1.25;color:#1a1a1a;font-weight:700;">
+              <span style="display:block;">Snippet Showcase</span>
             </h4>
-
-            <div class="mt-4">
-              <p class="nf-unified-copy">This section highlights the Odoo 19 shop snippet layout with a real screenshot-based preview.
+            <div style="margin-top:1rem;">
+              <p style="margin:16px 0 0;color:#666666;font-size:16px;line-height:1.75;max-width:600px;">This section highlights the Odoo 19 shop snippet layout with a real screenshot-based preview.
                 Product cards, pricing, wishlist, and cart actions are arranged in a clean structure
                 so users can quickly scan items and complete purchases with a better storefront experience.</p>
-              <ul class="nf-unified-list">
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Built for Odoo 19 website snippets</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Screenshot-driven product preview block</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Clear CTA placement for cart and wishlist</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Modern spacing and typography for better readability</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Consistent style with the full Natural Foods page</span></li>
+              <ul style="list-style:none;margin:24px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;">
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Built for Odoo 19 website snippets</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Screenshot-driven product preview block</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Clear CTA placement for cart and wishlist</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Modern spacing and typography for better readability</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Consistent style with the full Natural Foods page</span></li>
               </ul>
             </div>
           </div>
         </div>
         <div class="col col-12 col-md-12 col-lg-6">
           <div>
-            <div>
-              <img class="img-fluid nf-unified-image" src="./img/snippet.png" alt="Odoo 19 shop snippet screenshot">
-            </div>
-
+            <img class="img-fluid" src="./img/snippet.png" alt="Odoo 19 shop snippet screenshot" style="width:100%;border-radius:16px;object-fit:cover;">
           </div>
         </div>
       </div>
     </section>
-    <!--  -->
+
     <!-- product-presentation-section -->
-    <section class="nf-unified-section">
+    <section style="background:#fafbfc;border:1px solid #e0e0e0;border-radius:16px;padding:60px 48px;margin-bottom:40px;">
       <div class="row d-flex align-items-center">
         <div class="col col-12 col-md-12 col-lg-6">
           <div>
-            <div>
-              <img class="img-fluid nf-unified-image nf-unified-image-soft" src="./img/ads-2.png">
-            </div>
-
+            <img class="img-fluid" src="./img/ads-2.png" style="width:100%;border-radius:16px;object-fit:cover;">
           </div>
         </div>
         <div class="col col-12 col-md-12 col-lg-6">
-          <div class="nf-unified-content">
-            <h4 class="nf-unified-title">
-              <span>Classy</span><br>
-              <span>Presentation</span>
+          <div style="padding:0;">
+            <h4 style="margin:0;font-size:40px;line-height:1.25;color:#1a1a1a;font-weight:700;">
+              <span style="display:block;">Classy</span><br>
+              <span style="display:block;">Presentation</span>
             </h4>
-
-            <div class="mt-4">
-              <p class="nf-unified-copy">Highlight your products with captivating visuals
+            <div style="margin-top:1rem;">
+              <p style="margin:16px 0 0;color:#666666;font-size:16px;line-height:1.75;max-width:600px;">Highlight your products with captivating visuals
                 and detailed descriptions that engage customers and boost sales.
                 A well-crafted product presentation builds trust
                 and enhances the shopping experience.</p>
-              <ul class="nf-unified-list">
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>High-Quality Images</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Engaging Descriptions</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Interactive Features</span></li>
+              <ul style="list-style:none;margin:24px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;">
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>High-Quality Images</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Engaging Descriptions</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Interactive Features</span></li>
               </ul>
             </div>
           </div>
         </div>
-
       </div>
     </section>
+
     <!-- cart-page-section -->
-    <section class="mb-5 nf-unified-section">
+    <section style="background:#fafbfc;border:1px solid #e0e0e0;border-radius:16px;padding:60px 48px;margin-bottom:40px;">
       <div class="row d-flex align-items-center">
         <div class="col col-12 col-md-12 col-lg-6">
-          <div class="nf-unified-content">
-            <h4 class="nf-unified-title">
-              <span>Attractive Cart page</span><br>
-
+          <div style="padding:0;">
+            <h4 style="margin:0;font-size:40px;line-height:1.25;color:#1a1a1a;font-weight:700;">
+              <span style="display:block;">Attractive Cart page</span>
             </h4>
-
-            <div class="mt-4">
-              <p class="nf-unified-copy">The Natural Foods Theme Gives You a Fully
+            <div style="margin-top:1rem;">
+              <p style="margin:16px 0 0;color:#666666;font-size:16px;line-height:1.75;max-width:600px;">The Natural Foods Theme Gives You a Fully
                 Modified Cart View, and This Table Design is Also Have
                 Awesome Design, and it Gives You More Beauty for Your Odoo Frontend.
-                It will Give You a Clean Layout with the New Color Combination and a Modified Font. .</p>
-              <ul class="nf-unified-list">
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Modified Table Style</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>New Color Combination</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Shows discount percentage and discounted price</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Buttons with New Colors</span></li>
+                It will Give You a Clean Layout with the New Color Combination and a Modified Font.</p>
+              <ul style="list-style:none;margin:24px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;">
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Modified Table Style</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>New Color Combination</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Shows discount percentage and discounted price</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Buttons with New Colors</span></li>
               </ul>
             </div>
           </div>
         </div>
         <div class="col col-12 col-md-12 col-lg-6">
           <div>
-            <div>
-              <img class="img-fluid nf-unified-image" src="./img/cart.png">
-            </div>
-
+            <img class="img-fluid" src="./img/cart.png" style="width:100%;border-radius:16px;object-fit:cover;">
           </div>
         </div>
       </div>
     </section>
+
     <!-- contact-style-section -->
-    <section class="nf-unified-section">
+    <section style="background:#fafbfc;border:1px solid #e0e0e0;border-radius:16px;padding:60px 48px;margin-bottom:40px;">
       <div class="row d-flex align-items-center">
         <div class="col col-12 col-md-12 col-lg-6">
           <div>
-            <div>
-              <img class="img-fluid nf-unified-image nf-unified-image-soft" src="./img/ads-2.png">
-            </div>
-
+            <img class="img-fluid" src="./img/ads-2.png" style="width:100%;border-radius:16px;object-fit:cover;">
           </div>
         </div>
         <div class="col col-12 col-md-12 col-lg-6">
-          <div class="nf-unified-content">
-            <h4 class="nf-unified-title">
-              <span>Keep in touch</span><br>
-              <span>in new style</span>
+          <div style="padding:0;">
+            <h4 style="margin:0;font-size:40px;line-height:1.25;color:#1a1a1a;font-weight:700;">
+              <span style="display:block;">Keep in touch</span><br>
+              <span style="display:block;">in new style</span>
             </h4>
-
-            <div class="mt-4">
-              <p class="nf-unified-copy">Natural Foods Theme Gives You a Fully Modified Contact View with a
+            <div style="margin-top:1rem;">
+              <p style="margin:16px 0 0;color:#666666;font-size:16px;line-height:1.75;max-width:600px;">Natural Foods Theme Gives You a Fully Modified Contact View with a
                 Full-Screen Experience. It will Give You a Clean Layout
-                with the New OutLook and a Modified Font. .</p>
-              <ul class="nf-unified-list">
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Modified Style</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>Full-Screen View</span></li>
-                <li><i class="bi bi-check-circle-fill nf-unified-icon"></i><span>New Looks for Button</span></li>
+                with the New OutLook and a Modified Font.</p>
+              <ul style="list-style:none;margin:24px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;">
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Modified Style</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>Full-Screen View</span></li>
+                <li style="display:flex;align-items:center;gap:10px;color:#666666;font-size:15px;line-height:1.6;"><i class="bi bi-check-circle-fill" style="color:#2f8f46;font-size:18px;flex-shrink:0;"></i><span>New Looks for Button</span></li>
               </ul>
             </div>
           </div>
         </div>
-
       </div>
     </section>
-  <!-- -->
 
-
-    <div class="my-5">
-      <!-- banner card -->
-
-
-
-      <!-- service-section -->
+    <div style="margin-top:3rem;margin-bottom:3rem;">
 
       <!-- our-services-section -->
-      <section class="nf-card">
-        <h2 class="nf-h2">Our Services</h2>
+      <section style="background:#ffffff;border:1px solid #e0e0e0;border-radius:16px;padding:40px;margin-top:28px;">
+        <h2 style="font-size:32px;color:#1a1a1a;margin:0 0 16px;font-weight:700;">Our Services</h2>
         <div class="row g-3">
-          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-sliders2"></i></span><h6>Odoo Customization</h6></div></div>
-          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-tools"></i></span><h6>Odoo Implementation</h6></div></div>
-          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-life-preserver"></i></span><h6>Odoo Support</h6></div></div>
-          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-arrow-repeat"></i></span><h6>Odoo Migration</h6></div></div>
-          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-puzzle"></i></span><h6>Odoo Integration</h6></div></div>
-          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-person-workspace"></i></span><h6>Odoo Consultancy</h6></div></div>
-          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-patch-check"></i></span><h6>Odoo Licensing</h6></div></div>
-          <div class="col-md-3 col-sm-6"><div class="nf-service"><span class="icon-wrap"><i class="bi bi-person-plus"></i></span><h6>Hire Odoo Developer</h6></div></div>
+          <div class="col-md-3 col-sm-6">
+            <div style="border:1px solid #e0e0e0;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+              <span style="width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-sliders2"></i></span>
+              <h6 style="margin:0;color:#1a1a1a;font-size:16px;font-weight:700;line-height:1.4;">Odoo Customization</h6>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div style="border:1px solid #e0e0e0;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+              <span style="width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-tools"></i></span>
+              <h6 style="margin:0;color:#1a1a1a;font-size:16px;font-weight:700;line-height:1.4;">Odoo Implementation</h6>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div style="border:1px solid #e0e0e0;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+              <span style="width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-life-preserver"></i></span>
+              <h6 style="margin:0;color:#1a1a1a;font-size:16px;font-weight:700;line-height:1.4;">Odoo Support</h6>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div style="border:1px solid #e0e0e0;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+              <span style="width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-arrow-repeat"></i></span>
+              <h6 style="margin:0;color:#1a1a1a;font-size:16px;font-weight:700;line-height:1.4;">Odoo Migration</h6>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div style="border:1px solid #e0e0e0;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+              <span style="width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-puzzle"></i></span>
+              <h6 style="margin:0;color:#1a1a1a;font-size:16px;font-weight:700;line-height:1.4;">Odoo Integration</h6>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div style="border:1px solid #e0e0e0;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+              <span style="width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-person-workspace"></i></span>
+              <h6 style="margin:0;color:#1a1a1a;font-size:16px;font-weight:700;line-height:1.4;">Odoo Consultancy</h6>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div style="border:1px solid #e0e0e0;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+              <span style="width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-patch-check"></i></span>
+              <h6 style="margin:0;color:#1a1a1a;font-size:16px;font-weight:700;line-height:1.4;">Odoo Licensing</h6>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div style="border:1px solid #e0e0e0;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+              <span style="width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#e8f5eb;color:#2f8f46;font-size:24px;margin-bottom:16px;"><i class="bi bi-person-plus"></i></span>
+              <h6 style="margin:0;color:#1a1a1a;font-size:16px;font-weight:700;line-height:1.4;">Hire Odoo Developer</h6>
+            </div>
+          </div>
         </div>
       </section>
-  
+
       <!-- support-company-section -->
-      <section class="nf-card nf-company-center">
-        <h2 class="nf-h2">Support & Company</h2>
-        <img class="nf-company-logo" src="./img/erp23.png" alt="erp23 logo">
-        <p class="nf-text mb-2">Developed and maintained by nopStation.</p>
-        <p class="mb-0">Website: <a class="nf-link" href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer">https://www.erp-23.com/</a></p>
-        <p>Email: <a href="mailto:erp23@brainstation-23.com"> erp23@brainstation-23.com</a></p>
+      <section style="background:#ffffff;border:1px solid #e0e0e0;border-radius:16px;padding:40px;margin-top:28px;text-align:center;">
+        <h2 style="font-size:32px;color:#1a1a1a;margin:0 0 16px;font-weight:700;">Support &amp; Company</h2>
+        <img src="./img/erp23.png" alt="erp23 logo" style="max-height:48px;width:auto;margin-bottom:16px;">
+        <p style="margin:0;color:#666666;font-size:16px;line-height:1.6;" class="mb-2">Developed and maintained by nopStation.</p>
+        <p class="mb-0">Website: <a href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer" style="color:#2f8f46;text-decoration:none;font-weight:600;">https://www.erp-23.com/</a></p>
+        <p>Email: <a href="mailto:erp23@brainstation-23.com">erp23@brainstation-23.com</a></p>
       </section>
-  
-      <p class="nf-footer">Natural Foods Theme - Premium Odoo storefront experience for food eCommerce.</p>
+
+      <p style="margin-top:20px;text-align:center;color:#999999;font-size:14px;">Natural Foods Theme - Premium Odoo storefront experience for food eCommerce.</p>
     </div>
   </div>
 </body>
