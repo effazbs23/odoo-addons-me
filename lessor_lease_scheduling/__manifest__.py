@@ -17,8 +17,8 @@ This module provides comprehensive lease contract management for lessors:
 
 Note: Net Method (IFRS 16) support is currently under development.
     """,
-    'author': 'Brain Station 23',
-    'website': 'https://brainstation-23.com',
+    'author': 'ERP23',
+    'website': 'https://erp-23.com',
     'license': 'LGPL-3',
     'support': 'erp23@brainstation-23.com',
     'price': 199.00,
@@ -47,5 +47,5 @@ Note: Net Method (IFRS 16) support is currently under development.
     'external_dependencies': {
         'python': [],
     },
-    "support": "erp23@brainstation-23.com",
+    'support': 'erp23@brainstation-23.com',
 }
