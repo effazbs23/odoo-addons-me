@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_bs_journal_transfer_root"
+              name="Bank Cash Transfer"
+              parent="account.account_transactions_menu"
+              action="action_bs_journal_transfer"
+              sequence="10"/>
+</odoo>
