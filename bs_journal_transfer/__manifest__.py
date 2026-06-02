@@ -11,9 +11,11 @@
         * Auto-reconciliation with the Internal Transfer model
         * Full Accounting Integration
     """,
-    'author': 'Brain Station 23',
-    'website': 'https://brainstation-23.com',
+    'author': 'ERP23',
+    'website': 'https://erp-23.com',
     'support': 'erp23@brainstation-23.com',
+    'price': 10.00,
+    'currency': 'USD',
     'depends': ['accountant'],
     'data': [
         'security/bs_journal_transfer_security.xml',
