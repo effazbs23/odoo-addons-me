@@ -8,10 +8,12 @@
         ================
         * Transfer amounts between source and destination journals
         * Automatic bank statement line creation
-        * Auto-reconciliation with Internal Transfer model
+        * Auto-reconciliation with the Internal Transfer model
         * Full Accounting Integration
     """,
-    'author': 'Ispahani',
+    'author': 'Brain Station 23',
+    'website': 'https://brainstation-23.com',
+    'support': 'erp23@brainstation-23.com',
     'depends': ['accountant'],
     'data': [
         'security/bs_journal_transfer_security.xml',
