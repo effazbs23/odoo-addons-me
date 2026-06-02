@@ -6,8 +6,8 @@
         regardless of debug mode. By default, Odoo only shows the username when in debug mode,
         but this module ensures it's always visible.
     """,
-    "author": "Brain Station 23",
-    "website": "https://brainstation-23.com",
+    "author": "ERP23",
+    "website": "https://erp-23.com",
     "category": "Web",
     "version": "19.0.1.0.0",
     "depends": ["web"],
