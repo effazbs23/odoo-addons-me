@@ -21,6 +21,7 @@
 #############################################################################
 from . import product
 from . import category
+from . import product_public_category
 from . import new_arrival
 from . import featured_products
 from . import best_seller

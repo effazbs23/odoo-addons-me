@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="theme_natural_foods_blog_listing" inherit_id="website_blog.blog_post_short" name="Natural Foods Blog Listing">
+        <xpath expr="//t[@t-set='opt_blog_cards_design']" position="replace">
+            <t t-set="opt_blog_cards_design" t-value="True"/>
+        </xpath>
+        <xpath expr="//t[@t-set='opt_blog_list_view']" position="replace">
+            <t t-set="opt_blog_list_view" t-value="False"/>
+        </xpath>
+        <xpath expr="//t[@t-set='opt_blog_readable']" position="replace">
+            <t t-set="opt_blog_readable" t-value="False"/>
+        </xpath>
+        <xpath expr="//t[@t-set='opt_blog_sidebar_show']" position="replace">
+            <t t-set="opt_blog_sidebar_show" t-value="False"/>
+        </xpath>
+        <xpath expr="//section[@id='o_wblog_index_content']" position="attributes">
+            <attribute name="class" add="nf-blog-page py-3" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@id='o_wblog_posts_loop_container']" position="attributes">
+            <attribute name="class" add="col-12 col-lg-9 nf-blog-listing-col" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@id='o_wblog_posts_loop_container']" position="after">
+            <div class="col-12 col-lg-3 mt-4 mt-lg-0 nf-blog-sidebar-col">
+                <t t-call="website_blog.sidebar_blog_index"/>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="theme_natural_foods_blog_loop_cards" inherit_id="website_blog.posts_loop" name="Natural Foods Blog Cards">
+        <!-- Force 2-column grid on desktop (without breaking pager / loop structure) -->
+        <xpath expr="//t[@t-foreach='posts']" position="before">
+            <t t-if="not opt_blog_list_view" t-set="colWidth" t-value="'px-2 col-sm-6 col-md-6 col-lg-6'"/>
+        </xpath>
+        <xpath expr="//article[@name='blog_post']" position="attributes">
+            <attribute name="class" add="nf-blog-card border-0 shadow-sm overflow-hidden h-100" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="theme_natural_foods_blog_sidebar" inherit_id="website_blog.sidebar_blog_index" name="Natural Foods Blog Sidebar">
+        <xpath expr="//div[@id='o_wblog_sidebar']" position="attributes">
+            <attribute name="class" add="nf-blog-sidebar" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="theme_natural_foods_blog_post_page" inherit_id="website_blog.blog_post_complete" name="Natural Foods Blog Post Page">
+        <xpath expr="//section[@id='o_wblog_post_main']" position="attributes">
+            <attribute name="class" add="nf-blog-post-main" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@id='o_wblog_post_content']" position="attributes">
+            <attribute name="class" add="nf-blog-post-content" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@id='o_wblog_post_sidebar_col']" position="attributes">
+            <attribute name="class" add="nf-blog-sidebar-col" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="theme_natural_foods_blog_post_comments" inherit_id="website_blog.opt_blog_post_comment" name="Natural Foods Blog Comments Style">
+        <xpath expr="//div[@id='o_wblog_post_comments']" position="attributes">
+            <attribute name="class" add="nf-blog-comments-wrap" separator=" "/>
+        </xpath>
+    </template>
+</odoo>

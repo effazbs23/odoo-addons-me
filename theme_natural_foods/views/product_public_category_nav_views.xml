@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="natural_foods_product_public_category_form_nav" model="ir.ui.view">
+        <field name="name">product.public.category.form.nav.toggle</field>
+        <field name="model">product.public.category</field>
+        <field name="inherit_id" ref="website_sale.product_public_category_form_view"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="show_in_main_nav" widget="boolean_toggle"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="natural_foods_product_public_category_list_nav" model="ir.ui.view">
+        <field name="name">product.public.category.list.nav.toggle</field>
+        <field name="model">product.public.category</field>
+        <field name="inherit_id" ref="website_sale.product_public_category_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="display_name" position="after">
+                <field name="show_in_main_nav" widget="boolean_toggle" optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>

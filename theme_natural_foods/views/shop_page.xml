@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="natural_foods_shop_page" name="Natural Foods Shop" inherit_id="website_sale.products">
+        <xpath expr="//div[@id='products_grid']" position="replace">
+            <t t-set="current_pricelist" t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
+            <t t-set="display_currency"
+               t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
+
+            <div id="products_grid" class="col oe_website_sale">
+                <div class="container-fluid px-2 px-lg-3 py-4">
+                    <div class="nf-shop-toolbar">
+                        <div class="nf-shop-toolbar__left">
+                            <t t-if="is_view_active('website_sale.sort')">
+                                <t t-set="_classes" t-valuef="nf-toolbar-sort"/>
+                                <t t-call="website_sale.sort"/>
+                            </t>
+                        </div>
+                        <div class="nf-shop-toolbar__right d-flex align-items-center gap-2">
+                            <span class="text-muted small d-none d-sm-inline">View</span>
+                            <div class="nf-shop-view-switch" role="group" aria-label="Product layout">
+                                <button type="button"
+                                        class="nf-shop-view-btn active"
+                                        data-nf-view="grid"
+                                        aria-pressed="true"
+                                        title="Grid view">
+                                    <i class="bi bi-grid-3x3-gap" aria-hidden="true"/>
+                                </button>
+                                <button type="button"
+                                        class="nf-shop-view-btn"
+                                        data-nf-view="list"
+                                        aria-pressed="false"
+                                        title="List view">
+                                    <i class="bi bi-list-ul" aria-hidden="true"/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="nf-shop-products-row" class="row g-4 nf-shop-view-grid">
+                        <t t-foreach="products" t-as="product">
+                            <t t-set="contextual_price"
+                               t-value="(current_pricelist and product.with_context(pricelist=current_pricelist.id)._get_contextual_price()) or product._get_contextual_price()"/>
+
+                            <div class="col-xl-3 col-lg-4 col-md-6 col-6 nf-shop-product-col">
+                                <div class="card product-card nf-shop-product-card border-0 shadow-sm position-relative h-100">
+                                    <div class="product-card-image position-relative">
+                                        <a t-att-href="'/shop/product/%s' % product.id" class="d-block">
+                                            <img t-att-src="website.image_url(product, 'image_512')"
+                                                 class="card-img-top"
+                                                 t-att-alt="product.name"/>
+                                        </a>
+
+                                        <div class="product-actions position-absolute top-0 end-0 m-2 d-flex flex-column gap-1 opacity-0">
+                                            <a class="o_add_wishlist btn btn-light btn-sm rounded-circle shadow-sm"
+                                               t-att-data-product-product-id="product._get_first_possible_variant_id()"
+                                               href="#"
+                                               title="Add to Wishlist">
+                                                <i class="bi bi-heart"/>
+                                            </a>
+                                            <button type="button"
+                                                    class="btn btn-light btn-sm rounded-circle shadow-sm"
+                                                    t-attf-onclick="event.preventDefault(); event.stopPropagation(); quickView(#{product.id});"
+                                                    t-att-data-quick-view-product-id="product.id"
+                                                    title="Quick View">
+                                                <i class="bi bi-eye"/>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body text-center d-flex flex-column">
+                                        <h6 class="card-title mb-2">
+                                            <t t-esc="product.name"/>
+                                        </h6>
+
+                                        <div class="text-success fw-bold mb-3">
+                                            <t t-out="contextual_price"
+                                               t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
+                                        </div>
+
+                                        <button type="button"
+                                                class="btn btn-success w-100 s_add_to_cart_btn mt-auto"
+                                                t-att-data-product-template-id="product.id"
+                                                t-att-data-product-variant-id="product._get_first_possible_variant_id()"
+                                                t-att-data-product-type="product.type"
+                                                data-action="add_to_cart"
+                                                data-show-quantity="False">
+                                            Add to Cart
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+
+                    <div t-if="pager and pager['page_count'] &gt; 1"
+                         id="o_wsale_pager"
+                         class="products_pager d-flex justify-content-center py-4">
+                        <t t-call="website.pager"/>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
