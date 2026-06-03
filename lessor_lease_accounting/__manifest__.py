@@ -16,8 +16,8 @@ This module extends lessor_lease_scheduling with accounting features:
 
 Note: Net Method (IFRS 16) support is currently under development.
     """,
-    'author': 'Brain Station 23',
-    'website': 'https://brainstation-23.com',
+    'author': 'ERP23',
+    'website': 'https://erp-23.com',
     'license': 'LGPL-3',
     'price': 249.00,
     'currency': 'USD',
