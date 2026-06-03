@@ -33,7 +33,7 @@
                         <div class="d-flex align-items-center gap-3">
                             <!-- Account -->
                             <a t-att-href=" '/my' if request.session.uid else '/web/login' "
-                               class="btn btn-light rounded-pill shadow-sm d-flex align-items-center gap-2 ">
+                               class="btn btn-light rounded-pill shadow-sm d-flex align-items-center gap-2 hover-organic">
                                 <i class="bi bi-person-circle"></i>
                                 <span class="d-none d-sm-inline">
                                     <t t-if="request.session.uid">My Account</t>
@@ -55,7 +55,7 @@
                                         <div t-attf-class="o_wsale_my_wish #{not show_wishes and 'd-none'}">
 
                                             <a t-att-href="show_wishes and '/shop/wishlist' or '/web/login'"
-                                               class="btn btn-light d-flex align-items-center gap-2 rounded-pill position-relative bg-white shadow-sm hover-organic" >
+                                               class="btn btn-light d-flex align-items-center gap-2 rounded-pill position-relative shadow-sm hover-organic" >
 
                                                 <i class="bi bi-heart text-danger"></i>
                                                 <span class="d-none d-sm-inline fw-medium">Wishlist</span>
@@ -77,7 +77,7 @@
                                        t-value="request.session.get('website_sale_cart_quantity', request.cart.cart_quantity) or 0"/>
 
                                     <a href="/shop/cart"
-                                       class="btn btn-light d-flex align-items-center gap-2 rounded-pill hover-organic position-relative bg-white shadow-sm"
+                                       class="btn btn-light d-flex align-items-center gap-2 rounded-pill hover-organic position-relative  shadow-sm"
                                        aria-label="Shopping cart"
                                        onmouseenter="showCartDropdown()"
                                        onmouseleave="hideCartDropdown()"
@@ -133,7 +133,7 @@
                     </div>
                     <nav class="organic-nav d-none d-lg-block">
                         <ul class="nav d-flex align-items-center gap-3 justify-content-center">
-                            <t t-foreach="request.env['product.public.category'].search([])" t-as="cat">
+                            <t t-foreach="request.env['product.public.category'].natural_foods_navbar_categories(website)" t-as="cat">
                                 <li class="nav-item">
                                     <a t-att-href="'/shop/category/%s' % cat.id" class="nav-link">
                                         <t t-esc="cat.name"/>
@@ -211,7 +211,7 @@
                                 <div class="collapse" id="mobileShopCategoriesSubmenu">
                                     <div class="mobile-mega-menu-content p-3">
                                         <ul class="list-unstyled mb-0">
-                                            <t t-foreach="request.env['product.public.category'].search([])" t-as="cat">
+                                            <t t-foreach="request.env['product.public.category'].natural_foods_navbar_categories(website)" t-as="cat">
                                                 <li>
                                                     <a t-att-href="'/shop/category/%s' % cat.id"
                                                        class="text-decoration-none d-block py-1 hover-organic-link mobile-mega-link">
@@ -250,24 +250,29 @@
     </template>
 
     <!-- JS LOAD -->
-    <template id="natural_foods_js" inherit_id="website.layout">
-        <xpath expr="//body" position="inside">
-            <div id="loading-screen" class="loading-screen">
-                <div class="loading-content">
-                    <img src="/theme_natural_foods/static/src/img/loader.png" alt="Loading..." class="loading-spinner"/>
-                </div>
+ <template id="natural_foods_js" inherit_id="website.layout">
+    <xpath expr="//body" position="inside">
+
+        <!--  Loading Screen  -->
+        <div id="loading-screen" class="loading-screen">
+            <div class="loading-content">
+                <img src="/theme_natural_foods/static/src/img/loader.png"
+                     alt="Loading..."
+                     class="loading-spinner"/>
             </div>
-            <script src="/theme_natural_foods/static/src/js/swiper-bundle.min.js"/>
-            <script src="/theme_natural_foods/static/src/js/allswiper.js"/>
-            <script src="/theme_natural_foods/static/src/js/mobile-menu-enhancement.js"/>
-            <script src="/theme_natural_foods/static/src/js/product-tabs.js"/>
-            <script src="/theme_natural_foods/static/src/js/action-buttons.js"/>
-            <script src="/theme_natural_foods/static/src/js/loading-screen.js"/>
+        </div>
+
+        <!-- JS Files -->
+        <script src="/theme_natural_foods/static/src/js/swiper-bundle.min.js"/>
+        <script src="/theme_natural_foods/static/src/js/allswiper.js"/>
+        <script src="/theme_natural_foods/static/src/js/mobile-menu-enhancement.js"/>
+        <script src="/theme_natural_foods/static/src/js/product-tabs.js"/>
+        <script src="/theme_natural_foods/static/src/js/loading-screen.js"/>
+        <script src="/theme_natural_foods/static/src/js/action-buttons.js"/>
 
 
-        </xpath>
-    </template>
-
+    </xpath>
+</template>
 
 
 </odoo>

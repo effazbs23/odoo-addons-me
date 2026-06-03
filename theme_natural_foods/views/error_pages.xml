@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="theme_natural_foods_404_content" name="Natural Foods 404 Content">
+    
+              <div class="nf-404-title-bar text-center mb-3">
+                        <h6 class="mb-0 error-title">Page not found</h6>
+            </div>
+    
+        <div class="oe_structure nf-404-page-wrap">
+            <section class="nf-404-page py-3 py-lg-4">
+                <div class="container">
+                    
+                    <div class="nf-404-main mx-auto">
+                        <div class="nf-404-copy text-center">
+                            <h2 class="mb-2">The page you requested was not found, and we have a fine guess why.</h2>
+                            <p class="mb-1">If you typed the url directly, please make sure the spelling is correct.</p>
+                            <p class="mb-0">The page no longer exists. in this case, we profusely apologize for the inconvenience and for any damage this may cause.</p>
+                        </div>
+                        <div class="nf-404-illustration text-center">
+                            <div class="nf-404-cloud"/>
+                            <div class="nf-404-number">404</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </template>
+
+    <template id="theme_natural_foods_404_full" name="Natural Foods 404 Full Page">
+        <t t-call="web.frontend_layout">
+            <div id="wrap">
+                <t t-call="theme_natural_foods.theme_natural_foods_404_content"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="theme_natural_foods_404_page" inherit_id="http_routing.404" name="Natural Foods Custom 404 Page" priority="90">
+        <xpath expr="//div[@id='wrap']/div[contains(@class, 'oe_structure')]" position="replace">
+            <t t-call="theme_natural_foods.theme_natural_foods_404_content"/>
+        </xpath>
+    </template>
+
+    <template id="theme_natural_foods_page_404_route" inherit_id="website.page_404" name="Natural Foods Website 404 Route" priority="90">
+        <xpath expr="//t[@t-call='http_routing.404']" position="replace">
+            <t t-call="theme_natural_foods.theme_natural_foods_404_full"/>
+        </xpath>
+    </template>
+</odoo>

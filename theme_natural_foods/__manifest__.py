@@ -13,7 +13,7 @@
     performance, accessibility compliance, and SEO best practices for better search engine rankings.
     ''',
     'category': 'Theme/eCommerce',
-    'version': '19.0.1.1',
+    'version': '19.0.1.2',
     'author': 'ERP23',
     'company': 'nopCommerce, Brainstation 23 PLC',
     'maintainer': 'ERP 23',

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Checkout shell: scope styling -->
+    <template id="natural_foods_checkout_layout_wrap" inherit_id="website_sale.checkout_layout">
+        <xpath expr="//div[@id='wrap']" position="attributes">
+            <attribute name="class" add="nf-checkout-page" separator=" "/>
+        </xpath>
+        <xpath expr="//div[hasclass('o_total_card')]" position="attributes">
+            <attribute name="class" add="nf-order-summary-card" separator=" "/>
+        </xpath>
+    </template>
+
+    <!-- Order summary heading -->
+    <template id="natural_foods_cart_summary_heading" inherit_id="website_sale.cart_summary_content">
+        <xpath expr="//table[hasclass('o_cart_products_table')]" position="before">
+            <h5 class="nf-checkout-order-summary-title mb-3">Order Summary</h5>
+        </xpath>
+    </template>
+
+    <!-- Totals row labels -->
+    <template id="natural_foods_checkout_total_labels" inherit_id="website_sale.total">
+        <xpath expr="//tr[@name='o_order_delivery']/td[@colspan='2']" position="replace">
+            <td class="ps-0 pt-0 pb-2 border-0 text-muted" colspan="2">Shipping</td>
+        </xpath>
+        <xpath expr="//tr[@name='o_order_total_untaxed']/td[@colspan='2']" position="replace">
+            <td class="border-0 pb-2 ps-0 pt-0 text-start text-muted" colspan="2">Sub-Total</td>
+        </xpath>
+        <xpath expr="//tr[@name='o_order_total_taxes']/td[@colspan='2']" position="replace">
+            <td colspan="2" class="text-muted border-0 p-0 pe-3 pb-2">Tax</td>
+        </xpath>
+    </template>
+
+    <!-- Billing helper copy + ship-to-same wording -->
+    <template id="natural_foods_billing_address_copy" inherit_id="website_sale.billing_address_list">
+        <xpath expr="//div[@id='billing_address_list']/div[contains(@class,'justify-content-between')]" position="after">
+            <p class="nf-checkout-address-help text-muted small mb-2">
+                Select a billing address from your address book or enter a new address.
+            </p>
+        </xpath>
+        <xpath expr="//span[@name='use_delivery_as_billing_text']" position="replace">
+            <span name="use_delivery_as_billing_text">Ship to the same address</span>
+        </xpath>
+    </template>
+
+    <!-- Continue / Back actions -->
+    <template id="natural_foods_navigation_buttons" inherit_id="website_sale.navigation_buttons">
+        <!-- Root uses t-attf-class (not static class): hasclass() does not match — use contains(@t-attf-class, …). -->
+        <xpath expr="//div[contains(@t-attf-class, '_container_classes')]" position="attributes">
+            <attribute name="t-attf-class">#{_container_classes} d-flex flex-column flex-md-row flex-md-wrap align-items-md-center justify-content-md-between gap-2 gap-md-3 nf-checkout-nav-root</attribute>
+        </xpath>
+        <xpath expr="//a[@name='website_sale_main_button']" position="attributes">
+            <attribute name="t-attf-class">btn btn-success btn-lg px-4 #{not website_sale_order._is_cart_ready() and 'disabled'} w-100 w-md-auto nf-checkout-continue</attribute>
+        </xpath>
+        <xpath expr="//a[contains(@class,'mt-2')][.//i[contains(@class,'fa-angle-left')]]" position="attributes">
+            <attribute name="class" add="btn btn-outline-secondary nf-checkout-back" separator=" "/>
+        </xpath>
+    </template>
+
+    <!-- Confirmation / completed step redesign -->
+    <template id="natural_foods_confirmation_page" inherit_id="website_sale.confirmation">
+        <xpath expr="//t[@t-set='show_wizard_checkout']" position="replace">
+            <t t-set="show_wizard_checkout" t-value="True"/>
+        </xpath>
+        <xpath expr="//t[@t-set='show_footer']" position="replace">
+            <t t-set="show_footer" t-value="False"/>
+        </xpath>
+        <xpath expr="//div[@t-if=&quot;tx_sudo.state in ['pending', 'done'] or not order.amount_total&quot;]" position="replace">
+            <div class="nf-confirmed-title-bar d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Completed</h5>
+                <a title="Print" role="button" class="d-none d-md-inline-block btn btn-light ms-auto" href="/shop/print" target="_blank" aria-label="Print">
+                    <i class="fa fa-print me-2"/>Print
+                </a>
+            </div>
+        </xpath>
+        <xpath expr="//div[@id='order_name']" position="replace">
+            <div class="nf-confirmed-card-wrapper">
+                <div class="nf-confirmed-card text-center">
+                    <h2 class="nf-confirmed-thank mb-3">Thank You!</h2>
+                    <div class="nf-confirmed-icon mx-auto mb-3" aria-hidden="true">
+                        <i class="fa fa-check"/>
+                    </div>
+                    <p class="nf-confirmed-text mb-1">Your order has been successfully processed!</p>
+                    <p class="nf-confirmed-order mb-2">
+                        Order number:
+                        <span t-field="order.name"/>
+                    </p>
+                    <p class="mb-3">
+                        <a class="nf-confirmed-details-link" t-att-href="order.get_portal_url()">
+                            Click here for order details.
+                        </a>
+                    </p>
+                    <a href="/shop" class="btn btn-success px-4 nf-confirmed-continue">Continue</a>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//t[@t-call='website_sale.payment_confirmation_status']" position="replace"/>
+        <xpath expr="//div[@class='mt-3'][.//t[@t-call='website_sale.address_on_checkout']]" position="replace"/>
+        <xpath expr="//div[@id='oe_structure_website_sale_confirmation_2']" position="replace"/>
+        <xpath expr="//div[@class='d-lg-none']" position="replace"/>
+        <xpath expr="//input[contains(@class,'js_plausible_push')]" position="before">
+            <section class="nf-confirmed-features py-4">
+                <div class="row g-3">
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <div class="nf-confirmed-feature-box h-100">
+                            <i class="fa fa-truck" aria-hidden="true"/>
+                            <div>
+                                <h6 class="mb-1">Free Shipping</h6>
+                                <p class="mb-0">Free shipping for orders over $150</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <div class="nf-confirmed-feature-box h-100">
+                            <i class="fa fa-money" aria-hidden="true"/>
+                            <div>
+                                <h6 class="mb-1">Money Guarantee</h6>
+                                <p class="mb-0">Within 30 days for an exchange</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <div class="nf-confirmed-feature-box h-100">
+                            <i class="fa fa-credit-card" aria-hidden="true"/>
+                            <div>
+                                <h6 class="mb-1">Flexible Payment</h6>
+                                <p class="mb-0">Pay with multiple credit cards</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <div class="nf-confirmed-feature-box h-100">
+                            <i class="fa fa-clock-o" aria-hidden="true"/>
+                            <div>
+                                <h6 class="mb-1">Online Support</h6>
+                                <p class="mb-0">24 hours a day, 7 days a week</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+</odoo>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="natural_foods_quick_view_modal" inherit_id="website.layout" name="Natural Foods Quick View Modal">
+        <xpath expr="//body" position="inside">
+            <div id="naturalFoodsQuickView"
+                 class="modal fade nf-quick-view"
+                 tabindex="-1"
+                 aria-labelledby="naturalFoodsQuickViewLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content nf-quick-view__content border-0 overflow-hidden">
+                        <button type="button"
+                                class="btn-close nf-quick-view__close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+
+                        <div class="nf-quick-view__loading" data-quick-view-loading="1">
+                            <div class="nf-quick-view__spinner" aria-hidden="true"></div>
+                            <p class="mb-0">Loading product details...</p>
+                        </div>
+
+                        <div class="nf-quick-view__body d-none" data-quick-view-body="1">
+                            <div class="row g-0 align-items-stretch">
+                                <div class="col-lg-6">
+                                    <div class="nf-quick-view__media">
+                                        <img src=""
+                                             alt=""
+                                             class="img-fluid w-100 h-100 object-fit-cover"
+                                             data-quick-view-image="1"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="nf-quick-view__details">
+                                        <span class="nf-quick-view__eyebrow" data-quick-view-category="1"></span>
+                                        <h2 id="naturalFoodsQuickViewLabel"
+                                            class="nf-quick-view__title"
+                                            data-quick-view-name="1"></h2>
+
+                                        <div class="nf-quick-view__price-wrap">
+                                            <span class="nf-quick-view__price" data-quick-view-price="1"></span>
+                                            <span class="nf-quick-view__price-old d-none"
+                                                  data-quick-view-list-price="1"></span>
+                                        </div>
+
+                                        <p class="nf-quick-view__description"
+                                           data-quick-view-description="1"></p>
+
+                                        <div class="nf-quick-view__quantity">
+                                            <span class="nf-quick-view__label">Quantity</span>
+                                            <div class="nf-quick-view__counter">
+                                                <button type="button"
+                                                        class="btn btn-link nf-quick-view__counter-btn"
+                                                        data-quick-view-decrease="1"
+                                                        aria-label="Decrease quantity">
+                                                    <i class="bi bi-dash"></i>
+                                                </button>
+                                                <input type="number"
+                                                       min="1"
+                                                       value="1"
+                                                       class="form-control nf-quick-view__counter-input"
+                                                       data-quick-view-quantity="1"
+                                                       aria-label="Quantity"/>
+                                                <button type="button"
+                                                        class="btn btn-link nf-quick-view__counter-btn"
+                                                        data-quick-view-increase="1"
+                                                        aria-label="Increase quantity">
+                                                    <i class="bi bi-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="nf-quick-view__actions">
+                                            <button type="button"
+                                                    class="btn btn-sm btn-organic rounded-pill s_add_to_cart_btn nf-quick-view__cart"
+                                                    data-quick-view-add="1"
+                                                    data-action="add_to_cart"
+                                                    data-show-quantity="False">
+                                                <i class="bi bi-cart3"></i>
+                                                <span>Add</span>
+                                            </button>
+                                            <a href="#"
+                                               class="btn btn-outline-secondary nf-quick-view__link"
+                                               data-quick-view-link="1">
+                                                View full details
+                                            </a>
+                                        </div>
+
+                                        <div class="alert alert-danger d-none mb-0"
+                                             role="alert"
+                                             data-quick-view-error="1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

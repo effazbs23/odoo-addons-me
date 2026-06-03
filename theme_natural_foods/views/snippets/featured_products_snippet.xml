@@ -60,7 +60,8 @@
                                                     </button>
                                                     <button type="button"
                                                             class="btn btn-light btn-sm rounded-circle shadow-sm"
-                                                            t-att-onclick="'event.stopPropagation(); quickView(%s);' % product.id"
+                                                            t-attf-onclick="event.preventDefault(); event.stopPropagation(); quickView(#{product.id});"
+                                                            t-att-data-quick-view-product-id="product.id"
                                                             title="Quick View">
                                                         <i class="bi bi-eye"></i>
                                                     </button>
@@ -79,9 +80,15 @@
                                                         <t t-out="contextual_price"
                                                            t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
                                                     </span>
-                                                     <a t-att-href="'/shop/product/%s' % product.id" class="btn btn-sm btn-organic rounded-pill">
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-organic rounded-pill s_add_to_cart_btn"
+                                                            t-att-data-product-template-id="product.id"
+                                                            t-att-data-product-variant-id="product._get_first_possible_variant_id()"
+                                                            t-att-data-product-type="product.type"
+                                                            data-action="add_to_cart"
+                                                            data-show-quantity="False">
                                                         <i class="bi bi-cart3"></i> Add
-                                                    </a>
+                                                    </button>
                                                 </div>
                                             </div>
 

@@ -23,6 +23,8 @@ from odoo.addons.website_sale.controllers.main import WebsiteSale
 from odoo import fields, http
 from odoo.http import request
 from datetime import datetime
+from odoo.tools.mail import html2plaintext
+from odoo.tools.misc import format_amount
 
 class NaturalFoodController(http.Controller):
 
@@ -110,6 +112,32 @@ class CustomWebsiteSale(WebsiteSale):
             **post
         )
 
+    def _prepare_product_values(self, product, category, **kwargs):
+        values = super()._prepare_product_values(product, category, **kwargs)
+
+        related_products = product.alternative_product_ids.filtered(
+            lambda related_product: related_product.is_published and related_product.sale_ok
+        )
+
+        if not related_products and product.public_categ_ids:
+            related_products = request.env['product.template'].search(
+                [
+                    ('id', '!=', product.id),
+                    ('is_published', '=', True),
+                    ('sale_ok', '=', True),
+                    ('public_categ_ids', 'in', product.public_categ_ids.ids),
+                ],
+                limit=4,
+            )
+        else:
+            related_products = related_products[:4]
+
+        values.update({
+            'related_products': related_products[:4],
+            'product_sku': values['product_variant'].default_code or product.default_code,
+        })
+        return values
+
 
     @http.route('/shop/set_pricelist', type='json', auth='public', website=True)
     def set_pricelist(self, pricelist_id, **kwargs):
@@ -194,12 +222,12 @@ class CustomWebsiteSale(WebsiteSale):
 
     @http.route('/shop/cart/get_count', type='json', auth='public', website=True)
     def get_cart_count(self):
-        order = request.cart or request.website.sale_get_order()
+        order = request.cart
         return order.cart_quantity if order else 0
 
     @http.route('/shop/cart/dropdown_data', type='json', auth='public', website=True, csrf=False)
     def get_cart_dropdown_data(self):
-        order = request.cart or request.website.sale_get_order()
+        order = request.cart
         if not order:
             return {
                 'items': [],
@@ -232,7 +260,7 @@ class CustomWebsiteSale(WebsiteSale):
 
     @http.route('/shop/cart/remove_line', type='json', auth='public', website=True, csrf=False)
     def remove_cart_line(self, line_id):
-        order = request.cart or request.website.sale_get_order()
+        order = request.cart
         if order:
             try:
                 target_line_id = int(line_id)
@@ -244,21 +272,76 @@ class CustomWebsiteSale(WebsiteSale):
         return self.get_cart_dropdown_data()
 
 
+class DealsOfDayController(http.Controller):
 
-    class DealsOfDayController(http.Controller):
+    @http.route('/deals/of/day', type='json', auth='public', website=True)
+    def deals_of_day(self):
+        deal = request.env['natural.deals.of.day'].sudo().search(
+            [('is_active', '=', True)],
+            limit=1,
+            order='sequence asc'
+        )
 
-        @http.route('/deals/of/day', type='json', auth='public', website=True)
-        def deals_of_day(self):
-            deal = request.env['natural.deals.of.day'].sudo().search(
-                [('is_active', '=', True)],
-                limit=1,
-                order='sequence asc'
+        products = deal.product_tmpl_ids if deal else []
+
+        return {
+            'deal': deal,
+            'products': products,
+            'end_time': deal.deal_end_time if deal else False
+        }
+
+
+class QuickViewController(http.Controller):
+
+    @http.route('/quick_view/data/<int:product_id>', type='json', auth='public', website=True)
+    def quick_view_data(self, product_id):
+        product = request.env['product.template'].sudo().browse(product_id).exists()
+        website = request.website
+        if not product or not product.sale_ok or not product.is_published:
+            return {'error': 'Product not available'}
+
+        pricelist = (
+            request.session.get('website_sale_current_pl')
+            and request.env['product.pricelist'].sudo().browse(
+                int(request.session.get('website_sale_current_pl'))
             )
+        ) or website._get_and_cache_current_pricelist()
+        currency = (
+            pricelist.currency_id
+            if pricelist and pricelist.exists()
+            else request.env.company.currency_id
+        )
 
-            products = deal.product_tmpl_ids if deal else []
+        contextual_product = (
+            product.with_context(pricelist=pricelist.id)
+            if pricelist and pricelist.exists()
+            else product
+        )
+        price = contextual_product._get_contextual_price()
+        list_price = contextual_product.list_price
+        variant_id = product._get_first_possible_variant_id()
+        short_description = html2plaintext(product.description_sale or product.description or '').strip()
+        order = request.cart
+        cart_quantity = 0
+        if order and variant_id:
+            cart_line = order.website_order_line.filtered(lambda line: line.product_id.id == variant_id)[:1]
+            cart_quantity = int(cart_line.product_uom_qty) if cart_line else 0
 
-            return {
-                'deal': deal,
-                'products': products,
-                'end_time': deal.deal_end_time if deal else False
-            }
+        return {
+            'product_id': product.id,
+            'product_variant_id': variant_id,
+            'product_type': product.type,
+            'name': product.name,
+            'category': product.categ_id.name or '',
+            'description': short_description[:280],
+            'image_url': '/web/image/product.template/%s/image_512' % product.id,
+            'price': price,
+            'price_display': format_amount(request.env, price, currency),
+            'list_price': list_price,
+            'list_price_display': format_amount(request.env, list_price, currency),
+            'has_discount': list_price > price,
+            'currency_symbol': currency.symbol or '',
+            'product_url': '/shop/%s' % request.env['ir.http']._slug(product),
+            'cart_quantity': cart_quantity,
+            'can_add_to_cart': bool(variant_id and website.has_ecommerce_access()),
+        }

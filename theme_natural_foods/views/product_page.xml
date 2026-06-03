@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="natural_foods_product_hide_pricelist" inherit_id="website_sale.product" name="Natural Foods Hide Product Pricelist">
+        <xpath expr="//div[contains(@class, 'o_wsale_product_top_bar_desktop')]" position="replace"/>
+        <xpath expr="//div[contains(@class, 'd-flex') and contains(@class, 'd-md-none')]/t[@t-call='website_sale.pricelist_list']" position="replace"/>
+    </template>
+
+    <template id="natural_foods_product_sku" inherit_id="website_sale.product" name="Natural Foods Product SKU">
+        <xpath expr="//div[@id='o_wsale_product_details_content']/form/t[@t-call='website_sale.product_title']" position="after">
+            <div t-if="product_sku" class="o_wsale_product_details_content_section mb-3">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill border bg-white shadow-sm">
+                    <span class="fw-semibold text-muted">SKU</span>
+                    <span class="text-dark" t-esc="product_sku"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="natural_foods_related_products" inherit_id="website_sale.product" name="Natural Foods Related Products">
+        <xpath expr="//div[@id='wrap']/div[@id='oe_structure_website_sale_product_2']" position="before">
+            <section t-if="related_products" class="container mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h3 class="mb-1">Related Products</h3>
+                        <p class="text-muted mb-0">Products similar to this item</p>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <t t-foreach="related_products" t-as="related_product">
+                        <t t-set="related_price" t-value="related_product.with_context(pricelist=request.pricelist.id)._get_contextual_price()"/>
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <a t-att-href="related_product._get_product_url()" class="text-decoration-none">
+                                    <img t-att-src="website.image_url(related_product, 'image_512')"
+                                         t-att-alt="related_product.name"
+                                         class="card-img-top"/>
+                                </a>
+                                <div class="card-body d-flex flex-column text-center">
+                                    <a t-att-href="related_product._get_product_url()" class="text-decoration-none text-dark">
+                                        <h6 class="card-title mb-2" t-esc="related_product.name"/>
+                                    </a>
+                                    <div class="text-success fw-bold mt-auto">
+                                        <t t-out="related_price"
+                                           t-options="{'widget': 'monetary', 'display_currency': request.pricelist.currency_id}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </section>
+        </xpath>
+    </template>
+</odoo>
