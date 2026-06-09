@@ -35,6 +35,9 @@
     'support': 'erp23@brainstation-23.com',
     'price': 25.00,
     'currency': 'USD',
+    'images': [
+        'static/description/banner.gif',
+    ],
     'depends': ['stock_account', 'mrp_account'],
     'data': [
         'security/ir.model.access.csv',
