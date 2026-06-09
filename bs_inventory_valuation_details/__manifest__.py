@@ -33,6 +33,8 @@
     'author': 'ERP23',
     'website': 'https://erp-23.com',
     'support': 'erp23@brainstation-23.com',
+    'price': 25.00,
+    'currency': 'USD',
     'depends': ['stock_account', 'mrp_account'],
     'data': [
         'security/ir.model.access.csv',
