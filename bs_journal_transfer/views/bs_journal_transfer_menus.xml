@@ -2,7 +2,7 @@
 <odoo>
     <menuitem id="menu_bs_journal_transfer_root"
               name="Bank Cash Transfer"
-              parent="account.account_transactions_menu"
+              parent="account.menu_finance"
               action="action_bs_journal_transfer"
               sequence="10"/>
 </odoo>
