@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Inventory Valuation Details</title>
+</head>
+<body style="margin:0;padding:24px;font-family:Lato,'Open Sans',Arial,Helvetica,sans-serif;color:#243746;background:#f4f8fb;">
+
+<div style="max-width:900px;margin:0 auto;">
+
+    <div style="background:#fff;border:1px solid #d7e3ec;border-radius:18px;padding:32px;text-align:center;box-shadow:0 4px 18px rgba(15,35,55,0.07);margin-bottom:20px;">
+        <div style="display:inline-block;padding:7px 16px;border-radius:999px;background:#e9f7f4;color:#148a78;font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:16px;">
+            Odoo 19 &middot; Inventory &middot; Accounting &middot; Manufacturing
+        </div>
+
+        <h1 style="margin:0 0 12px 0;font-size:36px;line-height:1.2;color:#203447;">
+            Inventory Valuation Details
+        </h1>
+
+        <p style="max-width:720px;margin:0 auto 18px auto;color:#66788a;font-size:16px;line-height:1.7;">
+            View product-level stock valuation, cost method, unit cost, total value, and
+            expected accounting impact directly from transfers, scrap orders, and manufacturing orders.
+        </p>
+
+        <div style="margin-bottom:24px;">
+            <span style="display:inline-block;margin:4px;padding:6px 12px;border-radius:999px;background:#f2f7fb;border:1px solid #d7e3ec;color:#203447;font-size:12px;font-weight:700;">LGPL-3</span>
+            <span style="display:inline-block;margin:4px;padding:6px 12px;border-radius:999px;background:#f2f7fb;border:1px solid #d7e3ec;color:#203447;font-size:12px;font-weight:700;">Depends: stock_account</span>
+            <span style="display:inline-block;margin:4px;padding:6px 12px;border-radius:999px;background:#f2f7fb;border:1px solid #d7e3ec;color:#203447;font-size:12px;font-weight:700;">Depends: mrp_account</span>
+            <span style="display:inline-block;margin:4px;padding:6px 12px;border-radius:999px;background:#f2f7fb;border:1px solid #d7e3ec;color:#203447;font-size:12px;font-weight:700;">by ERP23</span>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:14px;text-align:left;">
+            <div style="flex:1 1 220px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;">
+                <strong style="display:block;margin-bottom:8px;color:#203447;">Transfer Valuation</strong>
+                <span style="color:#4d6274;font-size:14px;line-height:1.6;">Adds valuation smart buttons on completed receipts, deliveries, returns, dropship moves, and internal transfers.</span>
+            </div>
+            <div style="flex:1 1 220px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;">
+                <strong style="display:block;margin-bottom:8px;color:#203447;">Expected Journal Entry</strong>
+                <span style="color:#4d6274;font-size:14px;line-height:1.6;">Shows expected debit and credit accounts based on Odoo 19 stock valuation, stock variation, expense, and WIP accounts.</span>
+            </div>
+            <div style="flex:1 1 220px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;">
+                <strong style="display:block;margin-bottom:8px;color:#203447;">MRP and Scrap Support</strong>
+                <span style="color:#4d6274;font-size:14px;line-height:1.6;">Review finished product value, component cost, and scrap valuation from the source documents.</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #d7e3ec;border-radius:18px;padding:28px;box-shadow:0 4px 18px rgba(15,35,55,0.07);margin-bottom:20px;">
+        <h2 style="margin:0 0 14px 0;text-align:center;color:#203447;font-size:24px;">Overview</h2>
+        <p style="margin:0;color:#425466;line-height:1.7;max-width:760px;margin:0 auto 14px auto;">
+            <strong>Inventory Valuation Details</strong> gives inventory and accounting users a clear
+            breakdown of the valuation behind completed stock operations. Instead of checking stock
+            moves manually, users can open a valuation view from the related transfer, scrap order,
+            or manufacturing order.
+        </p>
+        <p style="margin:0;color:#425466;line-height:1.7;max-width:760px;margin:0 auto;">
+            The module uses Odoo's stock accounting data and product configuration to show quantity,
+            unit cost, total valuation, cost method, valuation method, source document, and expected
+            journal lines for operational review.
+        </p>
+    </div>
+
+    <div style="background:#fff;border:1px solid #d7e3ec;border-radius:18px;padding:28px;box-shadow:0 4px 18px rgba(15,35,55,0.07);margin-bottom:20px;">
+        <h2 style="margin:0 0 18px 0;text-align:center;color:#203447;font-size:24px;">Screenshots</h2>
+
+        <img src="ss1.png" alt="Inventory valuation smart button on a stock transfer" style="width:100%;display:block;border-radius:12px;border:1px solid #d7e3ec;margin-bottom:10px;"/>
+        <p style="margin:0 0 20px 0;text-align:center;color:#4d6274;font-size:14px;font-weight:600;">No valuation in odoo 19</p>
+
+        <img src="ss2.jpg" alt="Stock move valuation list with product-level valuation details" style="width:100%;display:block;border-radius:12px;border:1px solid #d7e3ec;margin-bottom:10px;"/>
+        <p style="margin:0 0 20px 0;text-align:center;color:#4d6274;font-size:14px;font-weight:600;">Product-level valuation list</p>
+
+        <img src="ss3.png" alt="Move valuation form showing cost and source document information" style="width:100%;display:block;border-radius:12px;border:1px solid #d7e3ec;margin-bottom:10px;"/>
+        <p style="margin:0 0 20px 0;text-align:center;color:#4d6274;font-size:14px;font-weight:600;">Detailed move valuation form</p>
+
+        <img src="ss4.png" alt="Expected journal entry preview for a stock move" style="width:100%;display:block;border-radius:12px;border:1px solid #d7e3ec;margin-bottom:10px;"/>
+        <p style="margin:0 0 20px 0;text-align:center;color:#4d6274;font-size:14px;font-weight:600;">Expected journal entry preview</p>
+
+        <img src="ss5.png" alt="Manufacturing or scrap valuation smart button" style="width:100%;display:block;border-radius:12px;border:1px solid #d7e3ec;margin-bottom:10px;"/>
+        <p style="margin:0;text-align:center;color:#4d6274;font-size:14px;font-weight:600;">Manufacturing and scrap valuation access</p>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:20px;">
+        <div style="flex:1 1 300px;padding:22px;border-radius:18px;border:1px solid #cceee2;background:#ecfbf6;box-shadow:0 4px 18px rgba(15,35,55,0.05);">
+            <h3 style="margin:0 0 14px 0;color:#203447;font-size:18px;">What It Shows</h3>
+            <ul style="margin:0;padding-left:18px;color:#425466;line-height:1.8;">
+                <li>Valuation total on completed stock transfers</li>
+                <li>Valuation total on completed scrap orders</li>
+                <li>Finished product and component valuation on manufacturing orders</li>
+                <li>Quantity, unit cost, total valuation, and product category</li>
+                <li>FIFO, AVCO, and standard cost method display</li>
+                <li>Periodic and perpetual valuation method display</li>
+                <li>Expected debit and credit accounts when no per-move entry exists</li>
+            </ul>
+        </div>
+
+        <div style="flex:1 1 300px;padding:22px;border-radius:18px;border:1px solid #f0dfb8;background:#fff8e8;box-shadow:0 4px 18px rgba(15,35,55,0.05);">
+            <h3 style="margin:0 0 14px 0;color:#203447;font-size:18px;">Designed For</h3>
+            <ul style="margin:0;padding-left:18px;color:#425466;line-height:1.8;">
+                <li>Inventory managers reviewing stock movement cost</li>
+                <li>Accountants validating expected stock valuation impact</li>
+                <li>Manufacturing teams reviewing component and finished goods values</li>
+                <li>Operations teams checking valuation on receipts and deliveries</li>
+                <li>Companies using Odoo 19 stock accounting with MRP</li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #d7e3ec;border-radius:18px;padding:28px;box-shadow:0 4px 18px rgba(15,35,55,0.07);margin-bottom:20px;">
+        <h2 style="margin:0 0 14px 0;text-align:center;color:#203447;font-size:24px;">Supported Documents</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;">
+            <div style="flex:1 1 180px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:6px;">Transfers</strong>
+                <span style="color:#66788a;font-size:13px;">Receipts, deliveries, returns, dropship, and internal operations</span>
+            </div>
+            <div style="flex:1 1 180px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:6px;">Manufacturing</strong>
+                <span style="color:#66788a;font-size:13px;">Finished product and component stock move valuation</span>
+            </div>
+            <div style="flex:1 1 180px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:6px;">Scrap Orders</strong>
+                <span style="color:#66788a;font-size:13px;">Scrapped product value with source move details</span>
+            </div>
+            <div style="flex:1 1 180px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:6px;">Journal Entries</strong>
+                <span style="color:#66788a;font-size:13px;">Linked accounting entries where Odoo creates them</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #d7e3ec;border-radius:18px;padding:28px;box-shadow:0 4px 18px rgba(15,35,55,0.07);margin-bottom:20px;">
+        <h2 style="margin:0 0 14px 0;text-align:center;color:#203447;font-size:24px;">Installation</h2>
+        <ol style="margin:0;padding-left:20px;color:#425466;line-height:2;">
+            <li>Download the module from the Odoo App Store.</li>
+            <li>Place the <code style="background:#eef4f8;border-radius:4px;padding:1px 5px;font-size:13px;color:#2c5282;">bs_inventory_valuation_details</code> folder in your Odoo addons directory.</li>
+            <li>Restart the Odoo server.</li>
+            <li>Go to <strong>Settings &rarr; Apps</strong>, search for <em>Inventory Valuation Details</em>, and click <strong>Install</strong>.</li>
+            <li>Open a completed transfer, scrap order, or manufacturing order and use the valuation smart button.</li>
+        </ol>
+
+        <div style="margin-top:18px;padding:14px;border-radius:12px;background:#f6fbff;border:1px dashed #bfd3e0;color:#4a6072;line-height:1.7;">
+            <strong>Requirements:</strong> Odoo 19.0 with the standard <code style="background:#eef4f8;border-radius:4px;padding:1px 5px;font-size:13px;color:#2c5282;">stock_account</code>
+            and <code style="background:#eef4f8;border-radius:4px;padding:1px 5px;font-size:13px;color:#2c5282;">mrp_account</code> modules installed.
+        </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #d7e3ec;border-radius:18px;padding:28px;box-shadow:0 4px 18px rgba(15,35,55,0.07);margin-bottom:20px;">
+        <h2 style="margin:0 0 14px 0;text-align:center;color:#203447;font-size:24px;">Technical Details</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;">
+            <div style="flex:1 1 200px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:6px;">No Data Export</strong>
+                <span style="color:#66788a;font-size:13px;">Uses Odoo data locally and does not send inventory or accounting data to external services.</span>
+            </div>
+            <div style="flex:1 1 200px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:6px;">Computed Display Fields</strong>
+                <span style="color:#66788a;font-size:13px;">Adds computed valuation, cost, document, and expected account fields on stock moves.</span>
+            </div>
+            <div style="flex:1 1 200px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:6px;">Odoo 19 Ready</strong>
+                <span style="color:#66788a;font-size:13px;">Built for Odoo 19 stock accounting and manufacturing accounting workflows.</span>
+            </div>
+            <div style="flex:1 1 200px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:6px;">LGPL-3 License</strong>
+                <span style="color:#66788a;font-size:13px;">Open source license suitable for standard Odoo deployments.</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="border:2px solid #148a78;border-radius:18px;padding:28px;margin-bottom:20px;background:#fff;">
+        <h2 style="margin:0 0 6px 0;text-align:center;color:#203447;font-size:24px;">Support &amp; Contact</h2>
+        <p style="margin:0 0 22px 0;text-align:center;color:#425466;font-size:15px;">For support, configuration questions, or bug reports, contact ERP23.</p>
+
+        <div style="display:flex;flex-wrap:wrap;gap:14px;">
+            <div style="flex:1 1 180px;border-radius:14px;padding:18px;border:1px solid #d7e3ec;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:4px;">Website</strong>
+                <a href="https://erp-23.com" style="color:#148a78;font-size:14px;">erp-23.com</a>
+            </div>
+            <div style="flex:1 1 180px;border-radius:14px;padding:18px;border:1px solid #d7e3ec;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:4px;">Email</strong>
+                <a href="mailto:erp23@brainstation-23.com" style="color:#148a78;font-size:14px;">erp23@brainstation-23.com</a>
+            </div>
+            <div style="flex:1 1 180px;border-radius:14px;padding:18px;border:1px solid #d7e3ec;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:4px;">Bug Reports</strong>
+                <a href="https://github.com/odoo-brainstation23/odoo_addons/issues" style="color:#148a78;font-size:14px;">GitHub Issues</a>
+            </div>
+            <div style="flex:1 1 180px;border-radius:14px;padding:18px;border:1px solid #d7e3ec;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:4px;">Company</strong>
+                <a href="https://brainstation-23.com" style="color:#148a78;font-size:14px;">BrainStation-23</a>
+            </div>
+        </div>
+    </div>
+
+    <p style="text-align:center;color:#6a7f90;font-size:13px;margin:0;">
+        &copy; 2026 <a href="https://erp-23.com" style="color:#148a78;">ERP23</a> &mdash; a product of
+        <a href="https://brainstation-23.com" style="color:#148a78;">BrainStation-23</a>.
+        Released under LGPL-3. Compatible with Odoo 19.0.
+    </p>
+
+</div>
+</body>
+</html>

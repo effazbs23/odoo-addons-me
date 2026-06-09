@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================
+         Inherit Stock Scrap Form: Add Valuation Smart Button
+         ============================================================ -->
+    <record id="view_stock_scrap_form_valuation_button" model="ir.ui.view">
+        <field name="name">stock.scrap.form.valuation.button</field>
+        <field name="model">stock.scrap</field>
+        <field name="inherit_id" ref="stock.stock_scrap_form_view"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button
+                    name="action_view_scrap_valuation"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-usd"
+                    invisible="state != 'done' or valued_move_count == 0">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="valuation_total" widget="monetary"
+                                   options="{'currency_field': 'company_currency_id'}"/>
+                            <field name="company_currency_id" invisible="1"/>
+                        </span>
+                        <span class="o_stat_text">Scrap Valuation</span>
+                    </div>
+                </button>
+            </div>
+            <xpath expr="//form/sheet" position="inside">
+                <field name="valued_move_count" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+

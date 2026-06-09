@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================
+         List View: Stock Move Valuation
+         ============================================================ -->
+    <record id="view_stock_move_valuation_tree" model="ir.ui.view">
+        <field name="name">stock.move.valuation.tree</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <list string="Stock Move Valuation" create="false" edit="false" delete="false"
+                  decoration-success="is_in == True"
+                  decoration-muted="is_out == True"
+                  decoration-info="is_dropship == True">
+                <field name="is_in" column_invisible="1"/>
+                <field name="is_out" column_invisible="1"/>
+                <field name="is_dropship" column_invisible="1"/>
+
+                <field name="source_document_ref" string="Document"/>
+                <field name="source_document_type" string="Doc Type" widget="badge"
+                       decoration-success="source_document_type == 'picking'"
+                       decoration-warning="source_document_type in ('production_output','production_component')"
+                       decoration-danger="source_document_type == 'scrap'"
+                       decoration-info="source_document_type in ('unbuild_output','unbuild_component')"/>
+
+                <field name="product_id" string="Product"/>
+                <field name="product_categ_id" string="Category" optional="show"/>
+                <field name="cost_method" string="Cost Method" widget="badge"
+                       decoration-success="cost_method == 'fifo'"
+                       decoration-warning="cost_method == 'average'"
+                       decoration-info="cost_method == 'standard'"/>
+
+                <!-- Valuation method: shows Periodic vs Perpetual -->
+                <field name="product_valuation" string="Valuation" widget="badge"
+                       decoration-success="product_valuation == 'real_time'"
+                       decoration-muted="product_valuation == 'periodic'"
+                       optional="show"/>
+
+                <field name="move_direction" string="Direction / Type"/>
+                <field name="quantity" string="Qty Done"/>
+                <field name="product_uom" string="UoM" optional="show"/>
+                <field name="price_unit_display" string="Unit Cost" widget="monetary"
+                       options="{'currency_field': 'company_currency_id'}"/>
+                <field name="company_currency_id" column_invisible="1"/>
+                <field name="abs_value" string="Total Valuation" widget="monetary"
+                       options="{'currency_field': 'company_currency_id'}"/>
+                <field name="value_justification" string="Cost Source" optional="show"/>
+                <field name="account_move_ref" string="Journal Entry" optional="show"/>
+                <field name="account_move_date" string="Acctg Date" optional="show"/>
+                <field name="date" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         Form View: Move Valuation Detail with Journal Entry tab
+         ============================================================ -->
+    <record id="view_stock_move_valuation_form" model="ir.ui.view">
+        <field name="name">stock.move.valuation.form</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <form string="Move Valuation Detail" create="false">
+                <sheet>
+                    <field name="sim_has_accounts" invisible="1"/>
+                    <field name="product_is_storable" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="reference" readonly="1"/></h1>
+                        <h3><field name="move_direction" readonly="1"/></h3>
+                    </div>
+
+                    <!-- Non-storable product warning -->
+                    <div class="alert alert-secondary" role="alert"
+                         invisible="product_is_storable == True">
+                        <strong>⚠️ No Stock Valuation</strong> — This product is a
+                        <strong>Service</strong> or a <strong>Consumable without inventory tracking</strong>.
+                        No valuation is generated for this move.
+                    </div>
+
+                    <group>
+                        <group string="Product">
+                            <field name="product_id" readonly="1"/>
+                            <field name="product_categ_id" string="Category" readonly="1"/>
+                            <field name="cost_method" string="Cost Method" readonly="1"/>
+                            <field name="product_valuation" string="Valuation Method" readonly="1"/>
+                            <field name="product_uom" string="Unit of Measure" readonly="1"/>
+                        </group>
+                        <group string="Valuation">
+                            <field name="quantity" string="Quantity Done" readonly="1"/>
+                            <field name="price_unit_display" string="Unit Cost" readonly="1"
+                                   widget="monetary"
+                                   options="{'currency_field': 'company_currency_id'}"/>
+                            <field name="abs_value" string="Total Valuation" readonly="1"
+                                   widget="monetary"
+                                   options="{'currency_field': 'company_currency_id'}"/>
+                            <field name="company_currency_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Source Document">
+                            <field name="source_document_type" string="Document Type" readonly="1"/>
+                            <field name="source_document_ref" string="Document" readonly="1"/>
+                            <field name="picking_id" string="Transfer" readonly="1"/>
+                            <field name="date" readonly="1"/>
+                        </group>
+                        <group string="Location">
+                            <field name="location_id" readonly="1"/>
+                            <field name="location_dest_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook invisible="product_is_storable == False">
+                        <!-- Tab 1: Cost Justification -->
+                        <page string="Cost Justification" name="cost_justification">
+                            <group>
+                                <field name="value_justification"
+                                       string="Current Cost Source"
+                                       readonly="1" nolabel="1"/>
+                                <field name="value_computed_justification"
+                                       string="System Computed Cost Source"
+                                       readonly="1" nolabel="1"/>
+                            </group>
+                        </page>
+
+                        <!-- Tab 2: Real Valuation Journal Entry -->
+                        <page string="Valuation Journal Entry" name="journal_entry"
+                              invisible="account_move_id == False">
+                            <group>
+                                <group>
+                                    <field name="account_move_id" string="Journal Entry" readonly="1"/>
+                                    <field name="account_move_ref" string="Entry Name" readonly="1"/>
+                                    <field name="account_move_journal_id" string="Journal" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="account_move_date" string="Accounting Date" readonly="1"/>
+                                </group>
+                            </group>
+                            <separator string="Journal Items (Debit / Credit)"/>
+                            <field name="account_move_line_ids" readonly="1" nolabel="1">
+                                <list create="false" edit="false" delete="false">
+                                    <field name="account_id" string="Account"/>
+                                    <field name="name" string="Label"/>
+                                    <field name="product_id" string="Product" optional="show"/>
+                                    <field name="partner_id" string="Partner" optional="show"/>
+                                    <field name="debit" string="Debit" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="credit" string="Credit" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="balance" string="Balance" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"
+                                           optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- Tab 3: Expected Journal Entry (no real JE — periodic or perpetual Odoo19) -->
+                        <page string="Expected Journal Entry" name="sim_journal_entry"
+                              invisible="account_move_id != False">
+
+                            <!-- Periodic valuation note -->
+                            <div class="alert alert-info mb-3" role="alert"
+                                 invisible="product_valuation != 'periodic'">
+                                <strong>📅 Periodic Valuation</strong>
+                                <p class="mb-0">
+                                    This product uses <strong>Periodic (Manual)</strong> valuation.
+                                    No journal entry is created per move.
+                                    Accounting is posted manually at period closing via
+                                    <em>Inventory → Reporting → Inventory Valuation → Close Valuation</em>.
+                                    The table below shows the expected debit/credit lines for reference.
+                                </p>
+                            </div>
+
+                            <!-- Perpetual (Odoo 19) note -->
+                            <div class="alert alert-warning mb-3" role="alert"
+                                 invisible="product_valuation != 'real_time' or sim_has_accounts == False">
+                                <p class="mb-1">
+                                    The table below shows the <strong>expected</strong> debit/credit
+                                    lines based on the product's configured accounts.
+                                </p>
+                            </div>
+
+                            <div class="alert alert-info mb-3" role="alert"
+                                 invisible="sim_note == False or sim_note == ''">
+                                <field name="sim_note" readonly="1" nolabel="1"/>
+                            </div>
+
+                            <!-- Simulated Journal Items Table -->
+                            <div invisible="sim_has_accounts == False">
+                                <separator string="Expected Journal Items (Informational)"/>
+                                <table class="table table-sm table-bordered" style="margin-top:8px">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width:30%">Account</th>
+                                            <th style="width:30%">Label</th>
+                                            <th style="width:10%">Product</th>
+                                            <th class="text-end" style="width:15%">Debit</th>
+                                            <th class="text-end" style="width:15%">Credit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><field name="sim_debit_account_id" readonly="1" nolabel="1" options="{'no_open': True}"/></td>
+                                            <td><field name="sim_debit_label" readonly="1" nolabel="1"/></td>
+                                            <td><field name="product_id" readonly="1" nolabel="1" options="{'no_open': True}"/></td>
+                                            <td class="text-end">
+                                                <field name="sim_amount" readonly="1" nolabel="1" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
+                                            </td>
+                                            <td class="text-end">0.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td><field name="sim_credit_account_id" readonly="1" nolabel="1" options="{'no_open': True}"/></td>
+                                            <td><field name="sim_credit_label" readonly="1" nolabel="1"/></td>
+                                            <td></td>
+                                            <td class="text-end">0.00</td>
+                                            <td class="text-end">
+                                                <field name="sim_amount" readonly="1" nolabel="1" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot class="table-light fw-bold">
+                                        <tr>
+                                            <td colspan="3">Total</td>
+                                            <td class="text-end">
+                                                <field name="sim_amount" readonly="1" nolabel="1" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <field name="sim_amount" readonly="1" nolabel="1" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <div class="alert alert-secondary" role="alert"
+                                 invisible="sim_has_accounts == True">
+                                <strong>Account configuration incomplete.</strong>
+                                Please configure: Stock Valuation Account (product category),
+                                Variation Account (on the valuation account), and Expense/COGS Account (product).
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- ============================================================
+         Action Window — storable products with actual valuation only
+         ============================================================ -->
+    <record id="action_stock_move_valuation" model="ir.actions.act_window">
+        <field name="name">Stock Move Valuations</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list,form</field>
+        <!-- Only storable products + done + actually valued (is_in/is_out/is_dropship) -->
+        <field name="domain">[
+            ('state', '=', 'done'),
+            ('product_id.is_storable', '=', True),
+            '|', ('is_in', '=', True),
+            '|', ('is_out', '=', True),
+                 ('is_dropship', '=', True)
+        ]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_stock_move_valuation_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_stock_move_valuation_form')}),
+        ]"/>
+    </record>
+
+<!--    &lt;!&ndash; Menu: Inventory > Reporting > Stock Valuations &ndash;&gt;-->
+<!--    <menuitem-->
+<!--        id="menu_stock_move_valuation"-->
+<!--        name="Stock Valuations"-->
+<!--        parent="stock.menu_warehouse_report"-->
+<!--        action="action_stock_move_valuation"-->
+<!--        sequence="25"/>-->
+
+</odoo>
+
