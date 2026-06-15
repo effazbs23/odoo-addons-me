@@ -16,7 +16,10 @@
     'support': 'erp23@brainstation-23.com',
     'price': 10.00,
     'currency': 'USD',
-    'depends': ['accountant'],
+    'images': [
+        'static/description/banner.gif',
+    ],
+    'depends': ['account'],
     'data': [
         'security/bs_journal_transfer_security.xml',
         'security/ir.model.access.csv',
