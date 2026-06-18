@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Journal Transfer</title>
+</head>
+<body style="margin:0;padding:24px;font-family:Lato,'Open Sans',Arial,Helvetica,sans-serif;color:#243746;background:#f4f8fb;">
+
+<div style="max-width:900px;margin:0 auto;">
+
+    <div style="background:#fff;border:1px solid #d7e3ec;border-radius:18px;padding:32px;text-align:center;box-shadow:0 4px 18px rgba(15,35,55,0.07);margin-bottom:20px;">
+        <div style="display:inline-block;padding:7px 16px;border-radius:999px;background:#e9f7f4;color:#148a78;font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:16px;">
+            Odoo 19 &middot; Accounting &middot; Bank/Cash Transfers
+        </div>
+
+        <h1 style="margin:0 0 12px 0;font-size:36px;line-height:1.2;color:#203447;">
+            Journal Transfer
+        </h1>
+
+        <p style="max-width:720px;margin:0 auto 18px auto;color:#66788a;font-size:16px;line-height:1.7;">
+            Transfer funds between bank and cash journals from a dedicated workflow, with
+            automatic bank statement line creation and optional reconciliation using Odoo's
+            internal transfer model.
+        </p>
+
+        <div style="margin-bottom:24px;">
+            <span style="display:inline-block;margin:4px;padding:6px 12px;border-radius:999px;background:#f2f7fb;border:1px solid #d7e3ec;color:#203447;font-size:12px;font-weight:700;">LGPL-3</span>
+            <span style="display:inline-block;margin:4px;padding:6px 12px;border-radius:999px;background:#f2f7fb;border:1px solid #d7e3ec;color:#203447;font-size:12px;font-weight:700;">Depends: account</span>
+            <span style="display:inline-block;margin:4px;padding:6px 12px;border-radius:999px;background:#f2f7fb;border:1px solid #d7e3ec;color:#203447;font-size:12px;font-weight:700;">Dedicated Transfer Menu</span>
+            <span style="display:inline-block;margin:4px;padding:6px 12px;border-radius:999px;background:#f2f7fb;border:1px solid #d7e3ec;color:#203447;font-size:12px;font-weight:700;">by Ispahani</span>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:14px;text-align:left;">
+            <div style="flex:1 1 220px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;">
+                <strong style="display:block;margin-bottom:8px;color:#203447;">Automatic Statement Entries</strong>
+                <span style="color:#4d6274;font-size:14px;line-height:1.6;">Creates matching withdrawal and deposit bank statement lines for every confirmed transfer.</span>
+            </div>
+            <div style="flex:1 1 220px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;">
+                <strong style="display:block;margin-bottom:8px;color:#203447;">Controlled Workflow</strong>
+                <span style="color:#4d6274;font-size:14px;line-height:1.6;">Manage transfers through draft, confirmed, and cancelled states with chatter tracking and attachments.</span>
+            </div>
+            <div style="flex:1 1 220px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;">
+                <strong style="display:block;margin-bottom:8px;color:#203447;">Internal Transfer Matching</strong>
+                <span style="color:#4d6274;font-size:14px;line-height:1.6;">Applies the Internal Transfer reconciliation model automatically when it is available in the company.</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #d7e3ec;border-radius:18px;padding:28px;box-shadow:0 4px 18px rgba(15,35,55,0.07);margin-bottom:20px;">
+        <img src="banner.gif" alt="Journal Transfer banner"
+             style="width:100%;display:block;border-radius:12px;border:1px solid #d7e3ec;margin-bottom:18px;"/>
+        <h2 style="margin:0 0 14px 0;text-align:center;color:#203447;font-size:24px;">Overview</h2>
+        <p style="margin:0 0 14px 0;color:#425466;line-height:1.7;max-width:760px;margin-left:auto;margin-right:auto;">
+            <strong>Journal Transfer</strong> gives accounting teams a focused way to move amounts
+            between bank and cash journals without manually entering both sides of the transfer.
+            Users create a single transfer record, select source and destination journals, enter
+            the amount, and confirm the transaction.
+        </p>
+        <p style="margin:0;color:#425466;line-height:1.7;max-width:760px;margin-left:auto;margin-right:auto;">
+            On confirmation, the module creates the outbound and inbound bank statement lines,
+            links them back to the transfer, and attempts automatic reconciliation through the
+            Internal Transfer model. This reduces repetitive data entry and keeps the transfer
+            process easier to trace from one document.
+        </p>
+    </div>
+
+    <div style="background:#fff;border:1px solid #d7e3ec;border-radius:18px;padding:28px;box-shadow:0 4px 18px rgba(15,35,55,0.07);margin-bottom:20px;">
+        <h2 style="margin:0 0 18px 0;text-align:center;color:#203447;font-size:24px;">Screenshots</h2>
+        <img src="img.png" alt="Journal Transfer form view"
+             style="width:100%;display:block;border-radius:12px;border:1px solid #d7e3ec;margin-bottom:10px;"/>
+        <p style="margin:0;text-align:center;color:#4d6274;font-size:14px;font-weight:600;">
+            Dedicated Journal Transfer form with source journal, destination journal, amount, attachment, and status
+            tracking
+        </p>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:20px;">
+        <div style="flex:1 1 300px;padding:22px;border-radius:18px;border:1px solid #cceee2;background:#ecfbf6;box-shadow:0 4px 18px rgba(15,35,55,0.05);">
+            <h3 style="margin:0 0 14px 0;color:#203447;font-size:18px;">What It Does</h3>
+            <ul style="margin:0;padding-left:18px;color:#425466;line-height:1.8;">
+                <li>Creates transfer records from a dedicated menu under the Invoicing app</li>
+                <li>Supports bank and cash journals as transfer source and destination</li>
+                <li>Generates two bank statement lines automatically on confirmation</li>
+                <li>Stores proof documents through an attachment field</li>
+                <li>Keeps related bank statement lines accessible from the transfer form</li>
+                <li>Posts chatter messages for key actions and reconciliation results</li>
+            </ul>
+        </div>
+
+        <div style="flex:1 1 300px;padding:22px;border-radius:18px;border:1px solid #f0dfb8;background:#fff8e8;box-shadow:0 4px 18px rgba(15,35,55,0.05);">
+            <h3 style="margin:0 0 14px 0;color:#203447;font-size:18px;">Business Benefits</h3>
+            <ul style="margin:0;padding-left:18px;color:#425466;line-height:1.8;">
+                <li>Reduces manual entry for internal movement of funds</li>
+                <li>Improves traceability between the transfer request and accounting impact</li>
+                <li>Helps standardize bank-to-bank and cash-to-bank transfer handling</li>
+                <li>Allows finance teams to attach deposit slips and supporting notes</li>
+                <li>Works with standard Odoo accounting models instead of custom ledger logic</li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #d7e3ec;border-radius:18px;padding:28px;box-shadow:0 4px 18px rgba(15,35,55,0.07);margin-bottom:20px;">
+        <h2 style="margin:0 0 14px 0;text-align:center;color:#203447;font-size:24px;">How It Works</h2>
+        <ol style="margin:0;padding-left:20px;color:#425466;line-height:2;">
+            <li>Create a new Journal Transfer from the <strong>Bank Cash Transfer</strong> menu.</li>
+            <li>Select the source journal and destination journal.</li>
+            <li>Enter the transfer amount, date, optional notes, and deposit slip attachment.</li>
+            <li>Confirm the transfer once the details are verified.</li>
+            <li>The module creates one negative bank statement line in the source journal and one positive line in the
+                destination journal.
+            </li>
+            <li>If an Internal Transfer reconciliation model exists, the module attempts to apply it automatically.</li>
+        </ol>
+    </div>
+
+    <div style="background:#fff;border:1px solid #d7e3ec;border-radius:18px;padding:28px;box-shadow:0 4px 18px rgba(15,35,55,0.07);margin-bottom:20px;">
+        <h2 style="margin:0 0 14px 0;text-align:center;color:#203447;font-size:24px;">Technical Details</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;">
+            <div style="flex:1 1 200px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:6px;">Model</strong>
+                <span style="color:#66788a;font-size:13px;">Uses a dedicated <code
+                        style="background:#eef4f8;border-radius:4px;padding:1px 4px;font-size:11px;">bs.journal.transfer</code> model with mail tracking.</span>
+            </div>
+            <div style="flex:1 1 200px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:6px;">Accounting Integration</strong>
+                <span style="color:#66788a;font-size:13px;">Creates standard <code
+                        style="background:#eef4f8;border-radius:4px;padding:1px 4px;font-size:11px;">account.bank.statement.line</code> records for both journals.</span>
+            </div>
+            <div style="flex:1 1 200px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:6px;">Security</strong>
+                <span style="color:#66788a;font-size:13px;">Includes accounting user and manager access rights with multi-company record rules.</span>
+            </div>
+            <div style="flex:1 1 200px;padding:16px;border-radius:14px;background:#fbfdff;border:1px solid #dce8f1;text-align:center;">
+                <strong style="color:#203447;display:block;margin-bottom:6px;">Sequence</strong>
+                <span style="color:#66788a;font-size:13px;">Generates transfer references automatically using a dedicated sequence.</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #d7e3ec;border-radius:18px;padding:28px;box-shadow:0 4px 18px rgba(15,35,55,0.07);margin-bottom:20px;">
+        <h2 style="margin:0 0 14px 0;text-align:center;color:#203447;font-size:24px;">Installation</h2>
+        <ol style="margin:0;padding-left:20px;color:#425466;line-height:2;">
+            <li>Download the module from the Odoo App Store.</li>
+            <li>Place the <code
+                    style="background:#eef4f8;border-radius:4px;padding:1px 5px;font-size:13px;color:#2c5282;">bs_journal_transfer</code>
+                folder in your Odoo addons path.
+            </li>
+            <li>Restart the Odoo server.</li>
+            <li>Go to <strong>Apps</strong>, search for <em>Journal Transfer</em>, and install it.</li>
+            <li>Open the <strong>Bank Cash Transfer</strong> menu under the Invoicing app and start creating
+                transfers.
+            </li>
+        </ol>
+    </div>
+
+    <!-- ── SUPPORT ────────────────────────────────────────────────────────── -->
+    <div style="border:2px solid #148a78;border-radius:18px;padding:28px;margin-bottom:20px;">
+        <h2 style="margin:0 0 6px 0;text-align:center;color:#203447;font-size:24px;">Support &amp; Contact</h2>
+        <p style="margin:0 0 22px 0;text-align:center;color:#425466;font-size:15px;">We&rsquo;re here to help &mdash;
+            reach out via any channel below.</p>
+
+        <div style="display:flex;flex-wrap:wrap;gap:14px;">
+
+            <div style="flex:1 1 180px;border-radius:14px;padding:18px;border:1px solid #d7e3ec;text-align:center;">
+                <div style="font-size:24px;margin-bottom:8px;">&#127760;</div>
+                <strong style="color:#203447;display:block;margin-bottom:4px;">Website</strong>
+                <a href="https://erp-23.com" style="color:#148a78;font-size:14px;">erp-23.com</a>
+            </div>
+
+            <div style="flex:1 1 180px;border-radius:14px;padding:18px;border:1px solid #d7e3ec;text-align:center;">
+                <div style="font-size:24px;margin-bottom:8px;">&#128231;</div>
+                <strong style="color:#203447;display:block;margin-bottom:4px;">Email</strong>
+                <a href="mailto:erp23@brainstation-23.com" style="color:#148a78;font-size:14px;">erp23@brainstation-23.com</a>
+            </div>
+
+            <div style="flex:1 1 180px;border-radius:14px;padding:18px;border:1px solid #d7e3ec;text-align:center;">
+                <div style="font-size:24px;margin-bottom:8px;">&#128030;</div>
+                <strong style="color:#203447;display:block;margin-bottom:4px;">Bug Reports</strong>
+                <a href="https://github.com/odoo-brainstation23/odoo_addons/issues"
+                   style="color:#148a78;font-size:14px;">GitHub Issues</a>
+            </div>
+
+            <div style="flex:1 1 180px;border-radius:14px;padding:18px;border:1px solid #d7e3ec;text-align:center;">
+                <div style="font-size:24px;margin-bottom:8px;">&#127970;</div>
+                <strong style="color:#203447;display:block;margin-bottom:4px;">Company</strong>
+                <a href="https://brainstation-23.com" style="color:#148a78;font-size:14px;">BrainStation-23</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── FOOTER ─────────────────────────────────────────────────────────── -->
+    <p style="text-align:center;color:#6a7f90;font-size:13px;margin:0;">
+        &copy; 2026 <a href="https://erp-23.com">ERP23</a> &mdash; a product of
+        <a href="https://brainstation-23.com" style="color:#148a78;">BrainStation-23</a>.
+        Released under LGPL-3. Compatible with Odoo 19.0.
+    </p>
+
+</div>
+</body>
+</html>

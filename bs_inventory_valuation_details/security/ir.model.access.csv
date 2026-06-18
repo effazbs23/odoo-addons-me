@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bid_stock_move_user,bid.stock.move.valuation.user,stock.model_stock_move,stock.group_stock_user,1,0,0,0
+access_bid_stock_move_manager,bid.stock.move.valuation.manager,stock.model_stock_move,stock.group_stock_manager,1,1,0,0
+access_bid_mrp_production_user,bid.mrp.production.valuation.user,mrp.model_mrp_production,stock.group_stock_user,1,0,0,0
+
