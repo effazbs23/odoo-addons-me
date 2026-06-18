@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kingdom_product_tab,access_kingdom_product_tab,model_kingdom_product_tab,base.group_user,1,1,1,1
+access_kingdom_deals_of_day,access.kingdom.deals.of.day,model_kingdom_deals_of_day,base.group_user,1,1,1,1
+access_featured_products,access.featured.products,model_featured_products,base.group_user,1,1,1,1
+access_bestsale_products,access.bestsale.products,model_bestsale_products,base.group_user,1,1,1,1
+access_kingdom_manufacturer,access.kingdom.manufacturer,model_kingdom_manufacturer,base.group_user,1,1,1,1

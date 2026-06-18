@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Kingdom interactions: register in __manifest__.py web.assets_frontend -->
+    <delete model="ir.asset" search="[('path', '=', 'theme_kingdom/static/src/interactions/featured_product_card.js')]"/>
+    <template id="kingdom_print_css" inherit_id="website.layout" name="Kingdom Print CSS">
+        <xpath expr="//head" position="inside">
+            <link rel="stylesheet" href="/theme_kingdom/static/src/css/print.css" media="print"/>
+        </xpath>
+    </template>
+
+    <template id="kingdom_js_assets" inherit_id="website.layout" name="Kingdom JS Assets">
+        <xpath expr="//body" position="inside">
+            <script type="text/javascript" src="/theme_kingdom/static/src/js/swiper-bundle.min.js"/>
+            <script type="text/javascript" src="/theme_kingdom/static/src/js/header-scroll.js"/>
+            <script type="text/javascript" src="/theme_kingdom/static/src/js/main.js"/>
+             <script type="text/javascript" src="/theme_kingdom/static/src/interactions/featured_product_card.js"/>
+        </xpath>
+    </template>
+</odoo>

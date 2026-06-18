@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_promo_banners" name="Kingdom Promo Banners">
+        <section class="s_promo_banners oe_structure promo-banner-blocks promo-banner-blocks--pre-featured"
+                 data-snippet="theme_kingdom.s_promo_banners"
+                 data-name="Promo Banners"
+                 aria-labelledby="PreFeaturedPromoHeading">
+            <h2 id="PreFeaturedPromoHeading" class="visually-hidden">Promotional offers</h2>
+            <div class="k-container">
+                <div class="promo-banner-blocks__grid">
+
+                    <a href="/shop"
+                       class="promo-banner-blocks__card promo-banner-blocks__card--light"
+                       style="background-image: url('/theme_kingdom/static/src/images/banner/left.webp');"
+                       aria-label="Washing Machine — Explore more.">
+                        <span class="visually-hidden o_translate_inline">Washing Machine — Explore more.</span>
+                    </a>
+
+                    <a href="/shop"
+                       class="promo-banner-blocks__card promo-banner-blocks__card--dark"
+                       style="background-image: url('/theme_kingdom/static/src/images/banner/right.webp');"
+                       aria-label="Air Conditioner — up to 25% off. Shop now.">
+                        <span class="visually-hidden o_translate_inline">Air Conditioner — up to 25% off. Shop now.</span>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

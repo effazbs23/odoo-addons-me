@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Single product cell (quad grid) -->
+    <template id="category_dual_product_cell" name="Category dual product cell">
+        <t t-set="rating_rounded"
+           t-value="min(5, max(0, int(round(product.sudo().rating_avg or 0))))"/>
+        <t t-set="contextual_price"
+           t-value="(current_pricelist and product.with_context(pricelist=current_pricelist.id)._get_contextual_price()) or product._get_contextual_price()"/>
+        <t t-set="compare_price"
+           t-value="product.compare_list_price or 0"/>
+        <t t-set="show_sale"
+           t-value="compare_price and compare_price > contextual_price"/>
+        <article class="product-carousel-cell">
+            <div class="product-carousel-cell__text">
+                <h3 class="product-carousel-cell__title">
+                    <a t-att-href="product.website_url" t-esc="product.name"/>
+                </h3>
+                <div class="product-carousel-cell__stars" t-att-aria-label="'%s out of 5 stars' % rating_rounded">
+                    <t t-foreach="range(1, 6)" t-as="star_i">
+                        <i t-attf-class="bi #{('bi-star-fill' if star_i &lt;= rating_rounded else 'bi-star')}"
+                           aria-hidden="true"/>
+                    </t>
+                </div>
+                <div class="product-carousel-cell__prices">
+                    <t t-if="show_sale">
+                        <span class="product-carousel-cell__old">
+                            <t t-out="compare_price"
+                               t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
+                        </span>
+                    </t>
+                    <span class="product-carousel-cell__price">
+                        <t t-out="contextual_price"
+                           t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
+                    </span>
+                </div>
+            </div>
+            <div class="product-carousel-cell__media">
+                <a t-att-href="product.website_url" class="product-carousel-cell__img-link">
+                    <img t-att-src="'/web/image/product.template/%s/image_128' % product.id"
+                         t-att-alt="product.name"
+                         width="96"
+                         height="96"
+                         loading="lazy"/>
+                </a>
+                <t t-if="product.website_ribbon_id">
+                    <span class="product-carousel-badge product-carousel-badge--top"
+                          t-esc="product.website_ribbon_id.name"/>
+                </t>
+            </div>
+        </article>
+    </template>
+
+    <!-- Swiper slides: 4 products per slide -->
+    <template id="category_dual_product_slides" name="Category dual product slides">
+        <t t-if="products">
+            <t t-foreach="range(0, len(products), 4)" t-as="chunk_start">
+                <div class="swiper-slide">
+                    <div class="product-carousel-grid product-carousel-grid--quad">
+                        <t t-foreach="products[chunk_start:chunk_start + 4]" t-as="product">
+                            <t t-call="theme_kingdom.category_dual_product_cell"/>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </t>
+        <t t-else="">
+            <div class="swiper-slide">
+                <div class="product-carousel-grid product-carousel-grid--quad">
+                    <article class="product-carousel-cell">
+                        <div class="product-carousel-cell__text">
+                            <h3 class="product-carousel-cell__title">
+                                <a href="/shop">Add products to this category</a>
+                            </h3>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- One column (Smart TV / Mixer Grinder style) -->
+    <template id="category_dual_carousel_column" name="Category dual carousel column">
+        <t t-set="ribbon" t-value="tab.get_feature_ribbon()"/>
+        <t t-set="feature_href" t-value="tab.get_feature_href()"/>
+        <t t-set="feature_bg" t-value="tab.get_feature_bg_url()"/>
+        <t t-set="new_products" t-value="tab.get_new_arrival_products()"/>
+        <t t-set="best_products" t-value="tab.get_best_seller_products()"/>
+        <t t-set="aria_label" t-value="ribbon"/>
+
+        <div class="product-carousel-section product-carousel-section--compact">
+            <div class="product-carousel-shell">
+                <a t-att-href="feature_href"
+                   class="product-carousel-feature product-carousel-feature--category">
+                    <span class="product-carousel-feature__ribbon" aria-hidden="true" t-esc="ribbon"/>
+                    <span class="product-carousel-feature__bg"
+                          t-att-style="'background-image: url(%s);' % feature_bg"/>
+                </a>
+                <div class="product-carousel-main">
+                    <div class="product-carousel-toolbar">
+                        <div class="product-carousel-tabs"
+                             role="tablist"
+                             t-att-aria-label="'%s products' % aria_label">
+                            <button type="button"
+                                    class="product-carousel-tab is-active"
+                                    role="tab"
+                                    aria-selected="true"
+                                    data-product-carousel-tab="new">
+                                New Arrivals
+                            </button>
+                            <button type="button"
+                                    class="product-carousel-tab"
+                                    role="tab"
+                                    aria-selected="false"
+                                    data-product-carousel-tab="best"
+                                    tabindex="-1">
+                                Best Sellers
+                            </button>
+                        </div>
+                        <div class="product-carousel-toolbar-nav">
+                            <div class="product-carousel-nav-group" data-nav-for="new">
+                                <span class="product-carousel-fraction"
+                                      data-carousel-fraction=""
+                                      aria-live="polite">
+                                    <span data-fraction-current="1">1</span>
+                                    /
+                                    <span data-fraction-total="1">1</span>
+                                </span>
+                                <div class="swiper-button-prev product-carousel-arrow"
+                                     t-attf-aria-label="Previous #{aria_label} products"/>
+                                <div class="swiper-button-next product-carousel-arrow"
+                                     t-attf-aria-label="Next #{aria_label} products"/>
+                            </div>
+                            <div class="product-carousel-nav-group d-none" data-nav-for="best" hidden="hidden">
+                                <span class="product-carousel-fraction"
+                                      data-carousel-fraction=""
+                                      aria-live="polite">
+                                    <span data-fraction-current="1">1</span>
+                                    /
+                                    <span data-fraction-total="1">1</span>
+                                </span>
+                                <div class="swiper-button-prev product-carousel-arrow"
+                                     t-attf-aria-label="Previous #{aria_label} best sellers"/>
+                                <div class="swiper-button-next product-carousel-arrow"
+                                     t-attf-aria-label="Next #{aria_label} best sellers"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-carousel-panels"
+                         data-product-carousel-panel="new"
+                         role="tabpanel">
+                        <div class="swiper product-carousel-swiper product-carousel-swiper--new">
+                            <div class="swiper-wrapper">
+                                <t t-set="products" t-value="new_products"/>
+                                <t t-call="theme_kingdom.category_dual_product_slides"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-carousel-panels d-none"
+                         data-product-carousel-panel="best"
+                         role="tabpanel"
+                         hidden="hidden">
+                        <div class="swiper product-carousel-swiper product-carousel-swiper--best">
+                            <div class="swiper-wrapper">
+                                <t t-set="products" t-value="best_products"/>
+                                <t t-call="theme_kingdom.category_dual_product_slides"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="s_category_dual_carousels" name="Kingdom Category Dual Carousels">
+        <section class="s_category_dual_carousels oe_structure oe_website_sale category-dual-section"
+                 data-snippet="theme_kingdom.s_category_dual_carousels"
+                 data-name="Category Dual Carousels"
+                 aria-labelledby="CategoryDualHeading">
+            <h2 id="CategoryDualHeading" class="visually-hidden">Category product highlights</h2>
+            <div class="k-container">
+                <t t-set="current_pricelist"
+                   t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
+                <t t-set="display_currency"
+                   t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
+                <t t-set="dual_tabs"
+                   t-value="request.env['kingdom.product.tab'].sudo().search([
+                       ('active', '=', True),
+                       ('show_in_homepage', '=', True),
+                   ], order='sequence asc, id asc', limit=2)"/>
+
+                <div class="category-dual-grid">
+                    <t t-if="dual_tabs">
+                        <t t-foreach="dual_tabs" t-as="tab">
+                            <t t-call="theme_kingdom.category_dual_carousel_column"/>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <!-- Demo columns until Product Tabs are configured (max 2) -->
+                        <t t-foreach="range(2)" t-as="demo_idx">
+                            <t t-set="demo_name" t-value="'Smart TV' if demo_idx == 0 else 'Mixer Grinder'"/>
+                            <t t-set="demo_bg"
+                               t-value="'/theme_kingdom/static/src/images/categories/cat-1.jpg' if demo_idx == 0 else '/theme_kingdom/static/src/images/categories/cat-2.jpg'"/>
+                            <div class="product-carousel-section product-carousel-section--compact">
+                                <div class="product-carousel-shell">
+                                    <a href="/shop"
+                                       class="product-carousel-feature product-carousel-feature--category">
+                                        <span class="product-carousel-feature__ribbon"
+                                              aria-hidden="true"
+                                              t-esc="demo_name"/>
+                                        <span class="product-carousel-feature__bg"
+                                              t-att-style="'background-image: url(%s);' % demo_bg"/>
+                                    </a>
+                                    <div class="product-carousel-main">
+                                        <div class="product-carousel-toolbar">
+                                            <div class="product-carousel-tabs" role="tablist">
+                                                <button type="button"
+                                                        class="product-carousel-tab is-active"
+                                                        role="tab"
+                                                        data-product-carousel-tab="new">New Arrivals</button>
+                                                <button type="button"
+                                                        class="product-carousel-tab"
+                                                        role="tab"
+                                                        data-product-carousel-tab="best"
+                                                        tabindex="-1">Best Sellers</button>
+                                            </div>
+                                            <div class="product-carousel-toolbar-nav">
+                                                <div class="product-carousel-nav-group" data-nav-for="new">
+                                                    <span class="product-carousel-fraction" data-carousel-fraction="">
+                                                        <span data-fraction-current="1">1</span> / <span data-fraction-total="1">1</span>
+                                                    </span>
+                                                    <div class="swiper-button-prev product-carousel-arrow"/>
+                                                    <div class="swiper-button-next product-carousel-arrow"/>
+                                                </div>
+                                                <div class="product-carousel-nav-group d-none" data-nav-for="best" hidden="hidden">
+                                                    <span class="product-carousel-fraction" data-carousel-fraction="">
+                                                        <span data-fraction-current="1">1</span> / <span data-fraction-total="1">1</span>
+                                                    </span>
+                                                    <div class="swiper-button-prev product-carousel-arrow"/>
+                                                    <div class="swiper-button-next product-carousel-arrow"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="product-carousel-panels" data-product-carousel-panel="new" role="tabpanel">
+                                            <div class="swiper product-carousel-swiper product-carousel-swiper--new">
+                                                <div class="swiper-wrapper">
+                                                    <div class="swiper-slide">
+                                                        <div class="product-carousel-grid product-carousel-grid--quad">
+                                                            <article class="product-carousel-cell">
+                                                                <div class="product-carousel-cell__text">
+                                                                    <h3 class="product-carousel-cell__title">
+                                                                        <a href="/shop">Configure Product Tabs</a>
+                                                                    </h3>
+                                                                    <div class="product-carousel-cell__stars">
+                                                                        <i class="bi bi-star" aria-hidden="true"/>
+                                                                        <i class="bi bi-star" aria-hidden="true"/>
+                                                                        <i class="bi bi-star" aria-hidden="true"/>
+                                                                        <i class="bi bi-star" aria-hidden="true"/>
+                                                                        <i class="bi bi-star" aria-hidden="true"/>
+                                                                    </div>
+                                                                </div>
+                                                            </article>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="product-carousel-panels d-none" data-product-carousel-panel="best" role="tabpanel" hidden="hidden">
+                                            <div class="swiper product-carousel-swiper product-carousel-swiper--best">
+                                                <div class="swiper-wrapper">
+                                                    <div class="swiper-slide">
+                                                        <div class="product-carousel-grid product-carousel-grid--quad">
+                                                            <article class="product-carousel-cell">
+                                                                <div class="product-carousel-cell__text">
+                                                                    <h3 class="product-carousel-cell__title">
+                                                                        <a href="/web#action=theme_kingdom.kingdom_product_tab_action">Website → Product Tabs</a>
+                                                                    </h3>
+                                                                </div>
+                                                            </article>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </div>
+            </div>
+        </section>
+    </template>
+
+</odoo>

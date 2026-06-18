@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="s_manufacturers" name="Kingdom Manufacturers">
+        <section class="s_manufacturers oe_structure home-manufacturers-section carousel-grid"
+                 data-snippet="theme_kingdom.s_manufacturers"
+                 data-name="Manufacturers"
+                 aria-labelledby="ManufacturersHeading">
+            <div class="k-container container">
+                <div class="home-manufacturers-head title">
+                    <h2 id="ManufacturersHeading" class="o_translate_inline"><strong>Manufacturers</strong></h2>
+                </div>
+                <div class="carousel-container swiperCarousel carousel-manufacturer">
+                    <div class="swiper-button-prev manufacturer-carousel-arrow" aria-label="Previous manufacturers"/>
+                    <div class="swiper-button-next manufacturer-carousel-arrow" aria-label="Next manufacturers"/>
+                    <div class="swiper manufacturer manufacturer-swiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Acer">
+                                        <img src="/theme_kingdom/static/src/images/0000151_acer_400.webp" alt="Acer" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Acer</a></div>
+                                </div>
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Cisco">
+                                        <img src="/theme_kingdom/static/src/images/0000152_cisco_400.webp" alt="Cisco" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Cisco</a></div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Iittala">
+                                        <img src="/theme_kingdom/static/src/images/0000153_iittala_400.webp" alt="Iittala" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Iittala</a></div>
+                                </div>
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Panasonic">
+                                        <img src="/theme_kingdom/static/src/images/0000154_panasonic_400.webp" alt="Panasonic" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Panasonic</a></div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Philips">
+                                        <img src="/theme_kingdom/static/src/images/0000155_philips_400.webp" alt="Philips" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Philips</a></div>
+                                </div>
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Sony">
+                                        <img src="/theme_kingdom/static/src/images/0000157_sony_400.webp" alt="Sony" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Sony</a></div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Umbra">
+                                        <img src="/theme_kingdom/static/src/images/0000159_umbra_400.webp" alt="Umbra" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Umbra</a></div>
+                                </div>
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Canon">
+                                        <img src="/theme_kingdom/static/src/images/0000198_canon_400.webp" alt="Canon" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Canon</a></div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Corkcicle">
+                                        <img src="/theme_kingdom/static/src/images/0000160_corkcicle_400.webp" alt="Corkcicle" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Corkcicle</a></div>
+                                </div>
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Apple">
+                                        <img src="/theme_kingdom/static/src/images/0000197_apple_400.webp" alt="Apple" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Apple</a></div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Hitachi">
+                                        <img src="/theme_kingdom/static/src/images/0000742_hitachi_400.webp" alt="Hitachi" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Hitachi</a></div>
+                                </div>
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Haier">
+                                        <img src="/theme_kingdom/static/src/images/0000743_haiser_400.webp" alt="Haier" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Haier</a></div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="BRÜHM">
+                                        <img src="/theme_kingdom/static/src/images/0000744_bruhm_400.webp" alt="BRÜHM" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">BRÜHM</a></div>
+                                </div>
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Scanfrost">
+                                        <img src="/theme_kingdom/static/src/images/0000745_scanfrost_400.webp" alt="Scanfrost" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Scanfrost</a></div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Walton">
+                                        <img src="/theme_kingdom/static/src/images/0000746_walton_400.webp" alt="Walton" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Walton</a></div>
+                                </div>
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Dometic">
+                                        <img src="/theme_kingdom/static/src/images/0000747_dometic-coolmatic_400.webp" alt="Dometic" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Dometic</a></div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="LG">
+                                        <img src="/theme_kingdom/static/src/images/0000121_lg_400.webp" alt="LG" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">LG</a></div>
+                                </div>
+                                <div class="manufacturer-item">
+                                    <a class="manufacturer-picture" href="#" title="Corkcicle">
+                                        <img src="/theme_kingdom/static/src/images/0000123_corkcicle_400.webp" alt="Corkcicle" loading="lazy"/>
+                                    </a>
+                                    <div class="manufacturer-name"><a href="#">Corkcicle</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+</odoo>

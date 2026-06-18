@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_featured_products_list" model="ir.ui.view">
+        <field name="name">featured.products.list</field>
+        <field name="model">featured.products</field>
+        <field name="arch" type="xml">
+            <list string="Featured Products">
+                <field name="name"/>
+                <field name="product_tmpl_ids"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_featured_products_form" model="ir.ui.view">
+        <field name="name">featured.products.form</field>
+        <field name="model">featured.products</field>
+        <field name="arch" type="xml">
+            <form string="Featured Products">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group string="Products">
+                        <field name="product_tmpl_ids"
+                               widget="many2many_tags"
+                               options="{'no_create': True}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_featured_products" model="ir.actions.act_window">
+        <field name="name">Featured Products</field>
+        <field name="res_model">featured.products</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_featured_products"
+              name="Featured Products"
+              parent="website.menu_website_global_configuration"
+              action="action_featured_products"
+              sequence="52"/>
+
+</odoo>

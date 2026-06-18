@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_product_carousel" name="Kingdom Product Carousel">
+        <section class="product-carousel-section" aria-labelledby="ProductCarouselHeading">
+            <h2 id="ProductCarouselHeading" class="visually-hidden">Featured products</h2>
+            <div class="k-container">
+                <div class="product-carousel-shell">
+
+                    <a href="/shop" class="product-carousel-feature">
+                        <span class="product-carousel-feature__bg"
+                              style="background-image: url('/theme_kingdom/static/src/images/categories/cat-3.jpg')"/>
+                        <span class="product-carousel-feature__caption">Cooking pan</span>
+                    </a>
+
+                    <div class="product-carousel-main">
+                        <div class="product-carousel-toolbar">
+                            <div class="product-carousel-tabs" role="tablist">
+                                <button type="button"
+                                        class="product-carousel-tab is-active"
+                                        role="tab"
+                                        data-product-carousel-tab="new">
+                                    New Arrivals
+                                </button>
+                                <button type="button"
+                                        class="product-carousel-tab"
+                                        role="tab"
+                                        data-product-carousel-tab="best"
+                                        tabindex="-1">
+                                    Best Sellers
+                                </button>
+                            </div>
+                            <div class="product-carousel-toolbar-nav">
+                                <div class="product-carousel-nav-group" data-nav-for="new">
+                                    <div class="swiper-button-prev product-carousel-arrow"/>
+                                    <div class="swiper-button-next product-carousel-arrow"/>
+                                </div>
+                                <div class="product-carousel-nav-group d-none" data-nav-for="best" hidden="hidden">
+                                    <div class="swiper-button-prev product-carousel-arrow"/>
+                                    <div class="swiper-button-next product-carousel-arrow"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- New Arrivals -->
+                        <div class="product-carousel-panels"
+                             data-product-carousel-panel="new">
+                            <t t-set="new_products" t-value="request.env['product.template'].sudo().search([
+                                ('website_published', '=', True),
+                                ('sale_ok', '=', True),
+                            ], order='create_date desc', limit=16)"/>
+                            <div class="swiper product-carousel-swiper product-carousel-swiper--new">
+                                <div class="swiper-wrapper">
+                                    <t t-foreach="range(0, len(new_products), 8)" t-as="i">
+                                        <div class="swiper-slide">
+                                            <div class="product-carousel-grid">
+                                                <t t-foreach="new_products[i:i+8]" t-as="product">
+                                                    <article class="product-carousel-cell">
+                                                        <div class="product-carousel-cell__text">
+                                                            <h3 class="product-carousel-cell__title">
+                                                                <a t-att-href="'/shop/product/%s' % product.id"
+                                                                   t-esc="product.name"/>
+                                                            </h3>
+                                                            <div class="product-carousel-cell__prices">
+                                                                <span class="product-carousel-cell__price">
+                                                                    $<t t-esc="'%.2f' % product.list_price"/>
+                                                                </span>
+                                                                <t t-if="product.compare_list_price and product.compare_list_price > product.list_price">
+                                                                    <span class="product-carousel-cell__old">
+                                                                        $<t t-esc="'%.2f' % product.compare_list_price"/>
+                                                                    </span>
+                                                                </t>
+                                                            </div>
+                                                        </div>
+                                                        <div class="product-carousel-cell__media">
+                                                            <a t-att-href="'/shop/product/%s' % product.id">
+                                                                <img t-att-src="'/web/image/product.template/%s/image_128' % product.id"
+                                                                     t-att-alt="product.name"
+                                                                     width="96" height="96" loading="lazy"/>
+                                                            </a>
+                                                        </div>
+                                                    </article>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Best Sellers -->
+                        <div class="product-carousel-panels d-none"
+                             data-product-carousel-panel="best"
+                             hidden="hidden">
+                            <t t-set="best_products" t-value="request.env['product.template'].sudo().search([
+                                ('website_published', '=', True),
+                                ('sale_ok', '=', True),
+                            ], order='id desc', limit=16)"/>
+                            <div class="swiper product-carousel-swiper product-carousel-swiper--best">
+                                <div class="swiper-wrapper">
+                                    <t t-foreach="range(0, len(best_products), 8)" t-as="i">
+                                        <div class="swiper-slide">
+                                            <div class="product-carousel-grid">
+                                                <t t-foreach="best_products[i:i+8]" t-as="product">
+                                                    <article class="product-carousel-cell">
+                                                        <div class="product-carousel-cell__text">
+                                                            <h3 class="product-carousel-cell__title">
+                                                                <a t-att-href="'/shop/product/%s' % product.id"
+                                                                   t-esc="product.name"/>
+                                                            </h3>
+                                                            <div class="product-carousel-cell__prices">
+                                                                <span class="product-carousel-cell__price">
+                                                                    $<t t-esc="'%.2f' % product.list_price"/>
+                                                                </span>
+                                                                <t t-if="product.compare_list_price and product.compare_list_price > product.list_price">
+                                                                    <span class="product-carousel-cell__old">
+                                                                        $<t t-esc="'%.2f' % product.compare_list_price"/>
+                                                                    </span>
+                                                                </t>
+                                                            </div>
+                                                        </div>
+                                                        <div class="product-carousel-cell__media">
+                                                            <a t-att-href="'/shop/product/%s' % product.id">
+                                                                <img t-att-src="'/web/image/product.template/%s/image_128' % product.id"
+                                                                     t-att-alt="product.name"
+                                                                     width="96" height="96" loading="lazy"/>
+                                                            </a>
+                                                        </div>
+                                                    </article>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>
