@@ -3,6 +3,7 @@
     <template id="s_featured_products" name="Kingdom Featured Products">
         <section class="s_featured_products oe_structure oe_website_sale featured-products-section"
                  data-snippet="theme_kingdom.s_featured_products"
+                 data-kingdom-live-snippet="s_featured_products"
                  data-name="Featured Products"
                  aria-labelledby="FeaturedProductsHeading">
             <div class="k-container">

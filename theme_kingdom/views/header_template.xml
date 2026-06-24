@@ -10,7 +10,7 @@
     </template>
 
     <template id="kingdom_header_category_item" name="Kingdom Header Category Item">
-        <t t-set="category_children" t-value="category.child_id"/>
+        <t t-set="category_children" t-value="category.kingdom_get_header_children()"/>
         <li t-attf-class="mm-nav-item #{category_children and 'has-children' or ''}">
             <a t-att-href="'/shop/category/%s' % category.id"
                t-attf-class="#{category_children and 'mm-nav-image' or ''}">
@@ -65,7 +65,7 @@
             <t t-set="website_sale_cart" t-value="request.cart"/>
             <t t-set="website_sale_cart_quantity" t-value="website_sale_cart.cart_quantity if website_sale_cart else 0"/>
             <t t-set="wishcount" t-value="len(request.env['product.wishlist'].current())"/>
-            <t t-set="kingdom_root_categories" t-value="request.env['product.public.category'].search([('parent_id', '=', False)], order='sequence, name, id')"/>
+            <t t-set="kingdom_root_categories" t-value="request.env['product.public.category'].kingdom_get_header_roots()"/>
             <t t-set="kingdom_top_menus" t-value="website.menu_id.child_id"/>
             <t t-set="active_lang" t-value="frontend_languages.get(lang) if frontend_languages else None"/>
             <t t-set="pricelist" t-value="request.pricelist"/>
@@ -181,31 +181,11 @@
                                         <i class="bi bi-chevron-down" aria-hidden="true"/>
                                     </a>
                                 </t>
-                                <t t-if="active_lang and len(frontend_languages) &gt; 1">
-                                    <div class="dropdown d-inline-block">
-                                        <a href="#"
-                                           class="k-inline-select dropdown-toggle"
-                                           data-bs-toggle="dropdown"
-                                           aria-label="Language">
-                                            <span t-out="active_lang.url_code.split('_')[0].upper()"/>
-                                            <i class="bi bi-chevron-down" aria-hidden="true"/>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <t t-foreach="frontend_languages.values()" t-as="lg">
-                                                <a role="menuitem"
-                                                   t-att-href="url_localized(lang_code=lg.code)"
-                                                   t-attf-class="dropdown-item #{'active' if lg.code == lang else ''}"
-                                                   t-out="lg.name.split('/').pop()"/>
-                                            </t>
-                                        </div>
-                                    </div>
-                                </t>
-                                <t t-else="">
-                                    <a href="#" class="k-inline-select" aria-label="Language">
-                                        <span t-out="active_lang and active_lang.url_code.split('_')[0].upper() or 'EN'"/>
-                                        <i class="bi bi-chevron-down" aria-hidden="true"/>
-                                    </a>
-                                </t>
+                                <t t-call="portal.language_selector"
+                                   codes="True"
+                                   _div_classes.f="d-inline-block"
+                                   _btn_class.f="k-inline-select dropdown-toggle border-0 bg-transparent p-0 shadow-none"
+                                   _dropdown_menu_class.f="dropdown-menu-end"/>
                             </div>
                         </div>
 
@@ -225,8 +205,10 @@
                                     <li class="user-account">
                                         <a t-att-href="is_logged_in and '/my/home' or '/web/login'">Account</a>
                                     </li>
-                                    <li id="topcartlink" t-if="website.has_ecommerce_access()">
+                                    <li t-attf-class="o_wsale_my_cart #{'' if website.has_ecommerce_access() else 'd-none'}"
+                                        id="topcartlink">
                                         <a href="/shop/cart"
+                                           class="js_kingdom_cart_toggle"
                                            t-attf-aria-label="Shopping cart, #{website_sale_cart_quantity} items">
                                             <span class="cart-qty my_cart_quantity" t-out="website_sale_cart_quantity"/>
                                             <span class="cart-ammount"
@@ -310,7 +292,7 @@
     <template id="kingdom_mobile_navigation_drawer" name="Kingdom Mobile Navigation Drawer">
         <t t-set="website_sale_cart" t-value="request.cart"/>
         <t t-set="wishcount" t-value="len(request.env['product.wishlist'].current())"/>
-        <t t-set="kingdom_root_categories" t-value="request.env['product.public.category'].search([('parent_id', '=', False)], order='sequence, name, id')"/>
+        <t t-set="kingdom_root_categories" t-value="request.env['product.public.category'].kingdom_get_header_roots()"/>
         <t t-set="kingdom_top_menus" t-value="website.menu_id.child_id"/>
         <t t-set="is_logged_in" t-value="website.user_id != user_id"/>
 

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="website.footer_custom" model="ir.ui.view">
-        <field name="active" eval="False"/>
-    </record>
-
     <template id="kingdom_footer_attributes"
               inherit_id="website.layout"
               name="Kingdom Footer Attributes">
@@ -35,7 +31,7 @@
                            res_company.state_id.name if res_company.state_id else None,
                            res_company.zip,
                        ] if part) or '8th floor, Plot#2, Amtoli, Bir Uttam AK Khandakar Rd, Mohakhali Commercial Area, Dhaka-1212'"/>
-                    <div class="container footer-upper">
+                    <div class="container footer-upper js_kingdom_footer_upper">
                         <div class="footer-block follow-us">
                             <div class="footer-logo">
                                 <a href="/" t-att-aria-label="website.name">
@@ -91,7 +87,9 @@
                             </div>
                         </div>
                         <div class="footer-block contact-us">
-                            <div class="title"><strong>Contact us</strong></div>
+                            <div class="title js_kingdom_footer_toggle" aria-expanded="false">
+                                <strong>Contact us</strong>
+                            </div>
                             <ul class="list list-unstyled mb-0">
                                 <li t-out="company_address"/>
                                 <li>
@@ -106,7 +104,9 @@
                             </ul>
                         </div>
                         <div class="footer-block">
-                            <div class="title"><strong>Information</strong></div>
+                            <div class="title js_kingdom_footer_toggle" aria-expanded="false">
+                                <strong>Information</strong>
+                            </div>
                             <ul class="list list-unstyled mb-0">
                                 <li><a href="/shop" class="o_translate_inline">Refrigerators</a></li>
                                 <li><a href="/shipping" class="o_translate_inline">Shipping &amp; returns</a></li>
@@ -117,7 +117,9 @@
                             </ul>
                         </div>
                         <div class="footer-block">
-                            <div class="title"><strong>Customer service</strong></div>
+                            <div class="title js_kingdom_footer_toggle" aria-expanded="false">
+                                <strong>Customer service</strong>
+                            </div>
                             <ul class="list list-unstyled mb-0">
                                 <li><a href="/website/search" class="o_translate_inline">Search</a></li>
                                 <li><a href="/blog" class="o_translate_inline">News</a></li>
@@ -128,7 +130,9 @@
                             </ul>
                         </div>
                         <div class="footer-block">
-                            <div class="title"><strong>My account</strong></div>
+                            <div class="title js_kingdom_footer_toggle" aria-expanded="false">
+                                <strong>My account</strong>
+                            </div>
                             <ul class="list list-unstyled mb-0">
                                 <li><a href="/my/home" class="o_translate_inline">My account</a></li>
                                 <li><a href="/my/orders" class="o_translate_inline">Orders</a></li>

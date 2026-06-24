@@ -60,6 +60,32 @@ body {
   .master-header > .header-menu .dropdown-menu {
     z-index: 1035;
   }
+
+  /* Search autocomplete extends over the sticky nav bar — keep it on top. */
+  .master-header > .master-header-panel {
+    position: relative;
+    z-index: 1030;
+  }
+
+  .header.header-main .header-lower,
+  .header.header-main .search-box.search-box-main,
+  .header.header-main .o_searchbar_form {
+    overflow: visible;
+  }
+
+  .header.header-main .o_searchbar_form .o_dropdown_menu {
+    z-index: 1050;
+  }
+
+  .header.header-main .header-selectors-wrapper,
+  .header.header-main .header-inline-selectors {
+    overflow: visible;
+  }
+
+  .header.header-main .header-inline-selectors .dropdown-menu,
+  .header.header-main .js_language_selector .dropdown-menu {
+    z-index: 1050;
+  }
 }
 
 @media (max-width: 991px) {
@@ -126,6 +152,30 @@ html.k-no-topbar #AnnouncementBanner {
 .header.header-main {
   background: var(--white);
   border-bottom: 1px solid var(--light-grey);
+}
+
+.header.header-main .header-inline-selectors {
+  position: relative;
+  z-index: 1040;
+}
+
+.header.header-main .js_language_selector .dropdown-toggle::after {
+  display: none;
+}
+
+.header.header-main .js_language_selector .dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-size: 12px;
+  color: #333;
+}
+
+.header.header-main .js_language_selector .dropdown-toggle::before {
+  font-family: bootstrap-icons;
+  content: "\f282";
+  font-size: 10px;
+  line-height: 1;
 }
 
 /* Desktop: full search row */
@@ -1493,14 +1543,14 @@ html.k-no-topbar #AnnouncementBanner {
   }
 }
 
-/* Buy Now — theme nop pattern (grey idle; purple on card hover / <1200px); class from Content plugins */
+/* Buy Now — purple at rest and on hover */
 .product-item .add-info .buynow-btn {
   width: 130px;
   min-width: calc(100% - 80px);
   max-width: calc(100% - 65px);
   border: 0;
   padding: 10px 15px;
-  background: var(--grey);
+  background: var(--secondary-color);
   color: #fff;
   border-radius: 4px;
   cursor: pointer;
@@ -1538,7 +1588,8 @@ html.k-no-topbar #AnnouncementBanner {
   }
 }
 
-.product-item:hover .buynow-btn:not(:disabled) {
+.product-item:hover .buynow-btn:not(:disabled),
+.product-item .add-info .buynow-btn:not(:disabled):hover {
   background: var(--secondary-color);
 }
 
@@ -1639,7 +1690,7 @@ html.k-no-topbar #AnnouncementBanner {
   max-width: calc(100% - 65px);
   border: 0;
   padding: 10px 15px;
-  background: var(--grey);
+  background: var(--secondary-color);
   color: #fff;
   border-radius: 4px;
   cursor: pointer;
@@ -1653,7 +1704,8 @@ html.k-no-topbar #AnnouncementBanner {
   line-height: 1.2;
 }
 
-.product-item:hover .btn-buy-now:not(:disabled) {
+.product-item:hover .btn-buy-now:not(:disabled),
+.product-item .add-info .btn-buy-now:not(:disabled):hover {
   background: var(--secondary-color);
 }
 
@@ -1662,15 +1714,17 @@ html.k-no-topbar #AnnouncementBanner {
   outline-offset: 2px;
 }
 
-/* Deal slides: grey Buy Now at rest; purple on card hover (override theme <1200px always-purple) */
+/* Deal slides: purple Buy Now at rest and on hover */
 .dealoftheday-wrapper .deal-slide-card .add-info .buynow-btn:not(:disabled),
 .dealoftheday-wrapper .deal-slide-card .add-info .btn-buy-now:not(:disabled) {
-  background: var(--grey) !important;
+  background: var(--secondary-color) !important;
   color: #fff !important;
 }
 
 .dealoftheday-wrapper .deal-slide-card:hover .add-info .buynow-btn:not(:disabled),
-.dealoftheday-wrapper .deal-slide-card:hover .add-info .btn-buy-now:not(:disabled) {
+.dealoftheday-wrapper .deal-slide-card:hover .add-info .btn-buy-now:not(:disabled),
+.dealoftheday-wrapper .deal-slide-card .add-info .buynow-btn:not(:disabled):hover,
+.dealoftheday-wrapper .deal-slide-card .add-info .btn-buy-now:not(:disabled):hover {
   background: var(--secondary-color) !important;
 }
 
@@ -2009,10 +2063,14 @@ html.k-no-topbar #AnnouncementBanner {
     border-top-color: #e6e8ec;
   }
 
-  .dealoftheday-wrapper .deal-slide-card .add-info .btn-buy-now:not(:disabled),
-  .dealoftheday-wrapper .deal-slide-card:hover .add-info .btn-buy-now:not(:disabled) {
+  .dealoftheday-wrapper .deal-slide-card .add-info .btn-buy-now:not(:disabled) {
     background: var(--secondary-color) !important;
     color: #fff !important;
+  }
+
+  .dealoftheday-wrapper .deal-slide-card:hover .add-info .btn-buy-now:not(:disabled),
+  .dealoftheday-wrapper .deal-slide-card .add-info .btn-buy-now:not(:disabled):hover {
+    background: var(--secondary-color) !important;
   }
 
   .dealoftheday-wrapper .deal-slide-card .deal-card-actions .btn-buy-now {
@@ -2023,6 +2081,61 @@ html.k-no-topbar #AnnouncementBanner {
     font-size: 12px !important;
     letter-spacing: 0;
   }
+}
+
+/* Hide legacy nopCommerce static flyout only when the dynamic cart is present */
+html:has(.js_kingdom_flyout_cart) #flyout-cart,
+html:has(.js_kingdom_flyout_cart) .flyout-cart:not(.js_kingdom_flyout_cart) {
+  display: none !important;
+}
+
+.flyout-cart.js_kingdom_flyout_cart {
+  z-index: 1070;
+  pointer-events: auto;
+}
+
+#advance-cart-flyout-cart-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 320px;
+  max-width: 100%;
+  z-index: 1070;
+  pointer-events: none;
+}
+
+html.flyout-cart-open::after,
+body.flyout-cart-open::after {
+  z-index: 1055;
+  pointer-events: none;
+}
+
+.flyout-cart.js_kingdom_flyout_cart .mini-shopping-cart {
+  height: 100%;
+}
+
+.flyout-cart.js_kingdom_flyout_cart .mini-shopping-cart > .items {
+  max-height: calc(100% - 250px);
+  overflow: auto;
+}
+
+.flyout-cart.js_kingdom_flyout_cart .product .price {
+  position: static;
+  transform: none;
+  margin: 0;
+}
+
+.flyout-cart.js_kingdom_flyout_cart .product .price .price-text {
+  display: inline;
+}
+
+.flyout-cart.js_kingdom_flyout_cart .remove-btn {
+  font-size: 12px;
+}
+
+.flyout-cart.js_kingdom_flyout_cart .remove-btn::before {
+  content: none;
 }
 
 /* —— Floating cart (corner strip — below fixed #topcartlink on desktop) —— */
@@ -2318,15 +2431,16 @@ html.k-no-topbar #AnnouncementBanner {
   min-width: 0;
   border: 0;
   border-radius: 4px;
-  background: #c8d0d6;
+  background: var(--secondary-color);
   color: #fff;
   font-size: 13px;
   font-weight: 700;
   line-height: 1;
 }
 
-.featured-product-card:hover .featured-buy-btn,
-.featured-buy-btn:focus-visible {
+.featured-product-card:hover .featured-buy-btn:not(:disabled),
+.featured-buy-btn:not(:disabled):hover,
+.featured-buy-btn:focus-visible:not(:disabled) {
   background: var(--secondary-color);
 }
 
@@ -4110,4 +4224,63 @@ html.k-no-topbar #AnnouncementBanner {
 
 .footer .networks li a {
   font-size: 0;
+}
+
+@media (max-width: 991px) {
+  .footer .footer-upper .footer-block > .title {
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    pointer-events: auto;
+    z-index: 1;
+    background-image: url("/theme_kingdom/static/src/images/plus.svg");
+    background-size: 15px 15px;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 2rem;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .footer .footer-upper .footer-block > .title strong {
+    pointer-events: none;
+  }
+
+  .footer .footer-upper .footer-block > .title.ui-state-active,
+  .footer .footer-upper .footer-block > .title.kingdom-footer-open {
+    background-image: url("/theme_kingdom/static/src/images/minus.svg");
+  }
+
+  .footer .footer-upper .footer-block > .list.kingdom-footer-panel-open,
+  .footer .footer-upper .footer-block > .list.ui-accordion-content {
+    display: block !important;
+  }
+}
+
+.footer-lower .footer-lower-contents {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  text-align: center;
+}
+
+@media (min-width: 992px) {
+  .footer-lower .footer-lower-contents {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .footer-lower .footer-lower-contents > div:not(:only-child):first-child {
+    text-align: left;
+  }
+
+  .footer-lower .footer-lower-contents > div:not(:only-child):last-child {
+    text-align: right;
+  }
 }

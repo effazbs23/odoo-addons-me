@@ -15,6 +15,7 @@
                 <field name="category_id"/>
                 <field name="product_limit"/>
                 <field name="show_in_homepage" widget="boolean_toggle"/>
+                <field name="show_in_header_menu" widget="boolean_toggle"/>
                 <field name="active" widget="boolean_toggle"/>
             </list>
         </field>
@@ -47,6 +48,8 @@
                             <field name="product_limit"/>
 
                             <field name="show_in_homepage"/>
+
+                            <field name="show_in_header_menu"/>
 
                             <field name="active"/>
 

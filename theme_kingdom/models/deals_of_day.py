@@ -4,6 +4,7 @@ from odoo import api, fields, models
 
 class KingdomDealsOfDay(models.Model):
     _name = 'kingdom.deals.of.day'
+    _inherit = ['kingdom.website.cache.mixin']
     _description = 'Kingdom Deal of the Day'
     _order = 'sequence, id'
 

@@ -4,6 +4,7 @@ from odoo import api, fields, models
 
 class KingdomManufacturer(models.Model):
     _name = 'kingdom.manufacturer'
+    _inherit = ['kingdom.website.cache.mixin']
     _description = 'Kingdom Manufacturer / Brand'
     _order = 'sequence, name, id'
 

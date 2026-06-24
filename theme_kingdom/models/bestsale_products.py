@@ -4,6 +4,7 @@ from odoo import api, fields, models
 
 class BestsaleProducts(models.Model):
     _name = 'bestsale.products'
+    _inherit = ['kingdom.website.cache.mixin']
     _description = 'Best Sale Products'
 
     name = fields.Char(

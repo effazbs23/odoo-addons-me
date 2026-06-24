@@ -4,6 +4,7 @@ from odoo import api, fields, models
 
 class FeaturedProducts(models.Model):
     _name = 'featured.products'
+    _inherit = ['kingdom.website.cache.mixin']
     _description = 'Featured Products'
 
     name = fields.Char(

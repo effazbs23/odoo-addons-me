@@ -8,6 +8,16 @@ export class FeaturedProductCard extends Interaction {
         _root: { 't-on-click': this.onCardClick },
     };
 
+    start() {
+        const buyBtn = this.el.querySelector('.s_add_to_cart_btn');
+        const activeSwatch = this.el.querySelector(
+            '.featured-product-swatch.is-active[data-variant-id]'
+        );
+        if (buyBtn && activeSwatch) {
+            buyBtn.dataset.productVariantId = activeSwatch.dataset.variantId;
+        }
+    }
+
     onCardClick(ev) {
         const swatch = ev.target.closest('.featured-product-swatch[data-ptav-id]');
         if (!swatch) {
@@ -29,6 +39,9 @@ export class FeaturedProductCard extends Interaction {
 
         this._activateSwatch(swatch, card);
         this._updatePreview(card, swatch);
+        if (buyBtn && swatch.dataset.variantId) {
+            buyBtn.dataset.productVariantId = swatch.dataset.variantId;
+        }
 
         this.services['cart'].add(
             {

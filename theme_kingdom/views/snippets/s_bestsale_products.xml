@@ -3,6 +3,7 @@
     <template id="s_bestsale_products" name="Kingdom Best Sale Products">
         <section class="s_bestsale_products oe_structure oe_website_sale featured-products-section bestsale-products-section"
                  data-snippet="theme_kingdom.s_bestsale_products"
+                 data-kingdom-live-snippet="s_bestsale_products"
                  data-name="Best Sale"
                  aria-labelledby="BestsaleProductsHeading">
             <div class="k-container">

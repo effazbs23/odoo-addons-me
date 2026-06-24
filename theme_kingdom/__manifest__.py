@@ -22,15 +22,17 @@
     ],
     'data': [
         'security/ir.model.access.csv',
+        'security/product_public_category_access.xml',
         'views/assets.xml',
         'views/header_template.xml',
         'views/footer_template.xml',
         'views/product_category_views.xml',
-        'views/product_tab_views.xml',
+        'views/flyout_cart_template.xml',
         'views/featured_products_views.xml',
         'views/bestsale_products_views.xml',
         'views/manufacturer_views.xml',
         'views/deals_of_day_views.xml',
+        'views/product_tab_views.xml',
         'views/snippets/s_hero_slider.xml',
         'views/snippets/s_category_slider.xml',
         'views/snippets/s_deal_of_the_day.xml',
@@ -57,7 +59,10 @@
             'theme_kingdom/static/src/css/styles.css',
             'theme_kingdom/static/src/css/customCss.css',
             'theme_kingdom/static/src/css/category-grid.css',
-           
+            ('after', 'website_sale/static/src/js/cart_service.js', 'theme_kingdom/static/src/js/kingdom_cart_service_patch.js'),
+            'theme_kingdom/static/src/interactions/kingdom_flyout_cart.js',
+            'theme_kingdom/static/src/interactions/featured_product_card.js',
+            'theme_kingdom/static/src/interactions/kingdom_live_snippet.js',
         ],
     },
 
@@ -68,6 +73,7 @@
     'installable': True,
     'application': False,
     'auto_install': False,
+    'post_init_hook': 'post_init_hook',
     'price': 0.0,
     'currency': 'USD',
 }
