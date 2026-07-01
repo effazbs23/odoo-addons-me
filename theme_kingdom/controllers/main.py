@@ -8,6 +8,10 @@ from odoo.http import request
 _KINGDOM_LIVE_SNIPPETS = {
     's_featured_products': 'theme_kingdom.s_featured_products',
     's_bestsale_products': 'theme_kingdom.s_bestsale_products',
+    's_deal_of_the_day': 'theme_kingdom.s_deal_of_the_day',
+    's_product_carousel': 'theme_kingdom.s_product_carousel',
+    's_category_dual_carousels': 'theme_kingdom.s_category_dual_carousels',
+    's_category_slider': 'theme_kingdom.s_category_slider',
 }
 
 

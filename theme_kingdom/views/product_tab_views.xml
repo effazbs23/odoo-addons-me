@@ -14,6 +14,7 @@
                 <field name="tab_type"/>
                 <field name="category_id"/>
                 <field name="product_limit"/>
+                <field name="show_in_product_carousel" widget="boolean_toggle"/>
                 <field name="show_in_homepage" widget="boolean_toggle"/>
                 <field name="show_in_header_menu" widget="boolean_toggle"/>
                 <field name="active" widget="boolean_toggle"/>
@@ -46,6 +47,9 @@
                                    invisible="tab_type != 'category'"/>
 
                             <field name="product_limit"/>
+
+                            <field name="show_in_product_carousel"
+                                   invisible="tab_type not in ('new_arrival', 'best_seller')"/>
 
                             <field name="show_in_homepage"/>
 
@@ -83,6 +87,16 @@
         <field name="name">Product Tabs</field>
         <field name="res_model">kingdom.product.tab</field>
         <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create product tabs for homepage snippets and header links.
+            </p>
+            <p>
+                <strong>New Arrivals</strong> / <strong>Best Sellers</strong> tabs feed the
+                Product Carousel snippet. Enable <em>Product tabs snippet</em> on category tabs
+                (max 2) for the Category Dual Carousels snippet (Smart TV / Mixer Grinder layout).
+            </p>
+        </field>
     </record>
 
     <!-- =========================
@@ -90,9 +104,9 @@
     ========================== -->
     <menuitem id="kingdom_product_tab_menu"
           name="Product Tabs"
-          parent="website.menu_website_configuration"
+          parent="website.menu_website_global_configuration"
           action="kingdom_product_tab_action"
-          groups="base.group_user"
+          groups="website.group_website_designer"
           sequence="51"/>
 
 </odoo>

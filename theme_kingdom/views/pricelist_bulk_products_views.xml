@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_kingdom_pricelist_bulk_products_form" model="ir.ui.view">
+        <field name="name">kingdom.pricelist.bulk.products.form</field>
+        <field name="model">kingdom.pricelist.bulk.products</field>
+        <field name="arch" type="xml">
+            <form string="Add Multiple Products">
+                <group>
+                    <field name="pricelist_id" readonly="1"/>
+                    <field name="product_tmpl_ids"
+                           widget="many2many_tags"
+                           options="{'no_create': True}"
+                           placeholder="Search and add products..."/>
+                </group>
+                <group string="Offer rule (same for all products)">
+                    <field name="compute_price" widget="radio"/>
+                    <field name="base" invisible="compute_price == 'fixed'"/>
+                    <field name="percent_price"
+                           invisible="compute_price != 'percentage'"/>
+                    <field name="price_discount"
+                           invisible="compute_price != 'formula'"/>
+                    <field name="price_round"
+                           invisible="compute_price != 'formula'"/>
+                    <field name="price_surcharge"
+                           invisible="compute_price != 'formula'"/>
+                    <field name="fixed_price"
+                           invisible="compute_price != 'fixed'"/>
+                    <field name="min_quantity"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="skip_existing"/>
+                </group>
+                <footer>
+                    <button name="action_apply"
+                            type="object"
+                            string="Add Products"
+                            class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_kingdom_pricelist_bulk_products" model="ir.actions.act_window">
+        <field name="name">Add Multiple Products</field>
+        <field name="res_model">kingdom.pricelist.bulk.products</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="product_pricelist_view_bulk_products" model="ir.ui.view">
+        <field name="name">product.pricelist.form.bulk.products</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+            <button name="action_open_pricelist_report" position="before">
+                <button name="action_bulk_add_products"
+                        type="object"
+                        string="Add Multiple Products"
+                        class="btn-primary"/>
+            </button>
+        </field>
+    </record>
+
+</odoo>

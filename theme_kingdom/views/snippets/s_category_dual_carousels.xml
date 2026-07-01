@@ -1,64 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Single product cell (quad grid) -->
-    <template id="category_dual_product_cell" name="Category dual product cell">
-        <t t-set="rating_rounded"
-           t-value="min(5, max(0, int(round(product.sudo().rating_avg or 0))))"/>
-        <t t-set="contextual_price"
-           t-value="(current_pricelist and product.with_context(pricelist=current_pricelist.id)._get_contextual_price()) or product._get_contextual_price()"/>
-        <t t-set="compare_price"
-           t-value="product.compare_list_price or 0"/>
-        <t t-set="show_sale"
-           t-value="compare_price and compare_price > contextual_price"/>
-        <article class="product-carousel-cell">
-            <div class="product-carousel-cell__text">
-                <h3 class="product-carousel-cell__title">
-                    <a t-att-href="product.website_url" t-esc="product.name"/>
-                </h3>
-                <div class="product-carousel-cell__stars" t-att-aria-label="'%s out of 5 stars' % rating_rounded">
-                    <t t-foreach="range(1, 6)" t-as="star_i">
-                        <i t-attf-class="bi #{('bi-star-fill' if star_i &lt;= rating_rounded else 'bi-star')}"
-                           aria-hidden="true"/>
-                    </t>
-                </div>
-                <div class="product-carousel-cell__prices">
-                    <t t-if="show_sale">
-                        <span class="product-carousel-cell__old">
-                            <t t-out="compare_price"
-                               t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
-                        </span>
-                    </t>
-                    <span class="product-carousel-cell__price">
-                        <t t-out="contextual_price"
-                           t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
-                    </span>
-                </div>
-            </div>
-            <div class="product-carousel-cell__media">
-                <a t-att-href="product.website_url" class="product-carousel-cell__img-link">
-                    <img t-att-src="'/web/image/product.template/%s/image_128' % product.id"
-                         t-att-alt="product.name"
-                         width="96"
-                         height="96"
-                         loading="lazy"/>
-                </a>
-                <t t-if="product.website_ribbon_id">
-                    <span class="product-carousel-badge product-carousel-badge--top"
-                          t-esc="product.website_ribbon_id.name"/>
-                </t>
-            </div>
-        </article>
-    </template>
-
-    <!-- Swiper slides: 4 products per slide -->
+    <!-- Swiper slides: 4 products per slide (2×2 quad grid) -->
     <template id="category_dual_product_slides" name="Category dual product slides">
         <t t-if="products">
             <t t-foreach="range(0, len(products), 4)" t-as="chunk_start">
                 <div class="swiper-slide">
                     <div class="product-carousel-grid product-carousel-grid--quad">
                         <t t-foreach="products[chunk_start:chunk_start + 4]" t-as="product">
-                            <t t-call="theme_kingdom.category_dual_product_cell"/>
+                            <t t-call="theme_kingdom.product_carousel_product_cell"/>
                         </t>
                     </div>
                 </div>
@@ -71,7 +21,7 @@
         </t>
     </template>
 
-    <!-- One column (Smart TV / Mixer Grinder style) -->
+    <!-- One column (Smart TV / Mixer Grinder compact layout) -->
     <template id="category_dual_carousel_column" name="Category dual carousel column">
         <t t-set="ribbon" t-value="tab.get_feature_ribbon()"/>
         <t t-set="feature_href" t-value="tab.get_feature_href()"/>
@@ -79,12 +29,9 @@
         <t t-set="new_products" t-value="tab.get_new_arrival_products()"/>
         <t t-set="best_products" t-value="tab.get_best_seller_products()"/>
         <t t-set="aria_label" t-value="ribbon"/>
-        <t t-set="new_arrival_label_tab"
-           t-value="request.env['kingdom.product.tab'].sudo().search([('active', '=', True), ('tab_type', '=', 'new_arrival')], order='sequence asc, id asc', limit=1)"/>
-        <t t-set="best_seller_label_tab"
-           t-value="request.env['kingdom.product.tab'].sudo().search([('active', '=', True), ('tab_type', '=', 'best_seller')], order='sequence asc, id asc', limit=1)"/>
-        <t t-set="new_arrival_label" t-value="new_arrival_label_tab.name if new_arrival_label_tab else 'New Arrivals'"/>
-        <t t-set="best_seller_label" t-value="best_seller_label_tab.name if best_seller_label_tab else 'Best Sellers'"/>
+        <t t-set="Tab" t-value="request.env['kingdom.product.tab'].sudo()"/>
+        <t t-set="new_arrival_label" t-value="Tab.get_carousel_subtab_label('new_arrival')"/>
+        <t t-set="best_seller_label" t-value="Tab.get_carousel_subtab_label('best_seller')"/>
 
         <div class="product-carousel-section product-carousel-section--compact">
             <div class="product-carousel-shell">
@@ -175,6 +122,7 @@
     <template id="s_category_dual_carousels" name="Kingdom Category Dual Carousels">
         <section class="s_category_dual_carousels oe_structure oe_website_sale category-dual-section"
                  data-snippet="theme_kingdom.s_category_dual_carousels"
+                 data-kingdom-live-snippet="s_category_dual_carousels"
                  data-name="Category Dual Carousels"
                  aria-labelledby="CategoryDualHeading">
             <h2 id="CategoryDualHeading" class="visually-hidden">Category product highlights</h2>
@@ -184,13 +132,21 @@
                 <t t-set="display_currency"
                    t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
                 <t t-set="dual_tabs"
-                   t-value="request.env['kingdom.product.tab'].sudo().search([('active', '=', True), ('show_in_homepage', '=', True)], order='sequence asc, id asc', limit=2)"/>
+                   t-value="request.env['kingdom.product.tab'].sudo().get_website_dual_carousel_tabs()"/>
 
-                <div class="category-dual-grid">
-                    <t t-foreach="dual_tabs" t-as="tab">
-                        <t t-call="theme_kingdom.category_dual_carousel_column"/>
-                    </t>
-                </div>
+                <t t-if="dual_tabs">
+                    <div class="category-dual-grid">
+                        <t t-foreach="dual_tabs" t-as="tab">
+                            <t t-call="theme_kingdom.category_dual_carousel_column"/>
+                        </t>
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="alert alert-info mb-0 o_not_editable">
+                        Enable <strong>Product tabs snippet</strong> on up to two Product Tabs
+                        (Website → Configuration → Product Tabs).
+                    </div>
+                </t>
             </div>
         </section>
     </template>

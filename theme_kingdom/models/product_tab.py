@@ -20,9 +20,15 @@ class KingdomProductTab(models.Model):
         default=True,
     )
     show_in_homepage = fields.Boolean(
-        string='Category dual carousel',
+        string='Product tabs snippet',
         default=False,
-        help='Show as one column in the homepage category dual carousel snippet (max 2).',
+        help='Show as one column in the Category Dual Carousels snippet (max 2 active tabs). '
+             'Each column shows category image, subcategory links, and New Arrivals / Best Sellers.',
+    )
+    show_in_product_carousel = fields.Boolean(
+        string='Product carousel snippet',
+        default=True,
+        help='Use this tab in the Product Carousel snippet (New Arrivals / Best Sellers types).',
     )
     tab_type = fields.Selection([
         ('new_arrival', 'New Arrivals'),
@@ -58,6 +64,12 @@ class KingdomProductTab(models.Model):
         default='/shop',
     )
 
+    def init(self):
+        super().init()
+        from odoo.addons.theme_kingdom import hooks
+        hooks._ensure_default_product_tabs(self.env)
+        hooks._ensure_dual_carousel_tabs(self.env)
+
     @api.model
     def get_website_dual_carousel_tabs(self, limit=2):
         """Up to two active tabs for the category dual carousel snippet."""
@@ -71,15 +83,19 @@ class KingdomProductTab(models.Model):
         )
 
     @api.model
-    def get_tab_by_type(self, tab_type):
+    def get_tab_by_type(self, tab_type, product_carousel=False):
         """First active tab for a given tab type (labels, carousels, menus)."""
         if not tab_type:
             return self.browse()
-        return self.sudo().search(
-            [('active', '=', True), ('tab_type', '=', tab_type)],
-            order='sequence asc, id asc',
-            limit=1,
-        )
+        domain = [('active', '=', True), ('tab_type', '=', tab_type)]
+        if product_carousel:
+            domain.append(('show_in_product_carousel', '=', True))
+        return self.sudo().search(domain, order='sequence asc, id asc', limit=1)
+
+    @api.model
+    def get_product_carousel_tab(self, tab_type):
+        """Tab for the Product Carousel snippet (QWeb-safe, no keyword args)."""
+        return self.get_tab_by_type(tab_type, product_carousel=True)
 
     @api.model
     def get_carousel_subtab_label(self, tab_type):
@@ -93,6 +109,11 @@ class KingdomProductTab(models.Model):
     def _get_category(self):
         self.ensure_one()
         return self.sudo().category_id
+
+    def _get_category_shop_url(self, category):
+        if not category:
+            return '/shop'
+        return '/shop/category/%s' % category.id
 
     def _product_domain(self):
         self.ensure_one()
@@ -154,7 +175,7 @@ class KingdomProductTab(models.Model):
             'on_sale': '/shop',
         }
         if self.tab_type == 'category' and self.category_id:
-            return self.category_id.website_url or '/shop'
+            return self._get_category_shop_url(self.category_id)
         return type_urls.get(self.tab_type, '/shop')
 
     def get_feature_href(self):
@@ -163,7 +184,7 @@ class KingdomProductTab(models.Model):
             return self.feature_url
         category = self._get_category()
         if category:
-            return category.website_url or '/shop'
+            return self._get_category_shop_url(category)
         return '/shop'
 
     def get_feature_bg_url(self):
@@ -178,3 +199,24 @@ class KingdomProductTab(models.Model):
     def get_feature_ribbon(self):
         self.ensure_one()
         return self.feature_label or self.name or 'Shop'
+
+    def get_display_title(self):
+        """Title shown on the product-tab picture overlay."""
+        self.ensure_one()
+        category = self._get_category()
+        if category:
+            return category.name
+        return self.name or ''
+
+    def get_subcategory_links(self, limit=6):
+        """Child public categories for the tab sidebar links."""
+        self.ensure_one()
+        category = self._get_category()
+        if not category:
+            return self.env['product.public.category']
+        children = self.env['product.public.category'].sudo().search(
+            [('parent_id', '=', category.id)],
+            order='sequence, name, id',
+            limit=limit,
+        )
+        return children or category

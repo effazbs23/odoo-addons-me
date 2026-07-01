@@ -19,6 +19,7 @@
 
         <section t-attf-class="dealoftheday-wrapper oe_structure oe_website_sale#{' d-none' if not active_deal and not editable else ''}"
                  data-snippet="theme_kingdom.s_deal_of_the_day"
+                 data-kingdom-live-snippet="s_deal_of_the_day"
                  data-name="Deal of the Day"
                  aria-labelledby="DealOfTheDayHeading">
             <h2 id="DealOfTheDayHeading" class="visually-hidden">Deal of the days</h2>
@@ -226,7 +227,7 @@
                                             <div class="swiper-slide">
                                                 <div class="product-item deal-slide-card">
                                                     <div class="details p-4 text-center text-muted">
-                                                        <p class="mb-0">Configure a deal pricelist with product rules to show products here.</p>
+                                                        <p class="mb-0">Select a deal pricelist with product items (Website → Configuration → Deals of the Day).</p>
                                                     </div>
                                                 </div>
                                             </div>

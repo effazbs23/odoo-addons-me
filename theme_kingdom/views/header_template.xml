@@ -197,9 +197,9 @@
                                            class="k-phone-link"
                                            t-out="res_company.phone or '+8801719304086'"/>
                                     </li>
-                                    <li t-if="website.has_ecommerce_access()">
+                                    <li t-if="website.has_ecommerce_access()" class="o_wsale_my_wish">
                                         <a href="/shop/wishlist" class="ico-wishlist">
-                                            Wishlist (<t t-out="wishcount"/>)
+                                            Wishlist (<span class="my_wish_quantity" t-out="wishcount"/>)
                                         </a>
                                     </li>
                                     <li class="user-account">
@@ -354,9 +354,11 @@
                            t-out="res_company.phone or '+8801719304086'"/>
                     </p>
                     <p class="mb-0">
-                        <a t-if="website.has_ecommerce_access()" href="/shop/wishlist">
-                            Wishlist (<t t-out="wishcount"/>)
-                        </a>
+                        <span t-if="website.has_ecommerce_access()" class="o_wsale_my_wish d-inline">
+                            <a href="/shop/wishlist">
+                                Wishlist (<span class="my_wish_quantity" t-out="wishcount"/>)
+                            </a>
+                        </span>
                         <span t-if="website.has_ecommerce_access()" class="text-muted mx-2">|</span>
                         <a t-att-href="is_logged_in and '/my/home' or '/web/login'">Account</a>
                     </p>

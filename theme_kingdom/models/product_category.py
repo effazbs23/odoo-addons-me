@@ -2,7 +2,7 @@ from odoo import api, models, fields
 
 
 class ProductPublicCategory(models.Model):
-    _inherit = 'product.public.category'
+    _inherit = ['product.public.category', 'kingdom.website.cache.mixin']
 
     show_in_homepage = fields.Boolean(
         string='Show in Homepage',
@@ -17,6 +17,18 @@ class ProductPublicCategory(models.Model):
             order='sequence, name, id',
         )
 
+    @api.model
+    def get_homepage_featured_categories(self, limit=8):
+        """Root categories flagged for the Featured Categories snippet."""
+        return self.sudo().search(
+            [
+                ('parent_id', '=', False),
+                ('show_in_homepage', '=', True),
+            ],
+            order='sequence, name, id',
+            limit=limit,
+        )
+
     def kingdom_get_header_children(self):
         """Direct child categories for a header menu item (public-safe)."""
         self.ensure_one()
@@ -25,5 +37,10 @@ class ProductPublicCategory(models.Model):
     def write(self, vals):
         res = super().write(vals)
         if 'show_in_homepage' in vals:
-            self.env.registry.clear_cache('templates')
+            self._invalidate_kingdom_website_cache()
         return res
+
+    def init(self):
+        super().init()
+        from odoo.addons.theme_kingdom import hooks
+        hooks._ensure_homepage_featured_categories(self.env)

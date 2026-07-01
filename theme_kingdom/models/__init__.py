@@ -21,6 +21,7 @@
 #############################################################################
 from . import website_cache
 from . import product_category
+from . import product_template
 from . import product_tab
 from . import website_menu
 from . import product_tab_header
@@ -28,5 +29,7 @@ from . import featured_products
 from . import bestsale_products
 from . import manufacturer
 from . import deals_of_day
+from . import product_pricelist
+from . import loyalty_program
 from . import blog_snippet
 from . import theme_utils

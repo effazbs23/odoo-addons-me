@@ -2,9 +2,25 @@
     'name': 'Theme Kingdom',
     'summary': 'Premium Megastore E-Commerce Theme for Odoo',
     'description': '''
-        Kingdom is a modern, fully responsive Odoo website theme designed for 
-        megastores and e-commerce businesses. Features include mega menu, 
-        announcement bar, product carousels, quick view, wishlist, and more.
+Kingdom Mega Store Theme
+========================
+
+Premium responsive Odoo eCommerce theme for megastores, electronics, appliances,
+and multi-category retail businesses.
+
+Features
+--------
+* Deal of the Day with countdown, scheduled start/end, pricelist & promotion integration
+* Mega menu, hero slider, category carousels, featured & best-sale products
+* Flyout cart, wishlist, mobile bottom navigation
+* Manufacturer logos, promo banners, blog news, service highlights
+* Website Builder snippets — drag and drop homepage blocks
+* Odoo native pricelist and loyalty promotion engine for offers
+
+Configuration
+-------------
+Website → Configuration → Deals of the Day, Featured Products, Best Sale Products.
+Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discounts.
     ''',
     'category': 'Theme/eCommerce',
     'version': '19.0.1.0',
@@ -12,10 +28,12 @@
     'company': 'nopCommerce, Brainstation 23 PLC',
     'maintainer': 'ERP 23',
     'website': 'https://www.erp-23.com',
+    'license': 'LGPL-3',
     'depends': [
         'website',
         'website_sale',
         'website_sale_wishlist',
+        'website_sale_loyalty',
         'website_blog',
         'auth_signup',
         'product'
@@ -23,15 +41,18 @@
     'data': [
         'security/ir.model.access.csv',
         'security/product_public_category_access.xml',
+        'data/deals_of_day_cron.xml',
         'views/assets.xml',
         'views/header_template.xml',
         'views/footer_template.xml',
         'views/product_category_views.xml',
         'views/flyout_cart_template.xml',
+        'views/product_related_template.xml',
         'views/featured_products_views.xml',
         'views/bestsale_products_views.xml',
         'views/manufacturer_views.xml',
         'views/deals_of_day_views.xml',
+        'views/pricelist_bulk_products_views.xml',
         'views/product_tab_views.xml',
         'views/snippets/s_hero_slider.xml',
         'views/snippets/s_category_slider.xml',
@@ -60,20 +81,23 @@
             'theme_kingdom/static/src/css/customCss.css',
             'theme_kingdom/static/src/css/category-grid.css',
             ('after', 'website_sale/static/src/js/cart_service.js', 'theme_kingdom/static/src/js/kingdom_cart_service_patch.js'),
+            ('after', 'website_sale_wishlist/static/src/js/website_sale_wishlist_utils.js', 'theme_kingdom/static/src/js/kingdom_wishlist_utils_patch.js'),
             'theme_kingdom/static/src/interactions/kingdom_flyout_cart.js',
             'theme_kingdom/static/src/interactions/featured_product_card.js',
             'theme_kingdom/static/src/interactions/kingdom_live_snippet.js',
         ],
+        'website.website_builder_assets': [
+            'theme_kingdom/static/src/website_builder/**/*',
+        ],
     },
 
-    'images': [
-        # 'static/description/banner.gif',
-    ],
+   
 
     'installable': True,
     'application': False,
     'auto_install': False,
     'post_init_hook': 'post_init_hook',
+    'pre_init_hook': 'pre_init_hook',
     'price': 0.0,
     'currency': 'USD',
 }

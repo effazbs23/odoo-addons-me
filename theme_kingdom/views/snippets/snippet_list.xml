@@ -56,7 +56,8 @@
 
             <t t-snippet="theme_kingdom.s_product_carousel"
                string="Product Carousel"
-               group="kingdom_snippet"/>
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
 
             <t t-snippet="theme_kingdom.s_manufacturers"
                string="Manufacturers"

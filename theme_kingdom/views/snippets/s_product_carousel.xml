@@ -1,66 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+    <template id="product_carousel_product_cell" name="Product carousel product cell">
+        <t t-set="rating_rounded"
+           t-value="min(5, max(0, int(round(product.sudo().rating_avg or 0))))"/>
+        <t t-set="contextual_price"
+           t-value="(current_pricelist and product.with_context(pricelist=current_pricelist.id)._get_contextual_price()) or product._get_contextual_price()"/>
+        <t t-set="compare_price"
+           t-value="product.compare_list_price or 0"/>
+        <t t-set="show_sale"
+           t-value="compare_price and compare_price > contextual_price"/>
+        <article class="product-carousel-cell">
+            <div class="product-carousel-cell__text">
+                <h3 class="product-carousel-cell__title">
+                    <a t-att-href="product.website_url" t-esc="product.name"/>
+                </h3>
+                <div class="product-carousel-cell__stars" t-att-aria-label="'%s out of 5 stars' % rating_rounded">
+                    <t t-foreach="range(1, 6)" t-as="star_i">
+                        <i t-attf-class="bi #{('bi-star-fill' if star_i &lt;= rating_rounded else 'bi-star')}"
+                           aria-hidden="true"/>
+                    </t>
+                </div>
+                <div class="product-carousel-cell__prices">
+                    <span class="product-carousel-cell__price">
+                        <t t-out="contextual_price"
+                           t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
+                    </span>
+                    <t t-if="show_sale">
+                        <span class="product-carousel-cell__old">
+                            <t t-out="compare_price"
+                               t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
+                        </span>
+                    </t>
+                </div>
+            </div>
+            <div class="product-carousel-cell__media">
+                <a t-att-href="product.website_url" class="product-carousel-cell__img-link">
+                    <img t-att-src="'/web/image/product.template/%s/image_128' % product.id"
+                         t-att-alt="product.name"
+                         width="96"
+                         height="96"
+                         loading="lazy"/>
+                </a>
+                <t t-if="product.website_ribbon_id">
+                    <t t-set="ribbon_name" t-value="(product.website_ribbon_id.name or '').lower()"/>
+                    <span t-attf-class="product-carousel-badge #{('product-carousel-badge--new' if 'new' in ribbon_name else 'product-carousel-badge--top')}"
+                          t-esc="product.website_ribbon_id.name"/>
+                </t>
+            </div>
+        </article>
+    </template>
+
+    <!-- Product carousel panel (8 products per slide — reference 4×2 grid) -->
+    <template id="product_carousel_panel" name="Product carousel panel">
+        <div t-attf-class="product-carousel-panels #{panel_hidden and 'd-none' or ''}"
+             t-att-id="panel_id"
+             role="tabpanel"
+             t-att-aria-labelledby="tab_id"
+             t-att-data-product-carousel-panel="panel_key"
+             t-att-hidden="panel_hidden and 'hidden' or None">
+            <div t-attf-class="swiper product-carousel-swiper product-carousel-swiper--#{panel_key}">
+                <div class="swiper-wrapper">
+                    <t t-if="products">
+                        <t t-foreach="range(0, len(products), 8)" t-as="i">
+                            <div class="swiper-slide">
+                                <div class="product-carousel-grid">
+                                    <t t-foreach="products[i:i+8]" t-as="product">
+                                        <t t-call="theme_kingdom.product_carousel_product_cell"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <div class="swiper-slide">
+                            <div class="product-carousel-grid"/>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </template>
+
     <template id="s_product_carousel" name="Kingdom Product Carousel">
-        <section class="product-carousel-section" aria-labelledby="ProductCarouselHeading">
+        <section class="s_product_carousel oe_structure oe_website_sale product-carousel-section"
+                 data-snippet="theme_kingdom.s_product_carousel"
+                 data-kingdom-live-snippet="s_product_carousel"
+                 data-name="Product Carousel"
+                 aria-labelledby="ProductCarouselHeading">
             <h2 id="ProductCarouselHeading" class="visually-hidden">Featured products</h2>
             <div class="k-container">
+                <t t-set="Tab" t-value="request.env['kingdom.product.tab'].sudo()"/>
                 <t t-set="new_tab"
-                   t-value="request.env['kingdom.product.tab'].sudo().search([('active', '=', True), ('tab_type', '=', 'new_arrival')], order='sequence asc, id asc', limit=1)"/>
+                   t-value="Tab.search([('active', '=', True), ('tab_type', '=', 'new_arrival'), ('show_in_product_carousel', '=', True)], limit=1, order='sequence asc, id asc')"/>
                 <t t-set="best_tab"
-                   t-value="request.env['kingdom.product.tab'].sudo().search([('active', '=', True), ('tab_type', '=', 'best_seller')], order='sequence asc, id asc', limit=1)"/>
+                   t-value="Tab.search([('active', '=', True), ('tab_type', '=', 'best_seller'), ('show_in_product_carousel', '=', True)], limit=1, order='sequence asc, id asc')"/>
+                <t t-if="not best_tab">
+                    <t t-set="best_tab"
+                       t-value="Tab.search([('active', '=', True), ('tab_type', '=', 'featured'), ('show_in_product_carousel', '=', True)], limit=1, order='sequence asc, id asc')"/>
+                </t>
                 <t t-set="feature_tab" t-value="new_tab or best_tab"/>
                 <t t-set="current_pricelist"
                    t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
                 <t t-set="display_currency"
                    t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
-                <t t-set="new_arrival_label" t-value="new_tab.name if new_tab else 'New Arrivals'"/>
-                <t t-set="best_seller_label" t-value="best_tab.name if best_tab else 'Best Sellers'"/>
+                <t t-set="new_arrival_label" t-value="Tab.get_carousel_subtab_label('new_arrival')"/>
+                <t t-set="secondary_label"
+                   t-value="best_tab.name if best_tab else Tab.get_carousel_subtab_label('best_seller')"/>
+                <t t-set="pc_uid" t-value="'pc%s' % (feature_tab.id if feature_tab else 0)"/>
 
-                <t t-if="feature_tab">
+                <t t-if="feature_tab or editable">
                     <div class="product-carousel-shell">
-                        <a t-att-href="feature_tab.get_feature_href()"
+                        <a t-att-href="feature_tab.get_feature_href() if feature_tab else '/shop'"
                            class="product-carousel-feature">
                             <span class="product-carousel-feature__bg"
-                                  t-att-style="'background-image: url(%s);' % feature_tab.get_feature_bg_url()"/>
-                            <span class="product-carousel-feature__caption" t-esc="feature_tab.get_feature_ribbon()"/>
+                                  t-att-style="'background-image: url(%s);' % (feature_tab.get_feature_bg_url() if feature_tab else '/theme_kingdom/static/src/images/categories/cat-3.jpg')"/>
+                            <span class="product-carousel-feature__caption"
+                                  t-esc="feature_tab.get_feature_ribbon() if feature_tab else 'Shop now'"/>
                         </a>
 
                         <div class="product-carousel-main">
                             <div class="product-carousel-toolbar">
-                                <div class="product-carousel-tabs" role="tablist">
-                                    <t t-if="new_tab">
+                                <div class="product-carousel-tabs"
+                                     role="tablist"
+                                     aria-label="Product groups">
+                                    <t t-if="new_tab or editable">
                                         <button type="button"
-                                                t-attf-class="product-carousel-tab #{best_tab and 'is-active' or 'is-active'}"
+                                                class="product-carousel-tab is-active"
                                                 role="tab"
+                                                t-att-id="'%sTabNew' % pc_uid"
                                                 aria-selected="true"
-                                                data-product-carousel-tab="new">
+                                                t-att-aria-controls="'%sPanelNew' % pc_uid"
+                                                data-product-carousel-tab="new"
+                                                tabindex="0">
                                             <t t-esc="new_arrival_label"/>
                                         </button>
                                     </t>
                                     <t t-if="best_tab">
                                         <button type="button"
-                                                t-attf-class="product-carousel-tab #{new_tab and '' or 'is-active'}"
+                                                class="product-carousel-tab"
                                                 role="tab"
-                                                t-att-aria-selected="'false' if new_tab else 'true'"
-                                                t-att-tabindex="'-1' if new_tab else None"
-                                                data-product-carousel-tab="best">
-                                            <t t-esc="best_seller_label"/>
+                                                t-att-id="'%sTabBest' % pc_uid"
+                                                aria-selected="false"
+                                                t-att-aria-controls="'%sPanelBest' % pc_uid"
+                                                data-product-carousel-tab="best"
+                                                tabindex="-1">
+                                            <t t-esc="secondary_label"/>
                                         </button>
                                     </t>
                                 </div>
-                                <div class="product-carousel-toolbar-nav">
-                                    <t t-if="new_tab">
-                                        <div class="product-carousel-nav-group" data-nav-for="new">
-                                            <div class="swiper-button-prev product-carousel-arrow"/>
-                                            <div class="swiper-button-next product-carousel-arrow"/>
-                                        </div>
-                                    </t>
+                                <div class="product-carousel-toolbar-nav" aria-live="polite">
+                                    <div class="product-carousel-nav-group"
+                                         t-att-id="'%sNavNew' % pc_uid"
+                                         data-nav-for="new">
+                                        <div class="swiper-button-prev product-carousel-arrow"
+                                             aria-label="Previous products"/>
+                                        <div class="swiper-button-next product-carousel-arrow"
+                                             aria-label="Next products"/>
+                                    </div>
                                     <t t-if="best_tab">
-                                        <div t-attf-class="product-carousel-nav-group #{new_tab and 'd-none' or ''}"
+                                        <div class="product-carousel-nav-group d-none"
+                                             t-att-id="'%sNavBest' % pc_uid"
                                              data-nav-for="best"
-                                             t-att-hidden="new_tab and 'hidden' or None">
-                                            <div class="swiper-button-prev product-carousel-arrow"/>
-                                            <div class="swiper-button-next product-carousel-arrow"/>
+                                             hidden="hidden">
+                                            <div class="swiper-button-prev product-carousel-arrow"
+                                                 aria-label="Previous products"/>
+                                            <div class="swiper-button-next product-carousel-arrow"
+                                                 aria-label="Next products"/>
                                         </div>
                                     </t>
                                 </div>
@@ -68,45 +174,45 @@
 
                             <t t-if="new_tab">
                                 <t t-set="new_products" t-value="new_tab.get_products()"/>
-                                <div class="product-carousel-panels"
-                                     data-product-carousel-panel="new">
-                                    <div class="swiper product-carousel-swiper product-carousel-swiper--new">
-                                        <div class="swiper-wrapper">
-                                            <t t-foreach="range(0, len(new_products), 8)" t-as="i">
-                                                <div class="swiper-slide">
-                                                    <div class="product-carousel-grid">
-                                                        <t t-foreach="new_products[i:i+8]" t-as="product">
-                                                            <t t-call="theme_kingdom.category_dual_product_cell"/>
-                                                        </t>
-                                                    </div>
-                                                </div>
-                                            </t>
-                                        </div>
-                                    </div>
-                                </div>
+                            </t>
+                            <t t-elif="editable">
+                                <t t-set="new_products"
+                                   t-value="request.env['product.template'].sudo().search([('sale_ok', '=', True), ('is_published', '=', True)], order='create_date desc', limit=16)"/>
+                            </t>
+                            <t t-else="">
+                                <t t-set="new_products" t-value="[]"/>
+                            </t>
+                            <t t-call="theme_kingdom.product_carousel_panel">
+                                <t t-set="products" t-value="new_products"/>
+                                <t t-set="panel_key" t-value="'new'"/>
+                                <t t-set="panel_id" t-value="'%sPanelNew' % pc_uid"/>
+                                <t t-set="tab_id" t-value="'%sTabNew' % pc_uid"/>
+                                <t t-set="panel_hidden" t-value="False"/>
                             </t>
 
                             <t t-if="best_tab">
                                 <t t-set="best_products" t-value="best_tab.get_products()"/>
-                                <div t-attf-class="product-carousel-panels #{new_tab and 'd-none' or ''}"
-                                     data-product-carousel-panel="best"
-                                     t-att-hidden="new_tab and 'hidden' or None">
-                                    <div class="swiper product-carousel-swiper product-carousel-swiper--best">
-                                        <div class="swiper-wrapper">
-                                            <t t-foreach="range(0, len(best_products), 8)" t-as="i">
-                                                <div class="swiper-slide">
-                                                    <div class="product-carousel-grid">
-                                                        <t t-foreach="best_products[i:i+8]" t-as="product">
-                                                            <t t-call="theme_kingdom.category_dual_product_cell"/>
-                                                        </t>
-                                                    </div>
-                                                </div>
-                                            </t>
-                                        </div>
-                                    </div>
-                                </div>
+                                <t t-call="theme_kingdom.product_carousel_panel">
+                                    <t t-set="products" t-value="best_products"/>
+                                    <t t-set="panel_key" t-value="'best'"/>
+                                    <t t-set="panel_id" t-value="'%sPanelBest' % pc_uid"/>
+                                    <t t-set="tab_id" t-value="'%sTabBest' % pc_uid"/>
+                                    <t t-set="panel_hidden" t-value="True"/>
+                                </t>
                             </t>
                         </div>
+                    </div>
+                    <t t-if="not feature_tab and editable">
+                        <p class="small text-muted mt-2 mb-0 o_not_editable">
+                            Preview products shown. Configure tabs in Website → Configuration → Product Tabs.
+                        </p>
+                    </t>
+                </t>
+                <t t-else="">
+                    <div class="alert alert-info mb-0 o_not_editable">
+                        Configure <strong>New Arrivals</strong> and <strong>Best Sellers</strong> in
+                        Website → Configuration → Product Tabs
+                        (enable <em>Product carousel snippet</em>).
                     </div>
                 </t>
             </div>

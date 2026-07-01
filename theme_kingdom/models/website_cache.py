@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import api, models
+from odoo import api, fields, models
 
 
 class KingdomWebsiteCacheMixin(models.AbstractModel):
@@ -8,6 +8,12 @@ class KingdomWebsiteCacheMixin(models.AbstractModel):
 
     def _invalidate_kingdom_website_cache(self):
         self.env.registry.clear_cache('templates')
+        if 'website.page' in self.env:
+            pages = self.env['website.page'].sudo().search([
+                ('url', 'in', ('/', '/home')),
+            ])
+            if pages:
+                pages.write({'write_date': fields.Datetime.now()})
 
     @api.model_create_multi
     def create(self, vals_list):

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="theme_kingdom.ProductTabSnippetOption">
+        <BuilderRow label.translate="Product Tabs">
+            <BuilderButton type="'secondary'" preview="false" action="'openProductTabs'">
+                Configure
+            </BuilderButton>
+        </BuilderRow>
+        <div class="px-2 pb-2 small text-muted">
+            New Arrivals / Best Sellers tabs power both carousels. Enable
+            <em>Dual carousel snippet</em> on category tabs (max 2 columns).
+        </div>
+    </t>
+
+</templates>
