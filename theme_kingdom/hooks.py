@@ -2,8 +2,37 @@
 
 
 def pre_init_hook(env):
-    """Copy legacy offer-line picks to product picks before the old field is removed."""
+    """Prepare schema and migrate legacy data before module models load."""
+    _ensure_website_menu_kingdom_tab_column(env)
     _migrate_deals_pricelist_items_to_products(env)
+
+
+def _ensure_website_menu_kingdom_tab_column(env):
+    """Add website_menu.kingdom_product_tab_id when missing (broken/partial installs)."""
+    cr = env.cr
+    cr.execute("""
+        SELECT EXISTS (
+            SELECT FROM information_schema.tables
+            WHERE table_name = 'website_menu'
+        )
+    """)
+    if not cr.fetchone()[0]:
+        return
+    cr.execute("""
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'website_menu'
+          AND column_name = 'kingdom_product_tab_id'
+    """)
+    if cr.fetchone():
+        return
+    cr.execute("""
+        ALTER TABLE website_menu
+        ADD COLUMN kingdom_product_tab_id int4
+    """)
+    cr.execute("""
+        CREATE INDEX IF NOT EXISTS website_menu_kingdom_product_tab_id_index
+        ON website_menu (kingdom_product_tab_id)
+    """)
 
 
 def post_init_hook(env):

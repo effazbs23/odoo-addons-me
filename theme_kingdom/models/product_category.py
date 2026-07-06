@@ -40,7 +40,3 @@ class ProductPublicCategory(models.Model):
             self._invalidate_kingdom_website_cache()
         return res
 
-    def init(self):
-        super().init()
-        from odoo.addons.theme_kingdom import hooks
-        hooks._ensure_homepage_featured_categories(self.env)

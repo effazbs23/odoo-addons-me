@@ -64,13 +64,6 @@ class KingdomProductTab(models.Model):
         default='/shop',
     )
 
-    def init(self):
-        super().init()
-        from odoo.addons.theme_kingdom import hooks
-        hooks._ensure_default_product_tabs(self.env)
-        hooks._ensure_dual_carousel_tabs(self.env)
-
-    @api.model
     def get_website_dual_carousel_tabs(self, limit=2):
         """Up to two active tabs for the category dual carousel snippet."""
         return self.sudo().search(

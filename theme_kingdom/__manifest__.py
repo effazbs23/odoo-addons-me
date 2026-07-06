@@ -91,7 +91,10 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
         ],
     },
 
-   
+    'images': [
+        'static/description/kingdom_description.png',
+        'static/description/kingdom_screenshot.gif',
+    ],
 
     'installable': True,
     'application': False,
