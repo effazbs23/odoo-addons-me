@@ -14,6 +14,8 @@
     </template>
 
     <template id="kingdom_flyout_cart_shell" name="Kingdom Flyout Cart Shell">
+        <t t-set="kingdom_flyout_currency"
+           t-value="(website_sale_cart and website_sale_cart.currency_id) or website.currency_id"/>
         <div id="advance-cart-flyout-cart-wrapper">
             <div class="flyout-cart js_kingdom_flyout_cart"
                  id="kingdom-flyout-cart"
@@ -40,7 +42,7 @@
                             Sub-Total:
                             <strong id="miniCartSubTotal"
                                     class="js_kingdom_flyout_subtotal"
-                                    t-out="(order.currency_id if order else request.pricelist.currency_id).format(website_sale_cart.amount_total if website_sale_cart else 0.0)"/>
+                                    t-out="kingdom_flyout_currency.format(website_sale_cart.amount_total if website_sale_cart else 0.0)"/>
                         </div>
                         <div class="buttons">
                             <button type="button"

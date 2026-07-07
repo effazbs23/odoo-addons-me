@@ -29,9 +29,10 @@
         <t t-set="new_products" t-value="tab.get_new_arrival_products()"/>
         <t t-set="best_products" t-value="tab.get_best_seller_products()"/>
         <t t-set="aria_label" t-value="ribbon"/>
-        <t t-set="Tab" t-value="request.env['kingdom.product.tab'].sudo()"/>
-        <t t-set="new_arrival_label" t-value="Tab.get_carousel_subtab_label('new_arrival')"/>
-        <t t-set="best_seller_label" t-value="Tab.get_carousel_subtab_label('best_seller')"/>
+        <t t-set="Tab"
+           t-value="request.env['kingdom.product.tab'].sudo() if 'kingdom.product.tab' in request.env else False"/>
+        <t t-set="new_arrival_label" t-value="Tab and Tab.get_carousel_subtab_label('new_arrival') or 'New Arrivals'"/>
+        <t t-set="best_seller_label" t-value="Tab and Tab.get_carousel_subtab_label('best_seller') or 'Best Sellers'"/>
 
         <div class="product-carousel-section product-carousel-section--compact">
             <div class="product-carousel-shell">
@@ -132,7 +133,7 @@
                 <t t-set="display_currency"
                    t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
                 <t t-set="dual_tabs"
-                   t-value="request.env['kingdom.product.tab'].sudo().get_website_dual_carousel_tabs()"/>
+                   t-value="request.env['kingdom.product.tab'].sudo().search([('active', '=', True), ('show_in_homepage', '=', True)], order='sequence asc, id asc', limit=2) if 'kingdom.product.tab' in request.env else False"/>
 
                 <t t-if="dual_tabs">
                     <div class="category-dual-grid">

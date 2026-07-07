@@ -33,3 +33,5 @@ from . import product_pricelist
 from . import loyalty_program
 from . import blog_snippet
 from . import theme_utils
+from . import website
+from . import ir_module_module

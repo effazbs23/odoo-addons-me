@@ -3,9 +3,9 @@
     <!-- Kingdom Deal of the Day — Content/plugins/deals_of_day markup -->
     <template id="s_deal_of_the_day" name="Kingdom Deal of the Day">
         <t t-set="active_deal"
-           t-value="request.env['kingdom.deals.of.day'].sudo().get_website_deal()"/>
+           t-value="'kingdom.deals.of.day' in request.env and request.env['kingdom.deals.of.day'].sudo().get_website_deal()"/>
         <t t-set="deal"
-           t-value="active_deal or (editable and request.env['kingdom.deals.of.day'].sudo().get_preview_deal())"/>
+           t-value="active_deal or (editable and 'kingdom.deals.of.day' in request.env and request.env['kingdom.deals.of.day'].sudo().get_preview_deal())"/>
         <t t-set="deal_products"
            t-value="deal._get_offer_products() if deal else request.env['product.template'].browse([])"/>
         <t t-set="deal_title" t-value="deal.name if deal else 'Deal of the days'"/>
