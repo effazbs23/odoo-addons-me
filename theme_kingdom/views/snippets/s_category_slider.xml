@@ -64,9 +64,11 @@
                     </div>
                 </t>
                 <t t-elif="editable">
-                    <div class="alert alert-info mb-0 o_not_editable">
-                        Enable <strong>Show in Homepage</strong> on eCommerce categories
-                        (Website → eCommerce → Categories) to populate Featured Categories.
+                    <div class="css_non_editable_mode_hidden">
+                        <div class="alert alert-info mb-0 o_not_editable">
+                            Enable <strong>Show in Homepage</strong> on eCommerce categories
+                            (Website → eCommerce → Categories) to populate Featured Categories.
+                        </div>
                     </div>
                 </t>
             </div>

@@ -142,10 +142,12 @@
                         </t>
                     </div>
                 </t>
-                <t t-else="">
-                    <div class="alert alert-info mb-0 o_not_editable">
-                        Enable <strong>Product tabs snippet</strong> on up to two Product Tabs
-                        (Website → Configuration → Product Tabs).
+                <t t-elif="editable">
+                    <div class="css_non_editable_mode_hidden">
+                        <div class="alert alert-info mb-0 o_not_editable">
+                            Enable <strong>Product tabs snippet</strong> on up to two Product Tabs
+                            (Website → Configuration → Product Tabs).
+                        </div>
                     </div>
                 </t>
             </div>

@@ -4720,3 +4720,8 @@ body.flyout-cart-open::after {
 .o_website_sale_checkout_container .o_checkout_cart_total {
   margin-bottom: 0.5rem;
 }
+
+/* Snippet editor hints — visible only in Website Builder (body.editor_enable). */
+body:not(.editor_enable) .css_non_editable_mode_hidden {
+  display: none !important;
+}

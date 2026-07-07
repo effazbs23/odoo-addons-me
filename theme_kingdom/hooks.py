@@ -75,6 +75,47 @@ def _migrate_kingdom_snippet_oe_structure(env):
             view.with_context(no_save_prev=True).write({'arch_db': new_arch})
 
 
+_EDITOR_HINT_PATTERNS = (
+    re.compile(
+        r'<p class="small text-muted mt-2 mb-0 o_not_editable"[^>]*>\s*'
+        r'Preview products shown\. Configure tabs in Website .*?Product Tabs\.\s*</p>',
+        re.DOTALL,
+    ),
+    re.compile(
+        r'<div class="alert alert-info mb-0 o_not_editable"[^>]*>.*?Product Tabs.*?</div>',
+        re.DOTALL,
+    ),
+    re.compile(
+        r'<div class="swiper-slide[^"]*">\s*<article class="featured-product-card">'
+        r'.*?Configure featured products in Website settings.*?</article>\s*</div>',
+        re.DOTALL,
+    ),
+    re.compile(
+        r'<div class="swiper-slide[^"]*">\s*<article class="featured-product-card">'
+        r'.*?Configure best sale products in Website settings.*?</article>\s*</div>',
+        re.DOTALL,
+    ),
+)
+
+
+def _strip_saved_snippet_editor_hints(env):
+    """Remove editor-only configuration hints baked into saved page HTML."""
+    View = env['ir.ui.view'].sudo()
+    views = View.search([
+        ('type', '=', 'qweb'),
+        ('arch_db', 'ilike', 'data-snippet="theme_kingdom.'),
+    ])
+    for view in views:
+        arch = view.arch_db
+        if not arch:
+            continue
+        new_arch = arch
+        for pattern in _EDITOR_HINT_PATTERNS:
+            new_arch = pattern.sub('', new_arch)
+        if new_arch != arch:
+            view.with_context(no_save_prev=True).write({'arch_db': new_arch})
+
+
 def pre_init_hook(env):
     """Prepare schema and migrate legacy data before module models load."""
     _ensure_website_menu_kingdom_tab_column(env)
@@ -137,6 +178,7 @@ def post_init_hook(env):
     _ensure_default_product_tabs(env)
     _ensure_homepage_featured_categories(env)
     _migrate_kingdom_snippet_oe_structure(env)
+    _strip_saved_snippet_editor_hints(env)
     _cleanup_stale_oe_view_refs(env)
 
 
