@@ -29,7 +29,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
     'maintainer': 'ERP 23',
     'website': 'https://erp-23.com',
     'support': 'erp23@brainstation-23.com',
-    'license': 'LGPL-3',
+    'license': 'OPL-1',
     'depends': [
         'website',
         'website_sale',
