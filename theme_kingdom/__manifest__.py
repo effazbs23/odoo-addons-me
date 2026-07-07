@@ -54,7 +54,8 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
     'company': 'nopCommerce, Brainstation 23 PLC',
     'maintainer': 'ERP 23',
     'website': 'https://www.erp-23.com',
-    'license': 'LGPL-3',
+    'support': 'erp23@brainstation-23.com',
+    'license': 'OPL-1',
     'depends': [
         'website',
         'website_sale',
@@ -127,6 +128,6 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
     'auto_install': False,
     'post_init_hook': 'post_init_hook',
     'pre_init_hook': 'pre_init_hook',
-    'price': 0.0,
-    'currency': 'USD',
+    'price': 100,
+    'currency': 'EUR',
 }
