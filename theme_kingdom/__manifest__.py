@@ -1,6 +1,32 @@
 {
     'name': 'Theme Kingdom',
-    'summary': 'Premium Megastore E-Commerce Theme for Odoo',
+    'summary': (
+        'A premium, responsive Odoo theme, Odoo eCommerce theme, Odoo website theme, Odoo 19 theme, '
+        'Odoo store theme, responsive Odoo theme, premium Odoo theme, Odoo shop theme, multipurpose '
+        'eCommerce theme, Odoo storefront theme, Odoo website builder theme and Odoo 19 compatible '
+        'theme, purpose-built as a megastore theme, electronics store theme, appliance store theme, '
+        'multi-category retail theme, department store theme, supermarket theme, gadget store theme, '
+        'furniture store theme, fashion store theme, grocery store theme, hypermarket theme and home '
+        'appliances theme. Comes with mega menu, hero slider, category carousel, category dual '
+        'carousel, sticky header, mobile bottom navigation, manufacturer logos, brand slider, promo '
+        'banners, blog news section and service highlights, plus deal of the day, countdown timer, '
+        'flash sale theme, best seller products, featured products, product carousel, product badges, '
+        'product filters, related products and product tabs. Shop smarter with flyout cart, mini cart, '
+        'wishlist, pricelist integration, loyalty promotions, bulk pricelist products and cart discount '
+        'theme tools, built on drag and drop snippets, website builder blocks, no-code theme, '
+        'customizable Odoo theme, easy setup theme, plug and play theme and ready to use theme '
+        'foundations. Delivers responsive design, mobile friendly theme, modern UI theme, clean layout '
+        'theme, fast loading theme, SEO friendly theme, conversion optimized theme, elegant design '
+        'theme and professional theme quality, the theme to buy Odoo theme, best Odoo eCommerce theme, '
+        'Odoo theme for electronics, Odoo theme for megastore, online store theme and retail theme '
+        'shoppers choose. Runs on swiper carousel theme, category grid layout, CMS theme, Odoo '
+        'snippets, OWL interactions, Bootstrap based theme, lightweight theme, fast performance theme, '
+        'SEO optimized theme, mobile-first theme and cross-browser theme tech, powering product '
+        'discovery, category navigation, discount theme, promotional theme, eCommerce homepage '
+        'builder, shop by category, countdown sale banner, scheduled promotions, auto scroll carousel, '
+        'upsell and cross-sell, trending products, responsive product grid, flash deals theme, '
+        'multi-brand store theme and brand showcase theme features.'
+    ),
     'description': '''
 Kingdom Mega Store Theme
 ========================
