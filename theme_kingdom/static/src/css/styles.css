@@ -157,9 +157,9 @@ html.k-no-topbar #AnnouncementBanner {
 .header.header-main .header-inline-selectors {
   position: relative;
   z-index: 1040;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 1rem;
 }
 
 .header.header-main .js_language_selector .dropdown-toggle::after {
@@ -187,14 +187,33 @@ html.k-no-topbar #AnnouncementBanner {
   display: inline-flex;
 }
 
+.header.header-main .header-lower .header-lower-right .header-selectors-wrapper .header-link-top a,
+.header.header-main .header-lower .header-lower-right .header-selectors-wrapper .header-link-top a span,
+.header.header-main .header-lower .header-lower-right .header-selectors-wrapper .k-inline-select,
+.header.header-main .header-lower .header-lower-right .header-selectors-wrapper .js_language_selector .dropdown-toggle {
+  font-size: 15px;
+  line-height: 1.2;
+  color: #333;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
 .header.header-main .k-inline-select {
   display: inline-flex;
   align-items: center;
   gap: 0.15rem;
+}
+
+.header.header-main .header-lower .header-lower-right .header-selectors-wrapper .header-link-top a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.header.header-main .header-lower .header-lower-right .header-selectors-wrapper .header-link-top a i {
   font-size: 12px;
-  color: #333;
-  white-space: nowrap;
-  text-decoration: none;
+  line-height: 1;
+  color: #111;
 }
 
 .header.header-main .k-inline-select:hover,
@@ -346,43 +365,10 @@ html.k-no-topbar #AnnouncementBanner {
     display: block !important;
   }
 
-  .header.header-main .header-link-top a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 11px;
-    line-height: 1;
-    color: #333;
-    white-space: nowrap;
-  }
-
-  .header.header-main .header-link-top a::before {
-    display: none !important;
-  }
-
-  .header.header-main .header-link-top a i {
-    font-size: 12px;
-    color: #111;
-  }
-
   .header.header-main .header-inline-selectors {
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-  }
-
-  .header.header-main .k-inline-select {
     display: inline-flex;
     align-items: center;
-    gap: 0.15rem;
-    font-size: 12px;
-    color: #333;
-    white-space: nowrap;
-    text-decoration: none;
-  }
-
-  .header.header-main .k-inline-select i {
-    font-size: 10px;
+    gap: 1rem;
   }
 
   /* kingdom.css: only #topcartlink stays visible below lg — do not override */
