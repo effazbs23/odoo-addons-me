@@ -1,0 +1,44 @@
+﻿.common-buttons {
+    text-align: center;
+
+    button, a {
+        display: inline-block;
+        text-decoration: none;
+        border: 1px solid var(--dark-grey);
+        background: none;
+        padding: 8px 10px;
+        color: var(--dark-grey);
+        border-radius: 3px;
+        position: relative;
+        padding-left: 44px;
+        cursor: pointer;
+        margin-bottom: 10px;
+
+        &::before {
+            @extend .icon;
+            line-height: 14px;
+            font-size: 18px;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+
+    .update-cart-button::before {
+        content: "";
+        background: url(../images/sync-alt-solid.svg) no-repeat center center;
+        height: 16px;
+        width: 16px;
+        opacity: 0.6;
+    }
+
+    .continue-shopping-button::before {
+        content: "\e94f";
+    }
+
+    .estimate-shipping-button::before {
+        content: "\e952";
+        font-size: 32px;
+    }
+}

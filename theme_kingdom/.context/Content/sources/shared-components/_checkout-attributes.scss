@@ -1,0 +1,51 @@
+﻿.checkout-attributes {
+    padding: 15px;
+
+    dt {
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 30px;
+        border-bottom: 2px solid var(--grey);
+        margin-bottom: 10px;
+        position: relative;
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+
+            &::before {
+                @extend .icon;
+                content: "\e965";
+                font-size: 26px;
+                vertical-align: middle;
+                display: inline-block;
+                margin-right: 5px;
+            }
+        }
+
+        .required {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            color: red;
+        }
+    }
+
+    dd {
+        select, input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--grey);
+            border-radius: 3px;
+        }
+
+        input[type=checkbox] {
+            display: none;
+        }
+    }
+}
+
+.selected-checkout-attributes {
+    padding: 8px 15px;
+}

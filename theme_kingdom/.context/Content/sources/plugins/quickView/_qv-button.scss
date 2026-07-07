@@ -1,0 +1,63 @@
+﻿
+.button {
+    &-2.quick-view-btn {
+        font-size: 0;
+        display: inline-block;
+        margin: 0;
+        height: 40px !important;
+        width: 40px;
+        position: relative;
+        border: none;
+        background-color: var(--primary-color);
+        transition: all 0.25s;
+        border-radius: 50%;
+        cursor: pointer;
+        vertical-align: middle;
+        color: var(--white);
+
+
+
+        &:hover {
+            background-color: var(--secondary-color);
+        }
+
+        &::before {
+            font-family: 'icomoon' !important;
+            font-style: normal;
+            font-weight: 500;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            font-size: 18px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+
+        &.button-outline {
+            background-color: var(--white);
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+
+            &:hover {
+                background-color: var(--secondary-color);
+                border: 2px solid var(--secondary-color);
+                color: var(--primary-color);
+            }
+        }
+    }
+
+
+    &-2.add-to-wishlist-button {
+        &::before {
+            content: "\e963";
+        }
+    }
+
+    &-2.quick-view-btn {
+        &::before {
+            content: "\e94d";
+        }
+    }
+}

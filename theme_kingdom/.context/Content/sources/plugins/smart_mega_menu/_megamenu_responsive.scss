@@ -1,0 +1,12 @@
+﻿@media (min-width: $md)  {
+    .mobile-menu-trigger,
+    .menu-overlay,
+    .mobile-mm-navbar .mobile-menu-head {
+        display: none;
+    }
+    .megamenu-wrapper {
+        .header-link-top {
+            display: none;
+        }
+    }
+}

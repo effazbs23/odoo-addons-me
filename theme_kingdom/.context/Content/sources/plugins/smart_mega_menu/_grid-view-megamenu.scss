@@ -1,0 +1,74 @@
+﻿@media (min-width: $md) {
+    .megamenu-grid-view {
+        .header-left-menu-dropdown {
+            .header-left-menu-button {
+                display: none;
+            }
+
+            .mm-navbar {
+                position: relative;
+                opacity: 1;
+                visibility: visible;
+                width: auto;
+                background: none;
+
+                .nav-menu {
+                    display: flex;
+
+                    > li {
+                        border-bottom: none;
+
+                        > a {
+                            color: #fff;
+                            padding: 12px 25px;
+                            font-weight: 700;
+                            
+
+                            .nav-icon {
+                                display: inline-block;
+                                vertical-align: middle;
+                                position: static;
+                                transform: translate(0);
+                                font-size: 0;
+                                margin-right: 4px;
+                            }
+
+                            .category-name {
+                                vertical-align: middle;
+                            }
+
+                            .right-arrow {
+                                transform: rotateZ(90deg);
+                                line-height: 6px;
+                                right: 5px;
+                            }
+                        }
+
+                        > .sublist {
+                            left: 0;
+                            top: 100%;
+
+                            @each $property, $value in $breakpoints {
+                                @if($property == xl) {
+                                    @media (min-width: $value) {
+                                        width: calc(1660px - 15px);
+                                    }
+                                }
+                                @else if($property == lg) {
+                                    @media (min-width: $value) {
+                                        width: calc($lg - 15px);
+                                    }
+                                }
+                                @else if($property == md) {
+                                    @media (min-width: $value) {
+                                        width: calc($md - 15px);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    }

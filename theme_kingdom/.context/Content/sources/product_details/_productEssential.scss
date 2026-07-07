@@ -1,0 +1,264 @@
+﻿.product-essential {
+    @extend .row;
+    align-items: flex-start;
+    padding-top: 20px;
+    padding-bottom: 35px;
+
+    @media (max-width: $lg - 1) {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    @media (max-width: $md - 1) {
+        padding-top: 15px;
+    }
+
+
+
+    .gallery {
+        width: 100%;
+
+        @media (min-width: $md) {
+            width: 35%;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        position: relative;
+        z-index: 1;
+
+        .details_picture-slider {
+            max-width: 100%;
+        }
+
+        .offer-content {
+            left: auto;
+            right: 10px;
+            z-index: 1000;
+        }
+    }
+
+    .overview {
+        width: 100%;
+
+        @media (min-width: $md) {
+            width: 65%;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .short-description {
+            line-height: 1.5;
+        }
+
+        .additional-details {
+            display: table;
+            width: 100%;
+            margin-bottom: 15px;
+
+            > div {
+                display: table-row;
+
+                > * {
+                    padding-bottom: 15px;
+                }
+            }
+
+            .label {
+                display: table-cell;
+                width: 35%;
+                font-weight: 700;
+            }
+
+            .value {
+                display: table-cell;
+                width: 75px;
+                width: 60%;
+                color: var(--dark-grey);
+            }
+        }
+
+        .manufacturers {
+            display: table;
+            width: 100%;
+            margin-bottom: 15px;
+
+            .label {
+                display: table-cell;
+                width: 35%;
+                font-weight: 700;
+            }
+
+            .value {
+                display: table-cell;
+                width: 70px;
+                width: 60%;
+
+                a {
+                    text-decoration: none;
+                    font-weight: 700;
+                    
+                }
+            }
+        }
+
+        .product-overview-wrapper {
+            @extend .row;
+
+            @media (min-width: $lg) {
+            }
+
+            @media (max-width: $lg - 1) {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .product-overview-left {
+                width: 100%;
+
+                @media (min-width: $lg) {
+                    width: calc(100% - 380px);
+                    padding-left: 7.5px;
+                    padding-right: 7.5px;
+                }
+            }
+
+            .product-overview-right {
+                width: 100%;
+
+                .tax-shipping-info {
+                    display: block;
+                }
+
+                @media (max-width: $lg - 1) {
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+
+                @media (min-width: $lg) {
+                    width: 380px;
+                    padding-left: 7.5px;
+                    padding-right: 7.5px;
+                }
+
+                padding: 0;
+                background: #FFFFFF;
+
+                .product-cart-wrapper {
+                    padding: 15px 0;
+                    border: 1px solid var(--grey);
+                    box-sizing: border-box;
+                    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
+                    border-radius: 3px;
+
+                    > div {
+                        padding: 0 10px;
+
+                        @media (max-width: $sm - 1) {
+                            padding: 0 7.5px
+                        }
+                    }
+
+                    .product-estimate-shipping {
+                        text-align: center;
+                    }
+
+                    .availability {
+                        border-bottom: 1px solid var(--grey);
+                        padding-bottom: 15px;
+
+                        .stock {
+                            text-align: center;
+                            font-weight: 500;
+
+                            .value {
+                                color: var(--primary-color);
+                            }
+                        }
+                    }
+
+                    .delivery {
+                        padding: 0;
+
+                        > div {
+                            border-top: 1px solid var(--grey);
+                            padding-top: 15px;
+                            text-align: center;
+
+
+                            &.free-shipping {
+                                text-align: center;
+                                font-weight: 500;
+
+                                &:not(:only-child) {
+                                    padding-bottom: 15px;
+                                }
+
+                                &::before {
+                                    @extend .icon;
+                                    content: "\e952";
+                                    font-size: 30px;
+                                    line-height: 16px;
+                                    vertical-align: middle;
+                                }
+
+                                .value {
+                                    color: var(--primary-color);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .download-sample-button {
+            border: 1px solid var(--black);
+            background: var(--black);
+            padding: 6px 10px;
+            color: var(--white);
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 14px;
+            border-radius: 3px;
+            font-weight: 500;
+            
+            cursor: pointer;
+            transition: all 0.25s;
+            display: inline-block;
+
+            &:hover {
+                background: var(--secondary-color);
+                border-color: var(--secondary-color);
+            }
+        }
+    }
+
+
+    .full-description {
+        @extend .col-lg-12;
+    }
+}
+
+.warenty-block {
+    h4 {
+        margin-bottom: 5px;
+    }
+
+    p {
+        border: 1px solid var(--grey);
+        display: inline-block;
+        padding: 7px 10px;
+        border-radius: 3px;
+        color: var(--dark-grey);
+
+        &::before {
+            @extend .icon;
+            content: "\e966";
+            font-size: 26px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+    }
+}

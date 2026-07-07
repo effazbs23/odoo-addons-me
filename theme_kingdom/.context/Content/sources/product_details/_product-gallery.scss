@@ -1,0 +1,39 @@
+﻿.gallery {
+    display: flex;
+    flex-direction: row-reverse;
+
+    .thumb-item {
+        width: 100px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+        a {
+            display: block;
+        }
+    }
+
+    .picture {
+        width: calc(100% - 100px);
+        .swiper-slide {
+            overflow: hidden;
+            background: var(--light-grey);
+            &::before {
+                content: "";
+                display: block;
+                padding-top: 122%;
+            }
+            img {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                height: 100%;
+                width: auto !important;
+                max-width: initial !important;
+            }
+        }
+    }
+
+    .swiper-lazy-preloader {
+        border-color: var(--primary-color)
+    }
+}

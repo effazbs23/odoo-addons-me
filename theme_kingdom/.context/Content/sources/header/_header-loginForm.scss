@@ -1,0 +1,133 @@
+﻿.dropdown {
+    .card {
+        box-shadow: 3px 0px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    &.not-loggedin {
+        .dropdown-list.login-form-popup {
+            opacity: 0;
+            margin-top: 15px;
+            visibility: hidden;
+            right: 0;
+            left: auto;
+            width: 395px;
+            top: 41px;
+            z-index: 10000;
+
+            &.show {
+                opacity: 1;
+                margin-top: 0;
+                visibility: visible;
+            }
+
+
+            .popup-login-form {
+                padding: 0;
+
+                .card {
+                    padding: 15px;
+                }
+            }
+
+            input[type=checkbox]:checked ~ label::before {
+                content: "";
+                background: var(--white);
+                border-color: var(--primary-color);
+                color: var(--primary-color);
+            }
+
+            .inputs {
+                label {
+                    margin-bottom: 10px;
+                    display: block;
+                }
+
+                &.reversed {
+                    display: flex;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                }
+
+                .forgot-password {
+                    a {
+                        color: var(--black);
+                        font-size: 14px;
+                        font-weight: 500;
+
+                        &::before {
+                            display: none;
+                        }
+                    }
+                }
+            }
+
+            .login-button {
+                width: 100%;
+            }
+
+            .header-ragister-block {
+                margin-top: 15px;
+
+                p {
+                    margin-bottom: 10px;
+
+                    a::before {
+                        display: none;
+                    }
+                }
+            }
+
+            .inputs {
+                > label:first-child {
+
+                    &::before {
+                        content: "\e95f";
+                        font-family: "icomoon" !important;
+                        display: inline;
+                        margin-right: 5px;
+                    }
+                }
+
+                &.date-of-birth {
+                    > label {
+                        &::before {
+                            content: "\e905";
+                        }
+                    }
+                }
+
+                & {
+                    > label[for="Email"] {
+                        &::before {
+                            content: "\e91a";
+                        }
+                    }
+                }
+
+                & {
+                    > label[for="Company"] {
+                        &::before {
+                            content: "\e93d";
+                        }
+                    }
+                }
+
+                & {
+                    > label[for="Password"],
+                    > label[for="ConfirmPassword"] {
+                        &::before {
+                            content: "\e937";
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.header-links ul li {
+    .header-create-an-account {
+        color: var(--primary-color) !important;
+        text-decoration: underline !important;
+        font-size: 17px;
+    }
+}

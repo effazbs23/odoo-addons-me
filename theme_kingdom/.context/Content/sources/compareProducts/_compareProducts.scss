@@ -1,0 +1,21 @@
+﻿.compare-products-page {
+    margin: 15px 0 30px;
+
+    .table-wrapper {
+        max-width: 100%;
+        overflow: auto;
+
+        .compare-products-table {
+            border-collapse: collapse;
+
+            th, td {
+                border: 1px solid var(--grey);
+                border-collapse: collapse;
+                padding: 5px;
+                &:first-child {
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+}

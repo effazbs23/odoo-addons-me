@@ -1,0 +1,27 @@
+﻿.tags {
+    label {
+        display: none;
+    }
+
+    ul {
+        li {
+            list-style-type: none;
+            display: inline-block;
+            border: 1px solid var(--grey);
+            padding: 3px 5px;
+            margin: 0px 5px 5px 0px;
+            border-radius: 3px;
+
+            a {
+                font-size: 13px;
+                text-decoration: none;
+                color: var(--black-faded);
+                
+            }
+        }
+
+        .separator {
+            display: none;
+        }
+    }
+}

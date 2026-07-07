@@ -1,0 +1,46 @@
+﻿.breadcrumb {
+    box-shadow: $shadow-style-2;
+    padding: 15px 100px;
+    text-align: center;
+
+    @media (max-width: $lg - 1 ) {
+        padding: 10px;
+        border-top: 1px solid var(--grey);
+    }
+
+    .page-title {
+        h1 {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: 600;
+            
+
+            @media (max-width: $md - 1) {
+                font-weight: 700;
+                font-size: 14px;
+                line-height: 19px;
+                margin-bottom: 5px;
+            }
+        }
+    }
+
+    ul {
+        list-style-type: none;
+
+        li {
+            display: inline-block;
+            font-weight: 500;
+
+            a {
+                font-size: 13px;
+                text-decoration: none;
+                color: var(--black);
+                font-weight: 500;
+            }
+
+            strong {
+                font-weight: 500;
+            }
+        }
+    }
+}

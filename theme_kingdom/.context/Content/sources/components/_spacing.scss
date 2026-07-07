@@ -1,0 +1,64 @@
+﻿@for $spacing from 1 to 7 {
+    .m {
+        &-#{$spacing} {
+            margin: ((32 * $spacing)/6) + px !important;
+        }
+
+        &l-#{$spacing} {
+            margin-left: ((32 * $spacing)/6) + px !important;
+        }
+
+        &r-#{$spacing} {
+            margin-right: ((32 * $spacing)/6) + px !important;
+        }
+
+        &t-#{$spacing} {
+            margin-top: ((32 * $spacing)/6) + px !important;
+        }
+
+        &b-#{$spacing} {
+            margin-bottom: ((32 * $spacing)/6) + px !important;
+        }
+
+        &x-#{$spacing} {
+            margin-left: ((32 * $spacing)/6) + px !important;
+            margin-right: ((32 * $spacing)/6) + px !important;
+        }
+
+        &y-#{$spacing} {
+            margin-top: ((32 * $spacing)/6) + px !important;
+            margin-bottom: ((32 * $spacing)/6) + px !important;
+        }
+    }
+    .p {
+        &-#{$spacing} {
+            padding: ((32 * $spacing)/6) + px !important;
+        }
+
+        &l-#{$spacing} {
+            padding-left: ((32 * $spacing)/6) + px !important;
+        }
+
+        &r-#{$spacing} {
+            padding-right: ((32 * $spacing)/6) + px !important;
+        }
+
+        &t-#{$spacing} {
+            padding-top: ((32 * $spacing)/6) + px !important;
+        }
+
+        &b-#{$spacing} {
+            padding-bottom: ((32 * $spacing)/6) + px !important;
+        }
+
+        &x-#{$spacing} {
+            padding-left: ((32 * $spacing)/6) + px !important;
+            padding-right: ((32 * $spacing)/6) + px;
+        }
+
+        &y-#{$spacing} {
+            padding-top: ((32 * $spacing)/6) + px !important;
+            padding-bottom: ((32 * $spacing)/6) + px !important;
+        }
+    }
+}

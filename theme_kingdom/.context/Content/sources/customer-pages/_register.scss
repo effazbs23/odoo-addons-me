@@ -1,0 +1,102 @@
+﻿.registration-page {
+    .inputs {
+        > label:first-child {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 19px;
+            color: #767677;
+            margin-bottom: 5px;
+            display: block;
+
+            &::before {
+                content: "\e95f";
+                font-family: "icomoon" !important;
+                display: inline;
+                font-size: 16px;
+                margin-right: 5px;
+            }
+        }
+
+        &.date-of-birth {
+            > label {
+                &::before {
+                    content: "\e905";
+                }
+            }
+        }
+
+        & {
+            > label[for="Email"] {
+                &::before {
+                    content: "\e91a";
+                }
+            }
+        }
+
+        & {
+            > label[for="Company"] {
+                &::before {
+                    content: "\e93d";
+                }
+            }
+        }
+
+        & {
+            > label[for="Password"],
+            > label[for="ConfirmPassword"] {
+                &::before {
+                    content: "\e937";
+                }
+            }
+        }
+    }
+
+    .buttons {
+        text-align: center;
+
+        button {
+            width: 300px;
+            max-width: 100%;
+        }
+    }
+
+    .check-username-availability-button {
+        border: 1px solid var(--black);
+        background: var(--black);
+        padding: 8px 15px;
+        color: var(--white);
+        font-size: 18px;
+        line-height: 18px;
+        border-radius: 3px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.25s;
+        position: absolute;
+        right: 0;
+        top: 20px;
+
+        &:hover {
+            background: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        &.search-box-button {
+            font-size: 0;
+            background-color: var(--primary-color);
+            display: inline-flex;
+            border: none;
+            padding: 0 12px;
+
+            &::before {
+                content: "\e94e";
+                font-size: 14px;
+                line-height: 35px;
+                @extend [class^="icon-"];
+            }
+
+            &:hover {
+                background-color: var(--secondary-color);
+            }
+        }
+    }
+}

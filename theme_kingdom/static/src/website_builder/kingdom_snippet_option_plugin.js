@@ -3,6 +3,7 @@
 import { Plugin } from "@html_editor/plugin";
 import { registry } from "@web/core/registry";
 import { withSequence } from "@html_editor/utils/resource";
+import { _t } from "@web/core/l10n/translation";
 import { SNIPPET_SPECIFIC } from "@html_builder/utils/option_sequence";
 import { BaseOptionComponent } from "@html_builder/core/utils";
 import { BuilderAction } from "@html_builder/core/builder_action";
@@ -73,7 +74,7 @@ export class RemoveKingdomSnippetBlockAction extends BuilderAction {
 
 class KingdomSnippetOptionPlugin extends Plugin {
     static id = "kingdomSnippetOption";
-    static dependencies = ["builderOptions"];
+    static dependencies = ["builderOptions", "remove"];
     resources = {
         builder_options: [
             withSequence(SNIPPET_SPECIFIC, KingdomSnippetOption),
@@ -83,8 +84,33 @@ class KingdomSnippetOptionPlugin extends Plugin {
             OpenKingdomSnippetConfigAction,
             RemoveKingdomSnippetBlockAction,
         },
+        get_overlay_buttons: withSequence(10, {
+            getButtons: (target) => this.getKingdomCarouselOverlayButtons(target),
+        }),
         on_removed_handlers: this.onRemovedKingdomSnippet.bind(this),
     };
+
+    /**
+     * Hero/carousel snippets select the active .carousel-item for the floating
+     * toolbar (it is resizable). Odoo marks slides unremovable, so the trash
+     * icon is omitted unless we add it for the parent Kingdom section.
+     */
+    getKingdomCarouselOverlayButtons(target) {
+        if (!target.classList.contains("carousel-item")) {
+            return [];
+        }
+        const section = target.closest(KINGDOM_SNIPPET_SELECTOR);
+        if (!section) {
+            return [];
+        }
+        return [
+            {
+                class: "oe_snippet_remove bg-danger fa fa-trash",
+                title: _t("Remove this block"),
+                handler: () => this.dependencies.remove.removeElement(section),
+            },
+        ];
+    }
 
     onRemovedKingdomSnippet({ removedEl, nextTargetEl }) {
         if (!removedEl.matches?.(KINGDOM_SNIPPET_SELECTOR)) {

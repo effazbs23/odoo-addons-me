@@ -1,0 +1,68 @@
+﻿
+.dealoftheday-content {
+    position: relative;
+
+    .title {
+        position: relative;
+        margin: 0 0 20px;
+
+
+
+        strong {
+            font-size: 24px;
+            line-height: 28px;
+            
+        }
+
+        .dealoftheday-counter {
+            display: inline-block;
+
+            [data-countdown] {
+                font-size: 0;
+            }
+
+            @media (min-width: $sm) {
+                display: none;
+            }
+
+            .count {
+                background: var(--secondary-color);
+                color: var(--white);
+                border-radius: 5px;
+                padding: 4px;
+                display: inline-block;
+                width: auto;
+                max-width: 100%;
+                height: auto;
+                font-size: 0;
+                margin: 0 3px;
+                text-align: center;
+
+                span {
+                    display: block;
+                    font-size: 14px;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+
+    @media(max-width: $md - 1) {
+        .deals-right-contents {
+            .title {
+                margin: 0;
+                position: static;
+
+                strong {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.right {
+    .dealoftheday-content {
+        flex-direction: row-reverse;
+    }
+}

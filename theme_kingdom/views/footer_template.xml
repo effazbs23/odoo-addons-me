@@ -157,12 +157,18 @@
                     </div>
                     <div class="footer-designed-by">
                         Designed By
-                        <a href="https://www.nop-station.com/"
+                        <a href="https://www.erp-23.com/"
                            target="_blank"
-                           rel="noopener">nopStation</a>
+                           rel="noopener">ERP-23</a>
                     </div>
                     <div class="footer-payment">
-                        <span class="pay-badge" aria-label="Visa">VISA</span>
+                        <span class="pay-badge" aria-label="Visa">
+                            <img src="/theme_kingdom/static/src/images/visa.webp"
+                                 alt="Visa"
+                                 width="30"
+                                 height="30"
+                                 loading="lazy"/>
+                        </span>
                         <span class="pay-badge" aria-label="Mastercard">MC</span>
                         <span class="pay-badge" aria-label="PayPal">PayPal</span>
                     </div>

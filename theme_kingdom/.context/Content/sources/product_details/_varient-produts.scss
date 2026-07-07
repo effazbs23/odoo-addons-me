@@ -1,0 +1,119 @@
+﻿.product-variant-line {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    border: 1px solid var(--grey);
+    margin-bottom: 15px;
+    padding: 15px;
+
+    .variant-picture {
+        @media(min-width: $sm) {
+            width: 20%;
+        }
+    }
+
+    .variant-overview {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+
+        .label {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        @media(min-width: $sm) {
+            width: 80%;
+        }
+
+        @media(min-width: $md) {
+            .varient-info, .varient-attributes, .variant-add-to-cart {
+                width: 33.33%;
+            }
+        }
+
+        .varient-info {
+            padding: 0 10px;
+            text-align: justify;
+
+            .variant-name {
+                font-size: 15px;
+                font-weight: 700;
+                margin-bottom: 15px;
+            }
+        }
+
+        .varient-attributes {
+            padding: 0 10px;
+
+            > * {
+                margin-bottom: 10px;
+            }
+
+            .attributes {
+                dt {
+                    margin-bottom: 8px;
+                }
+
+                .attribute-squares {
+                    label {
+                        font-size: 0;
+                        padding: 5px;
+                        min-width: initial;
+
+                        .attribute-square {
+                            margin: 0 !important;
+                        }
+                    }
+                }
+            }
+        }
+
+        .variant-add-to-cart {
+            padding: 0 10px;
+            font-size: 0;
+
+            .add-to-wishlist {
+                margin-left: 4px;
+            }
+
+            .estimated-delivery {
+                font-size: 14px;
+            }
+
+            .prices {
+                text-align: left;
+            }
+
+            .add-to-cart-panel {
+                width: auto;
+            }
+
+            .add-to-cart {
+                display: inline-block;
+                vertical-align: top;
+            }
+
+            .add-to-cart-button {
+                font-size: 0;
+                width: auto;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                margin-left: 5px;
+
+                &::before {
+                    font-family: "icomoon" !important;
+                    content: "\e94f";
+                    line-height: 1;
+                    font-size: 18px;
+                }
+            }
+
+            .add-to-cart-checkout-button {
+                min-height: 45px;
+            }
+        }
+    }
+}

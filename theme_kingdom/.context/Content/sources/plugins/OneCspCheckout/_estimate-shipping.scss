@@ -1,0 +1,28 @@
+﻿.estimate-shipping {
+    .inputs {
+        label {
+            text-align: left;
+            display: block;
+        }
+
+        .required {
+            top: 26px;
+        }
+    }
+
+    .estimate-shipping-button {
+        background: var(--black-faded);
+        color: #fff;
+        padding: 10px 25px;
+        border-radius: 3px;
+        border: none;
+        cursor: pointer;
+    }
+}
+
+.estimate-shipping-result {
+    ul {
+        list-style-type: none;
+        padding: 10px;
+    }
+}

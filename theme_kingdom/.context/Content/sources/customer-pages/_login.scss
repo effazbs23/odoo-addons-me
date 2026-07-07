@@ -1,0 +1,39 @@
+﻿@import "../variables/breakpoint";
+
+
+.login-page {
+    .buttons {
+        margin-top: 15px;
+
+        .button-1 {
+            margin-bottom: 10px;
+
+            @media (max-width: 440px) {
+                width: 100%;
+            }
+        }
+    }
+}
+
+@media (max-width: $xs) {
+    .forgot-password {
+        display: block;
+    }
+}
+.external-authentication {
+    .title {
+        text-align: center;
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+    .facebook-login-block {
+        @extend .card;
+        text-align: center;
+
+        .buttons {
+            button, a {
+                display: inline-block;
+            }
+        }
+    }
+}
