@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =========================
+         LIST VIEW
+    ========================== -->
+    <record id="kingdom_product_tab_list" model="ir.ui.view">
+        <field name="name">kingdom.product.tab.list</field>
+        <field name="model">kingdom.product.tab</field>
+        <field name="arch" type="xml">
+            <list string="Product Tabs" editable="top">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="tab_type"/>
+                <field name="category_id"/>
+                <field name="product_limit"/>
+                <field name="show_in_product_carousel" widget="boolean_toggle"/>
+                <field name="show_in_homepage" widget="boolean_toggle"/>
+                <field name="show_in_header_menu" widget="boolean_toggle"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- =========================
+         FORM VIEW
+    ========================== -->
+    <record id="kingdom_product_tab_form" model="ir.ui.view">
+        <field name="name">kingdom.product.tab.form</field>
+        <field name="model">kingdom.product.tab</field>
+        <field name="arch" type="xml">
+            <form string="Product Tab">
+
+                <sheet>
+
+                    <group>
+                        <!-- Left Side -->
+                        <group string="General Information">
+
+                            <field name="name"/>
+
+                            <field name="sequence"/>
+
+                            <field name="tab_type"/>
+
+                            <field name="category_id"
+                                   invisible="tab_type != 'category'"/>
+
+                            <field name="product_limit"/>
+
+                            <field name="show_in_product_carousel"
+                                   invisible="tab_type not in ('new_arrival', 'best_seller')"/>
+
+                            <field name="show_in_homepage"/>
+
+                            <field name="show_in_header_menu"/>
+
+                            <field name="active"/>
+
+                        </group>
+
+                        <!-- Right Side -->
+                        <group string="Feature Banner">
+
+                            <field name="feature_image"
+                                   widget="image"
+                                   class="oe_avatar"/>
+
+                            <field name="feature_label"/>
+
+                            <field name="feature_url"/>
+
+                        </group>
+
+                    </group>
+
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+    <!-- =========================
+         ACTION
+    ========================== -->
+    <record id="kingdom_product_tab_action" model="ir.actions.act_window">
+        <field name="name">Product Tabs</field>
+        <field name="res_model">kingdom.product.tab</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create product tabs for homepage snippets and header links.
+            </p>
+            <p>
+                <strong>New Arrivals</strong> / <strong>Best Sellers</strong> tabs feed the
+                Product Carousel snippet. Enable <em>Product tabs snippet</em> on category tabs
+                (max 2) for the Category Dual Carousels snippet (Smart TV / Mixer Grinder layout).
+            </p>
+        </field>
+    </record>
+
+    <!-- =========================
+         MENU
+    ========================== -->
+    <menuitem id="kingdom_product_tab_menu"
+          name="Product Tabs"
+          parent="website.menu_website_global_configuration"
+          action="kingdom_product_tab_action"
+          groups="website.group_website_designer"
+          sequence="51"/>
+
+</odoo>

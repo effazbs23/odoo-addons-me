@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_kingdom_manufacturer_list" model="ir.ui.view">
+        <field name="name">kingdom.manufacturer.list</field>
+        <field name="model">kingdom.manufacturer</field>
+        <field name="arch" type="xml">
+            <list string="Manufacturers">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="show_on_homepage" widget="boolean_toggle"/>
+                <field name="website_url"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_kingdom_manufacturer_form" model="ir.ui.view">
+        <field name="name">kingdom.manufacturer.form</field>
+        <field name="model">kingdom.manufacturer</field>
+        <field name="arch" type="xml">
+            <form string="Manufacturer">
+                <sheet>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                            <field name="show_on_homepage"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="website_url" placeholder="https:// or /shop"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_kingdom_manufacturer" model="ir.actions.act_window">
+        <field name="name">Manufacturers</field>
+        <field name="res_model">kingdom.manufacturer</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add brands for the homepage manufacturers carousel.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_kingdom_manufacturer"
+              name="Manufacturers"
+              parent="website.menu_website_global_configuration"
+              action="action_kingdom_manufacturer"
+              sequence="54"/>
+
+</odoo>

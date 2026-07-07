@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_hero_slider" name="Kingdom Hero Slider">
+        <section class="s_hero_slider s_hero_slider_wrapper s_carousel_wrapper p-0 topic-block topic-banner"
+                 data-snippet="theme_kingdom.s_hero_slider"
+                 data-name="Hero Slider"
+                 data-vxml="001"
+                 aria-label="Featured banners">
+            <t t-set="uniq" t-value="datetime.datetime.now().microsecond"/>
+            <div t-attf-id="heroCarousel{{uniq}}"
+                 class="s_hero_slider_carousel s_carousel home-page-main-slider carousel slide"
+                 data-bs-ride="true"
+                 data-bs-interval="6500">
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-name="Slide">
+                        <div class="topic-block-slide">
+                            <div class="topic-block-background oe_img_bg o_bg_img_center"
+                                 style="background-image: url('/theme_kingdom/static/src/images/hero/slider1.webp'); background-position: center;"
+                                 role="presentation"/>
+                            <a href="#" class="topic-block-link o_translate_inline" aria-label="Banner slide 1"/>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-name="Slide">
+                        <div class="topic-block-slide">
+                            <div class="topic-block-background oe_img_bg o_bg_img_center"
+                                 style="background-image: url('/theme_kingdom/static/src/images/hero/slider2.webp'); background-position: center;"
+                                 role="presentation"/>
+                            <a href="#" class="topic-block-link o_translate_inline" aria-label="Banner slide 2"/>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev o_not_editable"
+                        contenteditable="false"
+                        t-attf-data-bs-target="#heroCarousel{{uniq}}"
+                        data-bs-slide="prev"
+                        aria-label="Previous"
+                        title="Previous">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"/>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next o_not_editable"
+                        contenteditable="false"
+                        t-attf-data-bs-target="#heroCarousel{{uniq}}"
+                        data-bs-slide="next"
+                        aria-label="Next"
+                        title="Next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"/>
+                    <span class="visually-hidden">Next</span>
+                </button>
+                <div class="carousel-indicators o_not_editable">
+                    <button type="button"
+                            t-attf-data-bs-target="#heroCarousel{{uniq}}"
+                            data-bs-slide-to="0"
+                            class="active"
+                            aria-label="Carousel indicator"/>
+                    <button type="button"
+                            t-attf-data-bs-target="#heroCarousel{{uniq}}"
+                            data-bs-slide-to="1"
+                            aria-label="Carousel indicator"/>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Kingdom Deal of the Day — Content/plugins/deals_of_day markup -->
+    <template id="s_deal_of_the_day" name="Kingdom Deal of the Day">
+        <t t-set="active_deal"
+           t-value="'kingdom.deals.of.day' in request.env and request.env['kingdom.deals.of.day'].sudo().get_website_deal()"/>
+        <t t-set="deal"
+           t-value="active_deal or (editable and 'kingdom.deals.of.day' in request.env and request.env['kingdom.deals.of.day'].sudo().get_preview_deal())"/>
+        <t t-set="deal_products"
+           t-value="deal._get_offer_products() if deal else request.env['product.template'].browse([])"/>
+        <t t-set="deal_title" t-value="deal.name if deal else 'Deal of the days'"/>
+        <t t-set="deal_pricelist" t-value="deal.get_deal_pricelist() if deal else False"/>
+        <t t-set="display_currency"
+           t-value="(deal_pricelist and deal_pricelist.currency_id) or request.env.company.currency_id"/>
+        <t t-set="countdown_iso"
+           t-value="deal.get_countdown_iso() if deal else ''"/>
+        <t t-set="countdown_ms"
+           t-value="deal.get_countdown_end_ms() if deal else 0"/>
+
+        <section t-attf-class="dealoftheday-wrapper oe_website_sale#{' d-none' if not active_deal and not editable else ''}"
+                 data-snippet="theme_kingdom.s_deal_of_the_day"
+                 data-kingdom-live-snippet="s_deal_of_the_day"
+                 data-name="Deal of the Day"
+                 aria-labelledby="DealOfTheDayHeading">
+            <h2 id="DealOfTheDayHeading" class="visually-hidden">Deal of the days</h2>
+            <div class="k-container">
+                <div class="row g-3 g-lg-4 align-items-stretch">
+                    <div class="col-md-4 dealoftheday-leftadd">
+                        <div class="title">
+                            <strong t-esc="deal_title"/>
+                        </div>
+                        <div class="carousel-countdown"
+                             t-att-data-deal-countdown="countdown_iso or None"
+                             t-att-data-deal-end-ms="countdown_ms or None">
+                            <div class="count">
+                                <span class="cd-days">00</span>
+                                <span class="cd-label">Days</span>
+                            </div>
+                            <div class="count">
+                                <span class="cd-hours">00</span>
+                                <span class="cd-label">Hours</span>
+                            </div>
+                            <div class="count">
+                                <span class="cd-mins">00</span>
+                                <span class="cd-label">Minutes</span>
+                            </div>
+                            <div class="count">
+                                <span class="cd-secs">00</span>
+                                <span class="cd-label">Seconds</span>
+                            </div>
+                        </div>
+                        <div class="deals-sale-banner" aria-hidden="true">
+                            <t t-if="deal and deal.banner_image">
+                                <img t-att-src="'/web/image/kingdom.deals.of.day/%s/banner_image' % deal.id"
+                                     alt=""
+                                     loading="lazy"/>
+                            </t>
+                            <t t-else="">
+                                <img src="/theme_kingdom/static/src/images/sale.png"
+                                     alt=""
+                                     loading="lazy"/>
+                            </t>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8 deals-right-contents">
+                        <div class="dealoftheday-content">
+                            <div class="deals-toolbar">
+                                <div class="deals-toolbar-start">
+                                    <div class="title deals-toolbar-heading">
+                                        <div class="dealoftheday-counter"
+                                             t-att-data-deal-countdown="countdown_iso or None"
+                                             t-att-data-deal-end-ms="countdown_ms or None">
+                                            <div class="count">
+                                                <span class="cd-days">00</span>
+                                                <span class="cd-label">Days</span>
+                                            </div>
+                                            <div class="count">
+                                                <span class="cd-hours">00</span>
+                                                <span class="cd-label">Hours</span>
+                                            </div>
+                                            <div class="count">
+                                                <span class="cd-mins">00</span>
+                                                <span class="cd-label">Minutes</span>
+                                            </div>
+                                            <div class="count">
+                                                <span class="cd-secs">00</span>
+                                                <span class="cd-label">Seconds</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="deal-swiper-nav">
+                                    <div class="swiper-button-prev" aria-label="Previous deals"/>
+                                    <div class="swiper-button-next" aria-label="Next deals"/>
+                                </div>
+                            </div>
+
+                            <div class="deals-products">
+                                <div class="swiper deal-swiper">
+                                    <div class="swiper-wrapper">
+                                        <t t-if="deal_products">
+                                            <t t-foreach="deal_products" t-as="product">
+                                                <t t-set="can_add"
+                                                   t-value="product._is_add_to_cart_possible()"/>
+                                                <t t-set="contextual_price"
+                                                   t-value="product.with_context(pricelist=deal_pricelist.id)._get_contextual_price() if deal_pricelist else product._get_contextual_price()"/>
+                                                <t t-set="base_price"
+                                                   t-value="product.compare_list_price or product.list_price"/>
+                                                <t t-set="show_sale_badge"
+                                                   t-value="base_price and base_price > contextual_price"/>
+                                                <div class="swiper-slide">
+                                                    <div t-attf-class="product-item deal-slide-card #{'deal-card-actions--disabled' if not can_add else ''}">
+                                                        <t t-if="show_sale_badge">
+                                                            <div class="offer-content">
+                                                                <div class="discount-info-label">Sale</div>
+                                                            </div>
+                                                        </t>
+                                                        <div class="picture">
+                                                            <a t-att-href="product.website_url">
+                                                                <img t-att-src="'/web/image/product.template/%s/image_256' % product.id"
+                                                                     t-att-alt="product.name"
+                                                                     loading="lazy"/>
+                                                            </a>
+                                                        </div>
+                                                        <div class="details">
+                                                            <h2 class="product-title">
+                                                                <a t-att-href="product.website_url"
+                                                                   t-esc="product.name"/>
+                                                            </h2>
+                                                            <div class="add-info">
+                                                                <div class="prices">
+                                                                    <t t-if="not can_add">
+                                                                        <span class="deal-out-stock">Out of stock</span>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <t t-if="show_sale_badge">
+                                                                            <span class="old-price">
+                                                                                <t t-out="base_price"
+                                                                                   t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
+                                                                            </span>
+                                                                        </t>
+                                                                        <span class="price actual-price">
+                                                                            <t t-out="contextual_price"
+                                                                               t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
+                                                                        </span>
+                                                                    </t>
+                                                                </div>
+                                                                <t t-if="can_add">
+                                                                    <div class="deal-card-actions">
+                                                                        <div class="deal-qty" role="group" aria-label="Quantity">
+                                                                            <button type="button"
+                                                                                    class="deal-qty-btn"
+                                                                                    aria-label="Decrease quantity">−</button>
+                                                                            <input class="deal-qty-input"
+                                                                                   type="number"
+                                                                                   value="1"
+                                                                                   min="1"
+                                                                                   max="99"
+                                                                                   readonly="readonly"
+                                                                                   tabindex="-1"/>
+                                                                            <button type="button"
+                                                                                    class="deal-qty-btn"
+                                                                                    aria-label="Increase quantity">+</button>
+                                                                        </div>
+                                                                        <button type="button"
+                                                                                class="button-1 btn-buy-now s_add_to_cart_btn"
+                                                                                data-action="add_to_cart"
+                                                                                data-show-quantity="false"
+                                                                                t-att-data-product-template-id="product.id"
+                                                                                t-att-data-product-variant-id="product.product_variant_id.id"
+                                                                                t-att-data-product-type="product.type">
+                                                                            Buy Now
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="buttons">
+                                                                        <button type="button"
+                                                                                class="button-2 product-box-add-to-cart-button s_add_to_cart_btn"
+                                                                                data-action="add_to_cart"
+                                                                                data-show-quantity="false"
+                                                                                t-att-data-product-template-id="product.id"
+                                                                                t-att-data-product-variant-id="product.product_variant_id.id"
+                                                                                t-att-data-product-type="product.type">
+                                                                            Add to cart
+                                                                        </button>
+                                                                    </div>
+                                                                </t>
+                                                                <t t-else="">
+                                                                    <div class="deal-card-actions deal-card-actions--disabled">
+                                                                        <div class="deal-qty" role="group" aria-label="Quantity">
+                                                                            <button type="button"
+                                                                                    class="deal-qty-btn"
+                                                                                    disabled="disabled"
+                                                                                    aria-label="Decrease quantity">−</button>
+                                                                            <input class="deal-qty-input"
+                                                                                   type="number"
+                                                                                   value="1"
+                                                                                   readonly="readonly"
+                                                                                   tabindex="-1"
+                                                                                   disabled="disabled"/>
+                                                                            <button type="button"
+                                                                                    class="deal-qty-btn"
+                                                                                    disabled="disabled"
+                                                                                    aria-label="Increase quantity">+</button>
+                                                                        </div>
+                                                                        <button type="button"
+                                                                                class="button-1 btn-buy-now"
+                                                                                disabled="disabled">
+                                                                            Buy Now
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="buttons">
+                                                                        <button type="button"
+                                                                                class="button-2 product-box-add-to-cart-button"
+                                                                                disabled="disabled">
+                                                                            Add to cart
+                                                                        </button>
+                                                                    </div>
+                                                                </t>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </t>
+                                        <t t-elif="editable">
+                                            <div class="swiper-slide">
+                                                <div class="product-item deal-slide-card">
+                                                    <div class="details p-4 text-center text-muted">
+                                                        <p class="mb-0">Select a deal pricelist with product items (Website → Configuration → Deals of the Day).</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    <div class="swiper-pagination"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

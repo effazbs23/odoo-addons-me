@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_promo_banner" name="Kingdom Promo Banner">
+        <section class="s_promo_banner promo-banner-blocks"
+                 data-snippet="theme_kingdom.s_promo_banner"
+                 data-name="Promo Banner"
+                 aria-labelledby="PromoBannerBlocksHeading">
+            <h2 id="PromoBannerBlocksHeading" class="visually-hidden o_translate_inline">Promotional offers</h2>
+            <div class="k-container">
+                <a href="/shop"
+                   class="promo-banner-blocks__banner-link o_translate_inline"
+                   aria-label="View promotional offers — shop now">
+                    <img src="/theme_kingdom/static/src/images/Promotional_Banner.webp"
+                         alt="Kingdom Mega Store promotional sale banner"
+                         width="1912"
+                         height="600"
+                         loading="lazy"
+                         class="img img-fluid w-100"
+                         data-name="Promo Banner Image"/>
+                </a>
+            </div>
+        </section>
+    </template>
+</odoo>

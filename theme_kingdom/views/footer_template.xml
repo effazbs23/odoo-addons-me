@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="kingdom_footer_attributes"
+              inherit_id="website.layout"
+              name="Kingdom Footer Attributes">
+        <xpath expr="//footer[@id='bottom']" position="attributes">
+            <attribute name="t-attf-class" add="footer" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="template_footer_kingdom"
+              inherit_id="website.layout"
+              name="Kingdom Footer"
+              active="True">
+        <xpath expr="//div[@id='footer']" position="replace">
+            <div id="footer"
+                 class="oe_structure oe_structure_solo"
+                 t-ignore="true"
+                 t-if="not no_footer">
+                <section class="s_text_block"
+                         data-snippet="s_text_block"
+                         data-name="Kingdom Footer">
+                    <t t-set="company_email" t-value="res_company.email or 'sales@nop-station.com'"/>
+                    <t t-set="company_phone" t-value="res_company.phone or '+880 1720675492'"/>
+                    <t t-set="company_address"
+                       t-value="', '.join(part for part in [
+                           res_company.street,
+                           res_company.street2,
+                           res_company.city,
+                           res_company.state_id.name if res_company.state_id else None,
+                           res_company.zip,
+                       ] if part) or '8th floor, Plot#2, Amtoli, Bir Uttam AK Khandakar Rd, Mohakhali Commercial Area, Dhaka-1212'"/>
+                    <div class="container footer-upper js_kingdom_footer_upper">
+                        <div class="footer-block follow-us">
+                            <div class="footer-logo">
+                                <a href="/" t-att-aria-label="website.name">
+                                    <img t-att-src="'/logo.png?company=%s' % res_company.id"
+                                         t-att-alt="website.name"
+                                         width="180"
+                                         height="48"
+                                         loading="lazy"/>
+                                </a>
+                            </div>
+                            <div class="social">
+                                <div class="title"><strong>Follow us</strong></div>
+                                <ul class="networks list-unstyled mb-0">
+                                    <li class="facebook">
+                                        <a href="/website/social/facebook"
+                                           target="_blank"
+                                           rel="noopener"
+                                           aria-label="Facebook">Facebook</a>
+                                    </li>
+                                    <li class="twitter">
+                                        <a href="/website/social/twitter"
+                                           target="_blank"
+                                           rel="noopener"
+                                           aria-label="Twitter">Twitter</a>
+                                    </li>
+                                    <li class="rss">
+                                        <a href="/blog"
+                                           target="_blank"
+                                           rel="noopener"
+                                           aria-label="RSS">RSS</a>
+                                    </li>
+                                    <li class="youtube">
+                                        <a href="/website/social/youtube"
+                                           target="_blank"
+                                           rel="noopener"
+                                           aria-label="YouTube">YouTube</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="newsletter">
+                                <div class="title"><strong>Newsletter</strong></div>
+                                <div class="newsletter-subscribe">
+                                    <div class="newsletter-email">
+                                        <input type="email"
+                                               name="NewsletterEmail"
+                                               placeholder="Enter your email here..."
+                                               aria-label="Newsletter email"/>
+                                        <button type="button"
+                                                class="button-1"
+                                                aria-label="Subscribe">Subscribe</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer-block contact-us">
+                            <div class="title js_kingdom_footer_toggle" aria-expanded="false">
+                                <strong>Contact us</strong>
+                            </div>
+                            <ul class="list list-unstyled mb-0">
+                                <li t-out="company_address"/>
+                                <li>
+                                    <a t-att-href="'mailto:%s' % company_email"
+                                       t-out="company_email"/>
+                                </li>
+                                <li>
+                                    <a t-att-href="'tel:%s' % company_phone.replace(' ', '')"
+                                       class="o_force_ltr"
+                                       t-out="company_phone"/>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="footer-block">
+                            <div class="title js_kingdom_footer_toggle" aria-expanded="false">
+                                <strong>Information</strong>
+                            </div>
+                            <ul class="list list-unstyled mb-0">
+                                <li><a href="/shop" class="o_translate_inline">Refrigerators</a></li>
+                                <li><a href="/shipping" class="o_translate_inline">Shipping &amp; returns</a></li>
+                                <li><a href="/privacy" class="o_translate_inline">Privacy notice</a></li>
+                                <li><a href="/terms" class="o_translate_inline">Conditions of Use</a></li>
+                                <li><a href="/about-us" class="o_translate_inline">About us</a></li>
+                                <li><a href="/contactus" class="o_translate_inline">Contact us</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-block">
+                            <div class="title js_kingdom_footer_toggle" aria-expanded="false">
+                                <strong>Customer service</strong>
+                            </div>
+                            <ul class="list list-unstyled mb-0">
+                                <li><a href="/website/search" class="o_translate_inline">Search</a></li>
+                                <li><a href="/blog" class="o_translate_inline">News</a></li>
+                                <li><a href="/blog" class="o_translate_inline">Blog</a></li>
+                                <li><a href="/shop" class="o_translate_inline">Recently viewed products</a></li>
+                                <li><a href="/shop" class="o_translate_inline">Compare products list</a></li>
+                                <li><a href="/shop" class="o_translate_inline">New products</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-block">
+                            <div class="title js_kingdom_footer_toggle" aria-expanded="false">
+                                <strong>My account</strong>
+                            </div>
+                            <ul class="list list-unstyled mb-0">
+                                <li><a href="/my/home" class="o_translate_inline">My account</a></li>
+                                <li><a href="/my/orders" class="o_translate_inline">Orders</a></li>
+                                <li><a href="/my/account" class="o_translate_inline">Addresses</a></li>
+                                <li><a href="/shop/cart" class="o_translate_inline">Shopping cart</a></li>
+                                <li><a href="/shop/wishlist" class="o_translate_inline">Wishlist</a></li>
+                                <li><a href="/contactus" class="o_translate_inline">Apply for vendor account</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('o_footer_copyright')]" position="replace">
+            <div t-if="not no_copyright" class="footer-lower o_footer_copyright">
+                <div class="container footer-lower-contents">
+                    <div class="footer-powered-by">
+                        <span>Powered by</span>
+                        <a href="https://www.odoo.com/"
+                           target="_blank"
+                           rel="noopener">Odoo</a>
+                    </div>
+                    <div class="footer-designed-by">
+                        Designed By
+                        <a href="https://www.nop-station.com/"
+                           target="_blank"
+                           rel="noopener">nopStation</a>
+                    </div>
+                    <div class="footer-payment">
+                        <span class="pay-badge" aria-label="Visa">VISA</span>
+                        <span class="pay-badge" aria-label="Mastercard">MC</span>
+                        <span class="pay-badge" aria-label="PayPal">PayPal</span>
+                    </div>
+                    <div class="footer-disclaimer">
+                        <span class="o_footer_copyright_name">
+                            Copyright © <t t-esc="datetime.datetime.now().year"/>
+                            <t t-esc="website.name"/>.
+                            All rights reserved.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

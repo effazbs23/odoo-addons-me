@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_service_highlights" name="Kingdom Service Highlights">
+        <section class="s_service_highlights home-trust-section"
+                 data-snippet="theme_kingdom.s_service_highlights"
+                 data-name="Service Highlights"
+                 aria-labelledby="HomeTrustHeading">
+            <h2 id="HomeTrustHeading" class="visually-hidden o_translate_inline">Store benefits</h2>
+            <div class="k-container">
+                <div class="home-trust-grid">
+                    <article class="home-trust-card">
+                        <span class="home-trust-card__icon" aria-hidden="true">
+                            <img src="/theme_kingdom/static/src/images/Support.webp"
+                                 alt=""
+                                 width="40"
+                                 height="40"
+                                 loading="lazy"
+                                 data-name="Support Icon"/>
+                        </span>
+                        <div class="home-trust-card__text">
+                            <h3 class="o_translate_inline">Support 24/7</h3>
+                            <p class="o_translate_inline">Our dedicated support team is available 24/7 to assist you with any inquiries.</p>
+                        </div>
+                    </article>
+                    <article class="home-trust-card">
+                        <span class="home-trust-card__icon" aria-hidden="true">
+                            <img src="/theme_kingdom/static/src/images/Return.webp"
+                                 alt=""
+                                 width="40"
+                                 height="40"
+                                 loading="lazy"
+                                 data-name="Return Icon"/>
+                        </span>
+                        <div class="home-trust-card__text">
+                            <h3 class="o_translate_inline">30 Day Return Policy</h3>
+                            <p class="o_translate_inline">Return eligible items within 30 days of purchase. Terms apply.</p>
+                        </div>
+                    </article>
+                    <article class="home-trust-card">
+                        <span class="home-trust-card__icon" aria-hidden="true">
+                            <img src="/theme_kingdom/static/src/images/World.webp"
+                                 alt=""
+                                 width="40"
+                                 height="40"
+                                 loading="lazy"
+                                 data-name="Shipping Icon"/>
+                        </span>
+                        <div class="home-trust-card__text">
+                            <h3 class="o_translate_inline">World wide Shipping</h3>
+                            <p class="o_translate_inline">We ship to customers worldwide with reliable delivery partners.</p>
+                        </div>
+                    </article>
+                    <article class="home-trust-card">
+                        <span class="home-trust-card__icon" aria-hidden="true">
+                            <img src="/theme_kingdom/static/src/images/Delivery.webp"
+                                 alt=""
+                                 width="40"
+                                 height="40"
+                                 loading="lazy"
+                                 data-name="Delivery Icon"/>
+                        </span>
+                        <div class="home-trust-card__text">
+                            <h3 class="o_translate_inline">Free Delivery</h3>
+                            <p class="o_translate_inline">Enjoy free delivery on all orders! Shop now and have your items delivered to your door.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="kingdom_snippets" inherit_id="website.snippets" name="Kingdom Snippets">
+
+
+        <xpath expr="//snippets[@id='snippet_groups']" position="inside">
+            <t t-snippet="website.s_snippet_group"
+               snippet-group="kingdom_snippet"
+               string="Kingdom Snippets"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+        </xpath>
+
+
+        <xpath expr="//snippets[@id='snippet_structure']" position="inside">
+            <t t-snippet="theme_kingdom.s_hero_slider"
+               string="Hero Slider"
+               group="kingdom_snippet"/>
+
+            <t t-snippet="theme_kingdom.s_category_slider"
+               string="Category Slider"
+               group="kingdom_snippet"/>
+
+            <t t-snippet="theme_kingdom.s_deal_of_the_day"
+               string="Deal of the Day"
+               group="kingdom_snippet"/>
+
+            <t t-snippet="theme_kingdom.s_promo_banners"
+               string="Promo Banners"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+
+            <t t-snippet="theme_kingdom.s_promo_banner"
+               string="Promo Banner"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+
+            <t t-snippet="theme_kingdom.s_blog_news"
+               string="Blog and News"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+
+            <t t-snippet="theme_kingdom.s_bestsale_products"
+               string="Best Sale"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+
+            <t t-snippet="theme_kingdom.s_featured_products"
+               string="Featured Products"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+
+            <t t-snippet="theme_kingdom.s_category_dual_carousels"
+               string="Category Dual Carousels"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+
+            <t t-snippet="theme_kingdom.s_product_carousel"
+               string="Product Carousel"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+
+            <t t-snippet="theme_kingdom.s_manufacturers"
+               string="Manufacturers"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+
+            <t t-snippet="theme_kingdom.s_service_highlights"
+               string="Service Highlights"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+        </xpath>
+
+    </template>
+</odoo>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="s_blog_news_blog_item" name="Kingdom Blog News — Blog Item">
+        <article class="blog-item">
+            <a t-att-href="post.website_url" class="blog-img">
+                <img t-att-src="post.kingdom_cover_image_url()"
+                     t-att-alt="post.name"
+                     loading="lazy"/>
+            </a>
+            <p class="date-time">
+                <t t-esc="post.kingdom_formatted_post_date()"/>
+                (<t t-esc="post.kingdom_comment_count()"/>)
+            </p>
+            <h3>
+                <a t-att-href="post.website_url"
+                   class="blog-post-title o_translate_inline"
+                   t-esc="post.name"/>
+            </h3>
+            <p class="post-body o_translate_inline" t-esc="post.teaser or post.subtitle or ''"/>
+            <a t-att-href="post.website_url" class="blog-read-more o_translate_inline">Read More</a>
+        </article>
+    </template>
+
+    <template id="s_blog_news_news_item" name="Kingdom Blog News — News Item">
+        <article class="news-box-inner">
+            <a t-att-href="post.website_url"
+               class="news-img"
+               t-att-style="post.kingdom_cover_image_style()">
+                <span class="visually-hidden" t-esc="post.name"/>
+            </a>
+            <div class="news-details">
+                <h3>
+                    <a t-att-href="post.website_url"
+                       class="post-title o_translate_inline"
+                       t-esc="post.name"/>
+                </h3>
+                <p class="date-time">
+                    <t t-esc="post.kingdom_formatted_post_date()"/>
+                    (<t t-esc="post.kingdom_comment_count()"/>)
+                </p>
+                <p class="post-body">
+                    <span class="o_translate_inline" t-esc="post.teaser or post.subtitle or ''"/>
+                </p>
+                <a t-att-href="post.website_url" class="news-read-more o_translate_inline">Read More</a>
+            </div>
+        </article>
+    </template>
+
+    <template id="s_blog_news" name="Kingdom Blog and News">
+        <t t-set="blog_posts_data"
+           t-value="request.env['blog.blog'].sudo().kingdom_get_column_posts('blog', 3)"/>
+        <t t-set="blog_posts" t-value="blog_posts_data[0]"/>
+        <t t-set="blog_column_blog" t-value="blog_posts_data[1]"/>
+        <t t-set="news_posts_data"
+           t-value="request.env['blog.blog'].sudo().kingdom_get_column_posts('news', 2, blog_column_blog.id if blog_column_blog else None)"/>
+        <t t-set="news_posts" t-value="news_posts_data[0]"/>
+        <t t-set="news_column_blog" t-value="news_posts_data[1]"/>
+        <t t-set="blog_view_all"
+           t-value="blog_column_blog.kingdom_list_url() if blog_column_blog else '/blog'"/>
+        <t t-set="news_view_all"
+           t-value="news_column_blog.kingdom_list_url() if news_column_blog else '/blog'"/>
+
+        <section class="s_blog_news blog-news-section"
+                 data-snippet="theme_kingdom.s_blog_news"
+                 data-name="Blog and News"
+                 aria-labelledby="BlogNewsHeading">
+            <h2 id="BlogNewsHeading" class="visually-hidden o_translate_inline">Latest blogs and news</h2>
+            <div class="k-container blog-news-container">
+                <div class="blog-news-area">
+                    <div class="latest-blog-container">
+                        <div class="blog-news-head">
+                            <h2 class="title-container o_translate_inline">Latest Blogs</h2>
+                            <div class="view-all">
+                                <a t-att-href="blog_view_all" class="o_translate_inline">View All</a>
+                            </div>
+                        </div>
+                        <div class="blog-item-wrapper">
+                            <t t-if="blog_posts">
+                                <t t-foreach="blog_posts" t-as="post">
+                                    <t t-call="theme_kingdom.s_blog_news_blog_item"/>
+                                </t>
+                            </t>
+                            <t t-elif="editable">
+                                <article class="blog-item">
+                                    <a href="/blog" class="blog-img">
+                                        <img src="/theme_kingdom/static/src/images/categories/cat-3.jpg" alt="" loading="lazy"/>
+                                    </a>
+                                    <p class="date-time">April 07, 2022(0)</p>
+                                    <h3><a href="/blog" class="blog-post-title">Why Are Digital Products So Profitable?</a></h3>
+                                    <p class="post-body">Digital products continue to reshape how brands reach customers with lower overhead and faster launches.</p>
+                                    <a href="/blog" class="blog-read-more">Read More</a>
+                                </article>
+                            </t>
+                        </div>
+                    </div>
+
+                    <div class="latest-news-container">
+                        <div class="blog-news-head">
+                            <h2 class="title-container o_translate_inline">Latest News</h2>
+                            <div class="view-all">
+                                <a t-att-href="news_view_all" class="o_translate_inline">View All</a>
+                            </div>
+                        </div>
+                        <div class="news-items">
+                            <t t-if="news_posts">
+                                <t t-foreach="news_posts" t-as="post">
+                                    <t t-call="theme_kingdom.s_blog_news_news_item"/>
+                                </t>
+                            </t>
+                            <t t-elif="editable">
+                                <article class="news-box-inner">
+                                    <a href="/blog" class="news-img" style="background-image: url('/theme_kingdom/static/src/images/categories/cat-6.jpg')">
+                                        <span class="visually-hidden">New online store is open!</span>
+                                    </a>
+                                    <div class="news-details">
+                                        <h3><a href="/blog" class="post-title">New online store is open!</a></h3>
+                                        <p class="date-time">Wednesday, May 10, 2026 (0)</p>
+                                        <p class="post-body"><span>The new store is open now! We are excited to offer our latest deals.</span></p>
+                                        <a href="/blog" class="news-read-more">Read More</a>
+                                    </div>
+                                </article>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+</odoo>
