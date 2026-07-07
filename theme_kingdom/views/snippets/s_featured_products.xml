@@ -8,11 +8,13 @@
                  aria-labelledby="FeaturedProductsHeading">
             <div class="k-container">
                 <t t-set="featured_record"
-                   t-value="request.env['featured.products'].sudo().get_website_featured_record()"/>
+                   t-value="request.env['featured.products'].sudo().search([], limit=1) if 'featured.products' in request.env else False"/>
+                <t t-set="featured_picked"
+                   t-value="featured_record and request.env['product.template'].sudo().search([('id', 'in', featured_record.product_tmpl_ids.ids), ('sale_ok', '=', True), ('is_published', '=', True)], limit=12)"/>
                 <t t-set="featured_products"
-                   t-value="featured_record.get_website_products() if featured_record else request.env['product.template'].sudo().search([('sale_ok', '=', True), ('is_published', '=', True)], order='website_sequence desc, id desc', limit=12)"/>
+                   t-value="featured_picked if featured_picked else request.env['product.template'].sudo().search([('sale_ok', '=', True), ('is_published', '=', True)], order='website_sequence desc, id desc', limit=12)"/>
                 <t t-set="section_title"
-                   t-value="featured_record.name if featured_record else 'Featured Products'"/>
+                   t-value="featured_record[:1].name if featured_record else 'Featured Products'"/>
                 <t t-set="current_pricelist"
                    t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
                 <t t-set="display_currency"

@@ -1,4 +1,43 @@
 # -*- coding: utf-8 -*-
+import re
+
+
+_OE_VIEW_REF_RE = re.compile(
+    r'\s*data-oe-model=\\?"ir\.ui\.view\\?"\s*'
+    r'data-oe-id=\\?"(\d+)\\?"\s*'
+    r'data-oe-field=\\?"arch\\?"\s*'
+    r'data-oe-xpath=\\?"[^"\\]*\\?"',
+    re.IGNORECASE,
+)
+
+
+def _cleanup_stale_oe_view_refs(env):
+    """Remove website editor metadata that points to deleted ir.ui.view records."""
+    View = env['ir.ui.view'].sudo()
+    candidates = View.search([
+        ('type', '=', 'qweb'),
+        ('arch_db', 'ilike', 'data-oe-id'),
+    ])
+    for view in candidates:
+        arch = view.arch_db
+        if not arch:
+            continue
+        referenced_ids = {int(view_id) for view_id in re.findall(r'data-oe-id=\\?"(\d+)\\?"', arch)}
+        if not referenced_ids:
+            continue
+        existing_ids = set(View.browse(list(referenced_ids)).exists().ids)
+        stale_ids = referenced_ids - existing_ids
+        if not stale_ids:
+            continue
+        new_arch = arch
+        for stale_id in stale_ids:
+            new_arch = _OE_VIEW_REF_RE.sub(
+                lambda match, stale=stale_id: '' if int(match.group(1)) == stale else match.group(0),
+                new_arch,
+            )
+        new_arch = re.sub(r'\s+o_dirty(?=["\s>])', '', new_arch)
+        if new_arch != arch:
+            view.with_context(no_save_prev=True).write({'arch_db': new_arch})
 
 
 _KINGDOM_SNIPPET_CLASS_FIXES = (
@@ -98,6 +137,7 @@ def post_init_hook(env):
     _ensure_default_product_tabs(env)
     _ensure_homepage_featured_categories(env)
     _migrate_kingdom_snippet_oe_structure(env)
+    _cleanup_stale_oe_view_refs(env)
 
 
 def _ensure_homepage_featured_categories(env):

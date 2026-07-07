@@ -90,23 +90,24 @@
                  aria-labelledby="ProductCarouselHeading">
             <h2 id="ProductCarouselHeading" class="visually-hidden">Featured products</h2>
             <div class="k-container">
-                <t t-set="Tab" t-value="request.env['kingdom.product.tab'].sudo()"/>
+                <t t-set="Tab"
+                   t-value="request.env['kingdom.product.tab'].sudo() if 'kingdom.product.tab' in request.env else False"/>
                 <t t-set="new_tab"
-                   t-value="Tab.search([('active', '=', True), ('tab_type', '=', 'new_arrival'), ('show_in_product_carousel', '=', True)], limit=1, order='sequence asc, id asc')"/>
+                   t-value="Tab and Tab.search([('active', '=', True), ('tab_type', '=', 'new_arrival'), ('show_in_product_carousel', '=', True)], limit=1, order='sequence asc, id asc')"/>
                 <t t-set="best_tab"
-                   t-value="Tab.search([('active', '=', True), ('tab_type', '=', 'best_seller'), ('show_in_product_carousel', '=', True)], limit=1, order='sequence asc, id asc')"/>
+                   t-value="Tab and Tab.search([('active', '=', True), ('tab_type', '=', 'best_seller'), ('show_in_product_carousel', '=', True)], limit=1, order='sequence asc, id asc')"/>
                 <t t-if="not best_tab">
                     <t t-set="best_tab"
-                       t-value="Tab.search([('active', '=', True), ('tab_type', '=', 'featured'), ('show_in_product_carousel', '=', True)], limit=1, order='sequence asc, id asc')"/>
+                       t-value="Tab and Tab.search([('active', '=', True), ('tab_type', '=', 'featured'), ('show_in_product_carousel', '=', True)], limit=1, order='sequence asc, id asc')"/>
                 </t>
                 <t t-set="feature_tab" t-value="new_tab or best_tab"/>
                 <t t-set="current_pricelist"
                    t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
                 <t t-set="display_currency"
                    t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
-                <t t-set="new_arrival_label" t-value="Tab.get_carousel_subtab_label('new_arrival')"/>
+                <t t-set="new_arrival_label" t-value="Tab and Tab.get_carousel_subtab_label('new_arrival') or 'New Arrivals'"/>
                 <t t-set="secondary_label"
-                   t-value="best_tab.name if best_tab else Tab.get_carousel_subtab_label('best_seller')"/>
+                   t-value="best_tab.name if best_tab else (Tab and Tab.get_carousel_subtab_label('best_seller') or 'Best Sellers')"/>
                 <t t-set="pc_uid" t-value="'pc%s' % (feature_tab.id if feature_tab else 0)"/>
 
                 <t t-if="feature_tab or editable">

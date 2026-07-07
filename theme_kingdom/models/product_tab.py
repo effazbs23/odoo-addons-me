@@ -64,6 +64,7 @@ class KingdomProductTab(models.Model):
         default='/shop',
     )
 
+    @api.model
     def get_website_dual_carousel_tabs(self, limit=2):
         """Up to two active tabs for the category dual carousel snippet."""
         return self.sudo().search(
