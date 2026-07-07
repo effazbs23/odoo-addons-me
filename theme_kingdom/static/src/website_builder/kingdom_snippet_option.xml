@@ -12,10 +12,31 @@
                 </BuilderButton>
             </BuilderRow>
         </t>
+        <BuilderRow label.translate="Block">
+            <BuilderButton type="'danger'"
+                           preview="false"
+                           action="'removeKingdomSnippetBlock'"
+                           title.translate="Remove this block from the page"
+                           icon="'fa-trash'">
+                Remove block
+            </BuilderButton>
+        </BuilderRow>
+    </t>
+
+    <t t-name="theme_kingdom.KingdomCarouselSlideOption">
         <div class="px-2 pb-2 small text-muted">
-            Select this block, then use the trash icon in the toolbar or the
-            Customize panel to remove it from the page.
+            Use the arrows above to add or remove individual slides.
+            To delete the whole slider, remove the parent block below.
         </div>
+        <BuilderRow label.translate="Block">
+            <BuilderButton type="'danger'"
+                           preview="false"
+                           action="'removeKingdomSnippetBlock'"
+                           title.translate="Remove the entire slider block"
+                           icon="'fa-trash'">
+                Remove slider block
+            </BuilderButton>
+        </BuilderRow>
     </t>
 
 </templates>

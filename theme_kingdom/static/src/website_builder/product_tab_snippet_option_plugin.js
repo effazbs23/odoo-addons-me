@@ -11,7 +11,6 @@ export class ProductTabSnippetOption extends BaseOptionComponent {
     static template = "theme_kingdom.ProductTabSnippetOption";
     static selector =
         "section.s_product_carousel[data-snippet], section.s_category_dual_carousels[data-snippet]";
-    static groups = ["website.group_website_designer"];
 }
 
 export class OpenProductTabsAction extends BuilderAction {

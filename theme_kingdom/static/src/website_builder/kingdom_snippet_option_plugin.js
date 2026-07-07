@@ -7,6 +7,8 @@ import { SNIPPET_SPECIFIC } from "@html_builder/utils/option_sequence";
 import { BaseOptionComponent } from "@html_builder/core/utils";
 import { BuilderAction } from "@html_builder/core/builder_action";
 
+const KINGDOM_SNIPPET_SELECTOR = "section[data-snippet^='theme_kingdom.']";
+
 const KINGDOM_SNIPPET_ACTIONS = {
     "theme_kingdom.s_featured_products": "theme_kingdom.action_featured_products",
     "theme_kingdom.s_bestsale_products": "theme_kingdom.action_bestsale_products",
@@ -16,10 +18,20 @@ const KINGDOM_SNIPPET_ACTIONS = {
     "theme_kingdom.s_category_dual_carousels": "theme_kingdom.kingdom_product_tab_action",
 };
 
+function getKingdomSnippetSection(editingElement) {
+    return editingElement?.closest?.(KINGDOM_SNIPPET_SELECTOR) || null;
+}
+
+function getHomepageWrap(editable, nextTargetEl) {
+    return (
+        nextTargetEl?.closest?.("#wrap.oe_structure, .oe_structure[data-oe-id]") ||
+        editable.querySelector("#wrap.oe_structure[data-oe-id], #wrap.oe_structure")
+    );
+}
+
 export class KingdomSnippetOption extends BaseOptionComponent {
     static template = "theme_kingdom.KingdomSnippetOption";
-    static selector = "section[data-snippet^='theme_kingdom.']";
-    static groups = ["website.group_website_designer"];
+    static selector = KINGDOM_SNIPPET_SELECTOR;
 
     get configAction() {
         const snippetKey = this.env.getEditingElement()?.dataset?.snippet;
@@ -27,10 +39,15 @@ export class KingdomSnippetOption extends BaseOptionComponent {
     }
 }
 
+export class KingdomCarouselSlideOption extends BaseOptionComponent {
+    static template = "theme_kingdom.KingdomCarouselSlideOption";
+    static selector = `${KINGDOM_SNIPPET_SELECTOR} .carousel-item`;
+}
+
 export class OpenKingdomSnippetConfigAction extends BuilderAction {
     static id = "openKingdomSnippetConfig";
 
-    apply({ editingElement, params }) {
+    apply({ params }) {
         const actionXmlId = params?.actionXmlId;
         if (!actionXmlId) {
             return;
@@ -39,14 +56,48 @@ export class OpenKingdomSnippetConfigAction extends BuilderAction {
     }
 }
 
+export class RemoveKingdomSnippetBlockAction extends BuilderAction {
+    static id = "removeKingdomSnippetBlock";
+    static dependencies = ["remove"];
+
+    apply({ editingElement }) {
+        const section =
+            editingElement?.matches?.(KINGDOM_SNIPPET_SELECTOR)
+                ? editingElement
+                : getKingdomSnippetSection(editingElement);
+        if (section) {
+            this.dependencies.remove.removeElement(section);
+        }
+    }
+}
+
 class KingdomSnippetOptionPlugin extends Plugin {
     static id = "kingdomSnippetOption";
+    static dependencies = ["builderOptions"];
     resources = {
-        builder_options: [withSequence(SNIPPET_SPECIFIC, KingdomSnippetOption)],
+        builder_options: [
+            withSequence(SNIPPET_SPECIFIC, KingdomSnippetOption),
+            withSequence(SNIPPET_SPECIFIC, KingdomCarouselSlideOption),
+        ],
         builder_actions: {
             OpenKingdomSnippetConfigAction,
+            RemoveKingdomSnippetBlockAction,
         },
+        on_removed_handlers: this.onRemovedKingdomSnippet.bind(this),
     };
+
+    onRemovedKingdomSnippet({ removedEl, nextTargetEl }) {
+        if (!removedEl.matches?.(KINGDOM_SNIPPET_SELECTOR)) {
+            return;
+        }
+        // Clear overlay after DOM removal (before history refresh) to avoid
+        // MovePlugin reading parentNode.children on a detached section.
+        this.dependencies.builderOptions.deactivateContainers();
+        const wrapEl = getHomepageWrap(this.editable, nextTargetEl);
+        if (wrapEl) {
+            wrapEl.classList.add("o_dirty");
+        }
+    }
 }
 
 registry

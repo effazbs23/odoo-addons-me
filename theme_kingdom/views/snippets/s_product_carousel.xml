@@ -204,16 +204,20 @@
                         </div>
                     </div>
                     <t t-if="not feature_tab and editable">
-                        <p class="small text-muted mt-2 mb-0 o_not_editable">
-                            Preview products shown. Configure tabs in Website → Configuration → Product Tabs.
-                        </p>
+                        <div class="css_non_editable_mode_hidden">
+                            <p class="small text-muted mt-2 mb-0 o_not_editable">
+                                Preview products shown. Configure tabs in Website → Configuration → Product Tabs.
+                            </p>
+                        </div>
                     </t>
                 </t>
-                <t t-else="">
-                    <div class="alert alert-info mb-0 o_not_editable">
-                        Configure <strong>New Arrivals</strong> and <strong>Best Sellers</strong> in
-                        Website → Configuration → Product Tabs
-                        (enable <em>Product carousel snippet</em>).
+                <t t-elif="editable">
+                    <div class="css_non_editable_mode_hidden">
+                        <div class="alert alert-info mb-0 o_not_editable">
+                            Configure <strong>New Arrivals</strong> and <strong>Best Sellers</strong> in
+                            Website → Configuration → Product Tabs
+                            (enable <em>Product carousel snippet</em>).
+                        </div>
                     </div>
                 </t>
             </div>

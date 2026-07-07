@@ -7,6 +7,15 @@
                 Configure
             </BuilderButton>
         </BuilderRow>
+        <BuilderRow label.translate="Block">
+            <BuilderButton type="'danger'"
+                           preview="false"
+                           action="'removeKingdomSnippetBlock'"
+                           title.translate="Remove this block from the page"
+                           icon="'fa-trash'">
+                Remove block
+            </BuilderButton>
+        </BuilderRow>
         <div class="px-2 pb-2 small text-muted">
             New Arrivals / Best Sellers tabs power both carousels. Enable
             <em>Dual carousel snippet</em> on category tabs (max 2 columns).

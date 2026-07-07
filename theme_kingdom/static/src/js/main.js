@@ -675,6 +675,58 @@
       }
 
       if (categoryMenu) {
+        var megaCloseTimer;
+
+        function closeMegaPanels() {
+          categoryMenu.querySelectorAll(".nav-menu > li.is-mega-open").forEach(function (item) {
+            item.classList.remove("is-mega-open");
+          });
+        }
+
+        function openMegaPanel(item) {
+          clearTimeout(megaCloseTimer);
+          closeMegaPanels();
+          item.classList.add("is-mega-open");
+        }
+
+        function scheduleMegaClose(item) {
+          clearTimeout(megaCloseTimer);
+          megaCloseTimer = setTimeout(function () {
+            item.classList.remove("is-mega-open");
+          }, 220);
+        }
+
+        categoryMenu.querySelectorAll(".nav-menu > li.has-children").forEach(function (item) {
+          var sublist = item.querySelector(":scope > .sublist");
+          if (!sublist) return;
+
+          item.addEventListener("mouseenter", function () {
+            if (!window.matchMedia("(min-width: 992px)").matches) return;
+            openMegaPanel(item);
+          });
+
+          item.addEventListener("mouseleave", function (e) {
+            if (!window.matchMedia("(min-width: 992px)").matches) return;
+            if (e.relatedTarget && item.contains(e.relatedTarget)) {
+              return;
+            }
+            scheduleMegaClose(item);
+          });
+
+          sublist.addEventListener("mouseenter", function () {
+            if (!window.matchMedia("(min-width: 992px)").matches) return;
+            openMegaPanel(item);
+          });
+
+          sublist.addEventListener("mouseleave", function (e) {
+            if (!window.matchMedia("(min-width: 992px)").matches) return;
+            if (e.relatedTarget && item.contains(e.relatedTarget)) {
+              return;
+            }
+            scheduleMegaClose(item);
+          });
+        });
+
         categoryMenu.querySelectorAll(".mm-nav-item.has-children > a").forEach(function (link) {
           link.addEventListener("click", function (e) {
             var sublist = link.parentElement.querySelector(":scope > .sublist");
@@ -695,6 +747,19 @@
             e.preventDefault();
             e.stopPropagation();
             openSublist(arrow.closest("a"));
+          });
+        });
+
+        categoryMenu.querySelectorAll(".sublist .mm-nav-item.has-children > a").forEach(function (link) {
+          link.addEventListener("click", function (e) {
+            var sublist = link.parentElement.querySelector(":scope > .sublist");
+            if (!sublist) return;
+            if (window.matchMedia("(max-width: 991px)").matches) {
+              e.preventDefault();
+              openSublist(link);
+            } else if (link.getAttribute("href") === "#") {
+              e.preventDefault();
+            }
           });
         });
       }

@@ -178,8 +178,8 @@
                                 </div>
                             </t>
                         </t>
-                        <t t-else="">
-                            <div class="swiper-slide">
+                        <t t-elif="editable">
+                            <div class="swiper-slide css_non_editable_mode_hidden">
                                 <article class="featured-product-card">
                                     <a href="/shop" class="featured-product-picture">
                                         <img src="/theme_kingdom/static/src/images/categories/cat-5.jpg"

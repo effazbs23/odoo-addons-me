@@ -4,7 +4,7 @@
 
 
         <xpath expr="//snippets[@id='snippet_groups']" position="inside">
-            <t t-snippet="theme_kingdom.s_hero_slider"
+            <t t-snippet="website.s_snippet_group"
                snippet-group="kingdom_snippet"
                string="Kingdom Snippets"
                t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
