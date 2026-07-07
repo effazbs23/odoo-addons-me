@@ -10,9 +10,9 @@
     </template>
 
     <template id="kingdom_header_category_item" name="Kingdom Header Category Item">
-        <t t-set="category_children" t-value="category.kingdom_get_header_children()"/>
+        <t t-set="category_children" t-value="category.sudo().child_id"/>
         <li t-attf-class="mm-nav-item #{category_children and 'has-children' or ''}">
-            <a t-att-href="'/shop/category/%s' % category.id"
+            <a t-att-href="category_children and '#' or ('/shop/category/%s' % category.id)"
                t-attf-class="#{category_children and 'mm-nav-image' or ''}">
                 <span class="nav-icon">
                     <img class="image-container"
@@ -27,11 +27,24 @@
             </a>
             <div t-if="category_children" class="sublist">
                 <ul class="sublist-list ps-0 mb-0">
-                    <li t-foreach="category_children" t-as="child" class="mm-nav-item">
-                        <a t-att-href="'/shop/category/%s' % child.id">
-                            <span class="category-name" t-out="child.name"/>
-                        </a>
-                    </li>
+                    <t t-foreach="category_children" t-as="child">
+                        <t t-set="child_children" t-value="child.sudo().child_id"/>
+                        <li t-attf-class="mm-nav-item #{child_children and 'has-children' or ''}">
+                            <a t-att-href="child_children and '#' or ('/shop/category/%s' % child.id)">
+                                <span class="category-name" t-out="child.name"/>
+                                <span t-if="child_children" class="right-arrow icon icon-right-arrow" aria-hidden="true"/>
+                            </a>
+                            <div t-if="child_children" class="sublist">
+                                <ul class="sublist-list ps-0 mb-0">
+                                    <li t-foreach="child_children" t-as="grandchild" class="mm-nav-item">
+                                        <a t-att-href="'/shop/category/%s' % grandchild.id">
+                                            <span class="category-name" t-out="grandchild.name"/>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </t>
                 </ul>
             </div>
         </li>
@@ -71,6 +84,7 @@
             <t t-set="pricelist" t-value="request.pricelist"/>
             <t t-set="website_sale_pricelists" t-value="website.get_pricelist_available(show_visible=True)"/>
             <t t-set="hasPricelistDropdown" t-value="website_sale_pricelists and len(website_sale_pricelists) &gt; 1"/>
+            <t t-set="kingdom_display_currency" t-value="(pricelist and pricelist.currency_id) or website.currency_id"/>
             <t t-set="kingdom_cart_amount" t-value="website_sale_cart.amount_total if website_sale_cart else 0.0"/>
             <t t-set="is_logged_in" t-value="website.user_id != user_id"/>
 
@@ -157,12 +171,14 @@
                             </div>
                             <div class="header-inline-selectors" aria-label="Store selectors">
                                 <t t-if="hasPricelistDropdown">
-                                    <div class="dropdown d-inline-block">
-                                        <a href="#"
+                                    <div class="dropdown d-inline-block o_pricelist_dropdown">
+                                        <a role="button"
+                                           href="#"
                                            class="k-inline-select dropdown-toggle"
                                            data-bs-toggle="dropdown"
+                                           aria-expanded="false"
                                            aria-label="Currency">
-                                            <span t-out="pricelist and pricelist.name or 'Pricelist'"/>
+                                            <span t-out="kingdom_display_currency.name"/>
                                             <i class="bi bi-chevron-down" aria-hidden="true"/>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
@@ -171,17 +187,20 @@
                                                role="menuitem"
                                                t-att-href="'/shop/change_pricelist/%s' % pl.id"
                                                t-attf-class="dropdown-item #{'active' if pricelist and pricelist.id == pl.id else ''}"
-                                               t-out="pl.name"/>
+                                               t-att-aria-current="pricelist and pricelist.id == pl.id and 'true' or 'false'">
+                                                <span class="switcher_pricelist"
+                                                      t-att-data-pl_id="pl.id"
+                                                      t-out="pl.currency_id.name"/>
+                                            </a>
                                         </div>
                                     </div>
                                 </t>
                                 <t t-else="">
-                                    <a href="#" class="k-inline-select" aria-label="Currency">
-                                        <span t-out="pricelist and pricelist.name or website.currency_id.name"/>
-                                        <i class="bi bi-chevron-down" aria-hidden="true"/>
-                                    </a>
+                                    <span class="k-inline-select k-inline-select--static" aria-label="Currency">
+                                        <span t-out="kingdom_display_currency.name"/>
+                                    </span>
                                 </t>
-                                <t t-call="portal.language_selector"
+                                <t t-call="website.language_selector"
                                    codes="True"
                                    _div_classes.f="d-inline-block"
                                    _btn_class.f="k-inline-select dropdown-toggle border-0 bg-transparent p-0 shadow-none"
@@ -212,7 +231,7 @@
                                            t-attf-aria-label="Shopping cart, #{website_sale_cart_quantity} items">
                                             <span class="cart-qty my_cart_quantity" t-out="website_sale_cart_quantity"/>
                                             <span class="cart-ammount"
-                                                  t-out="website.currency_id.format(kingdom_cart_amount)"/>
+                                                  t-out="kingdom_display_currency.format(kingdom_cart_amount)"/>
                                         </a>
                                     </li>
                                 </ul>

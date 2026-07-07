@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="s_promo_banners" name="Kingdom Promo Banners">
-        <section class="s_promo_banners oe_structure promo-banner-blocks promo-banner-blocks--pre-featured"
+        <section class="s_promo_banners promo-banner-blocks promo-banner-blocks--pre-featured"
                  data-snippet="theme_kingdom.s_promo_banners"
                  data-name="Promo Banners"
                  aria-labelledby="PreFeaturedPromoHeading">

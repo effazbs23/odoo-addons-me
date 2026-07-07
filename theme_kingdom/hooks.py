@@ -1,6 +1,41 @@
 # -*- coding: utf-8 -*-
 
 
+_KINGDOM_SNIPPET_CLASS_FIXES = (
+    ('s_featured_products oe_structure oe_website_sale', 's_featured_products oe_website_sale'),
+    ('s_bestsale_products oe_structure oe_website_sale', 's_bestsale_products oe_website_sale'),
+    ('s_product_carousel oe_structure oe_website_sale', 's_product_carousel oe_website_sale'),
+    ('s_category_dual_carousels oe_structure oe_website_sale', 's_category_dual_carousels oe_website_sale'),
+    ('s_hero_slider s_hero_slider_wrapper s_carousel_wrapper p-0 oe_structure', 's_hero_slider s_hero_slider_wrapper s_carousel_wrapper p-0'),
+    ('s_category_slider oe_structure', 's_category_slider'),
+    ('dealoftheday-wrapper oe_structure oe_website_sale', 'dealoftheday-wrapper oe_website_sale'),
+    ('s_promo_banners oe_structure', 's_promo_banners'),
+    ('s_promo_banner oe_structure', 's_promo_banner'),
+    ('s_blog_news oe_structure', 's_blog_news'),
+    ('s_manufacturers oe_structure', 's_manufacturers'),
+    ('s_service_highlights oe_structure', 's_service_highlights'),
+)
+
+
+def _migrate_kingdom_snippet_oe_structure(env):
+    """Drop oe_structure from saved Kingdom snippet sections in page views."""
+    View = env['ir.ui.view'].sudo()
+    views = View.search([
+        ('type', '=', 'qweb'),
+        ('arch_db', 'ilike', 'data-snippet="theme_kingdom.'),
+        ('arch_db', 'ilike', 'oe_structure'),
+    ])
+    for view in views:
+        arch = view.arch_db
+        if not arch:
+            continue
+        new_arch = arch
+        for old, new in _KINGDOM_SNIPPET_CLASS_FIXES:
+            new_arch = new_arch.replace(old, new)
+        if new_arch != arch:
+            view.with_context(no_save_prev=True).write({'arch_db': new_arch})
+
+
 def pre_init_hook(env):
     """Prepare schema and migrate legacy data before module models load."""
     _ensure_website_menu_kingdom_tab_column(env)
@@ -62,6 +97,7 @@ def post_init_hook(env):
 
     _ensure_default_product_tabs(env)
     _ensure_homepage_featured_categories(env)
+    _migrate_kingdom_snippet_oe_structure(env)
 
 
 def _ensure_homepage_featured_categories(env):

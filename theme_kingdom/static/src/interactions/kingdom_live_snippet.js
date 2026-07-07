@@ -5,7 +5,6 @@ import { rpc } from '@web/core/network/rpc';
 const PRODUCT_ROW_SWIPER_OPTS = {
     spaceBetween: 14,
     slidesPerView: 2,
-    pagination: { clickable: true },
     breakpoints: {
         576: { slidesPerView: 2 },
         768: { slidesPerView: 3 },
@@ -93,6 +92,30 @@ export class KingdomLiveSnippet extends Interaction {
         }
         this.services['public.interactions'].stopInteractions(container);
         container.replaceWith(freshContainer);
+        await this.waitFor(
+            this.services['public.interactions'].startInteractions(this.el)
+        );
+    }
+
+    start() {
+        const snippetKey = this._getSnippetKey();
+        if (!snippetKey) {
+            return;
+        }
+        window.requestAnimationFrame(() => {
+            this._initSnippetWidgets(snippetKey);
+        });
+    }
+
+    destroy() {
+        if (this._dealCountdownInterval) {
+            window.clearInterval(this._dealCountdownInterval);
+            this._dealCountdownInterval = null;
+        }
+        super.destroy();
+    }
+
+    _initSnippetWidgets(snippetKey) {
         if (snippetKey === 's_deal_of_the_day') {
             this._initDealSnippet();
         } else if (
@@ -102,12 +125,12 @@ export class KingdomLiveSnippet extends Interaction {
             this._initProductCarousels();
         } else if (snippetKey === 's_category_slider') {
             this._initCategorySwiper();
-        } else {
+        } else if (
+            snippetKey === 's_featured_products'
+            || snippetKey === 's_bestsale_products'
+        ) {
             this._initProductSwiper();
         }
-        await this.waitFor(
-            this.services['public.interactions'].startInteractions(this.el)
-        );
     }
 
     _initDealCountdown() {
@@ -196,29 +219,39 @@ export class KingdomLiveSnippet extends Interaction {
     }
 
     _initProductSwiper() {
-        if (typeof Swiper === 'undefined') {
-            return;
-        }
-        const swiperEl = this.el.querySelector('.featured-swiper, .bestsale-swiper');
-        if (!swiperEl) {
-            return;
-        }
-        if (swiperEl.swiper) {
-            swiperEl.swiper.destroy(true, true);
-        }
-        const nav = this.el.querySelector('.featured-products-nav');
-        new Swiper(
-            swiperEl,
-            Object.assign({}, PRODUCT_ROW_SWIPER_OPTS, {
-                watchOverflow: true,
-                preventClicks: false,
-                preventClicksPropagation: false,
-                navigation: {
-                    prevEl: nav && nav.querySelector('.swiper-button-prev'),
-                    nextEl: nav && nav.querySelector('.swiper-button-next'),
-                },
-            })
-        );
+        const run = () => {
+            if (typeof window.KingdomInitProductRowSwiper === 'function') {
+                window.KingdomInitProductRowSwiper(this.el);
+                return;
+            }
+            if (typeof Swiper === 'undefined') {
+                window.setTimeout(run, 50);
+                return;
+            }
+            const swiperEl = this.el.querySelector('.featured-swiper, .bestsale-swiper');
+            if (!swiperEl) {
+                return;
+            }
+            if (swiperEl.swiper) {
+                swiperEl.swiper.destroy(true, true);
+            }
+            const nav = this.el.querySelector('.featured-products-nav');
+            new Swiper(
+                swiperEl,
+                Object.assign({}, PRODUCT_ROW_SWIPER_OPTS, {
+                    observer: true,
+                    observeParents: true,
+                    watchOverflow: true,
+                    preventClicks: false,
+                    preventClicksPropagation: false,
+                    navigation: {
+                        prevEl: nav && nav.querySelector('.swiper-button-prev'),
+                        nextEl: nav && nav.querySelector('.swiper-button-next'),
+                    },
+                })
+            );
+        };
+        run();
     }
 
     _initProductCarousels() {

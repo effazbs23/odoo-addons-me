@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="s_promo_banner" name="Kingdom Promo Banner">
-        <section class="s_promo_banner oe_structure promo-banner-blocks"
+        <section class="s_promo_banner promo-banner-blocks"
                  data-snippet="theme_kingdom.s_promo_banner"
                  data-name="Promo Banner"
                  aria-labelledby="PromoBannerBlocksHeading">

@@ -2,6 +2,8 @@
 
 from odoo import models
 
+from odoo.addons.theme_kingdom.hooks import _migrate_kingdom_snippet_oe_structure
+
 
 class ThemeUtils(models.AbstractModel):
     _inherit = 'theme.utils'
@@ -22,4 +24,5 @@ class ThemeUtils(models.AbstractModel):
 
     def _theme_kingdom_post_copy(self, mod):
         self._activate_kingdom_footer()
+        _migrate_kingdom_snippet_oe_structure(self.env)
         return True

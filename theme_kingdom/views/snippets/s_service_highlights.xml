@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="s_service_highlights" name="Kingdom Service Highlights">
-        <section class="s_service_highlights oe_structure home-trust-section"
+        <section class="s_service_highlights home-trust-section"
                  data-snippet="theme_kingdom.s_service_highlights"
                  data-name="Service Highlights"
                  aria-labelledby="HomeTrustHeading">

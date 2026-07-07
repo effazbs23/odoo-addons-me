@@ -40,7 +40,7 @@
                             Sub-Total:
                             <strong id="miniCartSubTotal"
                                     class="js_kingdom_flyout_subtotal"
-                                    t-out="website.currency_id.format(website_sale_cart.amount_total if website_sale_cart else 0.0)"/>
+                                    t-out="(order.currency_id if order else request.pricelist.currency_id).format(website_sale_cart.amount_total if website_sale_cart else 0.0)"/>
                         </div>
                         <div class="buttons">
                             <button type="button"

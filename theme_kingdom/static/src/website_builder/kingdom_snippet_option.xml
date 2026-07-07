@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="theme_kingdom.KingdomSnippetOption">
+        <t t-if="this.configAction">
+            <BuilderRow label.translate="Configuration">
+                <BuilderButton type="'secondary'"
+                               preview="false"
+                               action="'openKingdomSnippetConfig'"
+                               actionParam="{ actionXmlId: this.configAction }">
+                    Configure
+                </BuilderButton>
+            </BuilderRow>
+        </t>
+        <div class="px-2 pb-2 small text-muted">
+            Select this block, then use the trash icon in the toolbar or the
+            Customize panel to remove it from the page.
+        </div>
+    </t>
+
+</templates>

@@ -83,7 +83,7 @@
     </template>
 
     <template id="s_product_carousel" name="Kingdom Product Carousel">
-        <section class="s_product_carousel oe_structure oe_website_sale product-carousel-section"
+        <section class="s_product_carousel oe_website_sale product-carousel-section"
                  data-snippet="theme_kingdom.s_product_carousel"
                  data-kingdom-live-snippet="s_product_carousel"
                  data-name="Product Carousel"

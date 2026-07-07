@@ -61,7 +61,7 @@
         <t t-set="news_view_all"
            t-value="news_column_blog.kingdom_list_url() if news_column_blog else '/blog'"/>
 
-        <section class="s_blog_news oe_structure blog-news-section"
+        <section class="s_blog_news blog-news-section"
                  data-snippet="theme_kingdom.s_blog_news"
                  data-name="Blog and News"
                  aria-labelledby="BlogNewsHeading">

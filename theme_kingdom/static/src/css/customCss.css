@@ -212,6 +212,25 @@
     color: var(--primary-color);
   }
 
+  .header-left-menu-dropdown .nav-menu > li > .sublist .sublist-list > li > .sublist {
+    position: static;
+    visibility: visible;
+    opacity: 1;
+    width: auto;
+    min-height: 0;
+    box-shadow: none;
+    left: auto;
+    top: auto;
+    padding: 0;
+    margin-bottom: 15px;
+  }
+
+  .header-left-menu-dropdown .nav-menu > li > .sublist .sublist-list > li > .sublist .sublist-list .mm-nav-item a {
+    font-weight: 400;
+    color: var(--black);
+    padding: 4px 15px;
+  }
+
   .header-left-menu-dropdown .nav-menu > li:hover > .sublist {
     visibility: visible;
     opacity: 1;

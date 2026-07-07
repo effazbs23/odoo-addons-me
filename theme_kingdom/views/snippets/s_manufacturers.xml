@@ -2,7 +2,7 @@
 <odoo>
 
     <template id="s_manufacturers" name="Kingdom Manufacturers">
-        <section class="s_manufacturers oe_structure home-manufacturers-section carousel-grid"
+        <section class="s_manufacturers home-manufacturers-section carousel-grid"
                  data-snippet="theme_kingdom.s_manufacturers"
                  data-name="Manufacturers"
                  aria-labelledby="ManufacturersHeading">

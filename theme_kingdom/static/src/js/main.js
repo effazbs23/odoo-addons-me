@@ -667,13 +667,43 @@
     }
 
     function initHeaderMegaMenu() {
-      document.querySelectorAll(".header-menu .mm-nav-item.has-children .right-arrow").forEach(function (arrow) {
+      var categoryMenu = document.querySelector(".header-left-menu-dropdown");
+
+      function openSublist(link) {
+        var sublist = link && link.parentElement.querySelector(":scope > .sublist");
+        if (sublist) sublist.classList.add("show");
+      }
+
+      if (categoryMenu) {
+        categoryMenu.querySelectorAll(".mm-nav-item.has-children > a").forEach(function (link) {
+          link.addEventListener("click", function (e) {
+            var sublist = link.parentElement.querySelector(":scope > .sublist");
+            if (!sublist) return;
+            if (window.matchMedia("(max-width: 991px)").matches) {
+              e.preventDefault();
+              openSublist(link);
+              return;
+            }
+            if (link.getAttribute("href") === "#") {
+              e.preventDefault();
+            }
+          });
+        });
+
+        categoryMenu.querySelectorAll(".mm-nav-item.has-children .right-arrow").forEach(function (arrow) {
+          arrow.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openSublist(arrow.closest("a"));
+          });
+        });
+      }
+
+      document.querySelectorAll(".header-menu .header-right-menu .mm-nav-item.has-children .right-arrow").forEach(function (arrow) {
         arrow.addEventListener("click", function (e) {
           e.preventDefault();
           e.stopPropagation();
-          var link = arrow.closest("a");
-          var sublist = link && link.parentElement.querySelector(":scope > .sublist");
-          if (sublist) sublist.classList.add("show");
+          openSublist(arrow.closest("a"));
         });
       });
       var menuClose = document.querySelector(".header-menu > .mobile-menu-close");
@@ -688,7 +718,31 @@
       }
     }
 
+    function initHeaderSelectors() {
+      document.querySelectorAll(".header-inline-selectors .js_change_lang").forEach(function (link) {
+        link.addEventListener("click", function (ev) {
+          if (document.body.classList.contains("editor_enable")) {
+            return;
+          }
+          ev.preventDefault();
+          var urlCode = link.getAttribute("data-url_code");
+          if (!urlCode) {
+            return;
+          }
+          var target = (link.getAttribute("href") || "/").replace(/[&?]edit_translations[^&?]+/, "");
+          var hash = window.location.hash || "";
+          window.location.href =
+            "/website/lang/" +
+            encodeURIComponent(urlCode) +
+            "?r=" +
+            encodeURIComponent(target) +
+            (hash ? encodeURIComponent(hash) : "");
+        });
+      });
+    }
+
     initMobileChrome();
+    initHeaderSelectors();
     initHeaderMegaMenu();
     initMobileNavigationDrawer();
     initKingdomFooterAccordion();
@@ -1064,7 +1118,8 @@
     var productRowOpts = {
       spaceBetween: 14,
       slidesPerView: 2,
-      pagination: { clickable: true },
+      observer: true,
+      observeParents: true,
       breakpoints: {
         576: { slidesPerView: 2 },
         768: { slidesPerView: 3 },
@@ -1074,19 +1129,16 @@
       },
     };
 
-    function initProductRowSwiper(sectionSelector, swiperSelector, swiperOpts) {
-      var section = document.querySelector(sectionSelector);
-      if (
-        !section
-        || section.hasAttribute("data-kingdom-live-snippet")
-        || section.matches("section.s_featured_products[data-snippet], section.s_bestsale_products[data-snippet]")
-        || typeof Swiper === "undefined"
-      ) return;
-      var swiperEl = section.querySelector(swiperSelector);
-      if (!swiperEl) return;
+    function initProductRowSwiperInSection(section, swiperSelector, swiperOpts) {
+      if (!section || typeof Swiper === "undefined") return null;
+      var swiperEl = section.querySelector(swiperSelector || ".featured-swiper, .bestsale-swiper");
+      if (!swiperEl || !swiperEl.querySelector(".swiper-slide")) return null;
+      if (swiperEl.swiper && swiperEl.swiper.destroy) {
+        swiperEl.swiper.destroy(true, true);
+      }
       var nav = section.querySelector(".featured-products-nav");
       var opts = swiperOpts || productRowOpts;
-      new Swiper(swiperEl, Object.assign({}, opts, {
+      return new Swiper(swiperEl, Object.assign({}, opts, {
         watchOverflow: true,
         preventClicks: false,
         preventClicksPropagation: false,
@@ -1097,8 +1149,33 @@
       }));
     }
 
+    function initProductRowSwiper(sectionSelector, swiperSelector, swiperOpts) {
+      document.querySelectorAll(sectionSelector).forEach(function (section) {
+        initProductRowSwiperInSection(section, swiperSelector, swiperOpts);
+      });
+    }
+
+    window.KingdomInitProductRowSwiper = function (root) {
+      var scope = root || document;
+      scope.querySelectorAll(".featured-products-section, .bestsale-products-section").forEach(function (section) {
+        var swiperEl = section.querySelector(".featured-swiper, .bestsale-swiper");
+        var selector = swiperEl && swiperEl.classList.contains("bestsale-swiper")
+          ? ".bestsale-swiper"
+          : ".featured-swiper";
+        initProductRowSwiperInSection(section, selector, productRowOpts);
+      });
+    };
+
     initProductRowSwiper(".featured-products-section", ".featured-swiper");
     initProductRowSwiper(".bestsale-products-section", ".bestsale-swiper");
+
+    if (document.body.classList.contains("editor_enable") && typeof MutationObserver !== "undefined") {
+      var productRowObserver = new MutationObserver(function () {
+        window.KingdomInitProductRowSwiper();
+      });
+      var observeRoot = document.getElementById("wrapwrap") || document.body;
+      productRowObserver.observe(observeRoot, { childList: true, subtree: true });
+    }
 
     initSwiper(".secondary-hero-swiper", {
       loop: true,

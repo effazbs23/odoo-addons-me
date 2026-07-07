@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="s_category_slider" name="Kingdom Category Slider">
-        <section class="s_category_slider oe_structure home-page-category-grid k-featured-categories"
+        <section class="s_category_slider home-page-category-grid k-featured-categories"
                  data-snippet="theme_kingdom.s_category_slider"
                  data-kingdom-live-snippet="s_category_slider"
                  data-name="Featured Categories"

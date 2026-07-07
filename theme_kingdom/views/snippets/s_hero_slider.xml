@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="s_hero_slider" name="Kingdom Hero Slider">
-        <section class="s_hero_slider s_hero_slider_wrapper s_carousel_wrapper p-0 oe_structure topic-block topic-banner"
+        <section class="s_hero_slider s_hero_slider_wrapper s_carousel_wrapper p-0 topic-block topic-banner"
                  data-snippet="theme_kingdom.s_hero_slider"
                  data-name="Hero Slider"
                  data-vxml="001"
