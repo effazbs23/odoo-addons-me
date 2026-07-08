@@ -3,9 +3,6 @@
     <template id="naturalfood_our_products" name="Our Products Section">
         <section class="product-tabs py-5 featured-products-new-tab">
             <div class="container">
-                <t t-set="current_pricelist" t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
-                <t t-set="display_currency"
-                   t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
                 <t t-set="categories" t-value="request.env['product.public.category'].sudo().search([], order='sequence asc')"/>
                 <t t-set="first_category" t-value="categories[:1] and categories[0] or False"/>
                 <t t-set="first_cat_product"
@@ -79,89 +76,8 @@
                         </div>
 
                         <!-- Product Grid Container -->
-                        <div id="product-slider" class="row g-4">
-                            <t t-set="slider_first" t-value="True"/>
-
-                            <t t-foreach="categories" t-as="category">
-
-                                <t t-set="cat_products"
-                                   t-value="request.env['product.template'].sudo().search([
-                   ('public_categ_ids', 'in', [category.id]),
-                   ('is_published', '=', True),
-                   ('sale_ok', '=', True),
-               ], limit=8)"/>
-
-                                <!-- Swiper -->
-                                <div class="swiper category-products"
-                                     t-att-data-category="category.id"
-                                     t-att-style="'display:block;' if slider_first else 'display:none;'">
-
-                                    <div class="swiper-wrapper">
-
-                                        <t t-foreach="cat_products" t-as="product">
-                                            <div class="swiper-slide">
-                                                <div class="product-card shadow-hover border-0">
-                                                    <t t-set="contextual_price"
-                                                       t-value="(current_pricelist and product.with_context(pricelist=current_pricelist.id)._get_contextual_price()) or product._get_contextual_price()"/>
-
-                                                    <div class="product-card-image position-relative">
-                                                        <a t-att-href="'/shop/%s' % slug(product)">
-                                                            <img t-att-src="'/web/image/product.template/%s/image_512' % product.id"
-                                                                 t-att-alt="product.name"
-                                                                 class="img-fluid w-100"/>
-                                                        </a>
-
-                                                        <!-- Action Buttons -->
-                                                        <div class="product-actions position-absolute top-0 end-0 m-2 d-flex flex-column gap-1 opacity-0">
-                                                            <button type="button"
-                                                                    class="btn btn-light btn-sm rounded-circle shadow-sm"
-                                                                    t-att-onclick="'event.stopPropagation(); addToWishlist(%s);' % product.id"
-                                                                    title="Add to Wishlist">
-                                                                <i class="bi bi-heart"></i>
-                                                            </button>
-                                                            <button type="button"
-                                                                    class="btn btn-light btn-sm rounded-circle shadow-sm"
-                                                                    t-attf-onclick="event.preventDefault(); event.stopPropagation(); quickView(#{product.id});"
-                                                                    t-att-data-quick-view-product-id="product.id"
-                                                                    title="Quick View">
-                                                                <i class="bi bi-eye"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="p-3">
-                                                        <h6 class="fw-semibold text-dark mb-2">
-                                                            <t t-esc="product.name"/>
-                                                        </h6>
-
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <span class="h6 text-organic-600 fw-bold">
-                                                                <t t-out="contextual_price"
-                                                                   t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
-                                                            </span>
-
-                                                            <button type="button"
-                                                                    class="btn btn-sm btn-organic rounded-pill s_add_to_cart_btn"
-                                                                    t-att-data-product-template-id="product.id"
-                                                                    t-att-data-product-variant-id="product.product_variant_id.id"
-                                                                    t-att-data-product-type="product.type"
-                                                                    data-action="add_to_cart"
-                                                                    data-show-quantity="False">
-                                                                <i class="bi bi-cart3"/>
-                                                                Add
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </t>
-
-                                    </div>
-                                </div>
-                                <t t-set="slider_first" t-value="False"/>
-
-                            </t>
+                        <div id="product-slider" class="row g-4" data-nf-dynamic-container="our_products">
+                            <t t-call="theme_natural_foods.our_products_items"/>
                         </div>
 
                     </div>
@@ -169,5 +85,95 @@
                 </div>
             </div>
         </section>
+    </template>
+
+    <!-- Dynamic body: re-rendered server-side on every page load (see nf-dynamic-snippets.js) -->
+    <template id="our_products_items" name="Our Products Items">
+        <t t-set="current_pricelist" t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
+        <t t-set="display_currency"
+           t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
+        <t t-set="categories" t-value="request.env['product.public.category'].sudo().search([], order='sequence asc')"/>
+        <t t-set="slider_first" t-value="True"/>
+
+        <t t-foreach="categories" t-as="category">
+
+            <t t-set="cat_products"
+               t-value="request.env['product.template'].sudo().search([
+                   ('public_categ_ids', 'in', [category.id]),
+                   ('is_published', '=', True),
+                   ('sale_ok', '=', True),
+               ], limit=8)"/>
+
+            <!-- Swiper -->
+            <div class="swiper category-products"
+                 t-att-data-category="category.id"
+                 t-att-style="'display:block;' if slider_first else 'display:none;'">
+
+                <div class="swiper-wrapper">
+
+                    <t t-foreach="cat_products" t-as="product">
+                        <div class="swiper-slide">
+                            <div class="product-card shadow-hover border-0">
+                                <t t-set="contextual_price"
+                                   t-value="(current_pricelist and product.with_context(pricelist=current_pricelist.id)._get_contextual_price()) or product._get_contextual_price()"/>
+
+                                <div class="product-card-image position-relative">
+                                    <a t-att-href="'/shop/%s' % slug(product)">
+                                        <img t-att-src="'/web/image/product.template/%s/image_512' % product.id"
+                                             t-att-alt="product.name"
+                                             class="img-fluid w-100"/>
+                                    </a>
+
+                                    <!-- Action Buttons -->
+                                    <div class="product-actions position-absolute top-0 end-0 m-2 d-flex flex-column gap-1 opacity-0">
+                                        <button type="button"
+                                                class="btn btn-light btn-sm rounded-circle shadow-sm"
+                                                t-att-onclick="'event.stopPropagation(); addToWishlist(%s);' % product.id"
+                                                title="Add to Wishlist">
+                                            <i class="bi bi-heart"></i>
+                                        </button>
+                                        <button type="button"
+                                                class="btn btn-light btn-sm rounded-circle shadow-sm"
+                                                t-attf-onclick="event.preventDefault(); event.stopPropagation(); quickView(#{product.id});"
+                                                t-att-data-quick-view-product-id="product.id"
+                                                title="Quick View">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="p-3">
+                                    <h6 class="fw-semibold text-dark mb-2">
+                                        <t t-esc="product.name"/>
+                                    </h6>
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="h6 text-organic-600 fw-bold">
+                                            <t t-out="contextual_price"
+                                               t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
+                                        </span>
+
+                                        <button type="button"
+                                                class="btn btn-sm btn-organic rounded-pill s_add_to_cart_btn"
+                                                t-att-data-product-template-id="product.id"
+                                                t-att-data-product-variant-id="product.product_variant_id.id"
+                                                t-att-data-product-type="product.type"
+                                                data-action="add_to_cart"
+                                                data-show-quantity="False">
+                                            <i class="bi bi-cart3"/>
+                                            Add
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </t>
+
+                </div>
+            </div>
+            <t t-set="slider_first" t-value="False"/>
+
+        </t>
     </template>
 </odoo>
