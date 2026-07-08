@@ -14,9 +14,10 @@
     ''',
     'category': 'Theme/eCommerce',
     'version': '19.0.2.1',
-    'author': 'ERP 23',
-    'company': 'nopCommerce, Brainstation 23 PLC',
+    'author': 'ERP23',
+    'company': 'Brainstation 23 PLC',
     'maintainer': 'ERP23',
+    'support': 'erp23@brainstation-23.com',
     'website': 'https://www.erp-23.com',
     'depends': [
         'website',
