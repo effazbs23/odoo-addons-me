@@ -16,7 +16,7 @@
     'version': '19.0.2.1',
     'author': 'ERP 23',
     'company': 'nopCommerce, Brainstation 23 PLC',
-    'maintainer': 'ERP 23',
+    'maintainer': 'ERP23',
     'website': 'https://www.erp-23.com',
     'depends': [
         'website',
