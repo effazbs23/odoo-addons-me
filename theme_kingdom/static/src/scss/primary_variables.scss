@@ -1,0 +1,63 @@
+//------------------------------------------------------------------------------
+// Theme Kingdom — website primary variables
+// Brand colors from .context/Content + static/src/css/color.css
+// Do not copy website/primary_variables.scss here; only theme overrides.
+//------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Color palette
+// ---------------------------------------------------------------------------
+$o-color-palettes: map-merge($o-color-palettes,
+    (
+        'kingdom': (
+            // Primary / secondary from live brand (color.css)
+            'o-color-1': #e76e11,
+            'o-color-2': #7359bb,
+            'o-color-3': #f5f5f5,
+            'o-color-4': #ffffff,
+            'o-color-5': #222222,
+
+            'o-cc1-btn-primary': #e76e11,
+            'o-cc1-link': #e76e11,
+
+            'menu': 4,
+            // Must be CC indices 1-5 (raw hex breaks nth() in o-apply-colors)
+            'footer': 3,
+            'footer-custom': null,
+            'copyright': 4,
+            'copyright-custom': null,
+        ),
+    )
+);
+
+$o-selected-color-palettes-names: append($o-selected-color-palettes-names, 'kingdom');
+
+// ---------------------------------------------------------------------------
+// Fonts (extend default theme fonts)
+// ---------------------------------------------------------------------------
+$o-theme-font-configs: map-merge($o-theme-font-configs, (
+    'Lato': (
+        'family': ('Lato', sans-serif),
+    ),
+));
+
+// ---------------------------------------------------------------------------
+// Website values
+// header-template / footer-template stay 'default' so Kingdom is opt-in via
+// Website Builder (Style → Template). Selecting Kingdom sets:
+//   header-template: 'kingdom'
+//   footer-template: 'kingdom'
+// ---------------------------------------------------------------------------
+$o-website-values-palettes: (
+    (
+        'color-palettes-name': 'kingdom',
+        'font': 'Lato',
+        'headings-font': 'Lato',
+        'navbar-font': 'Lato',
+        'buttons-font': 'Lato',
+        'font-size-base': 1rem,
+        'link-underline': 'hover',
+        'header-template': 'default',
+        'footer-template': 'default',
+    ),
+);

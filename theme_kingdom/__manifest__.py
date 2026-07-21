@@ -72,6 +72,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
         'views/assets.xml',
         'views/header_template.xml',
         'views/footer_template.xml',
+        'data/header_footer_opt_in_migration.xml',
         'views/product_category_views.xml',
         'views/flyout_cart_template.xml',
         'views/product_related_template.xml',
@@ -97,7 +98,11 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
     ],
 
     'assets': {
+        'web._assets_primary_variables': [
+            'theme_kingdom/static/src/scss/primary_variables.scss',
+        ],
         'web.assets_frontend': [
+            'theme_kingdom/static/src/scss/fonts.scss',
             'theme_kingdom/static/src/css/bootstrap.min.css',
             'theme_kingdom/static/src/css/bootstrap-icons.min.css',
             'theme_kingdom/static/src/css/kingdom.css',
@@ -107,6 +112,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
             'theme_kingdom/static/src/css/styles.css',
             'theme_kingdom/static/src/css/customCss.css',
             'theme_kingdom/static/src/css/category-grid.css',
+            'theme_kingdom/static/content/scss/footer.scss',
             ('after', 'website_sale/static/src/js/cart_service.js', 'theme_kingdom/static/src/js/kingdom_cart_service_patch.js'),
             ('after', 'website_sale_wishlist/static/src/js/website_sale_wishlist_utils.js', 'theme_kingdom/static/src/js/kingdom_wishlist_utils_patch.js'),
             'theme_kingdom/static/src/interactions/kingdom_flyout_cart.js',

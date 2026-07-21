@@ -69,9 +69,13 @@
         </li>
     </template>
 
-    <template id="kingdom_header"
+    <!-- Selectable via Website Builder → Header → Template (not active by default).
+         priority=99 so this full header block replace runs after core header attribute
+         inherits (e.g. o_header_standard), matching how footer replaces #footer. -->
+    <template id="template_header_kingdom"
               inherit_id="website.layout"
-              name="Kingdom Header"
+              name="Kingdom"
+              active="False"
               priority="99">
 
         <xpath expr="//header" position="replace">
@@ -88,6 +92,10 @@
             <t t-set="kingdom_cart_amount" t-value="website_sale_cart.amount_total if website_sale_cart else 0.0"/>
             <t t-set="is_logged_in" t-value="website.user_id != user_id"/>
 
+            <header id="top"
+                    data-anchor="true"
+                    data-name="Header"
+                    class="o_header_kingdom o_colored_level">
             <div class="master-header">
                 <div class="master-header-panel">
                     <div class="announcement-bar announcement-wrapper announcement-open announcement-desktop position-relative"
@@ -116,168 +124,167 @@
                         </button>
                     </div>
 
-            <div class="header header-main o_colored_level" id="top" data-name="Header">
-                <div class="header-lower">
-                    <button type="button"
-                            class="btn btn-link mobile-menu-trigger d-lg-none p-0 me-1 border-0"
-                            data-bs-toggle="offcanvas"
-                            data-bs-target="#MobileNavigationDrawer"
-                            aria-controls="MobileNavigationDrawer"
-                            aria-label="Open menu">
-                        <svg class="mobile-menu-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                    </button>
+                    <div class="header header-main o_colored_level">
+                        <div class="header-lower">
+                            <button type="button"
+                                    class="btn btn-link mobile-menu-trigger d-lg-none p-0 me-1 border-0"
+                                    data-bs-toggle="offcanvas"
+                                    data-bs-target="#MobileNavigationDrawer"
+                                    aria-controls="MobileNavigationDrawer"
+                                    aria-label="Open menu">
+                                <svg class="mobile-menu-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                                </svg>
+                            </button>
 
-                    <div class="header-logo">
-                        <a href="/" class="k-logo k-logo-brand d-inline-block text-start" t-att-aria-label="website.name">
-                            <img t-att-src="'/logo.png?company=%s' % res_company.id"
-                                 t-att-alt="website.name"
-                                 loading="eager"/>
-                        </a>
-                    </div>
-
-                    <div class="search-box search-box-main search-box-desktop">
-                        <form method="get"
-                              action="/shop"
-                              role="search"
-                              class="o_searchbar_form s_searchbar_input"
-                              data-snippet="s_searchbar_input">
-                            <input type="hidden" class="o_search_order_by oe_unremovable" name="order" value="name asc"/>
-                            <label class="visually-hidden" for="kSearchQuery">Search store</label>
-                            <input id="kSearchQuery"
-                                   type="search"
-                                   name="search"
-                                   class="search-query"
-                                   data-search-type="products"
-                                   data-limit="5"
-                                   data-display-image="true"
-                                   data-display-description="true"
-                                   data-display-extra-link="true"
-                                   data-display-detail="true"
-                                   placeholder="Search store"
-                                   autocomplete="off"/>
-                            <button type="submit" class="button-1 search-box-button" title="Search" aria-label="Search"/>
-                        </form>
-                    </div>
-
-                    <div class="header-lower-right">
-                        <div class="header-selectors-wrapper">
-                            <div class="header-terms header-link-top">
-                                <a href="/terms"><i class="bi bi-asterisk" aria-hidden="true"/><span>Terms &amp; conditions</span></a>
+                            <div class="header-logo">
+                                <a href="/" class="k-logo k-logo-brand d-inline-block text-start" t-att-aria-label="website.name">
+                                    <img t-att-src="'/logo.png?company=%s' % res_company.id"
+                                         t-att-alt="website.name"
+                                         loading="eager"/>
+                                </a>
                             </div>
-                            <div class="header-storelocation header-link-top">
-                                <a href="/contactus"><i class="bi bi-person" aria-hidden="true"/><span>Contact Us</span></a>
+
+                            <div class="search-box search-box-main search-box-desktop">
+                                <form method="get"
+                                      action="/shop"
+                                      role="search"
+                                      class="o_searchbar_form s_searchbar_input"
+                                      data-snippet="s_searchbar_input">
+                                    <input type="hidden" class="o_search_order_by oe_unremovable" name="order" value="name asc"/>
+                                    <label class="visually-hidden" for="kSearchQuery">Search store</label>
+                                    <input id="kSearchQuery"
+                                           type="search"
+                                           name="search"
+                                           class="search-query"
+                                           data-search-type="products"
+                                           data-limit="5"
+                                           data-display-image="true"
+                                           data-display-description="true"
+                                           data-display-extra-link="true"
+                                           data-display-detail="true"
+                                           placeholder="Search store"
+                                           autocomplete="off"/>
+                                    <button type="submit" class="button-1 search-box-button" title="Search" aria-label="Search"/>
+                                </form>
                             </div>
-                            <div class="header-inline-selectors" aria-label="Store selectors">
-                                <t t-if="hasPricelistDropdown">
-                                    <div class="dropdown d-inline-block o_pricelist_dropdown">
-                                        <a role="button"
-                                           href="#"
-                                           class="k-inline-select dropdown-toggle"
-                                           data-bs-toggle="dropdown"
-                                           aria-expanded="false"
-                                           aria-label="Currency">
-                                            <span t-out="kingdom_display_currency.name"/>
-                                            <i class="bi bi-chevron-down" aria-hidden="true"/>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a t-foreach="website_sale_pricelists"
-                                               t-as="pl"
-                                               role="menuitem"
-                                               t-att-href="'/shop/change_pricelist/%s' % pl.id"
-                                               t-attf-class="dropdown-item #{'active' if pricelist and pricelist.id == pl.id else ''}"
-                                               t-att-aria-current="pricelist and pricelist.id == pl.id and 'true' or 'false'">
-                                                <span class="switcher_pricelist"
-                                                      t-att-data-pl_id="pl.id"
-                                                      t-out="pl.currency_id.name"/>
-                                            </a>
-                                        </div>
+
+                            <div class="header-lower-right">
+                                <div class="header-selectors-wrapper">
+                                    <div class="header-terms header-link-top">
+                                        <a href="/terms"><i class="bi bi-asterisk" aria-hidden="true"/><span>Terms &amp; conditions</span></a>
                                     </div>
-                                </t>
-                                <t t-else="">
-                                    <span class="k-inline-select k-inline-select--static" aria-label="Currency">
-                                        <span t-out="kingdom_display_currency.name"/>
-                                    </span>
-                                </t>
-                                <t t-call="website.language_selector"
-                                   codes="True"
-                                   _div_classes.f="d-inline-block"
-                                   _btn_class.f="k-inline-select dropdown-toggle border-0 bg-transparent p-0 shadow-none"
-                                   _dropdown_menu_class.f="dropdown-menu-end"/>
-                            </div>
-                        </div>
+                                    <div class="header-storelocation header-link-top">
+                                        <a href="/contactus"><i class="bi bi-person" aria-hidden="true"/><span>Contact Us</span></a>
+                                    </div>
+                                    <div class="header-inline-selectors" aria-label="Store selectors">
+                                        <t t-if="hasPricelistDropdown">
+                                            <div class="dropdown d-inline-block o_pricelist_dropdown">
+                                                <a role="button"
+                                                   href="#"
+                                                   class="k-inline-select dropdown-toggle"
+                                                   data-bs-toggle="dropdown"
+                                                   aria-expanded="false"
+                                                   aria-label="Currency">
+                                                    <span t-out="kingdom_display_currency.name"/>
+                                                    <i class="bi bi-chevron-down" aria-hidden="true"/>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a t-foreach="website_sale_pricelists"
+                                                       t-as="pl"
+                                                       role="menuitem"
+                                                       t-att-href="'/shop/change_pricelist/%s' % pl.id"
+                                                       t-attf-class="dropdown-item #{'active' if pricelist and pricelist.id == pl.id else ''}"
+                                                       t-att-aria-current="pricelist and pricelist.id == pl.id and 'true' or 'false'">
+                                                        <span class="switcher_pricelist"
+                                                              t-att-data-pl_id="pl.id"
+                                                              t-out="pl.currency_id.name"/>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="k-inline-select k-inline-select--static" aria-label="Currency">
+                                                <span t-out="kingdom_display_currency.name"/>
+                                            </span>
+                                        </t>
+                                        <t t-call="website.language_selector"
+                                           codes="True"
+                                           _div_classes.f="d-inline-block"
+                                           _btn_class.f="k-inline-select dropdown-toggle border-0 bg-transparent p-0 shadow-none"
+                                           _dropdown_menu_class.f="dropdown-menu-end"/>
+                                    </div>
+                                </div>
 
-                        <div class="header-links-wrapper d-flex align-items-center">
-                            <div class="header-links">
-                                <ul class="mb-0 ps-0">
-                                    <li>
-                                        <a t-att-href="'tel:%s' % (res_company.phone or '+8801719304086')"
-                                           class="k-phone-link"
-                                           t-out="res_company.phone or '+8801719304086'"/>
-                                    </li>
-                                    <li t-if="website.has_ecommerce_access()" class="o_wsale_my_wish">
-                                        <a href="/shop/wishlist" class="ico-wishlist">
-                                            Wishlist (<span class="my_wish_quantity" t-out="wishcount"/>)
-                                        </a>
-                                    </li>
-                                    <li class="user-account">
-                                        <a t-att-href="is_logged_in and '/my/home' or '/web/login'">Account</a>
-                                    </li>
-                                    <li t-attf-class="o_wsale_my_cart #{'' if website.has_ecommerce_access() else 'd-none'}"
-                                        id="topcartlink">
-                                        <a href="/shop/cart"
-                                           class="js_kingdom_cart_toggle"
-                                           t-attf-aria-label="Shopping cart, #{website_sale_cart_quantity} items">
-                                            <span class="cart-qty my_cart_quantity" t-out="website_sale_cart_quantity"/>
-                                            <span class="cart-ammount"
-                                                  t-out="kingdom_display_currency.format(kingdom_cart_amount)"/>
-                                        </a>
-                                    </li>
-                                </ul>
+                                <div class="header-links-wrapper d-flex align-items-center">
+                                    <div class="header-links">
+                                        <ul class="mb-0 ps-0">
+                                            <li>
+                                                <a t-att-href="'tel:%s' % (res_company.phone or '+8801719304086')"
+                                                   class="k-phone-link"
+                                                   t-out="res_company.phone or '+8801719304086'"/>
+                                            </li>
+                                            <li t-if="website.has_ecommerce_access()" class="o_wsale_my_wish">
+                                                <a href="/shop/wishlist" class="ico-wishlist">
+                                                    Wishlist (<span class="my_wish_quantity" t-out="wishcount"/>)
+                                                </a>
+                                            </li>
+                                            <li class="user-account">
+                                                <a t-att-href="is_logged_in and '/my/home' or '/web/login'">Account</a>
+                                            </li>
+                                            <li t-attf-class="o_wsale_my_cart #{'' if website.has_ecommerce_access() else 'd-none'}"
+                                                id="topcartlink">
+                                                <a href="/shop/cart"
+                                                   class="js_kingdom_cart_toggle"
+                                                   t-attf-aria-label="Shopping cart, #{website_sale_cart_quantity} items">
+                                                    <span class="cart-qty my_cart_quantity" t-out="website_sale_cart_quantity"/>
+                                                    <span class="cart-ammount"
+                                                          t-out="kingdom_display_currency.format(kingdom_cart_amount)"/>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-                </div>
-
-            <div class="header-menu header-menu-static border-0 rounded-0 d-none d-lg-block w-100">
-                <div class="mobile-menu-close" aria-hidden="true">×</div>
-                <div class="container">
-                    <div class="megamenu-wrapper align-items-center gap-1 gap-lg-2 w-100">
-                        <div class="header-left-menu-dropdown">
-                            <a class="header-left-menu-button" href="/shop">Categories</a>
-                            <div class="mm-navbar navbar mobile-mm-navbar red-menu list-view show-image border-0 rounded-0 p-0">
-                                <nav class="nav-navbar" aria-label="Browse categories">
-                                    <ul class="nav-menu nav-center ps-0 mb-0">
-                                        <t t-foreach="kingdom_root_categories" t-as="category">
-                                            <t t-call="theme_kingdom.kingdom_header_category_item"/>
-                                        </t>
-                                    </ul>
-                                </nav>
+                <div class="header-menu header-menu-static border-0 rounded-0 d-none d-lg-block w-100">
+                    <div class="mobile-menu-close" aria-hidden="true">×</div>
+                    <div class="container">
+                        <div class="megamenu-wrapper align-items-center gap-1 gap-lg-2 w-100">
+                            <div class="header-left-menu-dropdown">
+                                <a class="header-left-menu-button" href="/shop">Categories</a>
+                                <div class="mm-navbar navbar mobile-mm-navbar red-menu list-view show-image border-0 rounded-0 p-0">
+                                    <nav class="nav-navbar" aria-label="Browse categories">
+                                        <ul class="nav-menu nav-center ps-0 mb-0">
+                                            <t t-foreach="kingdom_root_categories" t-as="category">
+                                                <t t-call="theme_kingdom.kingdom_header_category_item"/>
+                                            </t>
+                                        </ul>
+                                    </nav>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="header-right-menu">
-                            <div class="mm-navbar navbar mobile-mm-navbar grid-view no-view border-0 p-0">
-                                <nav class="nav-navbar" aria-label="Top links">
-                                    <ul class="nav-menu nav-center ps-0 mb-0 d-flex flex-wrap justify-content-lg-end">
-                                        <t t-foreach="kingdom_top_menus" t-as="menu_item">
-                                            <t t-call="theme_kingdom.kingdom_header_menu_item"/>
-                                        </t>
-                                    </ul>
-                                </nav>
+                            <div class="header-right-menu">
+                                <div class="mm-navbar navbar mobile-mm-navbar grid-view no-view border-0 p-0">
+                                    <nav class="nav-navbar" aria-label="Top links">
+                                        <ul class="nav-menu nav-center ps-0 mb-0 d-flex flex-wrap justify-content-lg-end">
+                                            <t t-foreach="kingdom_top_menus" t-as="menu_item">
+                                                <t t-call="theme_kingdom.kingdom_header_menu_item"/>
+                                            </t>
+                                        </ul>
+                                    </nav>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
             </div>
 
             <t t-call="theme_kingdom.kingdom_mobile_navigation_drawer"/>
+            </header>
         </xpath>
 
     </template>

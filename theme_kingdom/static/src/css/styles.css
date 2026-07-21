@@ -4334,16 +4334,11 @@ body.flyout-cart-open::after {
   gap: 0.35rem;
 }
 
-.footer-payment .pay-badge {
-  display: inline-block;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.65rem;
-  font-weight: 800;
-  line-height: 1.2;
-  color: #1a1f36;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 3px;
+.footer-payment img {
+  display: block;
+  height: 30px;
+  width: auto;
+  max-width: 100%;
 }
 
 .footer .footer-logo img {
@@ -4352,8 +4347,40 @@ body.flyout-cart-open::after {
   height: auto;
 }
 
-.footer .networks li a {
-  font-size: 0;
+/* Kingdom footer — Odoo default s_social_media snippet */
+.footer .social .s_social_media {
+  margin-top: 0.25rem;
+}
+
+.footer .social .s_social_media > a {
+  margin: 5px;
+  text-decoration: none;
+}
+
+.footer .social .s_social_media > a > i.fa {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  height: 35px;
+  font-size: 16px;
+  line-height: 1;
+  color: #fff;
+  background: var(--black-faded, #444);
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: background 0.25s ease;
+}
+
+.footer .social .s_social_media > a:hover > i.fa,
+.footer .social .s_social_media > a:focus > i.fa {
+  background: var(--black-deep, #222);
+  color: #fff;
+}
+
+/* When Color option is ON, keep brand tint on the icon glyph */
+.footer .social .s_social_media:not(.no_icon_color) > a > i.fa {
+  color: inherit;
 }
 
 @media (max-width: 991px) {
@@ -4388,12 +4415,61 @@ body.flyout-cart-open::after {
   }
 }
 
+/* ============================================================================
+ * Kingdom footer colors — match https://kingdom.nop-station.com/
+ * Upper: #f5f5f5 + dark text | Copyright bar: #ffffff + dark text
+ * Beats Odoo .o_footer / .o_footer_copyright palette (orange copyright).
+ * ============================================================================ */
+#bottom.footer.o_footer,
+#bottom.o_footer_kingdom,
+#bottom.footer {
+  background-color: #f5f5f5 !important;
+  background-image: none !important;
+  color: #333333 !important;
+}
+
+#bottom.footer .footer-lower.o_footer_copyright,
+#bottom.o_footer_kingdom .footer-lower,
+#bottom.footer .o_footer_copyright,
+#bottom .footer-lower.o_footer_copyright {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #333333 !important;
+  border-top: 1px solid #ececec;
+}
+
+#bottom.footer .footer-lower,
+#bottom.footer .footer-lower a,
+#bottom.footer .footer-lower .o_footer_copyright_name,
+#bottom.footer .footer-upper .list li,
+#bottom.footer .footer-upper .list li a,
+#bottom.footer .footer-upper .title strong {
+  color: #333333 !important;
+}
+
+#bottom.footer .footer-powered-brand,
+#bottom.footer .footer-powered-by a {
+  color: #d4af37 !important;
+  font-weight: 700;
+}
+
+#bottom.footer .footer-upper .newsletter-email .button-1 {
+  background-color: #d4af37 !important;
+}
+
 .footer-lower .footer-lower-contents {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.65rem;
   text-align: center;
+}
+
+.footer-designed-by a img {
+  display: inline-block;
+  height: 24px;
+  width: auto;
+  vertical-align: middle;
 }
 
 @media (min-width: 992px) {

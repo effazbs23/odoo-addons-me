@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Same pattern as footer_option.xml / website_sale: extend the Template
+         BuilderSelect only (HeaderTemplateOption has several BuilderSelects). -->
+    <t t-inherit="website.HeaderTemplateOption" t-inherit-mode="extension">
+        <BuilderSelect action="'reloadComposite'" position="inside">
+            <BuilderSelectItem
+                id="'header_kingdom_opt'"
+                title.translate="Kingdom"
+                actionParam="[
+                    {
+                        action: 'websiteConfig',
+                        actionParam: {
+                            views: ['theme_kingdom.template_header_kingdom'],
+                            vars: { 'header-template': 'kingdom' },
+                            checkVars: false,
+                        }
+                    }
+                ]">
+                <Img
+                    attrs="{ style: 'width: calc(100% - 0.5rem);' }"
+                    src="'/theme_kingdom/static/src/img/snippets_options/header_template_kingdom.svg'"
+                />
+            </BuilderSelectItem>
+        </BuilderSelect>
+    </t>
+
+</templates>

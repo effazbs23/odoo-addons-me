@@ -172,8 +172,8 @@ def post_init_hook(env):
                     'perm_read': True,
                 })
 
-    for website in env['website'].search([]):
-        env['theme.utils'].with_context(website_id=website.id)._activate_kingdom_footer()
+    # Kingdom header/footer are selectable in Website Builder only — do not auto-enable.
+    env['theme.utils']._migrate_header_footer_opt_in()
 
     _ensure_default_product_tabs(env)
     _ensure_homepage_featured_categories(env)
