@@ -60,8 +60,64 @@ export class KingdomLiveSnippet extends Interaction {
         return dataSnippet;
     }
 
-    async willStart() {
+    /**
+     * Live refresh must not run in Website Builder. `editor_enable` is added
+     * late (onMounted), so also detect the website preview iframe early —
+     * otherwise branded QWeb HTML can be injected and then saved into #wrap,
+     * which disables all Blocks.
+     */
+    _isWebsiteEditorContext() {
         if (document.body.classList.contains('editor_enable')) {
+            return true;
+        }
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('enable_editor') || params.has('edit_translations')) {
+            return true;
+        }
+        try {
+            if (window.parent !== window) {
+                const parentDoc = window.parent.document;
+                if (
+                    parentDoc &&
+                    parentDoc.querySelector(
+                        '.o_website_preview, .o_website_fullscreen, .o-snippets-menu'
+                    )
+                ) {
+                    return true;
+                }
+            }
+        } catch {
+            // Cross-origin parent: if framed, skip live DOM mutation.
+            if (window.frameElement || window.parent !== window) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    _stripViewBranding(rootEl) {
+        if (!rootEl) {
+            return;
+        }
+        const attrs = [
+            'data-oe-model',
+            'data-oe-id',
+            'data-oe-field',
+            'data-oe-xpath',
+            'data-oe-source-id',
+        ];
+        for (const el of [rootEl, ...rootEl.querySelectorAll('*')]) {
+            if (el.getAttribute('data-oe-model') !== 'ir.ui.view') {
+                continue;
+            }
+            for (const attr of attrs) {
+                el.removeAttribute(attr);
+            }
+        }
+    }
+
+    async willStart() {
+        if (this._isWebsiteEditorContext()) {
             return;
         }
         const snippetKey = this._getSnippetKey();
@@ -72,6 +128,10 @@ export class KingdomLiveSnippet extends Interaction {
             rpc('/theme_kingdom/snippet/render', { snippet_key: snippetKey })
         );
         if (!html) {
+            return;
+        }
+        // Editor may have started while the RPC was in flight.
+        if (this._isWebsiteEditorContext()) {
             return;
         }
         const container = this.el.querySelector('.k-container');
@@ -85,6 +145,7 @@ export class KingdomLiveSnippet extends Interaction {
         if (!freshContainer) {
             return;
         }
+        this._stripViewBranding(freshContainer);
         if (freshSection.classList.contains('d-none') && !this.el.classList.contains('d-none')) {
             this.el.classList.add('d-none');
         } else if (!freshSection.classList.contains('d-none')) {

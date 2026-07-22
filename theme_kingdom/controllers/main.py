@@ -61,4 +61,9 @@ class ThemeKingdomSnippetController(http.Controller):
         template_key = _KINGDOM_LIVE_SNIPPETS.get(snippet_key)
         if not template_key:
             raise werkzeug.exceptions.NotFound()
-        return request.env['ir.qweb']._render(template_key)
+        # Never inject editor branding into live HTML — if that markup is later
+        # saved into a page, #wrap loses its own branding and Blocks are disabled.
+        return request.env['ir.qweb'].with_context(
+            inherit_branding=False,
+            inherit_branding_auto=False,
+        )._render(template_key)

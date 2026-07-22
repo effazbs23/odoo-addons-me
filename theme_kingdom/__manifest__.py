@@ -73,6 +73,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
         'views/header_template.xml',
         'views/footer_template.xml',
         'data/header_footer_opt_in_migration.xml',
+        'data/strip_baked_editor_branding.xml',
         'views/product_category_views.xml',
         'views/flyout_cart_template.xml',
         'views/product_related_template.xml',

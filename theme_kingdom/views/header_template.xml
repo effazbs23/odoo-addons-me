@@ -95,7 +95,11 @@
             <header id="top"
                     data-anchor="true"
                     data-name="Header"
-                    class="o_header_kingdom o_colored_level">
+                    class="o_header_kingdom o_colored_level o_no_autohide_menu">
+            <!-- Odoo auto_hide_menu.js expects header#top .top_menu; without it it
+                 throws on DOMContentLoaded (null.querySelector). Keep an empty
+                 stub so Kingdom's custom nav is not auto-collapsed. -->
+            <ul class="top_menu d-none" aria-hidden="true"/>
             <div class="master-header">
                 <div class="master-header-panel">
                     <div class="announcement-bar announcement-wrapper announcement-open announcement-desktop position-relative"

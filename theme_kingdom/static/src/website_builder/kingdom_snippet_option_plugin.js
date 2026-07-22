@@ -72,6 +72,14 @@ export class RemoveKingdomSnippetBlockAction extends BuilderAction {
     }
 }
 
+const VIEW_BRANDING_ATTRS = [
+    "data-oe-model",
+    "data-oe-id",
+    "data-oe-field",
+    "data-oe-xpath",
+    "data-oe-source-id",
+];
+
 class KingdomSnippetOptionPlugin extends Plugin {
     static id = "kingdomSnippetOption";
     static dependencies = ["builderOptions", "remove"];
@@ -88,7 +96,24 @@ class KingdomSnippetOptionPlugin extends Plugin {
             getButtons: (target) => this.getKingdomCarouselOverlayButtons(target),
         }),
         on_removed_handlers: this.onRemovedKingdomSnippet.bind(this),
+        // Keep #wrap editable: never persist ir.ui.view branding inside page arches.
+        clean_for_save_handlers: this.cleanViewBrandingForSave.bind(this),
     };
+
+    cleanViewBrandingForSave({ root }) {
+        if (!root) {
+            return;
+        }
+        // Keep branding on the savable root (#wrap); strip it from descendants.
+        root.querySelectorAll('[data-oe-model="ir.ui.view"]').forEach((el) => {
+            if (el === root) {
+                return;
+            }
+            for (const attr of VIEW_BRANDING_ATTRS) {
+                el.removeAttribute(attr);
+            }
+        });
+    }
 
     /**
      * Hero/carousel snippets select the active .carousel-item for the floating

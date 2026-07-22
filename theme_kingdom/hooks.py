@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
 
+from lxml import etree
+
+from odoo.addons.base.models.ir_ui_view import MOVABLE_BRANDING
 
 _OE_VIEW_REF_RE = re.compile(
     r'\s*data-oe-model=\\?"ir\.ui\.view\\?"\s*'
@@ -9,6 +12,15 @@ _OE_VIEW_REF_RE = re.compile(
     r'data-oe-xpath=\\?"[^"\\]*\\?"',
     re.IGNORECASE,
 )
+
+# Editor-only attrs that must never persist in saved page/snippet arches.
+_BAKED_EDITOR_ATTRS = tuple(MOVABLE_BRANDING) + (
+    'contenteditable',
+    'data-editor-message',
+    'data-editor-message-default',
+    'data-editor-sub-message',
+)
+_BAKED_EDITOR_CLASSES = ('o_editable', 'o_dirty')
 
 
 def _cleanup_stale_oe_view_refs(env):
@@ -116,6 +128,51 @@ def _strip_saved_snippet_editor_hints(env):
             view.with_context(no_save_prev=True).write({'arch_db': new_arch})
 
 
+def _strip_baked_editor_branding(env):
+    """Remove baked editor branding from saved QWeb arches.
+
+    When ``data-oe-model`` / ``data-oe-id`` / … are stored inside ``#wrap``
+    (e.g. after copying a rendered Kingdom snippet), Odoo's
+    ``distribute_branding`` moves branding off ``#wrap`` onto those
+    descendants. ``#wrap`` then never becomes ``o_editable``, so the Website
+    Builder disables every Blocks category
+    ("No block of this category can be dropped on this page").
+    """
+    View = env['ir.ui.view'].sudo()
+    views = View.search([
+        ('type', '=', 'qweb'),
+        '|', '|',
+        ('arch_db', 'ilike', 'data-oe-model'),
+        ('arch_db', 'ilike', 'data-oe-xpath'),
+        ('arch_db', 'ilike', 'contenteditable'),
+    ])
+    for view in views:
+        arch = view.arch_db
+        if not arch:
+            continue
+        try:
+            root = etree.fromstring(arch.encode('utf-8') if isinstance(arch, str) else arch)
+        except etree.XMLSyntaxError:
+            continue
+        changed = False
+        for el in root.iter(etree.Element):
+            for attr in _BAKED_EDITOR_ATTRS:
+                if attr in el.attrib:
+                    del el.attrib[attr]
+                    changed = True
+            classes = (el.get('class') or '').split()
+            cleaned = [c for c in classes if c not in _BAKED_EDITOR_CLASSES]
+            if cleaned != classes:
+                if cleaned:
+                    el.set('class', ' '.join(cleaned))
+                elif 'class' in el.attrib:
+                    del el.attrib['class']
+                changed = True
+        if changed:
+            new_arch = etree.tostring(root, encoding='unicode')
+            view.with_context(no_save_prev=True).write({'arch_db': new_arch})
+
+
 def pre_init_hook(env):
     """Prepare schema and migrate legacy data before module models load."""
     _ensure_website_menu_kingdom_tab_column(env)
@@ -179,6 +236,7 @@ def post_init_hook(env):
     _ensure_homepage_featured_categories(env)
     _migrate_kingdom_snippet_oe_structure(env)
     _strip_saved_snippet_editor_hints(env)
+    _strip_baked_editor_branding(env)
     _cleanup_stale_oe_view_refs(env)
 
 

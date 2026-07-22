@@ -35,3 +35,4 @@ from . import blog_snippet
 from . import theme_utils
 from . import website
 from . import ir_module_module
+from . import ir_ui_view

@@ -5,6 +5,7 @@ from odoo import api, models
 from odoo.addons.theme_kingdom.hooks import (
     _cleanup_stale_oe_view_refs,
     _migrate_kingdom_snippet_oe_structure,
+    _strip_baked_editor_branding,
     _strip_saved_snippet_editor_hints,
 )
 
@@ -79,6 +80,12 @@ class ThemeUtils(models.AbstractModel):
         ICP.set_param(_OPT_IN_MIGRATION_KEY, '1')
         return True
 
+    @api.model
+    def _strip_baked_editor_branding(self):
+        """Expose hooks._strip_baked_editor_branding for XML <function> upgrades."""
+        _strip_baked_editor_branding(self.env)
+        return True
+
     def _post_copy(self, mod):
         res = super()._post_copy(mod)
         _cleanup_stale_oe_view_refs(self.env)
@@ -91,5 +98,6 @@ class ThemeUtils(models.AbstractModel):
         self.enable_view('website.footer_custom')
         _migrate_kingdom_snippet_oe_structure(self.env)
         _strip_saved_snippet_editor_hints(self.env)
+        _strip_baked_editor_branding(self.env)
         _cleanup_stale_oe_view_refs(self.env)
         return True
