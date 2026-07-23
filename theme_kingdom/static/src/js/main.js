@@ -1252,7 +1252,7 @@
 
     function initManufacturerCarousel() {
       var section = document.querySelector(".home-manufacturers-section");
-      if (!section || typeof Swiper === "undefined") return;
+      if (!section || section.classList.contains("d-none") || typeof Swiper === "undefined") return;
       var carousel = section.querySelector(".carousel-container");
       var swiperEl = section.querySelector(".manufacturer-swiper");
       var prevEl = section.querySelector(".manufacturer-carousel-arrow.swiper-button-prev");

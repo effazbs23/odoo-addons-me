@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_template_form_view_manufacturer" model="ir.ui.view">
+        <field name="name">product.template.form.kingdom.manufacturer</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <field name="categ_id" position="after">
+                <field name="kingdom_manufacturer_id"
+                         options="{'no_quick_create': True}"
+                         placeholder="Select manufacturer"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_template_tree_view_manufacturer" model="ir.ui.view">
+        <field name="name">product.template.list.kingdom.manufacturer</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="categ_id" position="after">
+                <field name="kingdom_manufacturer_id" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

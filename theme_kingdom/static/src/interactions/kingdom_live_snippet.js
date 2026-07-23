@@ -45,6 +45,7 @@ export class KingdomLiveSnippet extends Interaction {
         'section.s_category_dual_carousels[data-snippet]',
         'section.s_category_slider[data-snippet]',
         'section.dealoftheday-wrapper[data-snippet]',
+        'section.s_manufacturers[data-snippet]',
     ].join(', ');
 
     _dealCountdownInterval = null;
@@ -191,6 +192,8 @@ export class KingdomLiveSnippet extends Interaction {
             || snippetKey === 's_bestsale_products'
         ) {
             this._initProductSwiper();
+        } else if (snippetKey === 's_manufacturers') {
+            this._initManufacturerCarousel();
         }
     }
 
@@ -338,6 +341,49 @@ export class KingdomLiveSnippet extends Interaction {
             return;
         }
         window.KingdomInitCategorySwiper(this.el);
+    }
+
+    _initManufacturerCarousel() {
+        if (typeof Swiper === 'undefined' || this.el.classList.contains('d-none')) {
+            return;
+        }
+        const carousel = this.el.querySelector('.carousel-container');
+        const swiperEl = this.el.querySelector('.manufacturer-swiper');
+        const prevEl = this.el.querySelector('.manufacturer-carousel-arrow.swiper-button-prev');
+        const nextEl = this.el.querySelector('.manufacturer-carousel-arrow.swiper-button-next');
+        if (!swiperEl || !carousel || !prevEl || !nextEl) {
+            return;
+        }
+        if (!swiperEl.querySelector('.swiper-slide')) {
+            return;
+        }
+        if (swiperEl.swiper) {
+            swiperEl.swiper.destroy(true, true);
+        }
+        const slideCount = swiperEl.querySelectorAll('.swiper-slide').length;
+        const config = {
+            loop: slideCount > 3,
+            speed: 450,
+            spaceBetween: 15,
+            slidesPerView: 3,
+            watchOverflow: true,
+            observer: true,
+            observeParents: true,
+            navigation: {
+                prevEl,
+                nextEl,
+            },
+            breakpoints: {
+                576: { slidesPerView: 4, spaceBetween: 15 },
+                992: { slidesPerView: 6, spaceBetween: 15 },
+                1600: { slidesPerView: 8, spaceBetween: 15 },
+            },
+        };
+        try {
+            new Swiper(swiperEl, config);
+        } catch {
+            new Swiper(swiperEl, { ...config, loop: false });
+        }
     }
 }
 

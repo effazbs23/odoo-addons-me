@@ -8,8 +8,8 @@
             <list string="Manufacturers">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
+                <field name="product_count"/>
                 <field name="show_on_homepage" widget="boolean_toggle"/>
-                <field name="website_url"/>
                 <field name="active" widget="boolean_toggle"/>
             </list>
         </field>
@@ -21,6 +21,14 @@
         <field name="arch" type="xml">
             <form string="Manufacturer">
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_products"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-shopping-cart">
+                            <field name="product_count" widget="statinfo" string="Products"/>
+                        </button>
+                    </div>
                     <field name="image" widget="image" class="oe_avatar"/>
                     <group>
                         <group>
@@ -28,9 +36,6 @@
                             <field name="sequence"/>
                             <field name="show_on_homepage"/>
                             <field name="active"/>
-                        </group>
-                        <group>
-                            <field name="website_url" placeholder="https:// or /shop"/>
                         </group>
                     </group>
                 </sheet>
@@ -45,6 +50,7 @@
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Add brands for the homepage manufacturers carousel.
+                Assign products to a manufacturer on the product form; clicking a brand on the website opens the shop filtered to that brand.
             </p>
         </field>
     </record>

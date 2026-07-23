@@ -4256,6 +4256,20 @@ body.flyout-cart-open::after {
   object-fit: contain;
 }
 
+.home-manufacturers-section .carousel-manufacturer .manufacturer-picture-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.2;
+}
+
 .home-manufacturers-section .carousel-manufacturer .manufacturer-picture:hover,
 .home-manufacturers-section .carousel-manufacturer .manufacturer-picture:focus-visible {
   border-color: var(--k-yellow);

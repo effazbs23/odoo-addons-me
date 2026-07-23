@@ -25,10 +25,45 @@ class KingdomManufacturer(models.Model):
         max_width=512,
         max_height=256,
     )
-    website_url = fields.Char(
-        string='Website URL',
-        help='Destination when visitors click the brand on the homepage.',
+    product_ids = fields.One2many(
+        'product.template',
+        'kingdom_manufacturer_id',
+        string='Product Templates',
     )
+    product_count = fields.Integer(
+        string='Products',
+        compute='_compute_product_count',
+    )
+
+    @api.depends('product_ids')
+    def _compute_product_count(self):
+        grouped = self.env['product.template']._read_group(
+            [('kingdom_manufacturer_id', 'in', self.ids)],
+            ['kingdom_manufacturer_id'],
+            ['__count'],
+        )
+        counts = {manufacturer.id: count for manufacturer, count in grouped}
+        for manufacturer in self:
+            manufacturer.product_count = counts.get(manufacturer.id, 0)
+
+    def action_view_products(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Products',
+            'res_model': 'product.template',
+            'view_mode': 'kanban,list,form',
+            'domain': [('kingdom_manufacturer_id', '=', self.id)],
+            'context': {
+                'default_kingdom_manufacturer_id': self.id,
+                'default_sale_ok': True,
+            },
+        }
+
+    def get_shop_url(self):
+        """Shop URL filtered to products of this manufacturer."""
+        self.ensure_one()
+        return f'/shop?manufacturer={self.id}'
 
     @api.model
     def get_website_manufacturer_slides(self, per_slide=2):

@@ -1,10 +1,25 @@
 # -*- coding: utf-8 -*-
-from odoo import models
+from odoo import fields, models
 from odoo.fields import Domain
 
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
+
+    kingdom_manufacturer_id = fields.Many2one(
+        'kingdom.manufacturer',
+        string='Manufacturer',
+        index=True,
+        ondelete='set null',
+        help='Brand/manufacturer assigned to this product. Used when filtering the shop by manufacturer.',
+    )
+
+    def _search_get_detail(self, website, order, options):
+        result = super()._search_get_detail(website, order, options)
+        manufacturer_id = options.get('kingdom_manufacturer_id')
+        if manufacturer_id:
+            result['base_domain'].append([('kingdom_manufacturer_id', '=', int(manufacturer_id))])
+        return result
 
     def kingdom_get_related_products(self, limit=12):
         """Products for the product page related block.

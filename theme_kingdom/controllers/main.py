@@ -4,6 +4,7 @@ import werkzeug
 from odoo import http
 from odoo.exceptions import AccessError
 from odoo.http import request
+from odoo.addons.website_sale.controllers.main import WebsiteSale
 
 _KINGDOM_LIVE_SNIPPETS = {
     's_featured_products': 'theme_kingdom.s_featured_products',
@@ -12,7 +13,40 @@ _KINGDOM_LIVE_SNIPPETS = {
     's_product_carousel': 'theme_kingdom.s_product_carousel',
     's_category_dual_carousels': 'theme_kingdom.s_category_dual_carousels',
     's_category_slider': 'theme_kingdom.s_category_slider',
+    's_manufacturers': 'theme_kingdom.s_manufacturers',
 }
+
+
+class WebsiteSaleManufacturer(WebsiteSale):
+    """Filter /shop by manufacturer assigned on product.template."""
+
+    def _get_search_options(self, category=None, attribute_value_dict=None, tags=None,
+                            min_price=0.0, max_price=0.0, conversion_rate=1, **post):
+        options = super()._get_search_options(
+            category=category,
+            attribute_value_dict=attribute_value_dict,
+            tags=tags,
+            min_price=min_price,
+            max_price=max_price,
+            conversion_rate=conversion_rate,
+            **post,
+        )
+        manufacturer = post.get('manufacturer')
+        if manufacturer:
+            try:
+                options['kingdom_manufacturer_id'] = int(manufacturer)
+            except (TypeError, ValueError):
+                pass
+        return options
+
+    def _shop_get_query_url_kwargs(self, search, min_price, max_price, order=None, tags=None, **kwargs):
+        res = super()._shop_get_query_url_kwargs(
+            search, min_price, max_price, order=order, tags=tags, **kwargs
+        )
+        manufacturer = kwargs.get('manufacturer')
+        if manufacturer:
+            res['manufacturer'] = manufacturer
+        return res
 
 
 class ThemeKingdomSnippetController(http.Controller):

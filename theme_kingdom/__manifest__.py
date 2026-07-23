@@ -80,6 +80,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
         'views/featured_products_views.xml',
         'views/bestsale_products_views.xml',
         'views/manufacturer_views.xml',
+        'views/product_template_views.xml',
         'views/deals_of_day_views.xml',
         'views/pricelist_bulk_products_views.xml',
         'views/product_tab_views.xml',
