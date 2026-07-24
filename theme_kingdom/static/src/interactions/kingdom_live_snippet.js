@@ -42,10 +42,16 @@ export class KingdomLiveSnippet extends Interaction {
         'section.s_featured_products[data-snippet]',
         'section.s_bestsale_products[data-snippet]',
         'section.s_product_carousel[data-snippet]',
+        'section.product-carousel-section[data-snippet]',
+        '.product-carousel-section[data-snippet="s_product_carousel"]',
+        '.product-carousel-section[data-snippet="theme_kingdom.s_product_carousel"]',
         'section.s_category_dual_carousels[data-snippet]',
+        'section.category-dual-section[data-snippet]',
         'section.s_category_slider[data-snippet]',
         'section.dealoftheday-wrapper[data-snippet]',
         'section.s_manufacturers[data-snippet]',
+        'section.s_dynamic_product_tabs[data-snippet]',
+        'section.k-dyn-tabs[data-snippet]',
     ].join(', ');
 
     _dealCountdownInterval = null;

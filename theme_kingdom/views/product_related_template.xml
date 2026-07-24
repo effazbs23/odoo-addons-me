@@ -8,7 +8,7 @@
             <t t-set="kingdom_related_products" t-value="product.kingdom_get_related_products()"/>
             <div id="oe_structure_website_sale_recommended_products"
                  t-if="kingdom_related_products">
-                <section class="pt32 pb32 o_wsale_alternative_products kingdom-related-products">
+                <section class="pt32 pb32 o_wsale_alternative_products kingdom-related-products js_sale oe_website_sale">
                     <div class="container">
                         <div class="mb-4">
                             <h4 class="mb-1">Related Products</h4>
@@ -17,7 +17,7 @@
                         <div class="row g-3 g-lg-4 kingdom-related-grid">
                             <t t-foreach="kingdom_related_products" t-as="rel_product">
                                 <div class="col-6 col-md-4 col-lg-3">
-                                    <div class="kingdom-related-card h-100">
+                                    <div class="kingdom-related-card h-100 position-relative">
                                         <a t-att-href="rel_product.website_url"
                                            class="kingdom-related-card__image d-block">
                                             <img t-att-src="'/web/image/product.template/%s/image_256' % rel_product.id"
@@ -25,6 +25,8 @@
                                                  class="img-fluid w-100"
                                                  loading="lazy"/>
                                         </a>
+                                        <t t-set="product" t-value="rel_product"/>
+                                        <t t-call="theme_kingdom.product_card_action_buttons"/>
                                         <div class="kingdom-related-card__body pt-2">
                                             <h6 class="kingdom-related-card__title mb-1">
                                                 <a t-att-href="rel_product.website_url"

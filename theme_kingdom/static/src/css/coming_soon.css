@@ -1,0 +1,198 @@
+/* Kingdom Coming Soon page */
+
+.k-coming-soon {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 0;
+    color: #fff;
+    background-color: #1a1a1a;
+    background-image: var(--k-coming-soon-bg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.k-coming-soon__overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(160deg, rgba(26, 26, 26, 0.72) 0%, rgba(90, 49, 244, 0.35) 55%, rgba(212, 175, 55, 0.28) 100%);
+    pointer-events: none;
+}
+
+.k-coming-soon__inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.k-coming-soon__brand {
+    margin-bottom: 1.5rem;
+}
+
+.k-coming-soon__logo img {
+    max-height: 56px;
+    width: auto;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+}
+
+.k-coming-soon__title {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #fff;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+}
+
+.k-coming-soon__subtitle {
+    margin: 0 auto 1.75rem;
+    max-width: 36rem;
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.k-coming-soon__countdown {
+    margin: 0 auto 2rem;
+    justify-content: center;
+}
+
+.k-coming-soon__countdown .cd-unit,
+.k-coming-soon__countdown .count {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.4rem;
+    padding: 0.75rem 0.85rem;
+    min-width: 4.25rem;
+    backdrop-filter: blur(4px);
+}
+
+.k-coming-soon__countdown .cd-num,
+.k-coming-soon__countdown .cd-days,
+.k-coming-soon__countdown .cd-hours,
+.k-coming-soon__countdown .cd-mins,
+.k-coming-soon__countdown .cd-secs {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--k-yellow, #d4af37);
+}
+
+.k-coming-soon__countdown .cd-label {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.k-coming-soon__form {
+    margin: 0 auto;
+    max-width: 460px;
+}
+
+.k-coming-soon__form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.k-coming-soon__input {
+    flex: 1 1 12rem;
+    min-width: 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    padding: 0.7rem 0.9rem;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--k-heading, #1a1a1a);
+    font-size: 0.95rem;
+}
+
+.k-coming-soon__input:focus {
+    outline: 2px solid var(--k-yellow, #d4af37);
+    outline-offset: 1px;
+}
+
+.k-coming-soon__btn {
+    flex: 0 0 auto;
+    border: none;
+    border-radius: 3px;
+    padding: 0.7rem 1.25rem;
+    background: var(--k-yellow, #d4af37);
+    color: #1a1a1a;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.k-coming-soon__btn:hover,
+.k-coming-soon__btn:focus-visible {
+    background: var(--k-yellow-hover, #bf9a30);
+}
+
+.k-coming-soon__btn:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.k-coming-soon__message {
+    margin: 0.75rem 0 0;
+    min-height: 1.25rem;
+    font-size: 0.9rem;
+}
+
+.k-coming-soon__message.is-success {
+    color: #b8f2c8;
+}
+
+.k-coming-soon__message.is-error {
+    color: #ffc9c9;
+}
+
+.k-coming-soon__admin-hint {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.k-coming-soon__admin-hint a {
+    color: var(--k-yellow, #d4af37);
+}
+
+@media (max-width: 575.98px) {
+    .k-coming-soon {
+        padding: 2rem 0;
+    }
+
+    .k-coming-soon__countdown .cd-unit,
+    .k-coming-soon__countdown .count {
+        min-width: 3.5rem;
+        padding: 0.55rem 0.45rem;
+    }
+
+    .k-coming-soon__countdown .cd-num,
+    .k-coming-soon__countdown .cd-days,
+    .k-coming-soon__countdown .cd-hours,
+    .k-coming-soon__countdown .cd-mins,
+    .k-coming-soon__countdown .cd-secs {
+        font-size: 1.25rem;
+    }
+
+    .k-coming-soon__form-row {
+        flex-direction: column;
+    }
+
+    .k-coming-soon__btn {
+        width: 100%;
+    }
+}

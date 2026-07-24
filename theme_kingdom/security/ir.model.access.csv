@@ -5,5 +5,6 @@ access_featured_products,access.featured.products,model_featured_products,base.g
 access_bestsale_products,access.bestsale.products,model_bestsale_products,base.group_user,1,1,1,1
 access_kingdom_manufacturer,access.kingdom.manufacturer,model_kingdom_manufacturer,base.group_user,1,1,1,1
 access_kingdom_pricelist_bulk_products,access.kingdom.pricelist.bulk.products,model_kingdom_pricelist_bulk_products,base.group_user,1,1,1,1
+access_kingdom_coming_soon_subscriber,access.kingdom.coming.soon.subscriber,model_kingdom_coming_soon_subscriber,base.group_user,1,1,1,1
 access_product_public_category_public,access.product.public.category.public,website_sale.model_product_public_category,base.group_public,1,0,0,0
 access_product_public_category_portal,access.product.public.category.portal,website_sale.model_product_public_category,base.group_portal,1,0,0,0

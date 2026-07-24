@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from odoo import api, fields, models
 
 
@@ -30,25 +31,58 @@ class KingdomProductTab(models.Model):
         default=True,
         help='Use this tab in the Product Carousel snippet (New Arrivals / Best Sellers types).',
     )
+    show_in_dynamic_tabs = fields.Boolean(
+        string='Dynamic Product Tabs',
+        default=True,
+        help='Show this tab in the Dynamic Product Tabs website snippet. '
+             'Tabs load products via AJAX when clicked.',
+    )
     tab_type = fields.Selection([
         ('new_arrival', 'New Arrivals'),
         ('best_seller', 'Best Sellers'),
-        ('featured',    'Featured'),
-        ('on_sale',     'On Sale'),
-        ('category',    'By Category'),
+        ('featured', 'Featured'),
+        ('on_sale', 'On Sale'),
+        ('category', 'By Category'),
     ],
         string='Tab Type',
         required=True,
         default='new_arrival',
+        help='How products are chosen when Product Source is Automatic.',
+    )
+    product_source = fields.Selection(
+        [
+            ('auto', 'Automatic (by Tab Type)'),
+            ('manual', 'Manual selection'),
+        ],
+        string='Product Source',
+        required=True,
+        default='auto',
+        help='Automatic: fill products from Tab Type rules. '
+             'Manual: pick products yourself below.',
     )
     category_id = fields.Many2one(
         'product.public.category',
         string='Category',
-        help='Used when Tab Type is By Category',
+        help='Used when Tab Type is By Category (automatic source).',
+    )
+    product_ids = fields.Many2many(
+        'product.template',
+        'kingdom_product_tab_product_rel',
+        'tab_id',
+        'product_id',
+        string='Products',
+        domain="[('sale_ok', '=', True)]",
+        help='Products shown when Product Source is Manual. Drag to reorder is not supported; '
+             'use Sequence on products or pick in preferred order.',
+    )
+    product_count = fields.Integer(
+        string='Products',
+        compute='_compute_product_count',
     )
     product_limit = fields.Integer(
         string='Product Limit',
         default=16,
+        help='Max products to show for automatic tabs.',
     )
     feature_image = fields.Image(
         string='Feature Image',
@@ -63,6 +97,88 @@ class KingdomProductTab(models.Model):
         string='Feature URL',
         default='/shop',
     )
+
+    @api.depends('product_ids', 'product_source', 'tab_type', 'category_id', 'product_limit')
+    def _compute_product_count(self):
+        for tab in self:
+            if tab.product_source == 'manual':
+                tab.product_count = len(tab.product_ids)
+            else:
+                tab.product_count = len(tab.get_products())
+
+    def action_view_products(self):
+        self.ensure_one()
+        products = self.get_products()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': self.name,
+            'res_model': 'product.template',
+            'view_mode': 'kanban,list,form',
+            'domain': [('id', 'in', products.ids)],
+            'context': {'create': False},
+        }
+
+    @api.model
+    def ensure_default_tabs(self):
+        """Seed Featured / New Arrivals / Best Sellers (safe on install + upgrade)."""
+        Tab = self.sudo()
+        defaults = [
+            {
+                'name': 'New Arrivals',
+                'tab_type': 'new_arrival',
+                'show_in_header_menu': True,
+                'show_in_product_carousel': True,
+                'show_in_dynamic_tabs': True,
+                'sequence': 10,
+            },
+            {
+                'name': 'Best Sellers',
+                'tab_type': 'best_seller',
+                'show_in_header_menu': True,
+                'show_in_product_carousel': True,
+                'show_in_dynamic_tabs': True,
+                'sequence': 20,
+            },
+            {
+                'name': 'Featured',
+                'tab_type': 'featured',
+                'show_in_header_menu': False,
+                'show_in_product_carousel': False,
+                'show_in_dynamic_tabs': True,
+                'sequence': 5,
+            },
+        ]
+        for vals in defaults:
+            existing = Tab.search([('tab_type', '=', vals['tab_type'])], limit=1)
+            if not existing:
+                Tab.create(vals)
+            else:
+                write_vals = {}
+                if (
+                    'show_in_header_menu' in existing._fields
+                    and not existing.show_in_header_menu
+                    and vals.get('show_in_header_menu')
+                ):
+                    write_vals['show_in_header_menu'] = True
+                if not existing.show_in_dynamic_tabs and vals.get('show_in_dynamic_tabs'):
+                    write_vals['show_in_dynamic_tabs'] = True
+                if write_vals:
+                    existing.write(write_vals)
+        if hasattr(Tab, '_sync_header_menus'):
+            Tab.search([])._sync_header_menus()
+        return True
+
+    @api.model
+    def get_dynamic_tabs(self, limit=8):
+        """Active tabs for the Dynamic Product Tabs snippet."""
+        return self.sudo().search(
+            [
+                ('active', '=', True),
+                ('show_in_dynamic_tabs', '=', True),
+            ],
+            order='sequence asc, id asc',
+            limit=limit,
+        )
 
     @api.model
     def get_website_dual_carousel_tabs(self, limit=2):
@@ -134,16 +250,27 @@ class KingdomProductTab(models.Model):
         )
 
     def get_products(self):
-        """Products for this tab according to tab_type."""
+        """Products for this tab according to product_source / tab_type."""
         self.ensure_one()
-        limit = self.product_limit or 16
         Product = self.env['product.template'].sudo()
+        limit = self.product_limit or 16
+
+        if self.product_source == 'manual':
+            # Keep configured order; only published/saleable products on website.
+            return self.product_ids.filtered(
+                lambda p: p.sale_ok and p.is_published
+            )[:limit]
+
         domain = self._product_domain()
         if self.tab_type == 'new_arrival':
             return self.get_new_arrival_products()
         if self.tab_type == 'best_seller':
             return self.get_best_seller_products()
         if self.tab_type == 'featured':
+            if 'featured.products' in self.env:
+                featured = self.env['featured.products'].sudo().search([], limit=1)
+                if featured and featured.product_tmpl_ids:
+                    return featured.product_tmpl_ids.filtered_domain(domain)[:limit]
             return Product.search(
                 domain,
                 order='website_sequence desc, id desc',

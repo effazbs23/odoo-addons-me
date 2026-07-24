@@ -22,6 +22,7 @@
 from . import website_cache
 from . import product_category
 from . import product_template
+from . import product_wishlist
 from . import product_tab
 from . import website_menu
 from . import product_tab_header
@@ -34,5 +35,7 @@ from . import loyalty_program
 from . import blog_snippet
 from . import theme_utils
 from . import website
+from . import coming_soon
+from . import res_config_settings
 from . import ir_module_module
 from . import ir_ui_view

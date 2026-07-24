@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="s_featured_products" name="Kingdom Featured Products">
-        <section class="s_featured_products oe_website_sale featured-products-section"
+        <section class="s_featured_products oe_website_sale js_sale featured-products-section"
                  data-snippet="theme_kingdom.s_featured_products"
                  data-kingdom-live-snippet="s_featured_products"
                  data-name="Featured Products"
@@ -65,6 +65,7 @@
                                                  t-att-alt="product.name"
                                                  loading="lazy"/>
                                         </a>
+                                        <t t-call="theme_kingdom.product_card_action_buttons"/>
                                         <div class="featured-product-body">
                                             <h3>
                                                 <a t-att-href="product.website_url" t-esc="product.name"/>

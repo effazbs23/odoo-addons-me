@@ -42,6 +42,9 @@
                          height="96"
                          loading="lazy"/>
                 </a>
+                <t t-call="theme_kingdom.product_card_action_buttons">
+                    <t t-set="show_quickview" t-value="False"/>
+                </t>
                 <t t-if="product.website_ribbon_id">
                     <t t-set="ribbon_name" t-value="(product.website_ribbon_id.name or '').lower()"/>
                     <span t-attf-class="product-carousel-badge #{('product-carousel-badge--new' if 'new' in ribbon_name else 'product-carousel-badge--top')}"
@@ -83,7 +86,7 @@
     </template>
 
     <template id="s_product_carousel" name="Kingdom Product Carousel">
-        <section class="s_product_carousel oe_website_sale product-carousel-section"
+        <section class="s_product_carousel oe_website_sale js_sale product-carousel-section"
                  data-snippet="theme_kingdom.s_product_carousel"
                  data-kingdom-live-snippet="s_product_carousel"
                  data-name="Product Carousel"

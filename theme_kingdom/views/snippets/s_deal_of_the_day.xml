@@ -17,7 +17,7 @@
         <t t-set="countdown_ms"
            t-value="deal.get_countdown_end_ms() if deal else 0"/>
 
-        <section t-attf-class="dealoftheday-wrapper oe_website_sale#{' d-none' if not active_deal and not editable else ''}"
+        <section t-attf-class="dealoftheday-wrapper oe_website_sale js_sale#{' d-none' if not active_deal and not editable else ''}"
                  data-snippet="theme_kingdom.s_deal_of_the_day"
                  data-kingdom-live-snippet="s_deal_of_the_day"
                  data-name="Deal of the Day"
@@ -122,6 +122,7 @@
                                                                      t-att-alt="product.name"
                                                                      loading="lazy"/>
                                                             </a>
+                                                            <t t-call="theme_kingdom.product_card_action_buttons"/>
                                                         </div>
                                                         <div class="details">
                                                             <h2 class="product-title">

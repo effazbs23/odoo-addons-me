@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models
 from odoo.fields import Domain
+from odoo.http import request
 
 
 class ProductTemplate(models.Model):
@@ -13,6 +14,27 @@ class ProductTemplate(models.Model):
         ondelete='set null',
         help='Brand/manufacturer assigned to this product. Used when filtering the shop by manufacturer.',
     )
+
+    def _kingdom_request_website(self):
+        """Website from the HTTP request, or current website as a safe fallback."""
+        try:
+            website = getattr(request, 'website', None)
+        except RuntimeError:
+            # No HTTP request bound (shell / some asset renders).
+            website = None
+        if website is not None:
+            return website
+        return self.env['website'].get_current_website()
+
+    def _website_show_quick_add(self):
+        """Safe when QWeb renders without request.website (builder / public asset)."""
+        self.ensure_one()
+        if not self.filtered_domain(self.env['website']._product_domain()):
+            return False
+        website = self._kingdom_request_website()
+        if not website:
+            return bool(self._get_contextual_price())
+        return not website.prevent_zero_price_sale or self._get_contextual_price()
 
     def _search_get_detail(self, website, order, options):
         result = super()._search_get_detail(website, order, options)

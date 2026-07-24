@@ -121,7 +121,7 @@
     </template>
 
     <template id="s_category_dual_carousels" name="Kingdom Category Dual Carousels">
-        <section class="s_category_dual_carousels oe_website_sale category-dual-section"
+        <section class="s_category_dual_carousels oe_website_sale js_sale category-dual-section"
                  data-snippet="theme_kingdom.s_category_dual_carousels"
                  data-kingdom-live-snippet="s_category_dual_carousels"
                  data-name="Category Dual Carousels"

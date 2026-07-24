@@ -61,3 +61,13 @@ class Website(models.Model):
 
     def kingdom_product_tab(self):
         return self._kingdom_sudo('kingdom.product.tab')
+
+    def kingdom_should_redirect_coming_soon(self, user=None):
+        """True when public (non-designer) visitors should see Coming Soon."""
+        self.ensure_one()
+        if not self.kingdom_coming_soon_enabled:
+            return False
+        user = user or self.env.user
+        if user.has_group('website.group_website_designer'):
+            return False
+        return True

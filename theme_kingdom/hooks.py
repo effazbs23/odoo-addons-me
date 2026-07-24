@@ -232,7 +232,9 @@ def post_init_hook(env):
     # Kingdom header/footer are selectable in Website Builder only — do not auto-enable.
     env['theme.utils']._migrate_header_footer_opt_in()
 
-    _ensure_default_product_tabs(env)
+    env['kingdom.product.tab'].ensure_default_tabs()
+    _ensure_dual_carousel_tabs(env)
+    _migrate_deals_of_day_pricelist_items(env)
     _ensure_homepage_featured_categories(env)
     _migrate_kingdom_snippet_oe_structure(env)
     _strip_saved_snippet_editor_hints(env)
@@ -258,32 +260,8 @@ def _ensure_homepage_featured_categories(env):
 
 
 def _ensure_default_product_tabs(env):
-    """Default New Arrivals / Best Sellers tabs and header menus on install or upgrade."""
-    Tab = env['kingdom.product.tab'].sudo()
-    defaults = [
-        {
-            'name': 'New Arrivals',
-            'tab_type': 'new_arrival',
-            'show_in_header_menu': True,
-            'show_in_product_carousel': True,
-            'sequence': 10,
-        },
-        {
-            'name': 'Best Sellers',
-            'tab_type': 'best_seller',
-            'show_in_header_menu': True,
-            'show_in_product_carousel': True,
-            'sequence': 20,
-        },
-    ]
-    for vals in defaults:
-        existing = Tab.search([('tab_type', '=', vals['tab_type'])], limit=1)
-        if not existing:
-            Tab.create(vals)
-        elif not existing.show_in_header_menu:
-            existing.write({'show_in_header_menu': True})
-    Tab.search([])._sync_header_menus()
-
+    """Default tabs + dual-carousel seed (used by legacy callers / migrations)."""
+    env['kingdom.product.tab'].ensure_default_tabs()
     _ensure_dual_carousel_tabs(env)
     _migrate_deals_of_day_pricelist_items(env)
 

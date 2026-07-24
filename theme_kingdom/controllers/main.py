@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import werkzeug
 
-from odoo import http
-from odoo.exceptions import AccessError
+from odoo import _, http
+from odoo.exceptions import ValidationError
 from odoo.http import request
+from odoo.addons.website.controllers.main import Website as WebsiteController
 from odoo.addons.website_sale.controllers.main import WebsiteSale
+from odoo.tools import email_normalize, is_html_empty
 
 _KINGDOM_LIVE_SNIPPETS = {
     's_featured_products': 'theme_kingdom.s_featured_products',
@@ -14,8 +16,87 @@ _KINGDOM_LIVE_SNIPPETS = {
     's_category_dual_carousels': 'theme_kingdom.s_category_dual_carousels',
     's_category_slider': 'theme_kingdom.s_category_slider',
     's_manufacturers': 'theme_kingdom.s_manufacturers',
+    's_dynamic_product_tabs': 'theme_kingdom.s_dynamic_product_tabs',
 }
 
+
+class KingdomWebsite(WebsiteController):
+    """Homepage redirect when Coming Soon mode is enabled."""
+
+    @http.route('/', auth='public', website=True, sitemap=True)
+    def index(self, **kw):
+        website = request.website
+        if website.kingdom_should_redirect_coming_soon():
+            return request.redirect('/coming-soon')
+        return super().index(**kw)
+
+
+class KingdomComingSoon(http.Controller):
+
+    @http.route(
+        '/coming-soon',
+        type='http',
+        auth='public',
+        website=True,
+        sitemap=True,
+    )
+    def coming_soon_page(self, **kwargs):
+        website = request.website
+        # Always allow designers; public only when enabled (or explicit preview).
+        if (
+            not website.kingdom_coming_soon_enabled
+            and not request.env.user.has_group('website.group_website_designer')
+        ):
+            return request.redirect('/')
+        return request.render(
+            'theme_kingdom.coming_soon_page',
+            {
+                'website': website,
+            },
+        )
+
+    @http.route(
+        '/theme_kingdom/coming_soon/subscribe',
+        type='jsonrpc',
+        auth='public',
+        methods=['POST'],
+        website=True,
+        sitemap=False,
+    )
+    def coming_soon_subscribe(self, email=None, **kwargs):
+        website = request.website
+        if not website.kingdom_coming_soon_show_subscribe:
+            return {'error': _('Subscriptions are currently closed.')}
+        if (
+            not website.kingdom_coming_soon_enabled
+            and not request.env.user.has_group('website.group_website_designer')
+        ):
+            return {'error': _('Subscriptions are currently closed.')}
+
+        normalized = email_normalize(email or '')
+        if not normalized:
+            return {'error': _('Please enter a valid email address.')}
+
+        Subscriber = request.env['kingdom.coming.soon.subscriber'].sudo()
+        existing = Subscriber.search([
+            ('email', '=', normalized),
+            ('website_id', '=', website.id),
+        ], limit=1)
+        if existing:
+            return {'message': _('You are already on the list. Thank you!')}
+
+        try:
+            with request.env.cr.savepoint():
+                Subscriber.create({
+                    'email': normalized,
+                    'website_id': website.id,
+                })
+        except ValidationError:
+            return {'message': _('You are already on the list. Thank you!')}
+        except Exception:
+            return {'error': _('Unable to subscribe right now. Please try again.')}
+
+        return {'message': _('Thanks! We will notify you when we launch.')}
 
 class WebsiteSaleManufacturer(WebsiteSale):
     """Filter /shop by manufacturer assigned on product.template."""
@@ -101,3 +182,105 @@ class ThemeKingdomSnippetController(http.Controller):
             inherit_branding=False,
             inherit_branding_auto=False,
         )._render(template_key)
+
+    @http.route(
+        '/theme_kingdom/product_tabs/render',
+        type='jsonrpc',
+        auth='public',
+        methods=['POST'],
+        website=True,
+        sitemap=False,
+        readonly=True,
+    )
+    def render_product_tab_panel(self, tab_id, **kwargs):
+        """AJAX: render products for one Dynamic Product Tab."""
+        if not request.website.has_ecommerce_access():
+            raise werkzeug.exceptions.Forbidden()
+        try:
+            tab_id = int(tab_id)
+        except (TypeError, ValueError) as err:
+            raise werkzeug.exceptions.NotFound() from err
+
+        tab = request.env['kingdom.product.tab'].sudo().browse(tab_id).exists()
+        if not tab or not tab.active or not tab.show_in_dynamic_tabs:
+            raise werkzeug.exceptions.NotFound()
+
+        return request.env['ir.ui.view']._render_template(
+            'theme_kingdom.dynamic_product_tabs_panel',
+            {
+                'tab': tab,
+                'website': request.website,
+            },
+        )
+
+    @http.route(
+        [
+            '/shop/quickview/<model("product.template"):product>',
+            '/theme_kingdom/quickview/<model("product.template"):product>',
+        ],
+        type='jsonrpc',
+        auth='public',
+        methods=['POST'],
+        website=True,
+        sitemap=False,
+        readonly=True,
+    )
+    def product_quickview(self, product, **kwargs):
+        """Return Quick View modal HTML + product metadata for the shop grid."""
+        website = request.website
+        if not website.has_ecommerce_access():
+            raise werkzeug.exceptions.Forbidden()
+
+        product = product.with_context(display_default_code=False)
+        if not product.exists() or not product.sale_ok:
+            raise werkzeug.exceptions.NotFound()
+        if not product.can_access_from_current_website():
+            raise werkzeug.exceptions.NotFound()
+        if not product.is_published and not request.env.user.has_group('website.group_website_designer'):
+            raise werkzeug.exceptions.NotFound()
+
+        combination = product._get_first_possible_combination()
+        combination_info = product._get_combination_info(combination=combination, add_qty=1.0)
+        product_variant = request.env['product.product'].browse(combination_info['product_id'])
+
+        has_custom_attribute = any(
+            ptav.is_custom
+            for ptal in product.valid_product_template_attribute_line_ids
+            for ptav in ptal.product_template_value_ids._only_active()
+        )
+        needs_full_page = product.type == 'combo' or has_custom_attribute
+
+        description = product.description_sale or ''
+        if product.description_ecommerce and not is_html_empty(product.description_ecommerce):
+            description_html = product.description_ecommerce
+        else:
+            description_html = False
+
+        html = request.env['ir.ui.view']._render_template(
+            'theme_kingdom.product_quickview_content',
+            {
+                'website': website,
+                'product': product,
+                'product_variant': product_variant,
+                'combination': combination,
+                'combination_info': combination_info,
+                'description': description,
+                'description_html': description_html,
+                'needs_full_page': needs_full_page,
+                'can_add_to_cart': (
+                    not needs_full_page
+                    and combination_info.get('is_combination_possible', True)
+                    and not combination_info.get('prevent_zero_price_sale')
+                    and product._website_show_quick_add()
+                ),
+            },
+        )
+        return {
+            'html': html,
+            'product_id': combination_info['product_id'],
+            'product_template_id': product.id,
+            'product_type': product.type,
+            'needs_full_page': needs_full_page,
+            'website_url': product.website_url,
+            'display_name': combination_info.get('display_name') or product.name,
+        }
