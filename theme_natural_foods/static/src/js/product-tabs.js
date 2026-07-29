@@ -1,50 +1,53 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const tabInputs = document.querySelectorAll('input.category-tab');
-    const categoryProducts = document.querySelectorAll('.category-products');
-    const categoryImageEl = document.getElementById('category-image');
-    const prevButton = document.getElementById('prev-slide');
-    const nextButton = document.getElementById('next-slide');
-    const slideInfo = document.getElementById('slide-info');
+(function () {
+    "use strict";
 
-    if (!tabInputs.length || !categoryProducts.length) {
-        return;
+    function getCategoryProducts() {
+        return document.querySelectorAll(".category-products");
     }
 
-    function getActiveSwiper() {
-        for (const div of categoryProducts) {
-            if (div.style.display !== 'none' && div.swiper) {
-                return div.swiper;
-            }
-        }
-        return null;
+    function getSlideInfoEl() {
+        return document.getElementById("slide-info");
     }
 
     function updateSlideInfo(swiperInstance) {
+        var slideInfo = getSlideInfoEl();
         if (!slideInfo || !swiperInstance) {
             return;
         }
-        const total = swiperInstance.slides.length || 1;
-        const current = (swiperInstance.activeIndex || 0) + 1;
-        slideInfo.textContent = `Slide ${current} of ${total}`;
+        var total = swiperInstance.slides.length || 1;
+        var current = (swiperInstance.activeIndex || 0) + 1;
+        slideInfo.textContent = "Slide " + current + " of " + total;
     }
 
     function bindSlideChange(swiperInstance) {
         if (!swiperInstance || swiperInstance.__slideInfoBound) {
             return;
         }
-        swiperInstance.on('slideChange', function () {
+        swiperInstance.on("slideChange", function () {
             updateSlideInfo(swiperInstance);
         });
         swiperInstance.__slideInfoBound = true;
     }
 
+    function getActiveSwiper() {
+        var products = getCategoryProducts();
+        for (var i = 0; i < products.length; i++) {
+            var div = products[i];
+            if (div.style.display !== "none" && div.swiper) {
+                return div.swiper;
+            }
+        }
+        return null;
+    }
+
     function updateCategoryImage(categoryId) {
+        var categoryImageEl = document.getElementById("category-image");
         if (!categoryImageEl) {
             return;
         }
-        const activeInput = document.querySelector(`input.category-tab[data-category="${categoryId}"]`);
-        const src = activeInput ? (activeInput.getAttribute('data-image-src') || '') : '';
-        const alt = activeInput ? (activeInput.getAttribute('data-image-alt') || 'Category Image') : 'Category Image';
+        var activeInput = document.querySelector('input.category-tab[data-category="' + categoryId + '"]');
+        var src = activeInput ? activeInput.getAttribute("data-image-src") || "" : "";
+        var alt = activeInput ? activeInput.getAttribute("data-image-alt") || "Category Image" : "Category Image";
         if (src) {
             categoryImageEl.src = src;
             categoryImageEl.alt = alt;
@@ -54,9 +57,9 @@ document.addEventListener('DOMContentLoaded', function () {
     function activateCategory(categoryId) {
         updateCategoryImage(categoryId);
 
-        categoryProducts.forEach(function (div) {
-            const isActive = div.dataset.category === categoryId;
-            div.style.display = isActive ? 'block' : 'none';
+        getCategoryProducts().forEach(function (div) {
+            var isActive = div.dataset.category === categoryId;
+            div.style.display = isActive ? "block" : "none";
             if (isActive && div.swiper) {
                 div.swiper.update();
                 div.swiper.slideTo(0, 0);
@@ -66,36 +69,64 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    tabInputs.forEach(function (input) {
-        input.addEventListener('change', function () {
-            if (this.checked) {
-                activateCategory(this.dataset.category);
-            }
-        });
-    });
-
-    const firstChecked = document.querySelector('input.category-tab:checked');
-    if (firstChecked) {
-        activateCategory(firstChecked.dataset.category);
+    function activateCurrent() {
+        var firstChecked = document.querySelector("input.category-tab:checked");
+        if (firstChecked) {
+            activateCategory(firstChecked.dataset.category);
+        }
     }
 
-    if (prevButton) {
-        prevButton.addEventListener('click', function () {
-            const swiperInstance = getActiveSwiper();
-            if (swiperInstance) {
-                swiperInstance.slidePrev();
-                updateSlideInfo(swiperInstance);
+    function bindOnce() {
+        document.querySelectorAll("input.category-tab").forEach(function (input) {
+            if (input.dataset.nfTabBound) {
+                return;
             }
+            input.dataset.nfTabBound = "1";
+            input.addEventListener("change", function () {
+                if (this.checked) {
+                    activateCategory(this.dataset.category);
+                }
+            });
         });
+
+        var prevButton = document.getElementById("prev-slide");
+        if (prevButton && !prevButton.dataset.nfBound) {
+            prevButton.dataset.nfBound = "1";
+            prevButton.addEventListener("click", function () {
+                var swiperInstance = getActiveSwiper();
+                if (swiperInstance) {
+                    swiperInstance.slidePrev();
+                    updateSlideInfo(swiperInstance);
+                }
+            });
+        }
+
+        var nextButton = document.getElementById("next-slide");
+        if (nextButton && !nextButton.dataset.nfBound) {
+            nextButton.dataset.nfBound = "1";
+            nextButton.addEventListener("click", function () {
+                var swiperInstance = getActiveSwiper();
+                if (swiperInstance) {
+                    swiperInstance.slideNext();
+                    updateSlideInfo(swiperInstance);
+                }
+            });
+        }
     }
 
-    if (nextButton) {
-        nextButton.addEventListener('click', function () {
-            const swiperInstance = getActiveSwiper();
-            if (swiperInstance) {
-                swiperInstance.slideNext();
-                updateSlideInfo(swiperInstance);
-            }
-        });
+    function init() {
+        if (!document.querySelectorAll("input.category-tab").length) {
+            return;
+        }
+        bindOnce();
+        activateCurrent();
     }
-});
+
+    // Called by nf-dynamic-snippets.js after the Our Products slider is refreshed.
+    window.nfRefreshProductTabs = function () {
+        bindOnce();
+        activateCurrent();
+    };
+
+    document.addEventListener("DOMContentLoaded", init);
+})();

@@ -35,40 +35,45 @@
 
                     <!-- Swiper Carousel -->
                     <div class="swiper carousel-swiper shop-category-swiper">
-                        <div class="swiper-wrapper">
-                            <t t-foreach="request.env['product.public.category'].sudo().search([])" t-as="category">
-                                <div class="swiper-slide col-6 col-md-4 col-lg-2">
-                                    <a t-att-href="'/shop/category/%s' % category.id"
-                                       class="text-decoration-none">
-                                        <div class="organic-card text-center p-3 h-100 shadow-hover bg-light border-0">
-                                            <!-- Image -->
-                                            <div class="display-4 mb-3">
-                                                <t t-if="category.image_128">
-                                                    <img
-                                                        t-att-src="'/web/image/product.public.category/%s/image_128' % category.id"
-                                                        t-att-alt="category.name"
-                                                        class="display-4 mw-100"
-                                                    />
-                                                </t>
-                                            </div>
-                                            <h6 class="fw-bold text-dark mb-2">
-                                                <t t-esc="category.name"/>
-                                            </h6>
-                                            <!-- Product Count -->
-                                            <span class="badge bg-organic-700 text-white rounded-pill small">
-                                                <t t-set="count"
-                                                   t-value="request.env['product.template'].sudo().search_count([('public_categ_ids','in',category.id)])"/>
-                                                <t t-esc="count"/> products
-                                            </span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </t>
+                        <div class="swiper-wrapper" data-nf-dynamic-container="shop_by_category">
+                            <t t-call="theme_natural_foods.shop_by_category_items"/>
                         </div>
                     </div>
 
                 </div>
             </div>
         </section>
+    </template>
+
+    <!-- Dynamic body: re-rendered server-side on every page load (see nf-dynamic-snippets.js) -->
+    <template id="shop_by_category_items" name="Shop by Category Items">
+        <t t-foreach="request.env['product.public.category'].sudo().search([])" t-as="category">
+            <div class="swiper-slide col-6 col-md-4 col-lg-2">
+                <a t-att-href="'/shop/category/%s' % category.id"
+                   class="text-decoration-none">
+                    <div class="organic-card text-center p-3 h-100 shadow-hover bg-light border-0">
+                        <!-- Image -->
+                        <div class="display-4 mb-3">
+                            <t t-if="category.image_128">
+                                <img
+                                    t-att-src="'/web/image/product.public.category/%s/image_128' % category.id"
+                                    t-att-alt="category.name"
+                                    class="display-4 mw-100"
+                                />
+                            </t>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2">
+                            <t t-esc="category.name"/>
+                        </h6>
+                        <!-- Product Count -->
+                        <span class="badge bg-organic-700 text-white rounded-pill small">
+                            <t t-set="count"
+                               t-value="request.env['product.template'].sudo().search_count([('public_categ_ids','in',category.id)])"/>
+                            <t t-esc="count"/> products
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </t>
     </template>
 </odoo>

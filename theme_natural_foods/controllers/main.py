@@ -28,6 +28,29 @@ from odoo.tools.misc import format_amount
 
 class NaturalFoodController(http.Controller):
 
+    # Server-rendered fragments for config-driven snippets. These are fetched by
+    # nf-dynamic-snippets.js on every page load so the snippets always reflect the
+    # latest backend configuration instead of the HTML frozen into the page arch.
+    _NF_SNIPPET_TEMPLATES = {
+        'featured_products': 'theme_natural_foods.featured_products_items',
+        'best_seller': 'theme_natural_foods.best_seller_items',
+        'new_arrival': 'theme_natural_foods.new_arrival_items',
+        'deals_of_day': 'theme_natural_foods.deals_of_day_items',
+        'our_products': 'theme_natural_foods.our_products_items',
+        'featured_recipes': 'theme_natural_foods.featured_recipes_items',
+        'shop_by_category': 'theme_natural_foods.shop_by_category_items',
+    }
+
+    @http.route('/theme_natural_foods/snippet_reload', type='http', auth='public', website=True, sitemap=False)
+    def nf_snippet_reload(self, key=None, **kwargs):
+        template = self._NF_SNIPPET_TEMPLATES.get(key)
+        if not template:
+            return request.make_response('', headers=[('Content-Type', 'text/html; charset=utf-8')])
+        response = request.render(template, {})
+        response.headers['Content-Type'] = 'text/html; charset=utf-8'
+        response.headers['Cache-Control'] = 'no-store, max-age=0'
+        return response
+
     # New Arrivals Route only
     @http.route(['/shop/new-arrivals'], type='http', auth='public', website=True)
     def new_arrivals(self, **kwargs):
