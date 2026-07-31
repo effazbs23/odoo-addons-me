@@ -1369,6 +1369,10 @@ html.k-no-topbar #AnnouncementBanner {
   text-align: center;
 }
 
+.dealoftheday-wrapper .deal-slide-card .prices .kingdom-product-price {
+  justify-content: center;
+}
+
 .dealoftheday-wrapper .deal-slide-card .prices .actual-price {
   color: #e6ab19;
   font-size: 16px;
@@ -2475,10 +2479,51 @@ body.flyout-cart-open::after {
 
 .featured-product-price {
   min-height: 24px;
-  color: #e6ab19;
   font-size: 16px;
   line-height: 1.3;
+}
+
+.featured-product-price .kingdom-product-price {
+  justify-content: flex-start;
+}
+
+.kingdom-product-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.kingdom-product-price__current {
+  color: var(--primary-color, #28b1e0);
   font-weight: 700;
+  white-space: nowrap;
+}
+
+.kingdom-product-price__base {
+  color: #bfc5ca;
+  font-weight: 400;
+  text-decoration: line-through;
+  white-space: nowrap;
+}
+
+.kingdom-product-price__discount {
+  color: #28a745;
+  font-weight: 600;
+  font-size: 0.92em;
+  white-space: nowrap;
+}
+
+.kingdom-product-price--detail .kingdom-product-price__current {
+  font-size: inherit;
+}
+
+.kingdom-product-price--detail .kingdom-product-price__base {
+  font-size: 0.85em;
+}
+
+.kingdom-product-price--shop .kingdom-product-price__current {
+  font-size: 1rem;
 }
 
 .featured-old-price {
@@ -4124,7 +4169,7 @@ body.flyout-cart-open::after {
   }
 }
 
-/* —— Manufacturers —— */
+/* —— Brands —— */
 .home-manufacturers-section.carousel-grid {
   padding: 1.75rem 0 1.5rem;
   background: #fff;

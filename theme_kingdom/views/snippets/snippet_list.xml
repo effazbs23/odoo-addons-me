@@ -12,6 +12,13 @@
 
 
         <xpath expr="//snippets[@id='snippet_structure']" position="inside">
+            <t t-snippet="theme_kingdom.s_countdown"
+               string="Countdown Timer"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg">
+                <keywords>countdown, timer, counter, promotion, sale, launch</keywords>
+            </t>
+
             <t t-snippet="theme_kingdom.s_hero_slider"
                string="Hero Slider"
                group="kingdom_snippet"/>

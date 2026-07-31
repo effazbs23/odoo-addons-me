@@ -23,7 +23,8 @@ function parseDealEndMs(root) {
     if (msAttr) {
         const parsed = parseInt(msAttr, 10);
         if (!Number.isNaN(parsed) && parsed > 0) {
-            return parsed;
+            // BuilderDateTimePicker stores unix seconds; deals use epoch ms.
+            return parsed < 1e12 ? parsed * 1000 : parsed;
         }
     }
     const iso = root.getAttribute('data-deal-countdown') || '';
@@ -52,6 +53,7 @@ export class KingdomLiveSnippet extends Interaction {
         'section.s_manufacturers[data-snippet]',
         'section.s_dynamic_product_tabs[data-snippet]',
         'section.k-dyn-tabs[data-snippet]',
+        'section.s_coming_soon[data-snippet]',
     ].join(', ');
 
     _dealCountdownInterval = null;

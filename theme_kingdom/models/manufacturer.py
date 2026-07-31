@@ -5,7 +5,7 @@ from odoo import api, fields, models
 class KingdomManufacturer(models.Model):
     _name = 'kingdom.manufacturer'
     _inherit = ['kingdom.website.cache.mixin']
-    _description = 'Kingdom Manufacturer / Brand'
+    _description = 'Kingdom Brand'
     _order = 'sequence, name, id'
 
     name = fields.Char(
@@ -18,7 +18,7 @@ class KingdomManufacturer(models.Model):
     show_on_homepage = fields.Boolean(
         string='Show on Homepage',
         default=True,
-        help='Include this brand in the homepage manufacturers carousel.',
+        help='Include this brand in the homepage brands carousel.',
     )
     image = fields.Image(
         string='Logo',
@@ -61,13 +61,13 @@ class KingdomManufacturer(models.Model):
         }
 
     def get_shop_url(self):
-        """Shop URL filtered to products of this manufacturer."""
+        """Shop URL filtered to products of this brand."""
         self.ensure_one()
         return f'/shop?manufacturer={self.id}'
 
     @api.model
     def get_website_manufacturer_slides(self, per_slide=2):
-        """Manufacturers grouped in pairs for the homepage carousel."""
+        """Brands grouped in pairs for the homepage carousel."""
         manufacturers = self.sudo().search(
             [('active', '=', True), ('show_on_homepage', '=', True)],
             order='sequence asc, id asc',

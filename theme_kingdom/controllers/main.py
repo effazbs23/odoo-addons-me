@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 import werkzeug
 
-from odoo import _, http
-from odoo.exceptions import ValidationError
+from odoo import http
 from odoo.http import request
-from odoo.addons.website.controllers.main import Website as WebsiteController
 from odoo.addons.website_sale.controllers.main import WebsiteSale
-from odoo.tools import email_normalize, is_html_empty
+from odoo.tools import is_html_empty
 
 _KINGDOM_LIVE_SNIPPETS = {
     's_featured_products': 'theme_kingdom.s_featured_products',
@@ -17,18 +15,8 @@ _KINGDOM_LIVE_SNIPPETS = {
     's_category_slider': 'theme_kingdom.s_category_slider',
     's_manufacturers': 'theme_kingdom.s_manufacturers',
     's_dynamic_product_tabs': 'theme_kingdom.s_dynamic_product_tabs',
+    's_coming_soon': 'theme_kingdom.s_coming_soon',
 }
-
-
-class KingdomWebsite(WebsiteController):
-    """Homepage redirect when Coming Soon mode is enabled."""
-
-    @http.route('/', auth='public', website=True, sitemap=True)
-    def index(self, **kw):
-        website = request.website
-        if website.kingdom_should_redirect_coming_soon():
-            return request.redirect('/coming-soon')
-        return super().index(**kw)
 
 
 class KingdomComingSoon(http.Controller):
@@ -54,49 +42,6 @@ class KingdomComingSoon(http.Controller):
                 'website': website,
             },
         )
-
-    @http.route(
-        '/theme_kingdom/coming_soon/subscribe',
-        type='jsonrpc',
-        auth='public',
-        methods=['POST'],
-        website=True,
-        sitemap=False,
-    )
-    def coming_soon_subscribe(self, email=None, **kwargs):
-        website = request.website
-        if not website.kingdom_coming_soon_show_subscribe:
-            return {'error': _('Subscriptions are currently closed.')}
-        if (
-            not website.kingdom_coming_soon_enabled
-            and not request.env.user.has_group('website.group_website_designer')
-        ):
-            return {'error': _('Subscriptions are currently closed.')}
-
-        normalized = email_normalize(email or '')
-        if not normalized:
-            return {'error': _('Please enter a valid email address.')}
-
-        Subscriber = request.env['kingdom.coming.soon.subscriber'].sudo()
-        existing = Subscriber.search([
-            ('email', '=', normalized),
-            ('website_id', '=', website.id),
-        ], limit=1)
-        if existing:
-            return {'message': _('You are already on the list. Thank you!')}
-
-        try:
-            with request.env.cr.savepoint():
-                Subscriber.create({
-                    'email': normalized,
-                    'website_id': website.id,
-                })
-        except ValidationError:
-            return {'message': _('You are already on the list. Thank you!')}
-        except Exception:
-            return {'error': _('Unable to subscribe right now. Please try again.')}
-
-        return {'message': _('Thanks! We will notify you when we launch.')}
 
 class WebsiteSaleManufacturer(WebsiteSale):
     """Filter /shop by manufacturer assigned on product.template."""

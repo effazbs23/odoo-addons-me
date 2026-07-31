@@ -102,6 +102,7 @@
         <field name="name">Product Tabs</field>
         <field name="res_model">kingdom.product.tab</field>
         <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create product tabs (Featured, New Arrivals, Best Sellers, …).

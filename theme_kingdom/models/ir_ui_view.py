@@ -27,8 +27,6 @@ class IrUiView(models.Model):
             for el in arch_section.iter():
                 if el.get('data-oe-model') != 'ir.ui.view':
                     continue
-                # Keep root branding for save routing; replace_arch_section
-                # ignores root data-oe-* anyway.
                 if el is arch_section:
                     continue
                 for attr in MOVABLE_BRANDING:

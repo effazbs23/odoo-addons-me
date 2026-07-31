@@ -493,7 +493,10 @@
       var msAttr = root.getAttribute("data-deal-end-ms");
       if (msAttr) {
         var parsed = parseInt(msAttr, 10);
-        if (!Number.isNaN(parsed) && parsed > 0) return parsed;
+        if (!Number.isNaN(parsed) && parsed > 0) {
+          // BuilderDateTimePicker stores unix seconds; deals use epoch ms.
+          return parsed < 1e12 ? parsed * 1000 : parsed;
+        }
       }
       var iso = root.getAttribute("data-deal-countdown") || "";
       if (iso) {

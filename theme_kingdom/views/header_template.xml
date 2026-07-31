@@ -79,6 +79,7 @@
               priority="99">
 
         <xpath expr="//header" position="replace">
+            <t t-if="not no_header">
             <t t-set="website_sale_cart" t-value="request.cart"/>
             <t t-set="website_sale_cart_quantity" t-value="website_sale_cart.cart_quantity if website_sale_cart else 0"/>
             <t t-set="wishcount" t-value="len(request.env['product.wishlist'].current())"/>
@@ -289,6 +290,7 @@
 
             <t t-call="theme_kingdom.kingdom_mobile_navigation_drawer"/>
             </header>
+            </t>
         </xpath>
 
     </template>

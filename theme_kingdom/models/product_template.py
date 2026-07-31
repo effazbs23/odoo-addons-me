@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import fields, models
+from odoo import api, fields, models
 from odoo.fields import Domain
 from odoo.http import request
 
@@ -9,10 +9,10 @@ class ProductTemplate(models.Model):
 
     kingdom_manufacturer_id = fields.Many2one(
         'kingdom.manufacturer',
-        string='Manufacturer',
+        string='Brand',
         index=True,
         ondelete='set null',
-        help='Brand/manufacturer assigned to this product. Used when filtering the shop by manufacturer.',
+        help='Brand assigned to this product. Used when filtering the shop by brand.',
     )
 
     def _kingdom_request_website(self):
@@ -42,6 +42,137 @@ class ProductTemplate(models.Model):
         if manufacturer_id:
             result['base_domain'].append([('kingdom_manufacturer_id', '=', int(manufacturer_id))])
         return result
+
+    def _kingdom_resolve_pricelist(self, website, pricelist=None):
+        if pricelist:
+            return pricelist.sudo()
+        try:
+            request.session
+            return website._get_and_cache_current_pricelist()
+        except (RuntimeError, AttributeError):
+            available = website.get_pricelist_available(show_visible=False)
+            if available:
+                return available[0].sudo()
+            return self.env['product.pricelist'].sudo()
+
+    def _kingdom_resolve_fiscal_position(self, website):
+        try:
+            request.session
+            return website._get_and_cache_current_fiscal_position()
+        except (RuntimeError, AttributeError):
+            return self.env['account.fiscal.position'].sudo()._get_fiscal_position(
+                website.partner_id
+            )
+
+    def _kingdom_compute_combination_prices(self, website, pricelist=None, quantity=1.0):
+        """Price info for cards/snippets without relying on request.website."""
+        self.ensure_one()
+        pricelist = self._kingdom_resolve_pricelist(website, pricelist=pricelist)
+        currency = pricelist.currency_id or website.currency_id
+        date = fields.Date.context_today(self)
+        uom = self.uom_id
+
+        pricelist_price, pricelist_rule_id = pricelist._get_product_price_rule(
+            product=self,
+            quantity=quantity,
+            uom=uom,
+            currency=currency,
+        )
+
+        price_before_discount = pricelist_price
+        pricelist_item = self.env['product.pricelist.item'].browse(pricelist_rule_id)
+        if pricelist_item._show_discount_on_shop():
+            price_before_discount = pricelist_item._compute_price_before_discount(
+                product=self,
+                quantity=quantity or 1.0,
+                date=date,
+                uom=uom,
+                currency=currency,
+            )
+
+        has_discounted_price = currency.compare_amounts(price_before_discount, pricelist_price) == 1
+        combination_info = {
+            'list_price': max(pricelist_price, price_before_discount),
+            'price': pricelist_price,
+            'has_discounted_price': has_discounted_price,
+        }
+
+        if (
+            not has_discounted_price
+            and self.compare_list_price
+            and self.env['res.groups']._is_feature_enabled(
+                'website_sale.group_product_price_comparison'
+            )
+        ):
+            combination_info['compare_list_price'] = self.currency_id._convert(
+                from_amount=self.compare_list_price,
+                to_currency=currency,
+                company=self.env.company,
+                date=date,
+                round=False,
+            )
+
+        product_taxes = self.sudo().taxes_id._filter_taxes_by_company(self.env.company)
+        if product_taxes:
+            fiscal_position = self._kingdom_resolve_fiscal_position(website)
+            taxes = fiscal_position.map_tax(product_taxes)
+            for price_key in ('price', 'list_price'):
+                combination_info[price_key] = self._apply_taxes_to_price(
+                    combination_info[price_key],
+                    currency,
+                    product_taxes,
+                    taxes,
+                    self,
+                    website=website,
+                )
+
+        return combination_info
+
+    def kingdom_get_price_display(self, website=None, pricelist=None):
+        """Normalized sale / base / discount fields for Kingdom product cards."""
+        self.ensure_one()
+        website = (
+            website
+            or self._kingdom_request_website()
+            or self.env['website'].get_current_website()
+        )
+        if not website:
+            price = self.list_price
+            compare = self.compare_list_price or 0
+            return self.kingdom_price_display_from_info({
+                'price': price,
+                'list_price': price,
+                'has_discounted_price': False,
+                'compare_list_price': compare if compare > price else 0,
+            })
+
+        combination_info = self._kingdom_compute_combination_prices(
+            website,
+            pricelist=pricelist,
+        )
+        return self.kingdom_price_display_from_info(combination_info)
+
+    @api.model
+    def kingdom_price_display_from_info(self, combination_info):
+        """Build card price dict from website_sale combination_info."""
+        price = combination_info.get('price') or 0.0
+        base_price = False
+        if combination_info.get('has_discounted_price'):
+            base_price = combination_info.get('list_price') or 0.0
+        else:
+            compare = combination_info.get('compare_list_price') or 0.0
+            if compare > price:
+                base_price = compare
+        has_discount = bool(base_price and base_price > price)
+        discount_percent = 0
+        if has_discount:
+            discount_percent = int(round((1 - (price / base_price)) * 100))
+        return {
+            'price': price,
+            'base_price': base_price,
+            'has_discount': has_discount,
+            'discount_percent': discount_percent,
+        }
 
     def kingdom_get_related_products(self, limit=12):
         """Products for the product page related block.

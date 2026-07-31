@@ -173,10 +173,28 @@ def _strip_baked_editor_branding(env):
             view.with_context(no_save_prev=True).write({'arch_db': new_arch})
 
 
+def _fix_stale_multi_website_action_contexts(env):
+    """Clear legacy multi-website menu contexts left after reverting to global config."""
+    xmlids = (
+        'theme_kingdom.action_bestsale_products',
+        'theme_kingdom.action_kingdom_manufacturer',
+        'theme_kingdom.action_kingdom_deals_of_day',
+        'theme_kingdom.action_featured_products',
+        'theme_kingdom.kingdom_product_tab_action',
+    )
+    for xmlid in xmlids:
+        action = env.ref(xmlid, raise_if_not_found=False)
+        if not action:
+            continue
+        if 'current_website_id' in str(action.context or ''):
+            action.sudo().write({'context': {}})
+
+
 def pre_init_hook(env):
     """Prepare schema and migrate legacy data before module models load."""
     _ensure_website_menu_kingdom_tab_column(env)
     _migrate_deals_pricelist_items_to_products(env)
+    _fix_stale_multi_website_action_contexts(env)
 
 
 def _ensure_website_menu_kingdom_tab_column(env):
@@ -231,11 +249,13 @@ def post_init_hook(env):
 
     # Kingdom header/footer are selectable in Website Builder only — do not auto-enable.
     env['theme.utils']._migrate_header_footer_opt_in()
+    env['theme.utils']._ensure_header_respects_no_header()
 
     env['kingdom.product.tab'].ensure_default_tabs()
     _ensure_dual_carousel_tabs(env)
     _migrate_deals_of_day_pricelist_items(env)
     _ensure_homepage_featured_categories(env)
+    env['theme.utils']._ensure_kingdom_shop_layout()
     _migrate_kingdom_snippet_oe_structure(env)
     _strip_saved_snippet_editor_hints(env)
     _strip_baked_editor_branding(env)

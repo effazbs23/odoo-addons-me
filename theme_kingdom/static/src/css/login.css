@@ -1,0 +1,14 @@
+/* Minimal auth page chrome (header/footer hidden via no_header / no_footer). */
+.k-login-container {
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.k-login-container .oe_login_form,
+.k-login-container .oe_signup_form,
+.k-login-container .oe_reset_password_form {
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+}

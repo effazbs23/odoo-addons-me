@@ -13,6 +13,7 @@
             <script type="text/javascript" src="/theme_kingdom/static/src/js/swiper-bundle.min.js"/>
             <script type="text/javascript" src="/theme_kingdom/static/src/js/header-scroll.js"/>
             <script type="text/javascript" src="/theme_kingdom/static/src/js/main.js"/>
+            <script type="text/javascript" src="/theme_kingdom/static/src/js/kingdom_unified_switcher.js"/>
         </xpath>
     </template>
 </odoo>

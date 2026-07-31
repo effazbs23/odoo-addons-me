@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Drag & drop snippet — content follows Website → Settings → Coming Soon -->
+    <template id="s_coming_soon" name="Kingdom Coming Soon">
+        <section class="s_coming_soon"
+                 data-snippet="theme_kingdom.s_coming_soon"
+                 data-kingdom-live-snippet="s_coming_soon"
+                 data-name="Coming Soon"
+                 aria-label="Coming Soon">
+            <t t-call="theme_kingdom.coming_soon_block">
+                <t t-set="is_snippet" t-value="True"/>
+            </t>
+        </section>
+    </template>
+
+</odoo>

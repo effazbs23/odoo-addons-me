@@ -1,0 +1,174 @@
+/* Kingdom unified pricelist + language switcher */
+
+.k-unified-switcher {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+.k-unified-switcher__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.7rem;
+    border: 0;
+    border-radius: 0.25rem 0.25rem 0 0;
+    background: var(--secondary-color, #d4af37);
+    color: #1a1a1a;
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+}
+
+.k-unified-switcher__toggle::after {
+    display: none;
+}
+
+.k-unified-switcher.show .k-unified-switcher__toggle,
+.k-unified-switcher__toggle[aria-expanded="true"] {
+    border-radius: 0.25rem 0.25rem 0 0;
+}
+
+.k-unified-switcher__flag {
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.k-unified-switcher__caret {
+    font-size: 0.7rem;
+    opacity: 0.85;
+}
+
+.k-unified-switcher__menu {
+    min-width: 15rem;
+    margin-top: 0 !important;
+    padding: 0.65rem 0.7rem 0.55rem;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 0 0 0.35rem 0.35rem;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
+.k-unified-switcher__pricelist {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.65rem;
+    padding: 0.35rem 0.45rem 0.35rem 0.65rem;
+    border: 1px solid #d7dce5;
+    border-radius: 0.3rem;
+    background: #fff;
+}
+
+.k-unified-switcher__pricelist--static {
+    justify-content: flex-start;
+}
+
+.k-unified-switcher__pl-current {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.k-unified-switcher__pl-symbol {
+    color: #6b7280;
+}
+
+.k-unified-switcher__pl-steps {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #e5e7eb;
+}
+
+.k-unified-switcher__pl-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.05rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #6b7280;
+    line-height: 1;
+}
+
+.k-unified-switcher__pl-btn:hover,
+.k-unified-switcher__pl-btn:focus {
+    color: var(--secondary-color, #d4af37);
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.k-unified-switcher__pl-btn + .k-unified-switcher__pl-btn {
+    border-top: 1px solid #e5e7eb;
+}
+
+.k-unified-switcher__langs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.k-unified-switcher__lang {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.4rem 0.45rem;
+    border-radius: 0.25rem;
+    color: #1f2937;
+    font-size: 0.88rem;
+    text-decoration: none;
+}
+
+.k-unified-switcher__lang:hover,
+.k-unified-switcher__lang:focus {
+    background: #f3f4f6;
+    color: #111827;
+    text-decoration: none;
+}
+
+.k-unified-switcher__lang.is-active {
+    background: rgba(212, 175, 55, 0.14);
+    font-weight: 600;
+}
+
+.k-unified-switcher__add-lang {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 0.45rem;
+    padding: 0.45rem 0.35rem 0.2rem;
+    border-top: 1px solid #eef0f4;
+    color: #4b5563;
+    font-size: 0.82rem;
+    text-decoration: none;
+}
+
+.k-unified-switcher__add-lang:hover {
+    color: var(--secondary-color, #d4af37);
+    text-decoration: none;
+}
+
+.k-unified-switcher__add-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    line-height: 1;
+}
+
+/* Keep header selector row tidy beside the unified control */
+.header.header-main .header-inline-selectors .k-unified-switcher {
+    margin-left: 0.15rem;
+}

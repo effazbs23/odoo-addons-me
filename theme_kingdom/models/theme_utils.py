@@ -31,8 +31,8 @@ class ThemeUtils(models.AbstractModel):
         templates = list(super()._footer_templates)
         kingdom_footer = 'theme_kingdom.template_footer_kingdom'
         if kingdom_footer not in templates:
-            # Keep the default template last.
-            templates.insert(-1, kingdom_footer)
+            # Last in the builder Template gallery / enable mutual exclusion list.
+            templates.append(kingdom_footer)
         return templates
 
     def _disable_legacy_kingdom_header(self):
@@ -96,8 +96,60 @@ class ThemeUtils(models.AbstractModel):
         self._ensure_kingdom_templates_inactive()
         self.enable_view('website.template_header_default')
         self.enable_view('website.footer_custom')
+        self._ensure_kingdom_shop_layout()
         _migrate_kingdom_snippet_oe_structure(self.env)
         _strip_saved_snippet_editor_hints(self.env)
         _strip_baked_editor_branding(self.env)
         _cleanup_stale_oe_view_refs(self.env)
+        return True
+
+    @api.model
+    def _ensure_kingdom_shop_layout(self):
+        """Enable top category chips + left category sidebar on every website."""
+        for website in self.env['website'].search([]):
+            utils = self.with_context(website_id=website.id)
+            utils.enable_view('website_sale.products_categories_top')
+            utils.enable_view('website_sale.products_categories')
+            # Prefer Kingdom chip styling over stock filmstrip variants.
+            utils.disable_view('website_sale.filmstrip_categories_pills')
+            utils.disable_view('website_sale.filmstrip_categories_images')
+            utils.disable_view('website_sale.filmstrip_categories_tabs')
+            utils.disable_view('website_sale.filmstrip_categories_bordered')
+            utils.disable_view('website_sale.filmstrip_categories_grid')
+            utils.disable_view('website_sale.filmstrip_categories_large_images')
+        return True
+
+    @api.model
+    def _ensure_header_respects_no_header(self):
+        """Website theme copies often skip XML updates — keep no_header support."""
+        View = self.env['ir.ui.view'].sudo().with_context(active_test=False)
+        views = View.search([('key', '=', 'theme_kingdom.template_header_kingdom')])
+        for view in views:
+            arch = view.arch_db or ''
+            if 'not no_header' in arch:
+                continue
+            needle = '<xpath expr="//header" position="replace">'
+            if needle not in arch:
+                continue
+            patched = arch.replace(
+                needle,
+                needle + '\n            <t t-if="not no_header">',
+                1,
+            )
+            # Close the wrapper before </xpath>
+            close = '</header>\n        </xpath>'
+            if close in patched:
+                patched = patched.replace(
+                    close,
+                    '</header>\n            </t>\n        </xpath>',
+                    1,
+                )
+            elif '</header>\n        </xpath>' not in patched:
+                patched = patched.replace(
+                    '</header>',
+                    '</header>\n            </t>',
+                    1,
+                )
+            if 'not no_header' in patched and patched != arch:
+                view.with_context(no_save_prev=True).write({'arch_db': patched})
         return True

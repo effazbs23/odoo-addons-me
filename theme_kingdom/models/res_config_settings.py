@@ -25,31 +25,19 @@ class ResConfigSettings(models.TransientModel):
         related='website_id.kingdom_coming_soon_show_countdown',
         readonly=False,
     )
-    kingdom_coming_soon_show_subscribe = fields.Boolean(
-        related='website_id.kingdom_coming_soon_show_subscribe',
-        readonly=False,
-    )
-    kingdom_coming_soon_subscribe_text = fields.Char(
-        related='website_id.kingdom_coming_soon_subscribe_text',
-        readonly=False,
-    )
-    kingdom_coming_soon_subscribe_button = fields.Char(
-        related='website_id.kingdom_coming_soon_subscribe_button',
-        readonly=False,
-    )
     kingdom_coming_soon_bg_image = fields.Image(
         related='website_id.kingdom_coming_soon_bg_image',
         readonly=False,
     )
-    kingdom_coming_soon_subscriber_count = fields.Integer(
-        related='website_id.kingdom_coming_soon_subscriber_count',
-        readonly=True,
+    kingdom_coming_soon_show_admin_login = fields.Boolean(
+        related='website_id.kingdom_coming_soon_show_admin_login',
+        readonly=False,
+    )
+    kingdom_coming_soon_login_show_header_footer = fields.Boolean(
+        related='website_id.kingdom_coming_soon_login_show_header_footer',
+        readonly=False,
     )
 
     def action_preview_coming_soon(self):
         self.ensure_one()
         return self.website_id.action_preview_coming_soon()
-
-    def action_open_coming_soon_subscribers(self):
-        self.ensure_one()
-        return self.website_id.action_open_coming_soon_subscribers()

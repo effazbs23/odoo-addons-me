@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
-from odoo.tools import email_normalize
+from odoo import fields, models
 
 
 class Website(models.Model):
@@ -31,45 +29,22 @@ class Website(models.Model):
         string='Show Countdown',
         default=True,
     )
-    kingdom_coming_soon_show_subscribe = fields.Boolean(
-        string='Show Subscription Form',
-        default=True,
-    )
-    kingdom_coming_soon_subscribe_text = fields.Char(
-        string='Subscribe Placeholder',
-        default='Enter your email to get notified',
-        translate=True,
-    )
-    kingdom_coming_soon_subscribe_button = fields.Char(
-        string='Subscribe Button Label',
-        default='Notify Me',
-        translate=True,
-    )
     kingdom_coming_soon_bg_image = fields.Image(
         string='Background Image',
         max_width=2560,
         max_height=1440,
     )
-    kingdom_coming_soon_subscriber_ids = fields.One2many(
-        'kingdom.coming.soon.subscriber',
-        'website_id',
-        string='Subscribers',
+    kingdom_coming_soon_show_admin_login = fields.Boolean(
+        string='Show Admin Login Link',
+        default=True,
+        help='Show a “Login as Admin” link on the Coming Soon page.',
     )
-    kingdom_coming_soon_subscriber_count = fields.Integer(
-        string='Subscriber Count',
-        compute='_compute_kingdom_coming_soon_subscriber_count',
+    kingdom_coming_soon_login_show_header_footer = fields.Boolean(
+        string='Login Page Header & Footer',
+        default=False,
+        help='When enabled, /web/login keeps the website header and footer. '
+             'When disabled, the login page is shown without header/footer.',
     )
-
-    def _compute_kingdom_coming_soon_subscriber_count(self):
-        Subscriber = self.env['kingdom.coming.soon.subscriber'].sudo()
-        grouped = Subscriber._read_group(
-            [('website_id', 'in', self.ids)],
-            ['website_id'],
-            ['__count'],
-        )
-        counts = {website.id: count for website, count in grouped}
-        for website in self:
-            website.kingdom_coming_soon_subscriber_count = counts.get(website.id, 0)
 
     def kingdom_coming_soon_countdown_end_ms(self):
         """UTC epoch ms for the Coming Soon countdown JS."""
@@ -94,17 +69,6 @@ class Website(models.Model):
             return '/web/image/website/%s/kingdom_coming_soon_bg_image' % self.id
         return '/theme_kingdom/static/src/images/cover.webp'
 
-    def action_open_coming_soon_subscribers(self):
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('Coming Soon Subscribers'),
-            'res_model': 'kingdom.coming.soon.subscriber',
-            'view_mode': 'list,form',
-            'domain': [('website_id', '=', self.id)],
-            'context': {'default_website_id': self.id},
-        }
-
     def action_preview_coming_soon(self):
         self.ensure_one()
         return {
@@ -112,41 +76,3 @@ class Website(models.Model):
             'url': '/coming-soon',
             'target': 'new',
         }
-
-
-class KingdomComingSoonSubscriber(models.Model):
-    _name = 'kingdom.coming.soon.subscriber'
-    _description = 'Coming Soon Subscriber'
-    _order = 'create_date desc, id desc'
-    _rec_name = 'email'
-
-    email = fields.Char(required=True, index=True)
-    website_id = fields.Many2one(
-        'website',
-        required=True,
-        ondelete='cascade',
-        index=True,
-        default=lambda self: self.env['website'].get_current_website(),
-    )
-
-    _email_website_uniq = models.Constraint(
-        'unique(email, website_id)',
-        'This email is already subscribed for this website.',
-    )
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        for vals in vals_list:
-            email = email_normalize(vals.get('email') or '')
-            if not email:
-                raise ValidationError(_('Please enter a valid email address.'))
-            vals['email'] = email
-        return super().create(vals_list)
-
-    def write(self, vals):
-        if 'email' in vals:
-            email = email_normalize(vals.get('email') or '')
-            if not email:
-                raise ValidationError(_('Please enter a valid email address.'))
-            vals = {**vals, 'email': email}
-        return super().write(vals)

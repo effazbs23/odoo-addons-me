@@ -34,7 +34,7 @@ Snippets
 --------
 
 Available drag-and-drop blocks include Hero Slider, Category Slider, Deal of the Day,
-Featured Products, Best Sale Products, Promo Banners, Blog News, Manufacturers,
+Featured Products, Best Sale Products, Promo Banners, Blog News, Brands,
 Service Highlights, and Product Carousel.
 
 Support

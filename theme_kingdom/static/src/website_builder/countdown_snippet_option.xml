@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="theme_kingdom.KingdomCountdownOption">
+        <BuilderRow label.translate="End Date">
+            <BuilderDateTimePicker applyTo="'.k-countdown'"
+                                  dataAttributeAction="'dealEndMs'"
+                                  acceptEmptyDate="false"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Style">
+            <BuilderSelect applyTo="'.k-countdown'">
+                <BuilderSelectItem classAction="'k-cd--circle-outline'">Outlined Circles</BuilderSelectItem>
+                <BuilderSelectItem classAction="'k-cd--circle-solid'">Solid Circles</BuilderSelectItem>
+                <BuilderSelectItem classAction="'k-cd--minimal'">Minimal</BuilderSelectItem>
+                <BuilderSelectItem classAction="'k-cd--compact'">Compact</BuilderSelectItem>
+                <BuilderSelectItem classAction="'k-cd--card'">Cards</BuilderSelectItem>
+                <BuilderSelectItem classAction="'k-cd--card-dark'">Dark Cards</BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+    </t>
+
+</templates>

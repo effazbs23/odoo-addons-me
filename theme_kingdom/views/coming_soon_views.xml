@@ -10,7 +10,7 @@
                 <block title="Coming Soon" id="kingdom_coming_soon_settings" invisible="not website_id">
                     <setting id="kingdom_coming_soon_enabled_setting"
                              string="Coming Soon Mode"
-                             help="Show a Coming Soon landing page to public visitors. Website designers still see the live site.">
+                             help="When enabled, public visitors are redirected to Coming Soon for every website page (shop, blog, etc.). Website designers still browse the live site. Title, subtitle, countdown and background are shared with the Coming Soon snippet.">
                         <field name="kingdom_coming_soon_enabled"/>
                         <div class="content-group" invisible="not kingdom_coming_soon_enabled">
                             <div class="row mt16">
@@ -34,34 +34,20 @@
                                 <label class="o_light_label" string="Show countdown timer" for="kingdom_coming_soon_show_countdown"/>
                             </div>
                             <div class="mt8">
-                                <field name="kingdom_coming_soon_show_subscribe"/>
-                                <label class="o_light_label" string="Show email subscription form" for="kingdom_coming_soon_show_subscribe"/>
+                                <field name="kingdom_coming_soon_show_admin_login"/>
+                                <label class="o_light_label" string="Show “Login as Admin” on Coming Soon page" for="kingdom_coming_soon_show_admin_login"/>
                             </div>
-                            <div class="row mt8" invisible="not kingdom_coming_soon_show_subscribe">
-                                <label class="col-lg-3 o_light_label" for="kingdom_coming_soon_subscribe_text"/>
-                                <field name="kingdom_coming_soon_subscribe_text" class="col-lg-6"/>
+                            <div class="mt8">
+                                <field name="kingdom_coming_soon_login_show_header_footer"/>
+                                <label class="o_light_label" string="Show header &amp; footer on login page" for="kingdom_coming_soon_login_show_header_footer"/>
                             </div>
-                            <div class="row mt8" invisible="not kingdom_coming_soon_show_subscribe">
-                                <label class="col-lg-3 o_light_label" for="kingdom_coming_soon_subscribe_button"/>
-                                <field name="kingdom_coming_soon_subscribe_button" class="col-lg-4"/>
-                            </div>
-                            <div class="mt16 d-flex flex-wrap gap-2">
+                            <div class="mt16">
                                 <button name="action_preview_coming_soon"
                                         type="object"
                                         string="Preview Page"
                                         class="btn-link"
                                         icon="fa-external-link"
                                         noSaveDialog="true"/>
-                                <button name="action_open_coming_soon_subscribers"
-                                        type="object"
-                                        string="View Subscribers"
-                                        class="btn-link"
-                                        icon="fa-envelope"
-                                        noSaveDialog="true"/>
-                                <span class="text-muted align-self-center"
-                                      invisible="not kingdom_coming_soon_subscriber_count">
-                                    (<field name="kingdom_coming_soon_subscriber_count" class="oe_inline"/> subscribers)
-                                </span>
                             </div>
                         </div>
                     </setting>
@@ -69,54 +55,5 @@
             </xpath>
         </field>
     </record>
-
-    <record id="kingdom_coming_soon_subscriber_list" model="ir.ui.view">
-        <field name="name">kingdom.coming.soon.subscriber.list</field>
-        <field name="model">kingdom.coming.soon.subscriber</field>
-        <field name="arch" type="xml">
-            <list string="Coming Soon Subscribers" create="1" delete="1">
-                <field name="email"/>
-                <field name="website_id" groups="website.group_multi_website"/>
-                <field name="create_date"/>
-            </list>
-        </field>
-    </record>
-
-    <record id="kingdom_coming_soon_subscriber_form" model="ir.ui.view">
-        <field name="name">kingdom.coming.soon.subscriber.form</field>
-        <field name="model">kingdom.coming.soon.subscriber</field>
-        <field name="arch" type="xml">
-            <form string="Coming Soon Subscriber">
-                <sheet>
-                    <group>
-                        <field name="email"/>
-                        <field name="website_id" groups="website.group_multi_website"/>
-                        <field name="create_date" readonly="1"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <record id="kingdom_coming_soon_subscriber_action" model="ir.actions.act_window">
-        <field name="name">Coming Soon Subscribers</field>
-        <field name="res_model">kingdom.coming.soon.subscriber</field>
-        <field name="view_mode">list,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                No Coming Soon subscribers yet.
-            </p>
-            <p>
-                Visitors who submit the subscription form on the Coming Soon page appear here.
-            </p>
-        </field>
-    </record>
-
-    <menuitem id="kingdom_coming_soon_subscriber_menu"
-              name="Coming Soon Subscribers"
-              parent="website.menu_website_global_configuration"
-              action="kingdom_coming_soon_subscriber_action"
-              groups="website.group_website_designer"
-              sequence="58"/>
 
 </odoo>

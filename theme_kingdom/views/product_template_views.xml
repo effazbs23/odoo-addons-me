@@ -9,7 +9,7 @@
             <field name="categ_id" position="after">
                 <field name="kingdom_manufacturer_id"
                          options="{'no_quick_create': True}"
-                         placeholder="Select manufacturer"/>
+                         placeholder="Select brand"/>
             </field>
         </field>
     </record>

@@ -8,7 +8,7 @@
         'multi-category retail theme, department store theme, supermarket theme, gadget store theme, '
         'furniture store theme, fashion store theme, grocery store theme, hypermarket theme and home '
         'appliances theme. Comes with mega menu, hero slider, category carousel, category dual '
-        'carousel, sticky header, mobile bottom navigation, manufacturer logos, brand slider, promo '
+        'carousel, sticky header, mobile bottom navigation, brand logos, brand slider, promo '
         'banners, blog news section and service highlights, plus deal of the day, countdown timer, '
         'flash sale theme, best seller products, featured products, product carousel, product badges, '
         'product filters, related products and product tabs. Shop smarter with flyout cart, mini cart, '
@@ -39,7 +39,7 @@ Features
 * Deal of the Day with countdown, scheduled start/end, pricelist & promotion integration
 * Mega menu, hero slider, category carousels, featured & best-sale products
 * Flyout cart, wishlist, mobile bottom navigation
-* Manufacturer logos, promo banners, blog news, service highlights
+* Brand logos, promo banners, blog news, service highlights
 * Website Builder snippets — drag and drop homepage blocks
 * Odoo native pricelist and loyalty promotion engine for offers
 
@@ -74,6 +74,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
         'views/header_template.xml',
         'views/footer_template.xml',
         'data/header_footer_opt_in_migration.xml',
+        'data/header_no_header_guard.xml',
         'data/strip_baked_editor_branding.xml',
         'views/product_category_views.xml',
         'views/flyout_cart_template.xml',
@@ -82,6 +83,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
         'views/bestsale_products_views.xml',
         'views/manufacturer_views.xml',
         'views/product_template_views.xml',
+        'views/product_price_templates.xml',
         'views/product_quickview_templates.xml',
         'views/deals_of_day_views.xml',
         'views/pricelist_bulk_products_views.xml',
@@ -89,6 +91,10 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
         'data/product_tab_seed.xml',
         'views/coming_soon_views.xml',
         'views/coming_soon_templates.xml',
+        'views/login_templates.xml',
+        'views/unified_switcher_templates.xml',
+        'views/shop_templates.xml',
+        'data/shop_layout_seed.xml',
         'views/snippets/s_hero_slider.xml',
         'views/snippets/s_category_slider.xml',
         'views/snippets/s_deal_of_the_day.xml',
@@ -102,6 +108,8 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
         'views/snippets/s_dynamic_product_tabs.xml',
         'views/snippets/s_manufacturers.xml',
         'views/snippets/s_service_highlights.xml',
+        'views/snippets/s_coming_soon.xml',
+        'views/snippets/s_countdown.xml',
         'views/snippets/snippet_list.xml',
     ],
 
@@ -123,16 +131,22 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
             'theme_kingdom/static/src/css/quickview.css',
             'theme_kingdom/static/src/css/dynamic_product_tabs.css',
             'theme_kingdom/static/src/css/coming_soon.css',
+            'theme_kingdom/static/src/css/login.css',
+            'theme_kingdom/static/src/css/countdown.css',
+            'theme_kingdom/static/src/css/unified_switcher.css',
+            'theme_kingdom/static/src/css/shop.css',
             'theme_kingdom/static/content/scss/footer.scss',
             ('after', 'website_sale/static/src/js/cart_service.js', 'theme_kingdom/static/src/js/kingdom_cart_service_patch.js'),
             ('after', 'website_sale_wishlist/static/src/js/website_sale_wishlist_utils.js', 'theme_kingdom/static/src/js/kingdom_wishlist_utils_patch.js'),
+            ('after', 'website/static/src/snippets/s_countdown/countdown.js', 'theme_kingdom/static/src/js/kingdom_countdown_patch.js'),
+            'theme_kingdom/static/src/js/kingdom_variant_preview_patch.js',
             'theme_kingdom/static/src/interactions/kingdom_flyout_cart.js',
             'theme_kingdom/static/src/interactions/featured_product_card.js',
             'theme_kingdom/static/src/interactions/kingdom_live_snippet.js',
             'theme_kingdom/static/src/interactions/kingdom_quickview.js',
             'theme_kingdom/static/src/interactions/kingdom_carousel_fix.js',
             'theme_kingdom/static/src/interactions/kingdom_dynamic_product_tabs.js',
-            'theme_kingdom/static/src/interactions/kingdom_coming_soon.js',
+            'theme_kingdom/static/src/interactions/kingdom_shop_layout.js',
         ],
         'website.website_builder_assets': [
             'theme_kingdom/static/src/website_builder/**/*',

@@ -39,3 +39,4 @@ from . import coming_soon
 from . import res_config_settings
 from . import ir_module_module
 from . import ir_ui_view
+from . import ir_http

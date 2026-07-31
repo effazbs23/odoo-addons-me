@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Kingdom shop filmstrip: horizontal category chips with icons -->
+    <template id="kingdom_filmstrip_categories"
+              inherit_id="website_sale.filmstrip_categories"
+              name="Kingdom Categories Chips"
+              priority="30">
+        <xpath expr="//div[@id='o_wsale_categories_filmstrip']" position="attributes">
+            <attribute name="class" add="o_wsale_filmstrip_kingdom_chips" separator=" "/>
+        </xpath>
+        <!-- Prefer real image URLs over base64 for caching/performance -->
+        <xpath expr="//div[@name='o_wsale_filmstrip_image']" position="replace">
+            <div t-if="c.image_128"
+                 name="o_wsale_filmstrip_image"
+                 class="o_wsale_filmstrip_image k-shop-cat-chip__icon rounded"
+                 t-attf-style="background-image:url('/web/image/product.public.category/{{c.id}}/image_128')"
+                 t-att-alt="c.name"
+                 role="img"
+                 aria-label="Category image"/>
+        </xpath>
+    </template>
+
+    <!-- Shop page structure: chips heading, toolbar count, grid/list -->
+    <template id="kingdom_products"
+              inherit_id="website_sale.products"
+              name="Kingdom Shop Layout"
+              priority="30">
+        <!-- Soft-hide large page titles; toolbar shows "All Products - N items" -->
+        <xpath expr="//h1[hasclass('o_wsale_shop_title')]" position="attributes">
+            <attribute name="class" add="d-none" separator=" "/>
+        </xpath>
+        <xpath expr="//h1[contains(@t-attf-class, 'o_wsale_category_title')]" position="attributes">
+            <attribute name="t-attf-class" add="d-none" separator=" "/>
+        </xpath>
+
+        <!-- Categories section heading above filmstrip -->
+        <xpath expr="//t[@t-call='website_sale.filmstrip_categories']" position="before">
+            <div t-if="opt_wsale_categories_top and category_entries"
+                 class="k-shop-categories">
+                <h2 class="k-shop-categories__title o_translate_inline">Categories</h2>
+            </div>
+        </xpath>
+
+        <!-- Replace products toolbar with Kingdom structure -->
+        <xpath expr="//div[hasclass('products_header')]" position="replace">
+            <div t-if="not opt_wsale_floating_bar"
+                 class="products_header k-shop-toolbar btn-toolbar flex-nowrap align-items-center justify-content-between gap-2 gap-lg-3">
+                <div class="k-shop-toolbar__meta me-auto">
+                    <span class="k-shop-toolbar__label">
+                        <t t-if="category" t-esc="category.name"/>
+                        <t t-elif="search">
+                            Search results
+                        </t>
+                        <t t-else="">All Products</t>
+                    </span>
+                    <span t-if="search_count is not None" class="k-shop-toolbar__count">
+                        - <t t-esc="search_count"/> items
+                    </span>
+                </div>
+                <div class="k-shop-toolbar__controls d-flex align-items-center flex-nowrap gap-1 gap-md-2">
+                    <t t-if="hasPricelistDropdown" t-call="website_sale.pricelist_list"/>
+                    <t t-if="is_view_active('website_sale.sort')" t-call="website_sale.sort"/>
+                    <div class="k-shop-layout-switch o_not_editable"
+                         role="group"
+                         aria-label="Product layout">
+                        <button type="button"
+                                class="k-shop-layout-switch__btn is-active"
+                                data-k-shop-layout="grid"
+                                title="Grid view"
+                                aria-label="Grid view"
+                                aria-pressed="true">
+                            <i class="fa fa-th" aria-hidden="true"/>
+                        </button>
+                        <button type="button"
+                                class="k-shop-layout-switch__btn"
+                                data-k-shop-layout="list"
+                                title="List view"
+                                aria-label="List view"
+                                aria-pressed="false">
+                            <i class="fa fa-list" aria-hidden="true"/>
+                        </button>
+                    </div>
+                    <button t-if="wsale_has_filters_btn"
+                            t-attf-class="btn btn-{{navClass}} position-relative {{not wsale_has_filters_btn_lg and 'd-lg-none'}} text-nowrap"
+                            title="Filters"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#o_wsale_offcanvas">
+                        <i class="oi oi-settings-adjust" role="img"/>
+                        <small class="ms-1 d-none d-md-inline-block">Filters</small>
+                        <span t-if="isFilteringByPrice or attrib_set or tags"
+                              t-attf-class="position-absolute top-0 start-100 translate-middle border border-{{navClass}} rounded-circle bg-danger p-1">
+                            <span class="visually-hidden">filters active</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Sidebar category links: radio-style active marker via CSS class -->
+    <template id="kingdom_products_categories_list"
+              inherit_id="website_sale.products_categories_list"
+              name="Kingdom Shop Categories Sidebar"
+              priority="30">
+        <xpath expr="//div[@name='wsale_products_categories_list']" position="attributes">
+            <attribute name="class" add="k-shop-sidebar-categories" separator=" "/>
+        </xpath>
+        <xpath expr="//ul[hasclass('nav')]" position="attributes">
+            <attribute name="class" add="k-shop-sidebar-nav" separator=" "/>
+        </xpath>
+        <xpath expr="//li[hasclass('nav-item')][1]/a" position="replace">
+            <a t-att-href="keep(shop_path)"
+               t-attf-class="k-shop-sidebar-link {{not category and 'is-active'}} p-0">
+                All Products
+            </a>
+        </xpath>
+    </template>
+
+    <template id="kingdom_categorie_link"
+              inherit_id="website_sale.categorie_link"
+              name="Kingdom Category Sidebar Link"
+              priority="30">
+        <xpath expr="//a" position="attributes">
+            <attribute name="t-attf-class">k-shop-sidebar-link {{c.id == category.id and 'is-active'}} p-0</attribute>
+        </xpath>
+    </template>
+
+</odoo>

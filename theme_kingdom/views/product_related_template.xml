@@ -33,10 +33,9 @@
                                                    class="text-reset text-decoration-none"
                                                    t-esc="rel_product.name"/>
                                             </h6>
-                                            <p class="kingdom-related-card__price mb-0 text-muted">
-                                                <span t-out="rel_product._get_contextual_price()"
-                                                      t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
-                                            </p>
+                                            <div class="kingdom-related-card__price featured-product-price mb-0">
+                                                <t t-call="theme_kingdom.product_card_price"/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -1,88 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- Shared markup used by /coming-soon page and the website snippet -->
+    <template id="coming_soon_block" name="Kingdom Coming Soon Block">
+        <!-- Editor render has no request.website; use QWeb env instead. -->
+        <t t-set="website" t-value="website or env['website'].get_current_website()"/>
+        <t t-set="is_snippet" t-value="is_snippet or False"/>
+        <div t-attf-class="k-coming-soon#{' k-coming-soon--snippet' if is_snippet else ''}"
+             t-att-style="'--k-coming-soon-bg: url(%s);' % website.kingdom_coming_soon_bg_url()">
+            <div class="k-coming-soon__overlay"/>
+            <div class="k-coming-soon__inner k-container">
+                <div class="k-coming-soon__brand">
+                    <a href="/" class="k-coming-soon__logo" t-att-title="website.name">
+                        <img t-att-src="website.image_url(website, 'logo')"
+                             t-att-alt="website.name"
+                             loading="eager"/>
+                    </a>
+                </div>
+
+                <h1 class="k-coming-soon__title o_translate_inline"
+                    t-esc="website.kingdom_coming_soon_title or 'Coming Soon'"/>
+                <p t-if="website.kingdom_coming_soon_subtitle"
+                   class="k-coming-soon__subtitle o_translate_inline"
+                   t-esc="website.kingdom_coming_soon_subtitle"/>
+
+                <t t-if="website.kingdom_coming_soon_show_countdown and website.kingdom_coming_soon_launch_datetime">
+                    <div class="k-coming-soon__countdown k-countdown carousel-countdown"
+                         t-att-data-deal-countdown="website.kingdom_coming_soon_countdown_iso() or None"
+                         t-att-data-deal-end-ms="website.kingdom_coming_soon_countdown_end_ms() or None"
+                         aria-label="Countdown to launch">
+                        <div class="cd-unit count">
+                            <span class="cd-num cd-days">00</span>
+                            <span class="cd-label">Days</span>
+                        </div>
+                        <div class="cd-unit count">
+                            <span class="cd-num cd-hours">00</span>
+                            <span class="cd-label">Hours</span>
+                        </div>
+                        <div class="cd-unit count">
+                            <span class="cd-num cd-mins">00</span>
+                            <span class="cd-label">Mins</span>
+                        </div>
+                        <div class="cd-unit count">
+                            <span class="cd-num cd-secs">00</span>
+                            <span class="cd-label">Secs</span>
+                        </div>
+                    </div>
+                </t>
+
+                <t t-if="website.kingdom_coming_soon_show_admin_login">
+                    <p class="k-coming-soon__admin-login">
+                        <a href="/web/login?redirect=/odoo" class="k-coming-soon__admin-login-link">
+                            Login as Admin
+                        </a>
+                    </p>
+                </t>
+
+                <t t-if="not is_snippet and env.user.has_group('website.group_website_designer')">
+                    <p class="k-coming-soon__admin-hint">
+                        Designer preview —
+                        <a href="/">return to homepage</a>
+                        or disable Coming Soon in
+                        <strong>Website → Configuration → Settings</strong>.
+                    </p>
+                </t>
+            </div>
+        </div>
+    </template>
+
     <template id="coming_soon_page" name="Kingdom Coming Soon">
         <t t-set="no_header" t-value="True"/>
         <t t-set="no_footer" t-value="True"/>
-        <t t-set="website" t-value="website or request.website"/>
+        <t t-set="website" t-value="website or env['website'].get_current_website()"/>
         <t t-set="additional_title" t-value="website.kingdom_coming_soon_title or 'Coming Soon'"/>
         <t t-call="website.layout">
-            <div class="k-coming-soon"
-                 t-att-style="'--k-coming-soon-bg: url(%s);' % website.kingdom_coming_soon_bg_url()">
-                <div class="k-coming-soon__overlay"/>
-                <div class="k-coming-soon__inner k-container">
-                    <div class="k-coming-soon__brand">
-                        <a href="/" class="k-coming-soon__logo" t-att-title="website.name">
-                            <img t-att-src="website.image_url(website, 'logo')"
-                                 t-att-alt="website.name"
-                                 loading="eager"/>
-                        </a>
-                    </div>
-
-                    <h1 class="k-coming-soon__title o_translate_inline"
-                        t-esc="website.kingdom_coming_soon_title or 'Coming Soon'"/>
-                    <p t-if="website.kingdom_coming_soon_subtitle"
-                       class="k-coming-soon__subtitle o_translate_inline"
-                       t-esc="website.kingdom_coming_soon_subtitle"/>
-
-                    <t t-if="website.kingdom_coming_soon_show_countdown and website.kingdom_coming_soon_launch_datetime">
-                        <div class="k-coming-soon__countdown k-countdown carousel-countdown"
-                             t-att-data-deal-countdown="website.kingdom_coming_soon_countdown_iso() or None"
-                             t-att-data-deal-end-ms="website.kingdom_coming_soon_countdown_end_ms() or None"
-                             aria-label="Countdown to launch">
-                            <div class="cd-unit count">
-                                <span class="cd-num cd-days">00</span>
-                                <span class="cd-label">Days</span>
-                            </div>
-                            <div class="cd-unit count">
-                                <span class="cd-num cd-hours">00</span>
-                                <span class="cd-label">Hours</span>
-                            </div>
-                            <div class="cd-unit count">
-                                <span class="cd-num cd-mins">00</span>
-                                <span class="cd-label">Mins</span>
-                            </div>
-                            <div class="cd-unit count">
-                                <span class="cd-num cd-secs">00</span>
-                                <span class="cd-label">Secs</span>
-                            </div>
-                        </div>
-                    </t>
-
-                    <t t-if="website.kingdom_coming_soon_show_subscribe">
-                        <form class="k-coming-soon__form"
-                              action="/theme_kingdom/coming_soon/subscribe"
-                              method="post"
-                              novalidate="novalidate">
-                            <label class="visually-hidden"
-                                   for="kComingSoonEmail"
-                                   t-esc="website.kingdom_coming_soon_subscribe_text or 'Email'"/>
-                            <div class="k-coming-soon__form-row">
-                                <input type="email"
-                                       id="kComingSoonEmail"
-                                       name="email"
-                                       class="k-coming-soon__input"
-                                       required="required"
-                                       autocomplete="email"
-                                       t-att-placeholder="website.kingdom_coming_soon_subscribe_text or 'Enter your email to get notified'"/>
-                                <button type="submit" class="k-coming-soon__btn button-1">
-                                    <t t-esc="website.kingdom_coming_soon_subscribe_button or 'Notify Me'"/>
-                                </button>
-                            </div>
-                            <p class="k-coming-soon__message" hidden="hidden" role="status"/>
-                        </form>
-                    </t>
-
-                    <t t-if="request.env.user.has_group('website.group_website_designer')">
-                        <p class="k-coming-soon__admin-hint">
-                            Designer preview —
-                            <a href="/">return to homepage</a>
-                            or disable Coming Soon in
-                            <strong>Website → Configuration → Settings</strong>.
-                        </p>
-                    </t>
-                </div>
-            </div>
+            <t t-call="theme_kingdom.coming_soon_block">
+                <t t-set="is_snippet" t-value="False"/>
+            </t>
         </t>
     </template>
 

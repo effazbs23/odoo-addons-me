@@ -192,8 +192,73 @@
         </div>
     </template>
 
-    <!-- Shop product tile: Quick View only (wishlist/compare already come from Odoo) -->
+    <!-- Shop list panel: keep variant swatches with price/actions -->
+    <template id="kingdom_products_item_list_panel"
+              inherit_id="website_sale.products_item"
+              name="Kingdom Shop List Panel"
+              priority="30">
+        <!-- Drop attributes from the text column -->
+        <xpath expr="//div[hasclass('o_wsale_product_info_attributes_wrapper')]/t[@t-call='website_sale.product_variant_preview']"
+               position="replace"/>
+        <!-- Re-inject at top of price/actions cluster -->
+        <xpath expr="//div[hasclass('o_wsale_product_sub')]" position="inside">
+            <t t-if="product_ptavs_data" t-call="website_sale.product_variant_preview"/>
+        </xpath>
+        <xpath expr="//div[hasclass('o_wsale_product_sub')]" position="attributes">
+            <attribute name="class" add="k-shop-list-panel" separator=" "/>
+        </xpath>
+    </template>
+
+    <!-- Variant swatches: no details navigation; select on /shop instead -->
+    <template id="kingdom_product_variant_preview_data"
+              inherit_id="website_sale.product_variant_preview"
+              name="Kingdom Variant Preview Data">
+        <xpath expr="//a[hasclass('o_product_variant_preview')]" position="attributes">
+            <attribute name="t-att-href">'#'</attribute>
+            <attribute name="role">button</attribute>
+            <attribute name="t-att-data-variant-url">previewed_ptav['variant_url']</attribute>
+            <attribute name="t-att-data-product-id">min(ptav.ptav_product_variant_ids, key=lambda p: p.id).id</attribute>
+            <attribute name="t-att-data-ptav-id">ptav.id</attribute>
+        </xpath>
+    </template>
+
+    <!-- Shop product tile: Quick View + list CTA (qty / Buy Now) -->
     <template id="shop_product_buttons_quickview" inherit_id="website_sale.shop_product_buttons" name="Kingdom Shop Quick View">
+        <xpath expr="//div[hasclass('o_wsale_product_action_row')]" position="before">
+            <t t-if="product._website_show_quick_add()">
+                <div class="k-shop-list-cta">
+                    <div class="k-shop-qty css_quantity input-group" contenteditable="false">
+                        <input type="text"
+                               class="form-control quantity text-center"
+                               name="add_qty"
+                               value="1"
+                               data-min="1"
+                               aria-label="Quantity"/>
+                        <div class="k-shop-qty__btns">
+                            <a href="#"
+                               class="css_quantity_plus js_add_cart_json"
+                               aria-label="Add one"
+                               title="Add one">
+                                <i class="oi oi-plus" aria-hidden="true"/>
+                            </a>
+                            <a href="#"
+                               class="css_quantity_minus js_add_cart_json"
+                               aria-label="Remove one"
+                               title="Remove one"
+                               name="remove_one">
+                                <i class="oi oi-minus" aria-hidden="true"/>
+                            </a>
+                        </div>
+                    </div>
+                    <button type="button"
+                            class="k-shop-buy-now a-submit o_we_buy_now"
+                            aria-label="Buy Now"
+                            title="Buy Now">
+                        Buy Now
+                    </button>
+                </div>
+            </t>
+        </xpath>
         <xpath expr="//div[hasclass('o_wsale_product_action_row')]" position="inside">
             <t t-call="theme_kingdom.product_quickview_button"/>
         </xpath>

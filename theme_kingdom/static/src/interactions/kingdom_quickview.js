@@ -10,31 +10,26 @@ import wSaleUtils from '@website_sale/js/website_sale_utils';
 /**
  * Kingdom product Quick View: fetches product HTML dynamically and supports
  * variant price/image updates plus Add to Cart via the cart service.
+ *
+ * Uses delegated listeners on #wrapwrap so buttons injected by live homepage
+ * snippets (featured / best sale / tabs) keep working after DOM refresh.
  */
 export class KingdomQuickView extends Interaction {
     static selector = '#wrapwrap';
 
     dynamicContent = {
-        '.kingdom-quickview-btn': {
-            't-on-click.prevent.stop': this.locked(this.onQuickViewClick),
-        },
-        '#kingdom_quickview_modal [data-kingdom-quickview-close]': {
-            't-on-click.prevent': this.onCloseClick,
-        },
-        '#kingdom_quickview_modal .js_variant_change': {
-            't-on-change': this.locked(this.onVariantChange),
-        },
-        '#kingdom_quickview_modal .kingdom-quickview__qty-btn': {
-            't-on-click.prevent': this.onQtyClick,
-        },
-        '#kingdom_quickview_modal .kingdom-quickview__add-to-cart': {
-            't-on-click.prevent': this.locked(this.onAddToCartClick),
+        _root: {
+            't-on-click': this.onRootClick,
+            't-on-change': this.onRootChange,
         },
     };
 
     setup() {
         this._onDocumentKeydown = this.onDocumentKeydown.bind(this);
         this._activeRequest = 0;
+        this._onQuickViewClickLocked = this.locked(this.onQuickViewClick);
+        this._onVariantChangeLocked = this.locked(this.onVariantChange);
+        this._onAddToCartClickLocked = this.locked(this.onAddToCartClick);
     }
 
     start() {
@@ -58,6 +53,54 @@ export class KingdomQuickView extends Interaction {
 
     get productRootEl() {
         return this.modalEl?.querySelector('.js_product');
+    }
+
+    onRootClick(ev) {
+        const quickViewBtn = ev.target.closest('.kingdom-quickview-btn');
+        if (quickViewBtn) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            return this._onQuickViewClickLocked.call(this, {
+                ...ev,
+                currentTarget: quickViewBtn,
+            });
+        }
+
+        if (!this.modalEl?.contains(ev.target)) {
+            return;
+        }
+
+        if (ev.target.closest('[data-kingdom-quickview-close]')) {
+            ev.preventDefault();
+            return this.onCloseClick();
+        }
+
+        const qtyBtn = ev.target.closest('.kingdom-quickview__qty-btn');
+        if (qtyBtn) {
+            ev.preventDefault();
+            return this.onQtyClick({
+                ...ev,
+                currentTarget: qtyBtn,
+            });
+        }
+
+        if (ev.target.closest('.kingdom-quickview__add-to-cart')) {
+            ev.preventDefault();
+            return this._onAddToCartClickLocked.call(this, ev);
+        }
+    }
+
+    onRootChange(ev) {
+        if (!this.modalEl?.contains(ev.target)) {
+            return;
+        }
+        const target = ev.target;
+        if (
+            target.classList.contains('js_variant_change')
+            && !target.classList.contains('variant_custom_value')
+        ) {
+            return this._onVariantChangeLocked.call(this, ev);
+        }
     }
 
     onDocumentKeydown(ev) {

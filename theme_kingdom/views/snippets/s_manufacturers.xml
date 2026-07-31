@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="s_manufacturers" name="Kingdom Manufacturers">
+    <template id="s_manufacturers" name="Kingdom Brands">
         <t t-set="manufacturer_slides"
            t-value="'kingdom.manufacturer' in request.env and request.env['kingdom.manufacturer'].sudo().get_website_manufacturer_slides(per_slide=2) or []"/>
         <t t-set="has_manufacturers" t-value="bool(manufacturer_slides)"/>

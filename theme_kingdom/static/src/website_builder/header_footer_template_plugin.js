@@ -38,7 +38,10 @@ class KingdomHeaderFooterTemplatePlugin extends Plugin {
     static id = "kingdomHeaderFooterTemplate";
 
     resources = {
-        footer_templates_providers: [() => this.getKingdomFooterTemplates()],
+        footer_templates_providers: [
+            // After core website footers (default sequence 10) so Kingdom is last.
+            withSequence(100, () => this.getKingdomFooterTemplates()),
+        ],
         theme_options: [
             withSequence(
                 25,
