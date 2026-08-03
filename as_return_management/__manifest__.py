@@ -1,6 +1,6 @@
 {
     'name': 'Return Management System',
-    'version': '19.0.1.3.0',
+    'version': '19.0.1.0.0',
     'category': 'Inventory/Inventory',
     'summary': 'Advanced Return and Replacement Management',
     'description': """
@@ -13,16 +13,14 @@
         * Dashboard and Analytics
         * Comprehensive Reporting
     """,
-    'author': 'Ayesha Siddika Suchi',
-    'website': 'https://www.yourcompany.com',
+    'author': 'ERP23',
+    'website': 'https://erp-23.com',
+    'support': 'erp23@brainstation-23.com',
     'depends': [
-        'base',
         'stock',
         'account',
         'sale',
         'purchase',
-        'mail',
-        'portal',
         'cup_is_customer_is_vendor',
     ],
     'data': [
