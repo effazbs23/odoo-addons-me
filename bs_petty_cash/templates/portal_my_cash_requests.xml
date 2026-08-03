@@ -1,0 +1,72 @@
+<odoo>
+    <!-- Cash Requests List -->
+    <template id="portal_my_cash_requests" name="My Cash Requests">
+        <t t-call="portal.portal_layout">
+            <div class="mb-3">
+                <a href="/cash_request/new" class="btn btn-primary">
+                    <i class="fa fa-plus"/> New Request
+                </a>
+                <a href="/my/home" class="btn btn-secondary">
+                    <i class="fa fa-chevron-left"/> Back
+                </a>
+            </div>
+
+            <h3>My Cash Requests</h3>
+
+            <t t-if="not cash_requests">
+                <p>You have no cash requests yet.</p>
+            </t>
+
+            <t t-if="cash_requests">
+                <t t-call="portal.portal_table">
+                    <thead>
+                            <tr class="active">
+                                <th>Reference</th>
+                                <th>Date</th>
+                                <th>Company</th>
+                                <th>Request Type</th>
+                                <th>Amount</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="cash_requests" t-as="req">
+                                <tr>
+                                    <td><span t-field="req.name"/></td>
+                                    <td><span t-field="req.date"/></td>
+                                    <td><span t-field="req.company_id"/></td>
+                                    <td><span t-field="req.request_type"/></td>
+                                    <td>
+                                    <span t-field="req.amount"
+                                          t-options='{"widget": "monetary", "display_currency": req.currency_id}'/>
+                                </td>
+                                <td>
+                                    <t t-if="len(req.purpose or '') &gt; 50">
+                                        <t t-esc="req.purpose[:50]"/>...
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="req.purpose"/>
+                                    </t>
+                                </td>
+                                <td>
+                                    <span t-if="req.state == 'draft'" class="badge bg-secondary">Draft</span>
+                                    <span t-elif="req.state == 'submitted'" class="badge bg-info">Submitted</span>
+                                    <span t-elif="req.state == 'approved'" class="badge bg-success">Approved</span>
+                                    <span t-elif="req.state == 'rejected'" class="badge bg-danger">Rejected</span>
+                                    <span t-elif="req.state == 'issued'" class="badge bg-primary">Issued</span>
+                                </td>
+                                <td>
+                                    <a t-attf-href="/my/cash_request/#{req.id}" class="btn btn-primary btn-sm">
+                                        <i class="fa fa-eye"/> View
+                                    </a>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
