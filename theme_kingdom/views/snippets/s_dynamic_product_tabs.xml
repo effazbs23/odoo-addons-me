@@ -28,16 +28,10 @@
                     <a t-att-href="product.website_url" t-esc="product.name"/>
                 </h3>
                 <div class="k-dyn-tab-card__price">
-                    <t t-if="show_sale">
-                        <span class="k-dyn-tab-card__old">
-                            <t t-out="compare_price"
-                               t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
-                        </span>
+                    <t t-call="theme_kingdom.product_card_price">
+                        <t t-set="pricelist" t-value="current_pricelist"/>
+                        <t t-set="display_currency" t-value="display_currency"/>
                     </t>
-                    <span class="k-dyn-tab-card__amount">
-                        <t t-out="contextual_price"
-                           t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
-                    </span>
                 </div>
             </div>
         </article>

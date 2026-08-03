@@ -84,6 +84,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
         'views/manufacturer_views.xml',
         'views/product_template_views.xml',
         'views/product_price_templates.xml',
+        'views/product_image_magnifier_templates.xml',
         'views/product_quickview_templates.xml',
         'views/deals_of_day_views.xml',
         'views/pricelist_bulk_products_views.xml',
@@ -135,6 +136,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
             'theme_kingdom/static/src/css/countdown.css',
             'theme_kingdom/static/src/css/unified_switcher.css',
             'theme_kingdom/static/src/css/shop.css',
+            'theme_kingdom/static/src/scss/product_image_magnifier.scss',
             'theme_kingdom/static/content/scss/footer.scss',
             ('after', 'website_sale/static/src/js/cart_service.js', 'theme_kingdom/static/src/js/kingdom_cart_service_patch.js'),
             ('after', 'website_sale_wishlist/static/src/js/website_sale_wishlist_utils.js', 'theme_kingdom/static/src/js/kingdom_wishlist_utils_patch.js'),
@@ -147,6 +149,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
             'theme_kingdom/static/src/interactions/kingdom_carousel_fix.js',
             'theme_kingdom/static/src/interactions/kingdom_dynamic_product_tabs.js',
             'theme_kingdom/static/src/interactions/kingdom_shop_layout.js',
+            'theme_kingdom/static/src/interactions/kingdom_product_image_magnifier.js',
         ],
         'website.website_builder_assets': [
             'theme_kingdom/static/src/website_builder/**/*',

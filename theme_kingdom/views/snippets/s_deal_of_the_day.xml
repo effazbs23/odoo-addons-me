@@ -135,16 +135,10 @@
                                                                         <span class="deal-out-stock">Out of stock</span>
                                                                     </t>
                                                                     <t t-else="">
-                                                                        <t t-if="show_sale_badge">
-                                                                            <span class="old-price">
-                                                                                <t t-out="base_price"
-                                                                                   t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
-                                                                            </span>
+                                                                        <t t-call="theme_kingdom.product_card_price">
+                                                                            <t t-set="pricelist" t-value="deal_pricelist"/>
+                                                                            <t t-set="display_currency" t-value="display_currency"/>
                                                                         </t>
-                                                                        <span class="price actual-price">
-                                                                            <t t-out="contextual_price"
-                                                                               t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
-                                                                        </span>
                                                                     </t>
                                                                 </div>
                                                                 <t t-if="can_add">

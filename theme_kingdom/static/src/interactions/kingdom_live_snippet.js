@@ -294,14 +294,17 @@ export class KingdomLiveSnippet extends Interaction {
         const run = () => {
             if (typeof window.KingdomInitProductRowSwiper === 'function') {
                 window.KingdomInitProductRowSwiper(this.el);
-                return;
+                const swiperEl = this.el.querySelector('.featured-swiper, .bestsale-swiper');
+                if (swiperEl && swiperEl.swiper) {
+                    return;
+                }
             }
             if (typeof Swiper === 'undefined') {
                 window.setTimeout(run, 50);
                 return;
             }
             const swiperEl = this.el.querySelector('.featured-swiper, .bestsale-swiper');
-            if (!swiperEl) {
+            if (!swiperEl || !swiperEl.querySelector('.swiper-slide')) {
                 return;
             }
             if (swiperEl.swiper) {
@@ -330,7 +333,16 @@ export class KingdomLiveSnippet extends Interaction {
         if (typeof window.KingdomInitProductCarousel !== 'function') {
             return;
         }
+        const roots = [];
+        if (this.el.matches('.product-carousel-section')) {
+            roots.push(this.el);
+        }
         this.el.querySelectorAll('.product-carousel-section').forEach((root) => {
+            if (!roots.includes(root)) {
+                roots.push(root);
+            }
+        });
+        roots.forEach((root) => {
             window.KingdomInitProductCarousel(root);
         });
     }

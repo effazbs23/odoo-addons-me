@@ -2318,6 +2318,9 @@ body.flyout-cart-open::after {
   border-radius: 3px;
   background: var(--primary-color);
   color: #fff;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 2;
 }
 
 .featured-products-nav .swiper-button-prev::after,
@@ -2484,7 +2487,7 @@ body.flyout-cart-open::after {
 }
 
 .featured-product-price .kingdom-product-price {
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .kingdom-product-price {
@@ -2495,7 +2498,7 @@ body.flyout-cart-open::after {
 }
 
 .kingdom-product-price__current {
-  color: var(--primary-color, #28b1e0);
+  color: var(--primary-color, #e6ab19);
   font-weight: 700;
   white-space: nowrap;
 }
@@ -2512,6 +2515,19 @@ body.flyout-cart-open::after {
   font-weight: 600;
   font-size: 0.92em;
   white-space: nowrap;
+}
+
+/* Keep shared price look inside older snippet wrappers */
+.product-carousel-cell__prices .kingdom-product-price,
+.k-dyn-tab-card__price .kingdom-product-price,
+.deal-slide-card .prices .kingdom-product-price {
+  justify-content: inherit;
+}
+
+.product-carousel-cell__prices .kingdom-product-price__current,
+.k-dyn-tab-card__price .kingdom-product-price__current,
+.deal-slide-card .prices .kingdom-product-price__current {
+  color: var(--primary-color, #e6ab19);
 }
 
 .kingdom-product-price--detail .kingdom-product-price__current {
@@ -3211,7 +3227,8 @@ body.flyout-cart-open::after {
   top: 50%;
   margin-top: 0;
   transform: translateY(-50%);
-  z-index: 4;
+  z-index: 10;
+  pointer-events: auto;
   width: 2.75rem;
   height: 2.75rem;
   opacity: 1;

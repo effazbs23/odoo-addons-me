@@ -22,15 +22,9 @@
                     </t>
                 </div>
                 <div class="product-carousel-cell__prices">
-                    <span class="product-carousel-cell__price">
-                        <t t-out="contextual_price"
-                           t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
-                    </span>
-                    <t t-if="show_sale">
-                        <span class="product-carousel-cell__old">
-                            <t t-out="compare_price"
-                               t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
-                        </span>
+                    <t t-call="theme_kingdom.product_card_price">
+                        <t t-set="pricelist" t-value="current_pricelist"/>
+                        <t t-set="display_currency" t-value="display_currency"/>
                     </t>
                 </div>
             </div>

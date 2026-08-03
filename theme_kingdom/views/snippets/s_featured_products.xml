@@ -126,14 +126,10 @@
                                             </t>
                                             <t t-else="">
                                                 <div class="featured-product-price">
-                                                    <t t-if="show_sale_badge">
-                                                        <span class="featured-old-price">
-                                                            <t t-out="compare_price"
-                                                               t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
-                                                        </span>
+                                                    <t t-call="theme_kingdom.product_card_price">
+                                                        <t t-set="pricelist" t-value="current_pricelist"/>
+                                                        <t t-set="display_currency" t-value="display_currency"/>
                                                     </t>
-                                                    <t t-out="contextual_price"
-                                                       t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
                                                 </div>
                                             </t>
                                         </div>

@@ -1225,7 +1225,21 @@
 
     window.KingdomInitProductRowSwiper = function (root) {
       var scope = root || document;
-      scope.querySelectorAll(".featured-products-section, .bestsale-products-section").forEach(function (section) {
+      var sectionSel = ".featured-products-section, .bestsale-products-section";
+      var sections = [];
+      // Live snippet passes the section itself as root; querySelectorAll only
+      // matches descendants, so include the root when it is the section.
+      if (scope.nodeType === 1 && scope.matches && scope.matches(sectionSel)) {
+        sections.push(scope);
+      }
+      if (scope.querySelectorAll) {
+        scope.querySelectorAll(sectionSel).forEach(function (section) {
+          if (sections.indexOf(section) === -1) {
+            sections.push(section);
+          }
+        });
+      }
+      sections.forEach(function (section) {
         var swiperEl = section.querySelector(".featured-swiper, .bestsale-swiper");
         var selector = swiperEl && swiperEl.classList.contains("bestsale-swiper")
           ? ".bestsale-swiper"
