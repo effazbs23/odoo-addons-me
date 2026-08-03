@@ -50,7 +50,6 @@
                     </div>
 
                     <field name="return_operation_type" invisible="1"/>
-                    <field name="is_gross_return" invisible="1"/>
 
                     <group>
                         <group>
@@ -213,13 +212,6 @@
                 <field name="picking_id"/>
                 <field name="purchase_order_id"/>
                 <field name="user_id"/>
-                <filter name="filter_customer_returns" string="Customer Returns"
-                        domain="[('return_operation_type', '=', 'customer'), ('is_gross_return', '=', False)]"/>
-                <filter name="filter_vendor_returns" string="Vendor Returns"
-                        domain="[('return_operation_type', '=', 'vendor')]"/>
-                <filter name="filter_gross_returns" string="Gross Returns"
-                        domain="[('is_gross_return', '=', True)]"/>
-                <separator/>
                 <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
                 <filter name="filter_submitted" string="Submitted" domain="[('state', '=', 'submitted')]"/>
                 <filter name="filter_approved" string="Approved" domain="[('state', '=', 'approved')]"/>
@@ -231,8 +223,6 @@
                 <group>
                     <filter name="group_by_partner" string="Partner" context="{'group_by': 'partner_id'}"/>
                     <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
-                    <filter name="group_by_operation_type" string="Operation Type"
-                            context="{'group_by': 'return_operation_type'}"/>
                     <filter name="group_by_purchase_order" string="Purchase Order"
                             context="{'group_by': 'purchase_order_id'}"/>
                     <filter name="group_by_user" string="Responsible" context="{'group_by': 'user_id'}"/>

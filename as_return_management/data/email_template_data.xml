@@ -12,7 +12,7 @@
                     <p>A return request has been submitted:</p>
                     <ul>
                         <li><strong>Return Number:</strong> ${object.name}</li>
-                        <li><strong>Customer:</strong> ${object.partner_id.name}</li>
+                        <li><strong>Vendor:</strong> ${object.partner_id.name}</li>
                         <li><strong>Request Date:</strong> ${object.request_date}</li>
                         <li><strong>Total Amount:</strong> ${object.total_return_amount} ${object.currency_id.name}</li>
                     </ul>
@@ -38,7 +38,7 @@
                         <li><strong>Total Amount:</strong> ${object.total_return_amount} ${object.currency_id.name}</li>
                     </ul>
                     <p>We will process your return shortly.</p>
-                    <p>Thank you,<br/>Customer Service Team</p>
+                    <p>Thank you,<br/>Procurement Team</p>
                 </div>
             </field>
             <field name="auto_delete" eval="True"/>

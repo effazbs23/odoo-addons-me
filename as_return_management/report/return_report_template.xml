@@ -15,14 +15,11 @@
         <field name="arch" type="xml">
             <list string="Return Analysis">
                 <field name="return_request_id"/>
-                <field name="return_operation_type" optional="show"/>
-                <field name="purchase_order_id" optional="hide"/>
+                <field name="purchase_order_id" optional="show"/>
                 <field name="partner_id"/>
                 <field name="product_id"/>
                 <field name="return_qty" sum="Total Return Qty"/>
-                <field name="replacement_qty" sum="Total Replacement Qty"/>
                 <field name="return_amount" sum="Total Return Amount"/>
-                <field name="replacement_amount" sum="Total Replacement Amount"/>
                 <field name="request_date"/>
                 <field name="state"/>
                 <field name="return_reason"/>
@@ -78,7 +75,7 @@
                                 <strong>Return Request:</strong>
                                 <span t-field="doc.name"/>
                                 <br/>
-                                <strong>Customer:</strong>
+                                <strong>Vendor:</strong>
                                 <span t-field="doc.partner_id"/>
                                 <br/>
                                 <strong>Request Date:</strong>
@@ -88,9 +85,6 @@
                             <div class="col-6">
                                 <strong>Status:</strong>
                                 <span t-field="doc.state"/>
-                                <br/>
-                                <strong>Return Type:</strong>
-                                <span t-field="doc.return_type"/>
                                 <br/>
                                 <strong>Responsible:</strong>
                                 <span t-field="doc.user_id"/>
@@ -105,7 +99,6 @@
                                     <th>Product</th>
                                     <th>Available Qty</th>
                                     <th>Return Qty</th>
-                                    <th>Replacement Qty</th>
                                     <th>Unit Price</th>
                                     <th>Return Amount</th>
                                     <th>Reason</th>
@@ -121,9 +114,6 @@
                                     </td>
                                     <td>
                                         <span t-field="line.return_qty"/>
-                                    </td>
-                                    <td>
-                                        <span t-field="line.replacement_qty"/>
                                     </td>
                                     <td>
                                         <span t-field="line.price_unit"/>

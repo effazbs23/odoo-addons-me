@@ -10,9 +10,8 @@ class ReturnRequest(models.Model):
     _inherit = 'return.request'
 
     return_operation_type = fields.Selection([
-        ('customer', 'Customer Return'),
         ('vendor', 'Vendor Return'),
-    ], string='Operation Type', default='customer', required=True, index=True)
+    ], string='Operation Type', default='vendor', required=True, index=True)
 
     purchase_order_id = fields.Many2one(
         'purchase.order',
@@ -55,23 +54,6 @@ class ReturnRequest(models.Model):
             if record.return_operation_type == 'vendor' and not record.purchase_order_id:
                 raise ValidationError(_(
                     'Purchase Order is mandatory for vendor returns.'))
-
-    @api.constrains('return_operation_type', 'is_gross_return')
-    def _check_vendor_not_gross(self):
-        for record in self:
-            if record.return_operation_type == 'vendor' and record.is_gross_return:
-                raise ValidationError(_('Gross returns are not supported for vendor returns.'))
-
-    @api.constrains('is_gross_return', 'invoice_id', 'picking_id', 'purchase_order_id')
-    def _check_gross_return_constraints(self):
-        # vendor requests are anchored on a purchase order; invoice/picking
-        # are optional references only
-        vendor = self.filtered(lambda r: r.return_operation_type == 'vendor')
-        for record in vendor:
-            if not record.purchase_order_id:
-                raise ValidationError(_(
-                    'Vendor returns must reference a purchase order.'))
-        super(ReturnRequest, self - vendor)._check_gross_return_constraints()
 
     @api.model_create_multi
     def create(self, vals_list):
