@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Return Wizard Form View -->
+    <record id="view_return_wizard_form" model="ir.ui.view">
+        <field name="name">return.wizard.form</field>
+        <field name="model">return.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Return Request">
+                <group>
+                    <field name="partner_id" options="{'no_create': True}"/>
+                    <field name="invoice_id"
+                           domain="[('partner_id', '=', partner_id), ('move_type', '=', 'out_invoice'), ('state', '=', 'posted')]"/>
+                    <field name="picking_id"
+                           domain="[('partner_id', '=', partner_id), ('picking_type_code', '=', 'outgoing'), ('state', '=', 'done')]"/>
+                    <field name="return_reason" placeholder="Describe the reason for return..."/>
+                </group>
+                <footer>
+                    <button name="action_create_return_request" string="Create Return Request"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Return Wizard Action -->
+    <record id="action_return_wizard" model="ir.actions.act_window">
+        <field name="name">Create Return Request</field>
+        <field name="res_model">return.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

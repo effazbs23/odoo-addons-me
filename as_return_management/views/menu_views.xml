@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_return_management_root"
+              name="Return"
+              web_icon="as_return_management,static/description/logo.png"
+              sequence="50"/>
+
+    <menuitem id="menu_invoice_wise_return_requests"
+              name="Sales Return"
+              parent="menu_return_management_root"
+              sequence="20"/>
+
+    <menuitem id="menu_invoice_wise_return_child"
+              name="Sales Return Requests"
+              parent="menu_invoice_wise_return_requests"
+              action="action_return_request"
+              sequence="10"/>
+
+    <menuitem id="menu_gross_return_requests"
+              name="Gross Return Requests"
+              parent="menu_invoice_wise_return_requests"
+              action="action_gross_return"
+              sequence="20"/>
+
+    <menuitem id="menu_vendor_return_requests"
+              name="Purchase Return"
+              parent="menu_return_management_root"
+              sequence="10"/>
+
+    <menuitem id="menu_vendor_return_requests_child"
+              name="Purchase Return Requests"
+              parent="menu_vendor_return_requests"
+              action="action_vendor_return"
+              sequence="20"/>
+
+
+    <!--    &lt;!&ndash; Return Requests Menu &ndash;&gt;-->
+    <!--    <menuitem id="menu_return_requests"-->
+    <!--              name="Return Requests"-->
+    <!--              parent="menu_return_management_root"-->
+    <!--              sequence="30"/>-->
+
+
+    <!-- Dashboard Menu
+    <menuitem id="menu_return_dashboard"
+              name="Dashboard"
+              parent="menu_return_management_root"
+              action="action_return_dashboard"
+              sequence="5"/>
+    -->
+    <!-- Configuration Menu -->
+    <menuitem id="menu_return_configuration"
+              name="Configuration"
+              parent="menu_return_management_root"
+              sequence="100"/>
+
+    <!-- Reports Menu -->
+    <menuitem id="menu_return_reports"
+              name="Reports"
+              parent="menu_return_management_root"
+              sequence="90"/>
+</odoo>
