@@ -31,7 +31,8 @@ class ReturnRequest(models.Model):
         'res.partner',
         string='Vendor',
         required=True,
-        tracking=True
+        tracking=True,
+        domain=[('supplier_rank', '>', 0)]
     )
 
     request_date = fields.Datetime(
