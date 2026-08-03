@@ -36,5 +36,20 @@
             <field name="domain_force">[(1, '=', 1)]</field>
             <field name="groups" eval="[(4, ref('group_return_manager'))]"/>
         </record>
+
+        <!-- Multi-company isolation (global rules, apply to every user) -->
+        <record id="return_request_company_rule" model="ir.rule">
+            <field name="name">Return Request Multi-Company</field>
+            <field name="model_id" ref="model_return_request"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="return_report_company_rule" model="ir.rule">
+            <field name="name">Return Report Multi-Company</field>
+            <field name="model_id" ref="model_return_report"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
     </data>
 </odoo>

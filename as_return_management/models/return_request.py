@@ -7,7 +7,7 @@ from odoo.exceptions import UserError
 class ReturnRequest(models.Model):
     _name = 'return.request'
     _description = 'Purchase Return Request'
-    _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'create_date desc'
 
     name = fields.Char(
@@ -126,6 +126,9 @@ class ReturnRequest(models.Model):
 
     def action_submit(self):
         """Submit return request for approval."""
+        self.ensure_one()
+        if self.state != 'draft':
+            raise UserError(_('Only draft return requests can be submitted.'))
         if not self.return_line_ids:
             raise UserError(_('Please add at least one return line.'))
         if not any(line.return_qty > 0 for line in self.return_line_ids):
@@ -135,27 +138,45 @@ class ReturnRequest(models.Model):
         self.message_post(body=_('Return request submitted for approval.'))
 
     def action_approve(self):
-        """Approve return request."""
+        """Approve return request. Restricted to Return Managers."""
+        self.ensure_one()
+        if not self.env.user.has_group('as_return_management.group_return_manager'):
+            raise UserError(_('Only a Return Manager can approve return requests.'))
+        if self.state != 'submitted':
+            raise UserError(_('Only submitted return requests can be approved.'))
         self.state = 'approved'
         self.message_post(body=_('Return request approved.'))
 
     def action_process(self):
         """Process the return request. Vendor returns override this to create the
         return-to-vendor picking and the vendor credit note."""
+        self.ensure_one()
+        if self.state != 'approved':
+            raise UserError(_('Only approved return requests can be processed.'))
         self.state = 'processing'
 
     def action_done(self):
         """Mark return request as done."""
+        self.ensure_one()
+        if self.state != 'processing':
+            raise UserError(_('Only requests being processed can be marked done.'))
         self.state = 'done'
         self.message_post(body=_('Return request completed.'))
 
     def action_cancel(self):
         """Cancel return request."""
+        self.ensure_one()
+        if self.state not in ('draft', 'submitted', 'approved'):
+            raise UserError(_(
+                'Only draft, submitted or approved requests can be cancelled.'))
         self.state = 'cancelled'
         self.message_post(body=_('Return request cancelled.'))
 
     def action_reset_to_draft(self):
         """Reset to draft state."""
+        self.ensure_one()
+        if self.state != 'cancelled':
+            raise UserError(_('Only cancelled requests can be reset to draft.'))
         self.state = 'draft'
 
     def action_view_return_picking(self):

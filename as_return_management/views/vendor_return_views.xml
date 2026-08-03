@@ -55,7 +55,7 @@
                         <group>
                             <field name="partner_id" string="Vendor"
                                    options="{'no_create': True}"
-                                   domain="[('is_supplier', '=', True)]"/>
+                                   domain="[('supplier_rank', '>', 0)]"/>
                             <field name="request_date"/>
                             <field name="expected_return_date" string="Return Date"/>
                         </group>

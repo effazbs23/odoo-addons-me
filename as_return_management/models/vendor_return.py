@@ -189,7 +189,10 @@ class ReturnRequest(models.Model):
         vendor = self.filtered(lambda r: r.return_operation_type == 'vendor')
         for request in vendor:
             request._action_process_vendor()
-        return super(ReturnRequest, self - vendor).action_process()
+        others = self - vendor
+        if others:
+            return super(ReturnRequest, others).action_process()
+        return True
 
     def _action_process_vendor(self):
         self.ensure_one()

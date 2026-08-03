@@ -27,7 +27,6 @@
         'security/ir.model.access.csv',
         'data/sequence_data.xml',
         'data/email_template_data.xml',
-        'views/res_partner_views.xml',
         'views/vendor_return_views.xml',
         'views/return_dashboard_views.xml',
         'views/menu_views.xml',
@@ -38,5 +37,8 @@
     'application': True,
     'auto_install': False,
     'license': 'LGPL-3',
-    'images': ['static/description/images/banner.png'],
+    'images': [
+        'static/description/banner.png',
+        'static/description/logo.png',
+    ],
 }

@@ -1,58 +1,383 @@
-<section class="oe_container">
-    <div class="oe_row oe_spaced">
-        <div class="oe_span12">
-            <h2 class="oe_slogan" style="color:#875A7B;">Return Management</h2>
-            <h3 class="oe_slogan">Complete Return Merchandise Authorization Solution</h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Return Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="container" style="max-width:900px; padding:20px">
+        <!-- Top Banner -->
+        <div class="text-center mb-4">
+            <img src="banner.png" alt="Purchase Return Management Banner" style="width:100%; max-height:300px; object-fit:contain; border-radius:8px">
         </div>
-    </div>
-</section>
 
-<section class="oe_container oe_dark">
-    <div class="oe_row oe_spaced">
-        <div class="oe_span6">
-            <h3>Key Features</h3>
-            <ul>
-                <li>Multiple return types (Invoice-based, Gross returns, Warranty)</li>
-                <li>Automated workflow with approval process</li>
-                <li>Integration with inventory and accounting</li>
-                <li>Comprehensive reporting and analytics</li>
-                <li>Email notifications and customer communication</li>
-                <li>Configurable return policies and reasons</li>
-            </ul>
-        </div>
-        <div class="oe_span6">
-            <div class="oe_picture">
-                <img class="oe_picture oe_screenshot" src="rma_dashboard.png" alt="RMA Dashboard">
+        <!-- Module Title -->
+        <h1 class="text-center mb-4" style="color:#2C3E50; font-size:32px; font-weight:700">Purchase Return Management</h1>
+
+        <p class="text-center text-muted mb-5" style="font-size:16px; line-height:1.6">
+            Manage vendor (purchase) returns end to end — from a return request anchored on a purchase order, through the return-to-vendor shipment, to the matching vendor credit note — with lot/serial precision, location-aware stock checks, and a controlled approval workflow.
+        </p>
+
+        <!-- Features Section -->
+        <div style="margin-top:30px">
+            <div style="background-color:#2C3E50; color:white; padding:15px; border-radius:8px">
+                <h3 style="color:#1ABC9C; font-size:24px; margin:0"><i class="fa fa-star mr-2"></i>Key Features</h3>
+            </div>
+            <div style="padding:20px; background-color:#ffffff; border:1px solid #eee; border-radius:8px; margin-top:15px">
+                
+                <div style="padding:10px 0; border-bottom:1px solid #eee; display:flex">
+                    <i class="fa fa-check-circle fa-2x text-success mr-3"></i>
+                    <div>
+                        <strong>Core Return Workflow:</strong><br>
+                        Vendor return requests anchored directly on a purchase order, with the vendor auto-filled. Features a 5-stage approval workflow (Draft → Submitted → Approved → Processing → Done) plus Cancelled and Reset to Draft. Manager-only approval enforces segregation of duties. Supports optional reference documents (vendor bill and incoming receipt) and per-request reason, priority, responsible user, expected date, and company.
+                    </div>
+                </div>
+
+                <div style="padding:10px 0; border-bottom:1px solid #eee; display:flex">
+                    <i class="fa fa-check-circle fa-2x text-success mr-3"></i>
+                    <div>
+                        <strong>Automatic Return-Line Generation:</strong><br>
+                        Return lines are generated automatically from PO goods lines in product UOM. Lot/serial aware generation ensures users only claim lots actually received. Returnable quantities are capped by real on-hand stock at the chosen source location, with serial products constrained to 0 or 1. Live per-line visibility covers ordered, received, billed, on-hand, and returnable quantities.
+                    </div>
+                </div>
+
+                <div style="padding:10px 0; border-bottom:1px solid #eee; display:flex">
+                    <i class="fa fa-check-circle fa-2x text-success mr-3"></i>
+                    <div>
+                        <strong>Location-Aware Returns:</strong><br>
+                        Ship returns from wherever goods are located (main stock, QC, or rejection area), defaulting to receipt destination. Automatically re-generates and re-caps quantities when source location changes, and blocks processing with clear guidance if source location inventory is insufficient.
+                    </div>
+                </div>
+
+                <div style="padding:10px 0; border-bottom:1px solid #eee; display:flex">
+                    <i class="fa fa-check-circle fa-2x text-success mr-3"></i>
+                    <div>
+                        <strong>Return-to-Vendor Shipment:</strong><br>
+                        Generates a return delivery picking from source location to vendor supplier location using configured operation types. Chained to original receipt moves (newest first) for full traceability, valuation accuracy, and automatic PO received quantity adjustment upon validation. Auto-completes request to Done once fully shipped.
+                    </div>
+                </div>
+
+                <div style="padding:10px 0; border-bottom:1px solid #eee; display:flex">
+                    <i class="fa fa-check-circle fa-2x text-success mr-3"></i>
+                    <div>
+                        <strong>Vendor Credit Note / Refund Engine:</strong><br>
+                        Automatically drafts partial vendor credit notes. Absorbs unbilled capacity into future billing and refunds only previously billed amounts with chatter log breakdowns. Target bill allocation accounts for existing draft/posted refunds, while netting out concurrency across open requests on the same PO line/lot.
+                    </div>
+                </div>
+
+                <div style="padding:10px 0; border-bottom:1px solid #eee; display:flex">
+                    <i class="fa fa-check-circle fa-2x text-success mr-3"></i>
+                    <div>
+                        <strong>Navigation &amp; Smart Buttons:</strong><br>
+                        Seamless routing with smart buttons on the return request to view picking operations and vendor credit notes. Convenient return count stat buttons added to Purchase Order, Vendor Bill, and Incoming Receipt forms.
+                    </div>
+                </div>
+
+                <div style="padding:10px 0; border-bottom:1px solid #eee; display:flex">
+                    <i class="fa fa-check-circle fa-2x text-success mr-3"></i>
+                    <div>
+                        <strong>Reporting &amp; Analysis:</strong><br>
+                        SQL-backed Purchase Return Analysis report featuring graph, pivot, and list views by vendor, product, PO, lot, status, reason, and amount. Includes printable QWeb PDF return requests, search filters, Kanban board, and custom group-by options.
+                    </div>
+                </div>
+
+                <div style="padding:10px 0; border-bottom:1px solid #eee; display:flex">
+                    <i class="fa fa-check-circle fa-2x text-success mr-3"></i>
+                    <div>
+                        <strong>Security &amp; Multi-Company Isolation:</strong><br>
+                        Dedicated Return User and Return Manager security groups with segregation of duties. Enforces record rules for personal vs. managerial access and complete multi-company data isolation on requests and analytics. Restricts vendor selection to valid suppliers.
+                    </div>
+                </div>
+
+                <div style="padding:10px 0; display:flex">
+                    <i class="fa fa-check-circle fa-2x text-success mr-3"></i>
+                    <div>
+                        <strong>Automation &amp; Configuration:</strong><br>
+                        Automated sequence numbering (VRET… prefix), integrated email notification templates for submission and approval, and complete mail thread chatter and activity tracking on every request.
+                    </div>
+                </div>
+
             </div>
         </div>
-    </div>
-</section>
 
-<section class="oe_container">
-    <div class="oe_row oe_spaced">
-        <div class="oe_span12">
-            <h3>Streamlined Return Process</h3>
-            <p>
-                Manage your return merchandise authorizations efficiently with our comprehensive RMA solution.
-                Handle customer returns, replacements, and refunds with automated workflows and real-time tracking.
-            </p>
-        </div>
-    </div>
-</section>
+        <!-- Screenshots Section -->
+        <div style="margin-top:40px">
+            <div style="background-color:#2C3E50; color:white; padding:15px; border-radius:8px">
+                <h3 style="color:#1ABC9C; font-size:24px; margin:0"><i class="fa fa-images mr-2"></i>Screenshots &amp; User Guide Workflow</h3>
+            </div>
 
-<section class="oe_container oe_dark">
-    <div class="oe_row oe_spaced">
-        <div class="oe_span4">
-            <h3>Invoice-based Returns</h3>
-            <p>Process returns directly from customer invoices with automatic line item population and validation.</p>
+            <div style="display:flex; flex-direction:column; margin-top:15px">
+
+                <!-- Screenshot 1 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">1. Navigate to Inventory Module</h5>
+                        </div>
+                        <img src="screenshots/1.png" class="img-fluid" alt="Navigate to Inventory" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Access the Inventory application from the main Odoo app dashboard to prepare tracked products.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 2 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">2. Select Products Menu</h5>
+                        </div>
+                        <img src="screenshots/2.png" class="img-fluid" alt="Select Products Menu" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Click on the Products menu in the navigation top bar to manage catalog items.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 3 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">3. Create New Product</h5>
+                        </div>
+                        <img src="screenshots/3.png" class="img-fluid" alt="Create New Product" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Click on the New button to open the product creation form.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 4 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">4. Configure Product &amp; Inventory Tracking</h5>
+                        </div>
+                        <img src="screenshots/4.png" class="img-fluid" alt="Configure Product" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Enter product name (e.g., Red Potato), set cost price, and check Track Inventory to enable stock control.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 5 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">5. Configure Security Access Rights</h5>
+                        </div>
+                        <img src="screenshots/5.png" class="img-fluid" alt="Configure User Rights" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">In Settings &gt; Users &amp; Companies, assign user privileges to Return User or Return Manager roles.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 6 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">6. Access Purchase Module</h5>
+                        </div>
+                        <img src="screenshots/6.png" class="img-fluid" alt="Access Purchase Module" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Open the Purchase application to initiate vendor purchase orders.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 7 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">7. Manage Vendor Contacts</h5>
+                        </div>
+                        <img src="screenshots/7.png" class="img-fluid" alt="Manage Vendors" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Navigate to Purchase &gt; Orders &gt; Vendors and click New to add or select a supplier.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 8 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">8. Create &amp; Confirm Purchase Order</h5>
+                        </div>
+                        <img src="screenshots/8.png" class="img-fluid" alt="Confirm Purchase Order" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Create a Purchase Order with products and quantities, then click Confirm Order.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 9 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">9. Receive Goods on Purchase Order</h5>
+                        </div>
+                        <img src="screenshots/9.png" class="img-fluid" alt="Receive Purchase Order" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Click Receive Products to record incoming inventory for the purchase order.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 10 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">10. Validate Incoming Receipt</h5>
+                        </div>
+                        <img src="screenshots/10.png" class="img-fluid" alt="Validate Receipt" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Validate the receipt operation (WH/IN) to record received stock quantities into the warehouse location.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 11 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">11. Open Return Application</h5>
+                        </div>
+                        <img src="screenshots/11.png" class="img-fluid" alt="Open Return App" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Click on the Return app icon from the main menu launcher to begin managing vendor returns.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 12 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">12. Purchase Return Requests Dashboard</h5>
+                        </div>
+                        <img src="screenshots/12.png" class="img-fluid" alt="Return Dashboard" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">View all existing return requests or click New to create a new return authorization.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 13 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">13. Select Vendor &amp; Purchase Order</h5>
+                        </div>
+                        <img src="screenshots/13.png" class="img-fluid" alt="Select Vendor and PO" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Select the vendor and purchase order to automatically generate location-aware return lines.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 14 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">14. Optional Bill &amp; Receipt Linkage</h5>
+                        </div>
+                        <img src="screenshots/14.png" class="img-fluid" alt="Link Bill or Receipt" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Optionally select specific reference vendor bills or receipts for precise refund calculation.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 15 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">15. Specify Return Quantities &amp; Submit</h5>
+                        </div>
+                        <img src="screenshots/15.png" class="img-fluid" alt="Submit Return Request" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Enter the requested return quantities (capped automatically by stock on hand) and click Submit.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot 16 -->
+                <div style="padding:10px 0">
+                    <div style="margin-bottom:20px; border:1px solid #ddd; border-radius:8px; text-align:center">
+                        <div style="background-color:#F8F9FA; padding:10px; border-bottom:1px solid #ddd; border-top-left-radius:8px; border-top-right-radius:8px">
+                            <h5 style="color:#2C3E50; margin:0; font-weight:600">16. Approval Process &amp; Execution Tracking</h5>
+                        </div>
+                        <img src="screenshots/16.png" class="img-fluid" alt="Approval and Execution" style="width:100%; height:auto; object-fit:contain">
+                        <div style="padding:15px; font-size:14px">
+                            <p class="m-0">Track full approval progression (Draft → Submitted → Approved → Processing → Done) with chatter updates and access linked stock pickings via smart buttons.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <div class="oe_span4">
-            <h3>Gross Returns</h3>
-            <p>Handle returns without original invoices, perfect for warranty claims and customer service scenarios.</p>
+
+        <!-- Contact & Support Section -->
+        <div style="margin-top:40px">
+          <div style="background-color:#34495E; color:white; padding:30px; border-radius:8px; text-align:center">
+            <h4 style="color:#1ABC9C; font-weight:600">Contact &amp; Support</h4>
+            <p style="margin-bottom:20px">For support, sales, or any other inquiries, please contact us.</p>
+            <div style="display:flex; flex-wrap:wrap; justify-content:center; margin:0 -90px">
+
+              <div style="padding:10px; min-width:200px; flex:1">
+                <div style="background-color:#2C3E50; padding:20px; border-radius:8px; height:100%">
+                  <h5 style="color:#1ABC9C; font-weight:600">Bangladesh</h5>
+                  <p>8th Floor, 2 Bir Uttam AK Khandakar Road,<br>Mohakhali C/A, Dhaka 1212</p>
+                  <p><a href="mailto:erp23@brainstation-23.com" style="color:white">erp23@brainstation-23.com</a></p>
+                  <p>+8801719-304086</p>
+                </div>
+              </div>
+
+              <div style="padding:10px; min-width:200px; flex:1">
+                <div style="background-color:#2C3E50; padding:20px; border-radius:8px; height:100%">
+                  <h5 style="color:#1ABC9C; font-weight:600">Germany</h5>
+                  <p>Bad Zwischenahn</p>
+                  <p><a href="mailto:erp23@brainstation-23.com" style="color:white">erp23@brainstation-23.com</a></p>
+                  <p>+4944036999839</p>
+                </div>
+              </div>
+
+              <div style="padding:10px; min-width:200px; flex:1">
+                <div style="background-color:#2C3E50; padding:20px; border-radius:8px; height:100%">
+                  <h5 style="color:#1ABC9C; font-weight:600">Malaysia</h5>
+                  <p>Level 9, Integra Tower, The Intermark, 348 Jalan Tun Razak, Kuala Lumpur</p>
+                  <p><a href="mailto:erp23@brainstation-23.com" style="color:white">erp23@brainstation-23.com</a></p>
+                  <p>+601111708999</p>
+                </div>
+              </div>
+
+              <div style="padding:10px; min-width:200px; flex:1">
+                <div style="background-color:#2C3E50; padding:20px; border-radius:8px; height:100%">
+                  <h5 style="color:#1ABC9C; font-weight:600">USA</h5>
+                  <p>7426 Alban Station Blvd, Suite A101,<br>Springfield, VA 22150</p>
+                  <p><a href="mailto:erp23@brainstation-23.com" style="color:white">erp23@brainstation-23.com</a></p>
+                  <p>+1 201 534 7200</p>
+                </div>
+              </div>
+
+              <div style="padding:10px; min-width:200px; flex:1">
+                <div style="background-color:#2C3E50; padding:20px; border-radius:8px; height:100%">
+                  <h5 style="color:#1ABC9C; font-weight:600">UAE</h5>
+                  <p>903, 9th Floor, DAMAC XL Tower,<br>Business Bay, Dubai</p>
+                  <p><a href="mailto:erp23@brainstation-23.com" style="color:white">erp23@brainstation-23.com</a></p>
+                  <p>+971 42420223</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
-        <div class="oe_span4">
-            <h3>Advanced Analytics</h3>
-            <p>Gain insights into return patterns, customer behavior, and product quality with detailed reporting.</p>
-        </div>
+
     </div>
-</section>
+</body>
+</html>

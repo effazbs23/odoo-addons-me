@@ -5,16 +5,16 @@
         <record id="email_template_return_submitted" model="mail.template">
             <field name="name">Return Request Submitted</field>
             <field name="model_id" ref="model_return_request"/>
-            <field name="subject">Return Request ${object.name} Submitted</field>
+            <field name="subject">Return Request {{ object.name }} Submitted</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
                     <p>Hello,</p>
                     <p>A return request has been submitted:</p>
                     <ul>
-                        <li><strong>Return Number:</strong> ${object.name}</li>
-                        <li><strong>Vendor:</strong> ${object.partner_id.name}</li>
-                        <li><strong>Request Date:</strong> ${object.request_date}</li>
-                        <li><strong>Total Amount:</strong> ${object.total_return_amount} ${object.currency_id.name}</li>
+                        <li><strong>Return Number:</strong> <t t-out="object.name or ''"/></li>
+                        <li><strong>Vendor:</strong> <t t-out="object.partner_id.name or ''"/></li>
+                        <li><strong>Request Date:</strong> <t t-out="object.request_date or ''"/></li>
+                        <li><strong>Total Amount:</strong> <t t-out="object.total_return_amount or ''"/> <t t-out="object.currency_id.name or ''"/></li>
                     </ul>
                     <p>Please review and approve the return request.</p>
                     <p>Thank you,<br/>Return Management Team</p>
@@ -27,15 +27,15 @@
         <record id="email_template_return_approved" model="mail.template">
             <field name="name">Return Request Approved</field>
             <field name="model_id" ref="model_return_request"/>
-            <field name="subject">Return Request ${object.name} Approved</field>
+            <field name="subject">Return Request {{ object.name }} Approved</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
-                    <p>Hello ${object.partner_id.name},</p>
+                    <p>Hello <t t-out="object.partner_id.name or ''"/>,</p>
                     <p>Your return request has been approved:</p>
                     <ul>
-                        <li><strong>Return Number:</strong> ${object.name}</li>
-                        <li><strong>Expected Return Date:</strong> ${object.expected_return_date}</li>
-                        <li><strong>Total Amount:</strong> ${object.total_return_amount} ${object.currency_id.name}</li>
+                        <li><strong>Return Number:</strong> <t t-out="object.name or ''"/></li>
+                        <li><strong>Expected Return Date:</strong> <t t-out="object.expected_return_date or ''"/></li>
+                        <li><strong>Total Amount:</strong> <t t-out="object.total_return_amount or ''"/> <t t-out="object.currency_id.name or ''"/></li>
                     </ul>
                     <p>We will process your return shortly.</p>
                     <p>Thank you,<br/>Procurement Team</p>
