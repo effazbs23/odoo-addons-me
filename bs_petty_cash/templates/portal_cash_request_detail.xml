@@ -1,0 +1,306 @@
+<odoo>
+    <!-- Cash Request Detail -->
+    <template id="portal_cash_request_detail" name="Cash Request Detail">
+        <t t-call="portal.portal_layout">
+            <div class="mb-3">
+                <a href="/my/cash_requests" class="btn btn-secondary">
+                    <i class="fa fa-chevron-left" /> Back
+                </a>
+            </div>
+
+            <div class="container">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">
+                            Cash Request: <span t-field="cash_request.name" />
+                            <span
+                            t-if="cash_request.state == 'draft'"
+                            class="badge bg-secondary float-end"
+                        >Draft</span>
+                            <span
+                            t-elif="cash_request.state == 'submitted'"
+                            class="badge bg-info float-end"
+                        >Submitted</span>
+                            <span
+                            t-elif="cash_request.state == 'approved'"
+                            class="badge bg-success float-end"
+                        >Approved</span>
+                            <span
+                            t-elif="cash_request.state == 'rejected'"
+                            class="badge bg-danger float-end"
+                        >Rejected</span>
+                            <span
+                            t-elif="cash_request.state == 'issued'"
+                            class="badge bg-primary float-end"
+                        >Issued</span>
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>Date:</strong>
+                                <p>
+                                    <span t-field="cash_request.date" />
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Company:</strong>
+                                <p>
+                                    <span t-field="cash_request.company_id" />
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>Employee:</strong>
+                                <p>
+                                    <span t-field="cash_request.employee_id" />
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Department:</strong>
+                                <p>
+                                    <span t-field="cash_request.department_id" />
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>Request Type:</strong>
+                                <p>
+                                    <span t-field="cash_request.request_type" />
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3" t-if="cash_request.vessel_id">
+                            <div class="col-md-6">
+                                <strong>Vessel:</strong>
+                                <p>
+                                    <span t-field="cash_request.vessel_id" />
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Requested Amount:</strong>
+                                <h4 class="text-primary">
+                                    <span
+                                        t-field="cash_request.amount"
+                                        t-options='{"widget": "monetary", "display_currency": cash_request.currency_id}'
+                                    />
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6" t-if="cash_request.approved_by">
+                                <strong>Approved By:</strong>
+                                <p>
+                                    <span t-field="cash_request.approved_by" />
+                                    <br />
+                                    <small>
+                                        <span t-field="cash_request.approved_date" />
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Purpose Lines Table -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <strong>Purpose Lines:</strong>
+                                <div class="table-responsive mt-2">
+                                    <table
+                                        class="table table-bordered table-sm align-middle mb-0"
+                                    >
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="width:55%">Purpose</th>
+                                                <th
+                                                    style="width:25%"
+                                                    class="text-end"
+                                                >Amount</th>
+                                                <th style="width:20%">Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t
+                                                t-foreach="cash_request.line_ids"
+                                                t-as="line"
+                                            >
+                                                <tr>
+                                                    <td>
+                                                        <span t-esc="line.purpose" />
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <span
+                                                            t-field="line.amount"
+                                                            t-options='{"widget": "monetary", "display_currency": cash_request.currency_id}'
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <a
+                                                            t-if="line.attachment"
+                                                            t-attf-href="/web/content/petty.cash.request.line/#{line.id}/attachment/#{line.attachment_filename or 'download'}"
+                                                            class="btn btn-sm btn-outline-primary"
+                                                            download=""
+                                                        >
+                                                            <i class="fa fa-download" />
+                                                            <t
+                                                                t-esc="line.attachment_filename or 'Download'"
+                                                            />
+                                                            <i
+                                                                t-if="cash_request.state != 'draft'"
+                                                                class="fa fa-lock ms-1"
+                                                                title="Read-only"
+                                                            />
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                            <t
+                                                t-if="not cash_request.line_ids and cash_request.purpose"
+                                            >
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <span
+                                                            t-field="cash_request.purpose"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                        <tfoot class="table-light fw-bold">
+                                            <tr>
+                                                <td class="text-end">Total:</td>
+                                                <td class="text-end">
+                                                    <span
+                                                        t-field="cash_request.amount"
+                                                        t-options='{"widget": "monetary", "display_currency": cash_request.currency_id}'
+                                                    />
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3" t-if="cash_request.notes">
+                            <div class="col-12">
+                                <strong>Notes:</strong>
+                                <p class="border rounded p-2 mb-0">
+                                    <span t-field="cash_request.notes" />
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="row mb-3"
+                            t-if="cash_request.attachment_ids"
+                            style="display:none"
+                        >
+                            <div class="col-12">
+                                <strong>Attachments:</strong>
+                                <div class="mt-2">
+                                    <t
+                                        t-foreach="cash_request.attachment_ids"
+                                        t-as="attachment"
+                                    >
+                                        <div class="card mb-2">
+                                            <div class="card-body">
+                                                <div class="row align-items-center">
+                                                    <div class="col">
+                                                        <i
+                                                            class="fa fa-file-pdf-o text-danger"
+                                                        />
+                                                        <span class="ms-2">
+                                                            <t
+                                                                t-esc="attachment.name"
+                                                            />
+                                                        </span>
+                                                        <br />
+                                                        <small class="text-muted">
+                                                            Uploaded: <t
+                                                            t-esc="attachment.create_date.strftime('%Y-%m-%d %H:%M')"
+                                                        />
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <a
+                                                            t-attf-href="/web/content/ir.attachment/#{attachment.id}/datas"
+                                                            class="btn btn-sm btn-primary"
+                                                            download=""
+                                                        >
+                                                            <i
+                                                            class="fa fa-download"
+                                                        /> Download
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <t t-if="cash_request.state == 'draft'">
+                                    <form
+                                        t-attf-action="/my/cash_request/#{cash_request.id}/submit"
+                                        method="post"
+                                        style="display: inline;"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="csrf_token"
+                                            t-att-value="request.csrf_token()"
+                                        />
+                                        <button type="submit" class="btn btn-primary">
+                                            <i
+                                            class="fa fa-paper-plane"
+                                        /> Submit for Approval
+                                        </button>
+                                    </form>
+                                </t>
+                                <t t-if="cash_request.state == 'submitted'">
+                                    <form
+                                        t-attf-action="/my/cash_request/#{cash_request.id}/cancel"
+                                        method="post"
+                                        style="display: inline;"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="csrf_token"
+                                            t-att-value="request.csrf_token()"
+                                        />
+                                        <button type="submit" class="btn btn-warning">
+                                            <i class="fa fa-undo" /> Cancel Submission
+                                        </button>
+                                    </form>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- No Employee Warning -->
+    <template id="portal_no_employee" name="No Employee">
+        <t t-call="portal.portal_layout">
+            <div class="container mt-5">
+                <div class="alert alert-warning">
+                    <h4>No Employee Record Found</h4>
+                    <p
+                    >You need to be linked to an employee record to use cash requests.</p>
+                    <p>Please contact your administrator.</p>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

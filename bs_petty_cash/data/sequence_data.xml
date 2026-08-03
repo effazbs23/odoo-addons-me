@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_petty_cash_request" model="ir.sequence">
+        <field name="name">Petty Cash Request</field>
+        <field name="code">petty.cash.request</field>
+        <field name="prefix">PCR/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_petty_cash_advance" model="ir.sequence">
+        <field name="name">Petty Cash Advance</field>
+        <field name="code">petty.cash.advance</field>
+        <field name="prefix">PCA/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_petty_cash_settlement" model="ir.sequence">
+        <field name="name">Petty Cash Settlement</field>
+        <field name="code">petty.cash.settlement</field>
+        <field name="prefix">PCS/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+</odoo>

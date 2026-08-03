@@ -1,0 +1,293 @@
+<odoo>
+    <!-- Cash Request Form -->
+    <template id="portal_cash_request_form" name="Cash Request Form">
+        <t t-call="portal.portal_layout">
+            <div class="mb-3">
+                <a href="/my/cash_requests" class="btn btn-secondary">
+                    <i class="fa fa-chevron-left" /> Back
+                </a>
+            </div>
+            <div class="container py-4">
+                <div class="card">
+                    <h5 class="card-header text-center bg-primary text-white">
+                        New Cash Request
+                    </h5>
+                    <div class="card-body">
+                        <form
+                            action="/cash_request/submit"
+                            method="post"
+                            id="cash_request_form"
+                            enctype="multipart/form-data"
+                        >
+                            <input
+                                type="hidden"
+                                name="csrf_token"
+                                t-att-value="request.csrf_token()"
+                            />
+
+                            <!-- Header Info -->
+                            <div class="row">
+                                <div class="col-sm-6 mb-3">
+                                    <div class="input-group">
+                                        <span
+                                            class="input-group-text fw-bold"
+                                        >Company *</span>
+                                        <select
+                                            class="form-control"
+                                            name="company_id"
+                                            required="1"
+                                        >
+                                            <t t-foreach="companies" t-as="company">
+                                                <option
+                                                    t-att-value="company.id"
+                                                    t-att-selected="company.id == default_company.id"
+                                                >
+                                                    <t t-esc="company.name" />
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 mb-3">
+                                    <div class="input-group">
+                                        <span
+                                            class="input-group-text fw-bold"
+                                        >Date *</span>
+                                        <input
+                                            type="date"
+                                            class="form-control"
+                                            name="date"
+                                            required="1"
+                                            t-att-value="today"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6 mb-3">
+                                    <div class="input-group">
+                                        <span
+                                            class="input-group-text fw-bold"
+                                        >Cost Center</span>
+                                        <select class="form-control" name="vessel_id">
+                                            <option value="">Select Cost Center</option>
+                                            <t t-foreach="vessels" t-as="vessel">
+                                                <option t-att-value="vessel['id']">
+                                                    <t t-esc="vessel['name']" />
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 mb-3">
+                                    <div class="input-group">
+                                        <span
+                                            class="input-group-text fw-bold"
+                                        >Currency *</span>
+                                        <select
+                                            class="form-control"
+                                            name="currency_id"
+                                            required="1"
+                                            id="currency_select"
+                                        >
+                                            <t t-foreach="currencies" t-as="currency">
+                                                <option
+                                                    t-att-value="currency.id"
+                                                    t-att-selected="currency.id == default_company.currency_id.id"
+                                                    t-att-data-symbol="currency.symbol"
+                                                >
+                                                    <t t-esc="currency.name" /> (<t
+                                                    t-esc="currency.symbol"
+                                                />)
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6 mb-3">
+                                    <div class="input-group">
+                                        <span
+                                            class="input-group-text fw-bold"
+                                        >Request Type *</span>
+                                        <select
+                                            class="form-control"
+                                            name="request_type"
+                                            required="1"
+                                        >
+                                            <option
+                                                value="purchase"
+                                            >Advance Against Purchase</option>
+                                            <option
+                                                value="salary"
+                                            >Advance Against Salary</option>
+                                            <option
+                                                value="tour_travel"
+                                            >Advance Against Tour-Travels &amp; Others</option>
+                                            <option
+                                                value="operational_expenses"
+                                            >Advance Against Operational Expenses</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Purpose Lines Table -->
+                            <div class="mb-3">
+                                <label
+                                    class="form-label fw-bold"
+                                >Purpose Lines *</label>
+                                <div class="table-responsive">
+                                    <table
+                                        class="table table-bordered table-sm align-middle"
+                                        id="purpose_lines_table"
+                                    >
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="width:45%">Purpose</th>
+                                                <th
+                                                    style="width:20%"
+                                                    class="text-end"
+                                                >Amount</th>
+                                                <th style="width:30%">Attachment</th>
+                                                <th style="width:5%" />
+                                            </tr>
+                                        </thead>
+                                        <tbody id="purpose_lines_body">
+                                            <tr class="purpose-line-row">
+                                                <td>
+                                                    <input
+                                                        type="text"
+                                                        class="form-control form-control-sm line-purpose"
+                                                        name="line_purpose[]"
+                                                        required="1"
+                                                        placeholder="Purpose description"
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input
+                                                        type="number"
+                                                        class="form-control form-control-sm line-amount text-end"
+                                                        name="line_amount[]"
+                                                        step="1"
+                                                        min="1"
+                                                        required="1"
+                                                        placeholder="0.00"
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input
+                                                        type="file"
+                                                        class="form-control form-control-sm line-attachment"
+                                                        name="line_attachment[]"
+                                                        accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.zip"
+                                                    />
+                                                </td>
+                                                <td class="text-center">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-danger btn-sm remove-line-btn"
+                                                        title="Remove"
+                                                        disabled="disabled"
+                                                    >
+                                                        <i class="fa fa-trash" />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="table-light fw-bold">
+                                                <td class="text-start">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-success btn-sm"
+                                                        id="add_line_btn"
+                                                    >
+                                                        <i
+                                                        class="fa fa-plus"
+                                                    /> Add a Line
+                                                    </button>
+                                                </td>
+                                                <td class="text-end">
+                                                    Total:
+                                                    <span
+                                                    id="lines_total"
+                                                    class="ms-1"
+                                                >0.00</span>
+                                                    <span
+                                                    id="currency_symbol"
+                                                    class="ms-1"
+                                                />
+                                                </td>
+                                                <td />
+                                                <td />
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Notes -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Notes</label>
+                                <textarea
+                                    class="form-control"
+                                    name="notes"
+                                    rows="3"
+                                    placeholder="Additional notes (optional)"
+                                />
+                            </div>
+
+                            <!-- Attachment (Optional) -->
+                            <div class="mb-3" style="display:none">
+                                <label
+                                    class="form-label fw-bold"
+                                >Attachment (Optional)</label>
+                                <input
+                                    type="file"
+                                    class="form-control"
+                                    name="attachment"
+                                    accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.zip"
+                                    placeholder="Upload supporting document"
+                                />
+                                <small class="form-text text-muted">
+                                    Supported formats: PDF, DOC, DOCX, XLS, XLSX, JPG, JPEG, PNG, ZIP
+                                </small>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input
+                                        type="checkbox"
+                                        class="form-check-input"
+                                        name="submit_now"
+                                        value="1"
+                                        id="submit_now"
+                                    />
+                                    <label class="form-check-label" for="submit_now">
+                                        Submit for approval immediately
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="text-end">
+                                <a
+                                    href="/my/cash_requests"
+                                    class="btn btn-secondary"
+                                >Cancel</a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-save" /> Create Request
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

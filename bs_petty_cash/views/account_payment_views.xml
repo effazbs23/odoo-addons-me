@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit account.payment form view to add settlement_id field -->
+    <record id="view_account_payment_form_inherit_settlement" model="ir.ui.view">
+        <field name="name">account.payment.form.inherit.settlement</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='memo']" position="after">
+                <field name="settlement_id" readonly="1" invisible="not settlement_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
