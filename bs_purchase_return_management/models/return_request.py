@@ -140,7 +140,7 @@ class ReturnRequest(models.Model):
     def action_approve(self):
         """Approve return request. Restricted to Return Managers."""
         self.ensure_one()
-        if not self.env.user.has_group('as_return_management.group_return_manager'):
+        if not self.env.user.has_group('bs_purchase_return_management.group_return_manager'):
             raise UserError(_('Only a Return Manager can approve return requests.'))
         if self.state != 'submitted':
             raise UserError(_('Only submitted return requests can be approved.'))

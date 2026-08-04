@@ -1,12 +1,12 @@
 from odoo import api, fields, models
 
 
-class StockPicking(models.Model):
-    _inherit = 'stock.picking'
+class AccountMove(models.Model):
+    _inherit = 'account.move'
 
     return_request_ids = fields.One2many(
         'return.request',
-        'picking_id',
+        'invoice_id',
         string='Return Requests'
     )
 
@@ -17,16 +17,16 @@ class StockPicking(models.Model):
 
     @api.depends('return_request_ids')
     def _compute_return_request_count(self):
-        for picking in self:
-            picking.return_request_count = len(picking.return_request_ids)
+        for move in self:
+            move.return_request_count = len(move.return_request_ids)
 
     def action_view_return_requests(self):
         """View related vendor return requests."""
-        action = self.env.ref('as_return_management.action_vendor_return').read()[0]
+        action = self.env.ref('bs_purchase_return_management.action_vendor_return').read()[0]
         if len(self.return_request_ids) > 1:
             action['domain'] = [('id', 'in', self.return_request_ids.ids)]
         elif self.return_request_ids:
             action['views'] = [
-                (self.env.ref('as_return_management.view_vendor_return_form').id, 'form')]
+                (self.env.ref('bs_purchase_return_management.view_vendor_return_form').id, 'form')]
             action['res_id'] = self.return_request_ids.id
         return action

@@ -11,7 +11,7 @@
                             class="oe_highlight" invisible="state != 'draft'"/>
                     <button name="action_approve" string="Approve" type="object"
                             class="oe_highlight" invisible="state != 'submitted'"
-                            groups="as_return_management.group_return_manager"/>
+                            groups="bs_purchase_return_management.group_return_manager"/>
                     <button name="action_process" string="Process" type="object"
                             class="oe_highlight" invisible="state != 'approved'"/>
                     <button name="action_done" string="Done" type="object"

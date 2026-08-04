@@ -166,8 +166,8 @@
         <field name="name">Return Request</field>
         <field name="model">return.request</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">as_return_management.return_request_document</field>
-        <field name="report_file">as_return_management.return_request_document</field>
+        <field name="report_name">bs_purchase_return_management.return_request_document</field>
+        <field name="report_file">bs_purchase_return_management.return_request_document</field>
         <field name="binding_model_id" ref="model_return_request"/>
         <field name="binding_type">report</field>
     </record>
