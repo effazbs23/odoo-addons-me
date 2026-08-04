@@ -982,6 +982,9 @@
         watchOverflow: true,
         observer: true,
         observeParents: true,
+        // Allow cart / wishlist / compare clicks inside slides.
+        preventClicks: false,
+        preventClicksPropagation: false,
       };
 
       var swipers = {};

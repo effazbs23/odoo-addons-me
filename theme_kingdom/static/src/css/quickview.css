@@ -200,9 +200,18 @@
 }
 
 .kingdom-product-actions .button-2.o_in_wishlist,
-.kingdom-product-actions .button-2.o_add_wishlist:disabled {
-    background-color: var(--secondary-color, #ea3957);
+.kingdom-product-actions .button-2.o_add_wishlist:disabled,
+.kingdom-product-actions .button-2.o_add_wishlist.disabled {
+    background-color: var(--secondary-color, #ea3957) !important;
+    color: #fff !important;
     opacity: 1;
+    cursor: default;
+}
+
+.kingdom-product-actions .button-2.o_in_wishlist::before,
+.kingdom-product-actions .button-2.o_add_wishlist:disabled::before,
+.kingdom-product-actions .button-2.o_add_wishlist.disabled::before {
+    color: #fff !important;
 }
 
 .kingdom-product-actions .button-2::before,
@@ -236,23 +245,34 @@
     content: "\e912";
 }
 
-/* Compact carousel / product-tab cells — under image, shifted toward the text */
+/* Compact carousel / product-tab cells — overlay bottom of the thumbnail */
+.product-carousel-cell__media {
+    z-index: 2;
+}
+
+.product-carousel-cell__text {
+    position: relative;
+    z-index: 1;
+}
+
 .product-carousel-cell__media .kingdom-product-actions {
     top: auto;
-    left: auto;
-    right: 0;
-    bottom: -0.15rem;
+    left: 50%;
+    right: auto;
+    bottom: 0.15rem;
     flex-direction: row;
-    gap: 0.25rem;
-    transform: translateX(35%);
+    gap: 0.2rem;
+    transform: translateX(-50%);
     opacity: 1;
-    z-index: 2;
+    z-index: 3;
+    pointer-events: auto;
 }
 
 .product-carousel-cell__media .kingdom-product-actions .button-2 {
     width: 24px;
     height: 24px;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+    pointer-events: auto;
 }
 
 .product-carousel-cell__media .kingdom-product-actions .button-2::before {
@@ -276,6 +296,21 @@
 
 .product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button::before {
     color: var(--primary-color, #28b1e0);
+}
+
+/* Active / already in wishlist — must beat the white carousel button styles */
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button.o_in_wishlist,
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button:disabled,
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button.disabled,
+.product-carousel-cell__media .kingdom-product-actions .button-2.o_add_wishlist.o_in_wishlist {
+    background-color: var(--secondary-color, #ea3957) !important;
+    color: #fff !important;
+}
+
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button.o_in_wishlist::before,
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button:disabled::before,
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button.disabled::before {
+    color: #fff !important;
 }
 
 .product-carousel-cell__media .kingdom-product-actions .button-2.quick-view-button {
@@ -311,13 +346,13 @@
 
     .product-carousel-cell .kingdom-product-actions {
         opacity: 0;
-        transform: translateX(35%) translateY(4px);
+        transform: translateX(-50%) translateY(4px);
         transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
     .product-carousel-cell:hover .kingdom-product-actions {
         opacity: 1;
-        transform: translateX(35%) translateY(0);
+        transform: translateX(-50%) translateY(0);
     }
 }
 

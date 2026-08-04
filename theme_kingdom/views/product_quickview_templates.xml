@@ -42,8 +42,9 @@
                 type="button"
                 t-attf-class="button-2 add-to-wishlist-button o_add_wishlist kingdom-wishlist-btn #{in_wish and 'o_in_wishlist' or ''}"
                 t-att-disabled="in_wish or None"
-                title="Add to wishlist"
-                aria-label="Add to wishlist"
+                t-att-title="in_wish and 'In your wishlist' or 'Add to wishlist'"
+                t-att-aria-label="in_wish and 'In your wishlist' or 'Add to wishlist'"
+                t-att-aria-pressed="in_wish and 'true' or 'false'"
                 t-att-data-product-template-id="product.id"
                 t-att-data-product-product-id="action_variant_id"
                 data-action="o_wishlist">

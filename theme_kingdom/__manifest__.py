@@ -139,6 +139,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
             'theme_kingdom/static/content/scss/footer.scss',
             ('after', 'website_sale/static/src/js/cart_service.js', 'theme_kingdom/static/src/js/kingdom_cart_service_patch.js'),
             ('after', 'website_sale_wishlist/static/src/js/website_sale_wishlist_utils.js', 'theme_kingdom/static/src/js/kingdom_wishlist_utils_patch.js'),
+            ('after', 'website_sale_wishlist/static/src/interactions/add_product_to_wishlist_button.js', 'theme_kingdom/static/src/js/kingdom_wishlist_button_patch.js'),
             ('after', 'website/static/src/snippets/s_countdown/countdown.js', 'theme_kingdom/static/src/js/kingdom_countdown_patch.js'),
             'theme_kingdom/static/src/js/kingdom_variant_preview_patch.js',
             'theme_kingdom/static/src/interactions/kingdom_flyout_cart.js',
