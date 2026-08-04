@@ -15,7 +15,7 @@
     'author': 'ERP23',
     'website': 'https://erp-23.com',
     'support': 'erp23@brainstation-23.com',
-    'price': '28',
+    'price': 28,
     'currency': 'USD',
     'depends': [
         'stock',
@@ -36,9 +36,9 @@
     'installable': True,
     'application': True,
     'auto_install': False,
-    'license': 'LGPL-3',
+    'license': 'OPL-1',
     'images': [
-        'static/description/banner.png',
+        'static/description/banner.gif',
         'static/description/logo.png',
     ],
 }
