@@ -54,16 +54,7 @@
                                     <article t-attf-class="featured-product-card #{'featured-product-card--soldout' if not can_add else ''}"
                                              t-att-data-product-template-id="product.id"
                                              t-att-data-product-type="product.type">
-                                        <t t-if="show_sale_badge or product.website_ribbon_id">
-                                            <div class="featured-product-badges">
-                                                <t t-if="product.website_ribbon_id">
-                                                    <span class="badge-new" t-esc="product.website_ribbon_id.name"/>
-                                                </t>
-                                                <t t-if="show_sale_badge">
-                                                    <span class="badge-top">Sale</span>
-                                                </t>
-                                            </div>
-                                        </t>
+                                        <t t-call="theme_kingdom.product_card_ribbons"/>
                                         <a t-att-href="product.website_url" class="featured-product-picture">
                                             <img t-att-src="'/web/image/product.template/%s/image_512' % product.id"
                                                  t-att-alt="product.name"

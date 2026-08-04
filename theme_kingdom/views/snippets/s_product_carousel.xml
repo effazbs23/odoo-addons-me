@@ -14,10 +14,11 @@
                          height="96"
                          loading="lazy"/>
                 </a>
-                <t t-if="product.website_ribbon_id">
-                    <t t-set="ribbon_name" t-value="(product.website_ribbon_id.name or '').lower()"/>
-                    <span t-attf-class="product-carousel-badge #{('product-carousel-badge--new' if 'new' in ribbon_name else 'product-carousel-badge--top')}"
-                          t-esc="product.website_ribbon_id.name"/>
+                <t t-call="theme_kingdom.product_card_ribbons">
+                    <t t-set="ribbon_style" t-value="'carousel'"/>
+                </t>
+                <t t-call="theme_kingdom.product_card_action_buttons">
+                    <t t-set="show_quickview" t-value="False"/>
                 </t>
             </div>
             <div class="product-carousel-cell__text">

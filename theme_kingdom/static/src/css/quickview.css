@@ -236,16 +236,17 @@
     content: "\e912";
 }
 
-/* Compact carousel / product-tab cells — match Kingdom product-tab icon row */
+/* Compact carousel / product-tab cells — under image, shifted toward the text */
 .product-carousel-cell__media .kingdom-product-actions {
     top: auto;
-    right: auto;
+    left: auto;
+    right: 0;
     bottom: -0.15rem;
-    left: 50%;
     flex-direction: row;
     gap: 0.25rem;
-    transform: translateX(-50%);
+    transform: translateX(35%);
     opacity: 1;
+    z-index: 2;
 }
 
 .product-carousel-cell__media .kingdom-product-actions .button-2 {
@@ -310,13 +311,13 @@
 
     .product-carousel-cell .kingdom-product-actions {
         opacity: 0;
-        transform: translateX(-50%) translateY(4px);
+        transform: translateX(35%) translateY(4px);
         transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
     .product-carousel-cell:hover .kingdom-product-actions {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        transform: translateX(35%) translateY(0);
     }
 }
 

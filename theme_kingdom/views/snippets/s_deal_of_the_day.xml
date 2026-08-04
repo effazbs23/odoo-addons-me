@@ -117,6 +117,7 @@
                                                             </div>
                                                         </t>
                                                         <div class="picture">
+                                                            <t t-call="theme_kingdom.product_card_ribbons"/>
                                                             <a t-att-href="product.website_url">
                                                                 <img t-att-src="'/web/image/product.template/%s/image_256' % product.id"
                                                                      t-att-alt="product.name"

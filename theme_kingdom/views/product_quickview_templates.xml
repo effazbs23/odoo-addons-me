@@ -79,6 +79,25 @@
         </div>
     </template>
 
+    <!-- Product ribbons: only render when the product has a ribbon assigned. -->
+    <template id="product_card_ribbons" name="Kingdom Product Card Ribbons">
+        <t t-set="ribbon"
+           t-value="product.sudo().product_variant_id.variant_ribbon_id or product.sudo().website_ribbon_id"/>
+        <t t-if="ribbon">
+            <t t-set="is_carousel_ribbon" t-value="ribbon_style == 'carousel'"/>
+            <t t-set="rkey" t-value="((ribbon.assign or '') + ' ' + (ribbon.name or '')).lower()"/>
+            <t t-set="is_new" t-value="'new' in rkey"/>
+            <div t-attf-class="kingdom-product-ribbons #{is_carousel_ribbon and 'product-carousel-badges' or 'featured-product-badges'}">
+                <span t-if="is_carousel_ribbon"
+                      t-attf-class="product-carousel-badge #{is_new and 'product-carousel-badge--new' or 'product-carousel-badge--top'}"
+                      t-esc="ribbon.name"/>
+                <span t-else=""
+                      t-attf-class="#{is_new and 'badge-new' or 'badge-top'}"
+                      t-esc="ribbon.name"/>
+            </div>
+        </t>
+    </template>
+
     <!-- Modal shell mounted once on the website layout -->
     <template id="product_quickview_modal_shell" inherit_id="website.layout" name="Kingdom Quick View Modal">
         <xpath expr="//div[@id='wrapwrap']" position="inside">

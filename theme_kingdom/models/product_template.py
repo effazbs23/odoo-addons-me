@@ -196,3 +196,56 @@ class ProductTemplate(models.Model):
             limit=limit,
             order='website_sequence desc, id desc',
         )
+
+    def _kingdom_ribbon_price_vals(self, price_vals=None):
+        """Price dict accepted by product.ribbon._is_applicable_for (sale ribbons)."""
+        self.ensure_one()
+        if price_vals:
+            return price_vals
+        try:
+            price = self._get_contextual_price()
+        except Exception:
+            price = self.list_price
+        compare = self.compare_list_price or 0.0
+        return {
+            'price_reduce': price,
+            'base_price': compare if compare > price else price,
+            'price': price,
+            'compare_list_price': compare,
+            'has_discounted_price': bool(compare and compare > price),
+        }
+
+    def kingdom_get_display_ribbons(self, price_vals=None):
+        """All ribbons to stack on product cards (manual + applicable auto New/Sale).
+
+        Unlike ``_get_ribbon`` (single ribbon), homepage cards show Top + New stacked
+        like the Kingdom reference layout whenever both apply.
+        """
+        self.ensure_one()
+        ProductRibbon = self.env['product.ribbon'].sudo()
+        variant = self.product_variant_id.sudo()
+        ribbons = ProductRibbon.browse()
+
+        manual = (variant.variant_ribbon_id if variant else ProductRibbon) or self.sudo().website_ribbon_id
+        if manual:
+            ribbons |= manual
+
+        price_vals = self._kingdom_ribbon_price_vals(price_vals)
+        auto_ribbons = ProductRibbon.search([('assign', '!=', 'manual')], order='sequence, id')
+        for ribbon in auto_ribbons:
+            if ribbon in ribbons:
+                continue
+            try:
+                if variant and ribbon._is_applicable_for(variant, price_vals):
+                    ribbons |= ribbon
+            except Exception:
+                continue
+
+        # Visual order like the reference: Top/Sale above, New below.
+        return ribbons.sorted(
+            key=lambda r: (
+                1 if 'new' in ((r.assign or '') + ' ' + (r.name or '')).lower() else 0,
+                r.sequence,
+                r.id,
+            )
+        )

@@ -2643,6 +2643,7 @@ body.flyout-cart-open::after {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 2px;
 }
 
 .featured-product-badges span {
@@ -2652,6 +2653,7 @@ body.flyout-cart-open::after {
   font-size: 12px;
   line-height: 1;
   text-align: center;
+  border-radius: 2px;
 }
 
 .featured-product-badges .badge-top {
@@ -3648,11 +3650,22 @@ body.flyout-cart-open::after {
   object-fit: cover;
 }
 
-.product-carousel-badge {
+.product-carousel-badges {
   position: absolute;
   top: 0.2rem;
   left: 0.2rem;
-  z-index: 1;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.product-carousel-badge,
+.product-carousel-badges .product-carousel-badge {
+  position: static;
+  display: inline-block;
   padding: 0.1rem 0.35rem;
   font-size: 0.58rem;
   font-weight: 800;
@@ -3664,15 +3677,25 @@ body.flyout-cart-open::after {
 }
 
 .product-carousel-badge--top {
-  background: var(--k-sale-red);
+  background: #d71920;
 }
 
 .product-carousel-badge--new {
-  background: #1565c0;
+  background: #0d0a8f;
 }
 
 .product-carousel-badge--stack {
+  /* Legacy single-badge absolute stack; prefer .product-carousel-badges */
   top: 1.45rem;
+}
+
+.dealoftheday-wrapper .deal-slide-card .picture {
+  position: relative;
+}
+
+.dealoftheday-wrapper .deal-slide-card .featured-product-badges {
+  top: 8px;
+  left: 0;
 }
 
 /* —— Promotional banner blocks — glassmorphism panels over images/banner/*.webp —— */
@@ -4849,6 +4872,12 @@ body.flyout-cart-open::after {
   overflow: hidden;
   background: #fff;
   transition: box-shadow 0.2s ease;
+}
+
+.kingdom-related-products .kingdom-related-card .featured-product-badges {
+  top: 8px;
+  left: 0;
+  z-index: 3;
 }
 
 .kingdom-related-products .kingdom-related-card:hover {

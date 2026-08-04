@@ -18,6 +18,8 @@
                             <t t-foreach="kingdom_related_products" t-as="rel_product">
                                 <div class="col-6 col-md-4 col-lg-3">
                                     <div class="kingdom-related-card h-100 position-relative">
+                                        <t t-set="product" t-value="rel_product"/>
+                                        <t t-call="theme_kingdom.product_card_ribbons"/>
                                         <a t-att-href="rel_product.website_url"
                                            class="kingdom-related-card__image d-block">
                                             <img t-att-src="'/web/image/product.template/%s/image_256' % rel_product.id"
@@ -25,7 +27,6 @@
                                                  class="img-fluid w-100"
                                                  loading="lazy"/>
                                         </a>
-                                        <t t-set="product" t-value="rel_product"/>
                                         <t t-call="theme_kingdom.product_card_action_buttons"/>
                                         <div class="kingdom-related-card__body pt-2">
                                             <h6 class="kingdom-related-card__title mb-1">
