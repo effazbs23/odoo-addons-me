@@ -51,8 +51,6 @@ export class KingdomLiveSnippet extends Interaction {
         'section.s_category_slider[data-snippet]',
         'section.dealoftheday-wrapper[data-snippet]',
         'section.s_manufacturers[data-snippet]',
-        'section.s_dynamic_product_tabs[data-snippet]',
-        'section.k-dyn-tabs[data-snippet]',
         'section.s_coming_soon[data-snippet]',
     ].join(', ');
 
@@ -70,37 +68,11 @@ export class KingdomLiveSnippet extends Interaction {
     }
 
     /**
-     * Live refresh must not run in Website Builder. `editor_enable` is added
-     * late (onMounted), so also detect the website preview iframe early —
-     * otherwise branded QWeb HTML can be injected and then saved into #wrap,
-     * which disables all Blocks.
+     * Live refresh runs on public pages and in Website Builder.
+     * Server render uses inherit_branding=False; we also strip any view
+     * branding attrs before injecting HTML so #wrap Blocks stay usable.
      */
     _isWebsiteEditorContext() {
-        if (document.body.classList.contains('editor_enable')) {
-            return true;
-        }
-        const params = new URLSearchParams(window.location.search);
-        if (params.has('enable_editor') || params.has('edit_translations')) {
-            return true;
-        }
-        try {
-            if (window.parent !== window) {
-                const parentDoc = window.parent.document;
-                if (
-                    parentDoc &&
-                    parentDoc.querySelector(
-                        '.o_website_preview, .o_website_fullscreen, .o-snippets-menu'
-                    )
-                ) {
-                    return true;
-                }
-            }
-        } catch {
-            // Cross-origin parent: if framed, skip live DOM mutation.
-            if (window.frameElement || window.parent !== window) {
-                return true;
-            }
-        }
         return false;
     }
 
@@ -165,6 +137,7 @@ export class KingdomLiveSnippet extends Interaction {
         await this.waitFor(
             this.services['public.interactions'].startInteractions(this.el)
         );
+        this.el.dispatchEvent(new CustomEvent('kingdom-live-refreshed'));
     }
 
     start() {
@@ -174,6 +147,7 @@ export class KingdomLiveSnippet extends Interaction {
         }
         window.requestAnimationFrame(() => {
             this._initSnippetWidgets(snippetKey);
+            this.el.dispatchEvent(new CustomEvent('kingdom-live-refreshed'));
         });
     }
 

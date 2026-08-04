@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Remove Product Tabs snippet + Website Configuration menu on upgrade. -->
+    <function model="theme.utils" name="_remove_dynamic_product_tabs_feature"/>
+</odoo>

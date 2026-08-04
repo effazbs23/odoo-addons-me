@@ -1,0 +1,23 @@
+﻿$colors: ( 
+    primary-color: $primary-color, 
+    secondary-color: $secondary-color, 
+    white: $white, 
+    black-deep: $black-deep, 
+    black: $black, 
+    black-faded: $black-faded, 
+    yellow: $yellow,
+    red: $red,
+    dark-grey: $dark-grey,
+    grey: $grey ,
+    light-grey: $light-grey,
+    footer-bg: $footer-bg,
+    off-white: $off-white,
+    category-even: $category-even,
+    category-odd: $category-odd,
+    success-color: $success-color,
+);
+:root {
+    @each $property, $value in $colors {
+        --#{$property} : #{$value};
+    }
+}

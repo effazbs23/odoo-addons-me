@@ -1,0 +1,113 @@
+﻿.header {
+    .header-lower {
+        @extend .container;
+        @extend .row;
+        margin: auto;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: nowrap;
+        padding: 8px 15px;
+
+        .header-logo {
+            img {
+                max-height: 70px;
+            }
+
+            @media (max-width: $md - 1) {
+                max-width: 120px;
+                width: 27%;
+                margin: 0;
+                margin-left: 10px;
+                margin-right: auto;
+
+                img {
+                    max-width: 100%;
+                    max-height: 35px;
+                }
+            }
+        }
+
+        .header-links-wrapper {
+            text-align: right;
+        }
+
+        .header-lower-right {
+
+            @media (max-width: $md - 1 ) {
+                display: flex;
+                align-items: center;
+            }
+
+            .header-selectors-wrapper {
+                display: flex;
+                justify-content: flex-end;
+                margin-bottom: 15px;
+                text-align: right;
+                align-items: center;
+
+                @media (max-width: $md - 1 ) {
+                    margin-bottom: 0;
+                }
+
+                .header-terms {
+                    a {
+                        &::before {
+                            content: "\e956" !important;
+                        }
+                    }
+                }
+
+                .header-storelocation {
+                    a {
+                        &::before {
+                            content: "\e936" !important;
+                        }
+                    }
+                }
+
+                & > * {
+                    padding-right: 15px;
+                    padding-left: 15px;
+
+                    @media (max-width: $md - 1 ) {
+                        padding-right: 5px;
+                        padding-left: 5px;
+                    }
+
+                    &:last-child {
+                        padding-right: 0;
+                    }
+                }
+
+                select {
+                    border: none;
+                    color: var(--black-faded);
+                    min-width: 60px;
+
+                    @media (max-width: $md - 1 ) {
+                        min-width: initial;
+                        max-width: 50px;
+                    }
+                }
+
+                .header-link-top {
+                    vertical-align: middle;
+
+                    a {
+                        color: var(--black-faded);
+                        font-size: 14px;
+                        text-decoration: none;
+                        white-space: nowrap;
+                        &::before {
+                            display: none !important;
+                        }
+                      img {
+                          max-width: 18px;
+                          vertical-align: middle;
+                      }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,149 @@
+﻿.ajax-cart-notification-opened {
+    body {
+        overflow: hidden;
+    }
+
+    .ui-icon-closethick {
+      span {
+          display: none;
+      }
+    }
+}
+
+.success-notification {
+    padding: 0;
+    z-index: 9999;
+
+    .ui-dialog-titlebar {
+       
+    }
+
+    button {
+       
+    }
+
+    .product-picture {
+        @media (max-width: $sm - 1) {
+            width: 200px;
+            margin: auto;
+        }
+    }
+
+
+    .price {
+        font-weight: 700;
+        font-size: 26px;
+        line-height: 32px;
+        margin-bottom: 15px;
+        color: var(--secondary-color);
+    }
+
+    .ui-dialog-titlebar-close {
+        border-radius: 50%;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(50%, 0%);
+        height: 22px;
+        width: 22px;
+        transition: all 0.3s;
+        text-align: center;
+
+        @media (max-width: $sm - 1) {
+            margin: 0;
+            border-radius: 0;
+            transform: none;
+        }
+
+        &:hover {
+            transform: translate(50%, 0%) rotateZ(90deg);
+        }
+
+        &::before {
+            content: "\e910";
+            font-family: "icomoon" !important;
+            display: inline-block;
+            color: #fff;
+            position: absolute;
+            font-size: 10px;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            background: var(--secondary-color);
+            height: 100%;
+            width: 100%;
+            opacity: 1;
+            padding: 0;
+            text-indent: 0;
+            line-height: 20px;
+        }
+    }
+
+    .ui-dialog-titlebar {
+        text-align: center;
+        background: var(--off-white);
+        border: none;
+    }
+
+    .product-name {
+        font-weight: 700;
+        font-size: 15px;
+        line-height: 20px;
+        margin-bottom: 15px;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        @media (max-width: $sm - 1) {
+            margin: 10px 0;
+        }
+
+        button {
+            height: 35px;
+            color: var(--white);
+            background: var(--black);
+            box-shadow: 1px 2px 3px rgba(124, 116, 116, 0.1);
+            padding: 5px 25px;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 14px;
+            margin: 8px 4px;
+            border: none;
+
+            &.cart-button {
+                background: var(--primary-color);
+            }
+
+            @media (max-width: $sm - 1) {
+                width: 100%;
+                margin: 0 0 5px;
+            }
+        }
+    }
+}
+.failor-notification {
+    padding: 0;
+
+    .ui-dialog-titlebar {
+        text-align: center;
+        background: var(--off-white);
+        border: none;
+    }
+
+
+    .warrning {
+        text-align: center;
+        color: var(--red);
+        h2 {
+            border: 12px;
+            font-weight: 500;
+            border: 1px solid var(--red);
+            margin: 5px 0;
+            padding: 5px 0;
+        }
+    }
+}

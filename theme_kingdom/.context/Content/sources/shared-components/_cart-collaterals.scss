@@ -1,0 +1,43 @@
+﻿.cart-collaterals {
+    padding: 15px;
+
+    .title {
+        position: relative;
+        margin: 0;
+
+        strong {
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 30px;
+            border-bottom: 2px solid var(--grey);
+            margin-bottom: 10px;
+            display: block;
+        }
+    }
+
+    .coupon-code {
+        position: relative;
+        margin-bottom: 15px;
+
+        .button-2 {
+            position: absolute;
+            bottom: 50%;
+            right: 5px;
+            height: 30px;
+            background: var(--secondary-color);
+            border-radius: 3px;
+            padding: 5px 10px;
+            color: var(--white);
+            border: none;
+            transform: translateY(50%);
+        }
+    }
+
+    select, input {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--grey);
+        border-radius: 3px;
+    }
+}

@@ -1,0 +1,39 @@
+﻿.spc {
+    .inputs input[type=text], .inputs input[type=email],
+    .inputs input[type=password], .inputs input[type=date],
+    .inputs input[type=date], .inputs input[type=tel], .inputs select {
+        color: var(--black);
+        background: #FFFFFF;
+        border: 1px solid #D5D5DA;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
+        border-radius: 3px;
+        padding: 5px;
+    }
+
+    .select-pickup-point {
+        ul {
+            list-style-type: none;
+            text-align: left;
+        }
+    }
+
+    .edit-address {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: -5px;
+        margin-right: -5px;
+
+        label {
+            display: none;
+        }
+
+        .inputs {
+            width: 50%;
+            padding: 0 5px;
+
+            &.address-input {
+                width: 100%;
+            }
+        }
+    }
+}

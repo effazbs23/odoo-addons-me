@@ -1,0 +1,193 @@
+﻿//sass diclarations
+@import "font-family/fonts";
+@import "variables/color-variables";
+@import "variables/breakpoint";
+
+//css style
+/*---css variables---*/
+@import "variables/css-variables";
+
+/*---icon fonts---*/
+@import "icon-fonts";
+
+/*---global style css---*/
+@import "global";
+
+/*---width fixer---*/
+@import "width-fixer";
+
+/*---container---*/
+@import "containers";
+
+/*---grid---*/
+@import "grid";
+
+/*---nopcommerce common components style---*/
+@import "nop-common";
+
+/*---loader---*/
+@import "components/loader";
+
+/*---spacing---*/
+@import "components/spacing";
+
+/*---table style---*/
+@import "components/table";
+
+/*---form components---*/
+@import "components/form-components";
+
+/*---dropdown style---*/
+@import "components/dropdown";
+
+/*---buttons style---*/
+@import "components/buttons";
+
+/*---card style---*/
+@import "components/card";
+
+/*---news-scroller style---*/
+@import "components/news-scroller";
+
+/*---news-scroller style---*/
+@import "components/back-to-top";
+
+/*---header style---*/
+@import "header/header";
+
+/*---carousel style---*/
+@import "carousel/carousel";
+
+/*---footer style---*/
+@import "footer/footer";
+
+/*---footer style---*/
+@import "footer/shipping-types-wrapper";
+
+/*---breadcrumb style---*/
+@import "shared-components/product-grid";
+
+/*---breadcrumb style---*/
+@import "shared-components/breadcrumb";
+
+/*---cart popup style---*/
+@import "shared-components/cart-popup";
+
+/*---side-2 style---*/
+@import "shared-components/side-2";
+
+/*---flyout cart style---*/
+@import "shared-components/flyout-cart";
+
+/*---color image square style---*/
+@import "components/color-image-square";
+
+/*---product box style---*/
+@import "shared-components/product-box";
+
+/*---category item style---*/
+@import "shared-components/category-box";
+
+/*---category item style---*/
+@import "shared-components/ajax-filter";
+
+/*---category item style---*/
+@import "shared-components/mobile-bottom-navigation";
+
+/*---bar notification item style---*/
+@import "shared-components/bar-notification";
+
+/*---checkout attributes item style---*/
+@import "shared-components/checkout-attributes";
+
+/*---checkout attributes item style---*/
+@import "shared-components/cart-collaterals";
+
+/*---eu-cookie-bar-notification attributes item style---*/
+@import "shared-components/eu-cookie-bar-notification";
+
+/*---tags item style---*/
+@import "shared-components/tag";
+
+/*---pager item style---*/
+@import "shared-components/pager";
+
+/*---multipage checkout order progress style---*/
+@import "shared-components/order-progress";
+
+/*---common page layout style---*/
+@import "shared-components/common-page-layout";
+
+/*---estimate shipping layout style---*/
+@import "shared-components/estimate-shipping";
+
+
+/*---homepage style---*/
+@import "homepage";
+
+/*---category product page style---*/
+@import "category_product-page/category-product";
+
+/*---product details page style---*/
+@import "product_details/productStyle";
+
+/*---shopping cart page style---*/
+@import "shopping-cart/shopping-cart";
+
+/*---customer login page style---*/
+@import "customer-pages/login";
+
+/*---customer register page style---*/
+@import "customer-pages/register";
+
+/*---customer registration successful page style---*/
+@import "customer-pages/registerSuccessful";
+
+/*---customer address  page style---*/
+@import "customer-pages/customer-address";
+
+/*---checkout page style---*/
+@import "checkout/checkout";
+
+/*---compare products page style---*/
+@import "compareProducts/compareProducts";
+
+/*---checkout page style---*/
+@import "customer-pages/myAccount";
+
+/*---blog page style---*/
+@import "blog/blog-style";
+
+/*---news page style---*/
+@import "news/news";
+
+/*---news item style---*/
+@import "news/newsitem";
+
+/*---sitemap style---*/
+@import "sitemap/sitemap";
+
+/*---forum item style---*/
+@import "forum/forum";
+
+/*---order list style---*/
+@import "order/order-list";
+
+/*---order list style---*/
+@import "order/returen-request";
+
+/*---order details style---*/
+@import "order/details";
+
+/*---order details style---*/
+@import "order/order-completed-page";
+
+/*---manufacturer page style---*/
+@import "manufacturer_page/manufacturer_page";
+
+/*---additional  style---*/
+@import "additional";
+
+
+
+

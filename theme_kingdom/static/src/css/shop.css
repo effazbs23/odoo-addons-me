@@ -138,7 +138,8 @@
     gap: 0.45rem;
     margin-left: auto;
     padding: 0.75rem 1rem;
-    min-width: min(100%, 22rem);
+    width: 100%;
+    max-width: 22rem;
     order: 10;
 }
 

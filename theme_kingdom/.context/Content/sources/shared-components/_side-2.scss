@@ -1,0 +1,199 @@
+﻿.side-2 {
+    margin: 15px 0 0;
+
+    .side-2-close {
+        display: none;
+    }
+
+    @media (max-width: $md - 1) {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        background: var(--white);
+        box-shadow: $shadow-style-4;
+        max-width: calc(100vw - 15px);
+        margin: 0;
+        height: 100%;
+        width: 300px;
+        transform: translateX(-120%);
+        transition: all 0.3s;
+        z-index: 9999;
+        max-width: calc(100% - 35px);
+
+        .side-2-close {
+            display: block;
+            position: absolute;
+            left: 100%;
+            top: 0px;
+            background: var(--red);
+            color: #fff;
+            padding: 6px 8px;
+            box-shadow: $shadow-style-4;
+        }
+
+        .side-2-wrapper {
+            height: 100%;
+            overflow: auto;
+            padding: 15px;
+        }
+
+        &.open {
+            transform: translateX(0);
+        }
+    }
+
+    .block, .product-filter {
+        border: 1px solid var(--light-grey);
+        box-shadow: $shadow-style-1;
+        padding: 15px;
+        border-radius: 3px;
+        margin-bottom: 15px;
+
+        .group,
+        .listbox {
+            margin-bottom: 5px;
+
+            li {
+                line-height: 25px;
+            }
+        }
+
+        .title, .filter-title {
+            margin: 0 0 15px;
+            color: var(--black);
+            
+
+            strong {
+                font-size: 14px;
+                font-weight: 600;
+                
+            }
+        }
+
+        ul {
+            list-style-type: none;
+
+            li {
+
+                a {
+                    display: block;
+                    color: var(--black-faded);
+                    text-decoration: none;
+                }
+
+                .product-picture {
+                    width: 25%;
+                    margin-right: 5px;
+                }
+
+                .product-name {
+                    width: 75%;
+                }
+            }
+        }
+
+        .show-more-link {
+            padding-left: 25px;
+
+            span {
+                color: var(--primary-color);
+                cursor: pointer;
+            }
+        }
+    }
+
+
+
+    .block-recently-viewed-products {
+        .list {
+            li {
+                display: flex;
+                justify-content: flex-start;
+                align-items: flex-start;
+            }
+        }
+    }
+}
+
+.filter-title,
+.side-2 .block .title {
+    position: relative;
+    margin: 0 0 10px;
+
+    strong {
+        display: block;
+        max-width: calc(100% - 60px);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 20px;
+    }
+
+    .filterbox-buttons {
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        .collapse-filter {
+            background: none;
+            border: none;
+            font-size: 0;
+
+            &::before {
+                content: "\e939";
+                font-family: "icomoon" !important;
+                font-size: 16px;
+                cursor: pointer;
+                color: var(--dark-grey);
+                width: 16px;
+                display: inline-block;
+            }
+
+            &.open::before {
+                content: "\e943";
+                font-size: 14px;
+            }
+        }
+
+        .filter-search-button {
+            background: none;
+            border: none;
+            font-size: 0;
+
+            &::before {
+                content: "\e94e";
+                font-family: "icomoon" !important;
+                font-size: 16px;
+                cursor: pointer;
+                color: var(--dark-grey);
+            }
+        }
+    }
+
+    .sublist {
+        padding-left: 10px;
+    }
+}
+
+.filter-search {
+    height: 0;
+    transition: all 0.3s;
+    overflow: hidden;
+    opacity: 0;
+
+    &.show {
+        height: 32px;
+        margin-bottom: 10px;
+        opacity: 1;
+    }
+
+    input {
+        display: block;
+        width: 100%;
+        border: 1px solid var(--grey);
+        border-radius: 50px;
+        height: 27px;
+        padding: 15px;
+    }
+}

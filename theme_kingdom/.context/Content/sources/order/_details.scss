@@ -1,0 +1,202 @@
+﻿
+.order-details-page {
+    .print-buttons {
+        text-align: center;
+
+        a {
+            display: inline-block;
+            text-decoration: none;
+            background: var(--primary-color);
+            padding: 10px 20px;
+            color: #fff;
+            width: 130px;
+
+            &.pdf-invoice-button {
+                background: var(--secondary-color);
+            }
+        }
+    }
+
+    .order-overview {
+        margin: 30px 0;
+        text-align: center;
+
+        ul {
+            list-style-type: none;
+        }
+    }
+
+    .order-details-area {
+        > .row {
+            width: 100%;
+        }
+    }
+
+    .shipping-info-wrap,
+    .billing-info-wrap {
+        > div {
+            margin-bottom: 15px;
+
+            .re-order-button {
+                border: 1px solid var(--red);
+                background: var(--red);
+                padding: 5px 10px;
+                color: var(--white);
+                font-size: 15px;
+                line-height: 18px;
+                border-radius: 3px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all .25s;
+                margin: 10px 0px;
+
+                &:hover {
+                    border: 1px solid var(--black);
+                    background: var(--black);
+                }
+            }
+        }
+
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 15px;
+
+        .title {
+            margin-bottom: 5px;
+
+            strong {
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 24px;
+                color: var(--primary-color);
+            }
+        }
+    }
+
+    .section.totals {
+        max-width: 360px;
+        margin-left: auto;
+
+        .actions {
+            text-align: center;
+
+            button {
+                background: var(--secondary-color);
+            }
+        }
+    }
+
+    .totals {
+        margin-bottom: 30px;
+    }
+
+    td {
+        &.product {
+
+
+            a {
+                text-decoration: none;
+            }
+        }
+    }
+}
+.table-wrapper {
+    max-width: 100%;
+    overflow: auto;
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-weight: 600;
+        box-shadow: $shadow-style-2;
+        margin-bottom: 30px;
+
+        tr {
+            box-shadow: $shadow-style-6;
+        }
+
+
+        th {
+            background: var(--black);
+            color: var(--white);
+            padding: 15px 10px;
+            border-collapse: collapse;
+            min-width: 85px;
+        }
+
+        td {
+            padding: 15px 10px;
+        }
+    }
+}
+
+.print-order-button {
+    margin-right: 10px;
+}
+
+@media (min-width: $md) {
+    .order-details-page {
+        .jsmartable {
+            .info {
+                display: none;
+            }
+        }
+    }
+}
+
+@media (max-width: $md - 1) {
+    .order-details-page {
+
+        .fa {
+            font-family: "icomoon" !important;
+            font-style: normal;
+
+            &.fa-plus::before {
+                content: "\e943";
+                font-size: 16px;
+                display: inline-block;
+            }
+
+            &.fa-minus::before {
+                content: "\e939";
+                font-size: 16px;
+                display: inline-block;
+            }
+        }
+
+        .jsmartable-row {
+            box-shadow: none;
+
+            .jsmartable-col {
+                padding: 0;
+
+                tr {
+                    box-shadow: none;
+
+                    td {
+                        padding: 10px 10px;
+                        border: none !important;
+                        background: none !important;
+
+                        .remove-btn {
+                            border: none;
+                            background: none;
+
+                            &::before {
+                                font-family: "icomoon" !important;
+                                content: "\e948";
+                                display: inline;
+                                font-size: 16px;
+                                color: var(--red);
+                            }
+                        }
+
+                        .product-name {
+                            font-weight: 500;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

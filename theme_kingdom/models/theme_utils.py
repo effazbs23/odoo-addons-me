@@ -5,6 +5,7 @@ from odoo import api, models
 from odoo.addons.theme_kingdom.hooks import (
     _cleanup_stale_oe_view_refs,
     _migrate_kingdom_snippet_oe_structure,
+    _remove_dynamic_product_tabs_feature as remove_dynamic_product_tabs_feature,
     _strip_baked_editor_branding,
     _strip_saved_snippet_editor_hints,
 )
@@ -100,7 +101,14 @@ class ThemeUtils(models.AbstractModel):
         _migrate_kingdom_snippet_oe_structure(self.env)
         _strip_saved_snippet_editor_hints(self.env)
         _strip_baked_editor_branding(self.env)
+        remove_dynamic_product_tabs_feature(self.env)
         _cleanup_stale_oe_view_refs(self.env)
+        return True
+
+    @api.model
+    def _remove_dynamic_product_tabs_feature(self):
+        """Expose hooks cleanup for XML &lt;function&gt; upgrades."""
+        remove_dynamic_product_tabs_feature(self.env)
         return True
 
     @api.model

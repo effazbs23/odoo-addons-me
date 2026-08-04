@@ -15,10 +15,14 @@
                    t-value="bestsale_picked if bestsale_picked else request.env['product.template'].sudo().search([('sale_ok', '=', True), ('is_published', '=', True)], order='website_sequence desc, id desc', limit=12)"/>
                 <t t-set="section_title"
                    t-value="bestsale_record[:1].name if bestsale_record else 'Best Sale'"/>
+                <t t-set="website" t-value="website or env['website'].get_current_website()"/>
+                <t t-set="_pl_sid" t-value="request.session.get('website_sale_current_pl')"/>
+                <t t-set="_pl_session"
+                   t-value="_pl_sid and request.env['product.pricelist'].sudo().browse(int(_pl_sid))"/>
                 <t t-set="current_pricelist"
-                   t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
+                   t-value="(_pl_session and _pl_session.exists() and _pl_session) or (website.get_pricelist_available(show_visible=False)[:1] if website else request.env['product.pricelist'])"/>
                 <t t-set="display_currency"
-                   t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
+                   t-value="(current_pricelist and current_pricelist.currency_id) or (website and website.currency_id) or request.env.company.currency_id"/>
 
                 <div class="featured-products-head">
                     <h2 id="BestsaleProductsHeading" class="o_translate_inline" t-esc="section_title"/>

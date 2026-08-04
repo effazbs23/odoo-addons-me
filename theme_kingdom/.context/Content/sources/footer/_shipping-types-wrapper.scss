@@ -1,0 +1,118 @@
+﻿.shipping-types-wrapper {
+    margin: 36px 0;
+
+    .shipping-types {
+        align-items: stretch;
+
+        .col-6 {
+            margin-bottom: 15px;
+        }
+    }
+
+
+    .shipping-type {
+        border: 1px solid #E1E5E8;
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 10px 15px;
+        border-radius: 3px;
+        margin-bottom: 10px;
+
+        @media (max-width: $xs - 1) {
+            text-align: center;
+            min-height: 100%;
+            padding: 0;
+            box-shadow: none;
+            border: none;
+        }
+
+        .shipping-type--icon {
+            display: inline-flex;
+            width: 53px;
+            height: 53px;
+            border-radius: 50%;
+            vertical-align: middle;
+            border: 1px solid var(--secondary-color);
+            margin-right: 15px;
+            justify-content: center;
+            align-items: center;
+
+            img {
+                width: 35px;
+            }
+
+            @media (max-width: $xs - 1) {
+                margin-bottom: 10px;
+                margin-right: 0;
+                width: 100%;
+                height: auto;
+                overflow: hidden;
+
+                &::before {
+                    content: "";
+                    display: block;
+                    padding-top: 100%;
+                }
+
+                img {
+                    width: 45px;
+                }
+            }
+        }
+
+        .shipping-type--info {
+            display: inline-block;
+            width: calc(100% - 72px);
+            vertical-align: middle;
+
+            @media (max-width: $xs - 1) {
+                width: 100%;
+            }
+
+            h3 {
+                margin-bottom: 7px;
+                font-style: normal;
+                font-weight: 700;
+                font-size: 13px;
+                line-height: 17px;
+                word-break: break-word;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                text-overflow: ellipsis;
+                max-height: 36px;
+                overflow: hidden;
+
+
+                @media (max-width: $xs - 1) {
+                    font-weight: 700;
+                    font-size: 10px;
+                    line-height: 12px;
+                }
+
+                a {
+                    color: var(--black);
+                    text-decoration: none;
+                }
+            }
+        }
+
+        .shipping-type--desc {
+            margin-bottom: 0;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 14px;
+            color: var(--black);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+            max-height: 28px;
+            overflow: hidden;
+
+            @media (max-width: $xs - 1) {
+                display: none;
+            }
+        }
+    }
+}

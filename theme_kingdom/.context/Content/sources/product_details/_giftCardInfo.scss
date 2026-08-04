@@ -1,0 +1,61 @@
+﻿.giftcard {
+    margin: 15px 0;
+    max-width: 300px;
+
+    > div {
+        position: relative;
+        margin-bottom: 15px;
+        .required {
+            color: var(--red);
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    }
+
+    label {
+        font-size: 14px;
+        color: var(--black);
+        font-weight: 700;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    textarea {
+        display: block;
+        width: 100%;
+        border: none;
+        border: 1px solid var(--grey);
+        color: var(--black-faded);
+        height: 32px;
+        outline: none;
+        padding: 5px;
+        min-height: 80px;
+
+        &:focus {
+            border-bottom: 1px solid var(--black-faded);
+        }
+    }
+
+    input {
+        &[type="text"],
+        &[type="email"],
+        &[type="password"],
+        &[type="date"],
+        &[type="date"],
+        &[type="tel"] {
+            display: block;
+            width: 100%;
+            border: none;
+            border: 1px solid var(--grey);
+            color: var(--black-faded);
+            height: 32px;
+            outline: none;
+            padding: 5px;
+
+            &:focus {
+                border-bottom: 1px solid var(--black-faded);
+            }
+        }
+    }
+}

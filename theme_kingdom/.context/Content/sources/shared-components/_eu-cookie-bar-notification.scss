@@ -1,0 +1,43 @@
+﻿.eu-cookie-bar-notification {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    background: var(--white);
+    padding: 20px;
+    box-shadow: $shadow-material-4;
+
+    .content {
+        @extend .container;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+
+        .text {
+            font-weight: 600;
+        }
+
+        .ok-button {
+            margin-right: 10px;
+        }
+    }
+
+    @media (max-width: $md - 1) {
+        bottom: 68px;
+        z-index: 100;
+        .content {
+            text-align: center;
+
+            .text {
+                margin-bottom: 15px;
+                width: 100%;
+            }
+
+            .buttons-more {
+                width: 100%;
+            }
+        }
+    }
+}

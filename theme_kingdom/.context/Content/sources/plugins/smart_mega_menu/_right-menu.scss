@@ -1,0 +1,258 @@
+﻿.header-right-menu {
+
+    @media (min-width: $md) {
+
+        .nav-menu {
+            .mm-nav-item {
+                display: inline-block;
+
+                .nav-icon {
+                    max-width: 20px;
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-right: 4px;
+
+                    @media (max-width: $md - 1) {
+                        display: none;
+                    }
+                }
+
+                a {
+                    display: block;
+                    padding: 10px 20px;
+                    height: 38px;
+                    text-decoration: none;
+                    
+                }
+            }
+        }
+
+        .grid-view {
+            .nav-menu {
+                .mm-nav-item {
+
+                    &.has-children {
+                        a {
+                            > span {
+                                vertical-align: middle;
+                            }
+                        }
+
+                        .right-arrow {
+                            transform: rotateZ(90deg);
+                            display: inline-block;
+                            margin-left: 5px;
+                            vertical-align: initial;
+
+                            &::before {
+                                color: var(--grey);
+                                vertical-align: middle;
+                                margin-left: 5px;
+                            }
+                        }
+
+                        .sublist {
+                            display: none;
+                            position: absolute;
+                            top: 100%;
+                            left: 0;
+                            background: var(--white);
+                            z-index: 1000;
+                            color: var(--black);
+                            width: 100%;
+                            animation-name: sublistFadeInUp;
+                            animation-duration: 0.3s;
+                            padding: 15px;
+                            box-shadow: 3px 0 20px rgba(0,0,0,0.10);
+
+                            .right-arrow {
+                                display: none;
+                            }
+
+                            a {
+                                padding: 5px;
+                                position: relative;
+                            }
+
+                            .sublist-list {
+                                display: flex;
+                                flex-wrap: wrap;
+
+                                > .mm-nav-item {
+                                    width: 20%;
+                                }
+                            }
+
+                            .sublist {
+                                position: static;
+                                opacity: 1;
+                                visibility: visible;
+                                margin: 0;
+                                box-shadow: none;
+                                padding: 0;
+                                display: block;
+
+                                .sublist-list {
+                                    display: block;
+
+
+
+                                    .mm-nav-item {
+                                        a {
+                                            font-weight: 500;
+                                        }
+                                    }
+                                }
+                            }
+
+                            .mm-nav-item {
+                                display: block;
+
+                                a {
+                                    color: var(--black);
+                                }
+                            }
+                        }
+
+                        &:hover {
+                            > .sublist {
+                                display: block;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    @media (min-width: $md) {
+
+        .header-left-menu-button {
+            color: var(--white);
+            font-size: 16px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 10px;
+            width: 280px;
+            background: rgba(255,255,255,0.2);
+            text-decoration: none;
+            
+            margin-left: auto;
+
+            &::before {
+                content: "\e92c";
+                font-family: "icomoon" !important;
+                font-style: normal;
+                font-weight: 500;
+                margin-right: 15px;
+            }
+
+            @media(max-width: $md - 1) {
+                display: none;
+            }
+        }
+
+        .list-view {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            background: #fff;
+            display: none;
+
+            .mm-nav-item {
+                display: block;
+                position: relative;
+
+                .right-arrow {
+                    position: absolute;
+                    right: 10px;
+                    top: 50%;
+                    transform: translateY(-50%) rotateZ(90deg);
+                }
+
+                a {
+                    display: block;
+                    color: var(--black);
+                }
+
+                &.has-children {
+                    .sublist {
+                        position: absolute;
+                        right: 100%;
+                        top: 0;
+                        left: auto;
+                        overflow: visible;
+                        background: var(--white);
+                        z-index: 1000;
+                        color: var(--black);
+                        width: 100%;
+                        animation-name: sublistFadeInUp;
+                        animation-duration: 0.3s;
+                        padding: 15px;
+                        box-shadow: 3px 0 20px rgba(0,0,0,0.10);
+                        display: none;
+
+
+                        .sublist-list {
+                            display: block;
+
+                            > .mm-nav-item {
+                                width: 100%;
+                            }
+                        }
+                    }
+
+                    &:hover {
+                        > .sublist {
+                            display: block;
+                        }
+                    }
+                }
+            }
+        }
+
+        &:hover {
+            > .list-view {
+                display: block;
+            }
+        }
+    }
+
+    .header-left-menu-button {
+
+        @media(max-width: $md - 1) {
+            display: none;
+        }
+    }
+}
+
+@keyframes sublistFadeInUp {
+    0% {
+        visibility: hidden;
+        opacity: 0;
+        margin-top: 10px;
+    }
+
+    100% {
+        visibility: visible;
+        opacity: 1;
+        margin-top: 0;
+    }
+}
+
+.right-menu-list-view {
+    .header-right-menu {
+        @media (min-width: $md) {
+            position: relative;
+
+            .nav-navbar {
+                box-shadow: 3px 0 20px rgba(0,0,0,0.10);
+            }
+        }
+    }
+}

@@ -3,7 +3,8 @@
 
     <!-- Shared price row: sale price, struck-through base, optional % off -->
     <template id="product_card_price" name="Kingdom Product Card Price">
-        <t t-set="website" t-value="website or request.website"/>
+        <!-- Builder / render_public_asset has no request.website; use env instead. -->
+        <t t-set="website" t-value="website or env['website'].get_current_website()"/>
         <t t-set="display_currency"
            t-value="display_currency or (website and website.currency_id) or request.env.company.currency_id"/>
         <t t-set="price_info"

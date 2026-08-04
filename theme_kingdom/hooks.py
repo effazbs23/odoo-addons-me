@@ -23,6 +23,76 @@ _BAKED_EDITOR_ATTRS = tuple(MOVABLE_BRANDING) + (
 _BAKED_EDITOR_CLASSES = ('o_editable', 'o_dirty')
 
 
+def _remove_dynamic_product_tabs_feature(env):
+    """Drop Dynamic Product Tabs snippet + Website → Product Tabs menu (one-shot cleanup)."""
+    ICP = env['ir.config_parameter'].sudo()
+    flag = 'theme_kingdom.dynamic_product_tabs_removed'
+
+    # Always drop stale ir.asset rows pointing at removed files (safe to re-run).
+    Asset = env['ir.asset'].sudo()
+    stale_asset_paths = [
+        'theme_kingdom/static/src/css/dynamic_product_tabs.css',
+        'theme_kingdom/static/src/interactions/kingdom_dynamic_product_tabs.js',
+    ]
+    Asset.search([('path', 'in', stale_asset_paths)]).unlink()
+
+    # Clear compiled bundles that embed css_error_message for the missing file.
+    Attach = env['ir.attachment'].sudo()
+    broken = Attach.search([
+        ('name', 'ilike', 'assets_'),
+        ('url', 'ilike', '/web/assets/'),
+    ])
+    # Only unlink CSS attachments so next request recompiles cleanly.
+    broken.filtered(lambda a: (a.name or '').endswith('.css') or (a.name or '').endswith('.min.css')).unlink()
+
+    if ICP.get_param(flag):
+        return
+
+    View = env['ir.ui.view'].sudo().with_context(active_test=False)
+    keys = [
+        'theme_kingdom.s_dynamic_product_tabs',
+        'theme_kingdom.dynamic_product_tabs_panel',
+        'theme_kingdom.dynamic_product_tabs_item',
+    ]
+    View.search([('key', 'in', keys)]).unlink()
+    if 'theme.ir.ui.view' in env:
+        env['theme.ir.ui.view'].sudo().with_context(active_test=False).search(
+            [('key', 'in', keys)]
+        ).unlink()
+
+    pages = View.search([
+        ('type', '=', 'qweb'),
+        '|',
+        ('arch_db', 'ilike', 's_dynamic_product_tabs'),
+        ('arch_db', 'ilike', 'data-kingdom-live-snippet="s_dynamic_product_tabs"'),
+    ])
+    for view in pages:
+        arch = view.arch_db
+        if not arch:
+            continue
+        try:
+            root = etree.fromstring(arch)
+        except etree.XMLSyntaxError:
+            continue
+        removed = False
+        for xpath_expr in (
+            '//section[contains(concat(" ", normalize-space(@class), " "), " s_dynamic_product_tabs ")]',
+            '//*[@data-kingdom-live-snippet="s_dynamic_product_tabs"]',
+            '//*[contains(@data-snippet, "s_dynamic_product_tabs")]',
+        ):
+            for el in root.xpath(xpath_expr):
+                parent = el.getparent()
+                if parent is not None:
+                    parent.remove(el)
+                    removed = True
+        if removed:
+            view.with_context(no_save_prev=True).write({
+                'arch_db': etree.tostring(root, encoding='unicode'),
+            })
+
+    ICP.set_param(flag, '1')
+
+
 def _cleanup_stale_oe_view_refs(env):
     """Remove website editor metadata that points to deleted ir.ui.view records."""
     View = env['ir.ui.view'].sudo()
@@ -181,6 +251,7 @@ def _fix_stale_multi_website_action_contexts(env):
         'theme_kingdom.action_kingdom_deals_of_day',
         'theme_kingdom.action_featured_products',
         'theme_kingdom.kingdom_product_tab_action',
+        'theme_kingdom.kingdom_dual_carousel_tab_action',
     )
     for xmlid in xmlids:
         action = env.ref(xmlid, raise_if_not_found=False)
@@ -259,6 +330,7 @@ def post_init_hook(env):
     _migrate_kingdom_snippet_oe_structure(env)
     _strip_saved_snippet_editor_hints(env)
     _strip_baked_editor_branding(env)
+    _remove_dynamic_product_tabs_feature(env)
     _cleanup_stale_oe_view_refs(env)
 
 

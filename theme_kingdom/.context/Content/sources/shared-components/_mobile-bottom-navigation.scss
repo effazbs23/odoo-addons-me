@@ -1,0 +1,100 @@
+﻿.mobile-bottom-navigation {
+    @media (min-width: $md) {
+        display: none;
+    }
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    padding: 5px 15px;
+    background: var(--white);
+    box-shadow: $shadow-style-4;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 10px 10px 0px 0px;
+
+    a {
+        display: inline-block;
+        text-decoration: none;
+        color: var(--dark-grey);
+     
+        text-align: center;
+        position: relative;
+        padding: 5px;
+        font-size: 10px;
+
+        &::before {
+            @extend .icon;
+            display: block;
+            font-size: 16px;
+            margin-bottom: 7px;
+        }
+
+        &.account::before {
+            content: "\e95e";
+        }
+
+        &.wishlist::before {
+            content: "\e963";
+        }
+
+        &.mobile-search-button::before {
+            content: "\e94e";
+        }
+
+        &.filter-button::before {
+            content: "\e924";
+        }
+
+        &.mobile-cart::before {
+            content: "\e94f";
+        }
+
+        .cart-qty,
+        .cart-ammount {
+            display: none;
+        }
+    }
+}
+
+.customer-popup {
+    position: fixed;
+    bottom: 67px;
+    left: 20px;
+    transform: translate(0,30px);
+    background: var(--white);
+    box-shadow: 1px 1px 20px rgba(0,0,0,0.5);
+    list-style-type: none;
+    padding: 0;
+    width: 250px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+
+    @media (max-width: $xs - 1) {
+        width: calc(100vw - 40px);
+    }
+
+    &.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(0,0);
+    }
+
+    li {
+        a {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+        }
+
+        &:first-child {
+            a {
+                border-bottom: 1px solid var(--grey);
+            }
+        }
+    }
+}

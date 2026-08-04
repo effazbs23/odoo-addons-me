@@ -1,9 +1,31 @@
 # -*- coding: utf-8 -*-
 from odoo import models
+from odoo.http import request
 
 
 class Website(models.Model):
     _inherit = 'website'
+
+    def kingdom_get_current_pricelist(self):
+        """Pricelist for QWeb snippets — safe in Website Builder (no request.cart)."""
+        self.ensure_one()
+        Pricelist = self.env['product.pricelist'].sudo()
+        try:
+            pl_id = request.session.get('website_sale_current_pl')
+            if pl_id:
+                pl = Pricelist.browse(int(pl_id))
+                if pl.exists() and pl._is_available_on_website(self):
+                    return pl
+        except (RuntimeError, AttributeError, TypeError, ValueError):
+            pass
+
+        # Never call _get_and_cache_current_pricelist here: builder/public-asset
+        # renders have no request.cart and crash inside that helper.
+        available = self.get_pricelist_available(show_visible=False)
+        if available:
+            return available[0].sudo()
+        partner_pl = self.env.user.partner_id.property_product_pricelist
+        return partner_pl.sudo() if partner_pl else Pricelist
 
     def _kingdom_model(self, model_name):
         """Return sudoed model env, or None if the model is not installed."""
@@ -73,12 +95,6 @@ class Website(models.Model):
         if Tab is None:
             return self.env['kingdom.product.tab']
         return Tab.get_website_dual_carousel_tabs(limit=limit)
-
-    def kingdom_dynamic_tabs(self, limit=8):
-        Tab = self._kingdom_model('kingdom.product.tab')
-        if Tab is None:
-            return self.env['kingdom.product.tab']
-        return Tab.get_dynamic_tabs(limit=limit)
 
     def kingdom_manufacturer_slides(self, per_slide=2):
         Manufacturer = self._kingdom_model('kingdom.manufacturer')

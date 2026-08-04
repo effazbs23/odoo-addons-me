@@ -1,0 +1,32 @@
+.forum-search-box {
+    max-width: 37%;
+    width: 700px;
+    min-width: 280px;
+    margin: 10px 0px;
+
+    form {
+        display: block;
+        position: relative;
+
+        input {
+            width: 100%;
+            height: 43px;
+            border: 1px solid #D4DAE3;
+            border-radius: 5px;
+            padding: 0 15px;
+        }
+
+        .search-box-button {
+            position: absolute;
+            right: 3px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+}
+
+.forum-search-page {
+    .search-input {
+        margin-bottom: 15px;
+    }
+}

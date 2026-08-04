@@ -1,0 +1,13 @@
+﻿%attribute-square {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+    height: 16px;
+    width: 16px;
+    border-radius: 3%;
+    margin: 4px;
+    display: inline-block;
+}
+.attribute-squares {
+    .attribute-square {
+        @extend %attribute-square;
+    }
+}

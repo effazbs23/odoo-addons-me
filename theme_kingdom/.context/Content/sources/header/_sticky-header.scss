@@ -1,0 +1,35 @@
+﻿.sticky-header-added {
+    .master-header {
+        &.stick {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 98;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
+            @media (min-width: $lg) {
+                .header {
+                    transition: all 0.5s;
+                }
+            }
+        }
+
+        @media (min-width: $lg) {
+            .header {
+                &.no-animation {
+                    transition: all 0s;
+                }
+            }
+        }
+    }
+
+    .mobile-menu-added {
+        .stick {
+            @media (max-width: $lg - 1) {
+                z-index: 9999 !important;
+            }
+        }
+    }
+}

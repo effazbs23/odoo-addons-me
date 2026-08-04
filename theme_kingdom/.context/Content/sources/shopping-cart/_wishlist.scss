@@ -1,0 +1,59 @@
+﻿.wishlist-content {
+    .add-to-cart-checkbox {
+        display: inline;
+    }
+
+    .add-to-cart {
+        width: auto;
+        display: table-cell;
+        font-size: inherit;
+        text-align: center;
+
+        [type ="checkbox"] {
+            display: inline;
+        }
+
+        label {
+            @media (min-width: $lg) {
+                display: none;
+            }
+        }
+    }
+
+    th, td {
+        width: auto;
+        vertical-align: top;
+    }
+
+    .common-buttons {
+        .update-wishlist-button {
+            &::before {
+                content: "\e963"
+            }
+        }
+
+        .email-a-friend-wishlist-button {
+            &::before {
+                content: "\e919";
+                background: none;
+            }
+        }
+
+        .add-cart-button {
+            &::before {
+                content: "\e951";
+                background: none;
+            }
+        }
+    }
+
+    .table-wrapper {
+        max-width: 100%;
+        overflow: auto;
+    }
+}
+
+.share-info {
+    text-align: center;
+    margin: 15px 0;
+}

@@ -14,7 +14,6 @@ _KINGDOM_LIVE_SNIPPETS = {
     's_category_dual_carousels': 'theme_kingdom.s_category_dual_carousels',
     's_category_slider': 'theme_kingdom.s_category_slider',
     's_manufacturers': 'theme_kingdom.s_manufacturers',
-    's_dynamic_product_tabs': 'theme_kingdom.s_dynamic_product_tabs',
     's_coming_soon': 'theme_kingdom.s_coming_soon',
 }
 
@@ -127,36 +126,6 @@ class ThemeKingdomSnippetController(http.Controller):
             inherit_branding=False,
             inherit_branding_auto=False,
         )._render(template_key)
-
-    @http.route(
-        '/theme_kingdom/product_tabs/render',
-        type='jsonrpc',
-        auth='public',
-        methods=['POST'],
-        website=True,
-        sitemap=False,
-        readonly=True,
-    )
-    def render_product_tab_panel(self, tab_id, **kwargs):
-        """AJAX: render products for one Dynamic Product Tab."""
-        if not request.website.has_ecommerce_access():
-            raise werkzeug.exceptions.Forbidden()
-        try:
-            tab_id = int(tab_id)
-        except (TypeError, ValueError) as err:
-            raise werkzeug.exceptions.NotFound() from err
-
-        tab = request.env['kingdom.product.tab'].sudo().browse(tab_id).exists()
-        if not tab or not tab.active or not tab.show_in_dynamic_tabs:
-            raise werkzeug.exceptions.NotFound()
-
-        return request.env['ir.ui.view']._render_template(
-            'theme_kingdom.dynamic_product_tabs_panel',
-            {
-                'tab': tab,
-                'website': request.website,
-            },
-        )
 
     @http.route(
         [

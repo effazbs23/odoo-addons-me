@@ -46,14 +46,12 @@ class ProductTemplate(models.Model):
     def _kingdom_resolve_pricelist(self, website, pricelist=None):
         if pricelist:
             return pricelist.sudo()
-        try:
-            request.session
-            return website._get_and_cache_current_pricelist()
-        except (RuntimeError, AttributeError):
-            available = website.get_pricelist_available(show_visible=False)
-            if available:
-                return available[0].sudo()
-            return self.env['product.pricelist'].sudo()
+        if website and hasattr(website, 'kingdom_get_current_pricelist'):
+            return website.kingdom_get_current_pricelist()
+        available = website.get_pricelist_available(show_visible=False) if website else False
+        if available:
+            return available[0].sudo()
+        return self.env['product.pricelist'].sudo()
 
     def _kingdom_resolve_fiscal_position(self, website):
         try:

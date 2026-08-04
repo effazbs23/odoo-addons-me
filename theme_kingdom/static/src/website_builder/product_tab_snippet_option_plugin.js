@@ -16,8 +16,14 @@ export class ProductTabSnippetOption extends BaseOptionComponent {
 export class OpenProductTabsAction extends BuilderAction {
     static id = "openProductTabs";
 
-    apply() {
-        window.open("/web#action=theme_kingdom.kingdom_product_tab_action", "_blank");
+    apply({ editingElement }) {
+        const section = editingElement?.closest?.("[data-snippet]") || editingElement;
+        const snippet = section?.dataset?.snippet || "";
+        const action =
+            snippet.includes("s_category_dual_carousels")
+                ? "theme_kingdom.kingdom_dual_carousel_tab_action"
+                : "theme_kingdom.kingdom_product_tab_action";
+        window.open(`/web#action=${action}`, "_blank");
     }
 }
 

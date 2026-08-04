@@ -1,0 +1,14 @@
+﻿.spc {
+    .payment-method {
+        .payment-logo {
+            max-width: 80px;
+        }
+        .checkout-data {
+            td {
+                select {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+}

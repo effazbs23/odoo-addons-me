@@ -132,7 +132,7 @@
 /* Snippet variant — section height, not full-page lock screen */
 .k-coming-soon--snippet,
 .s_coming_soon .k-coming-soon {
-    min-height: min(70vh, 36rem);
+    min-height: 36rem;
     padding: 3.5rem 0;
 }
 
@@ -143,7 +143,7 @@
 
     .k-coming-soon--snippet,
     .s_coming_soon .k-coming-soon {
-        min-height: min(60vh, 28rem);
+        min-height: 28rem;
         padding: 2.5rem 0;
     }
 
