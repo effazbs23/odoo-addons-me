@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_custom_statusbar_module_config_manager,custom.statusbar.module.config.manager,model_custom_statusbar_module_config,base.group_system,1,1,1,1
+access_custom_statusbar_module_config_user,custom.statusbar.module.config.user,model_custom_statusbar_module_config,base.group_user,1,0,0,0
+access_custom_statusbar_state_config_manager,custom.statusbar.state.config.manager,model_custom_statusbar_state_config,base.group_system,1,1,1,1
+access_custom_statusbar_state_config_user,custom.statusbar.state.config.user,model_custom_statusbar_state_config,base.group_user,1,0,0,0

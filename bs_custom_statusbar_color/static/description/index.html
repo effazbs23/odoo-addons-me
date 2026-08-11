@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Statusbar Color</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+</head>
+<body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#F7F9FC;color:#001844;line-height:1.6;">
+<div style="max-width:1200px;margin:0 auto;padding:40px 20px 80px;">
+
+  <!-- 1. Compatibility / Support Header -->
+  <div style="margin:30px 0;padding:40px;border:1px solid #DCE1E8;border-radius:16px;background:#ffffff;">
+    <div class="row g-4 align-items-center">
+      <div class="col-12 col-md-3 text-center">
+        <img src="./assets/logo.png" style="height:60px;width:auto;object-fit:contain;" alt="Custom Statusbar Color logo">
+      </div>
+      <div class="col-12 col-md-9">
+        <div class="row g-4">
+          <div class="col-12 col-sm-6">
+            <h6 style="margin:0 0 12px;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Supports</h6>
+            <div class="d-flex gap-2 flex-wrap">
+              <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle" style="color:#2ECC71;"></i> Enterprise</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle" style="color:#2ECC71;"></i> Community</span>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <h6 style="margin:0 0 12px;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Availability</h6>
+            <div class="d-flex gap-2 flex-wrap">
+              <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle" style="color:#2ECC71;"></i> Odoo.sh</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle" style="color:#2ECC71;"></i> On Premise</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Banner -->
+  <div style="margin-top:3rem;margin-bottom:3rem;">
+    <img src="./assets/main_screenshot.png" class="img-fluid" alt="Custom Statusbar Color main screenshot" style="border-radius:10px;width:100%;">
+  </div>
+
+  <!-- 3. Hero -->
+  <section style="background:linear-gradient(135deg,#EAF6FC 0%,#F0F4FF 100%);border:1px solid #DCE1E8;border-radius:16px;padding:60px 48px;margin-bottom:20px;">
+    <span style="display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#EAF6FC;color:#00668E;padding:8px 14px;margin:0 8px 12px 0;">Odoo Module</span>
+    <span style="display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#EAF6FC;color:#00668E;padding:8px 14px;margin:0 8px 12px 0;">Technical</span>
+    <h1 style="font-size:48px;font-weight:700;color:#001844;margin:16px 0 12px;line-height:1.2;">Custom Statusbar Color</h1>
+    <p style="margin:0;color:#797F8B;font-size:18px;max-width:800px;line-height:1.7;">Configurable per-state coloring for statusbar widgets, rule by rule.</p>
+  </section>
+
+  <!-- 4. Core Features grid: intentionally omitted -->
+
+  <!-- 5. Module Highlights -->
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Module Highlights</h2>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;background:#F7F9FC;padding:32px;height:100%;">
+          <h4 style="color:#001844;font-size:22px;font-weight:700;margin-bottom:12px;">No-Code Rule-Based Coloring</h4>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.7;">Pick any Odoo model from a dropdown and create color rules directly in the backend UI — no XML, no Python, and no developer involvement required.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;background:#F7F9FC;padding:32px;height:100%;">
+          <h4 style="color:#001844;font-size:22px;font-weight:700;margin-bottom:12px;">Automatic State Discovery &amp; Rescan</h4>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.7;">Statusbar states are detected live when a model is selected, and rules can be re-synced anytime to adapt to view changes while preserving existing colors.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;background:#F7F9FC;padding:32px;height:100%;">
+          <h4 style="color:#001844;font-size:22px;font-weight:700;margin-bottom:12px;">Per-State Dual Coloring</h4>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.7;">Each workflow state gets an independent Default (inactive) and In-State (active) background color, with text contrast automatically adjusted between black and white for readability.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;background:#F7F9FC;padding:32px;height:100%;">
+          <h4 style="color:#001844;font-size:22px;font-weight:700;margin-bottom:12px;">Global Real-Time Application</h4>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.7;">Colors apply across form, list, and kanban views and update live across active sessions via bus notifications — with no page refreshes and no view changes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Dependencies -->
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;margin-bottom:15px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Dependencies</h2>
+    <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #DCE1E8;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;background:#EAF6FC;font-weight:600;">base</span>
+    <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #DCE1E8;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;background:#EAF6FC;font-weight:600;">web</span>
+  </section>
+
+  <!-- 7. Screenshots -->
+  <section style="margin-top:28px;margin-bottom:40px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Screenshots</h2>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Easy Navigation &amp; Command Palette Integration</h5>
+      </div>
+      <img src="./assets/01_menu_access.png" alt="Easy Navigation and Command Palette Integration" style="display:block;width:100%;height:auto;object-fit:contain;">
+      <div style="padding:15px 20px;font-size:14px;color:#797F8B;"><p style="margin:0;">Access the Custom Statusbar Color configuration directly from the main Odoo navigation menu or via the global command palette (Ctrl+K).</p></div>
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Rules Overview &amp; Live Previews</h5>
+      </div>
+      <img src="./assets/02_rules_list_view.png" alt="Rules Overview and Live Previews" style="display:block;width:100%;height:auto;object-fit:contain;">
+      <div style="padding:15px 20px;font-size:14px;color:#797F8B;"><p style="margin:0;">View all custom statusbar rules at a glance with live colored statusbar state previews and single-click enable toggles.</p></div>
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Simple Rule Creation</h5>
+      </div>
+      <img src="./assets/03_create_rule.png" alt="Simple Rule Creation" style="display:block;width:100%;height:auto;object-fit:contain;">
+      <div style="padding:15px 20px;font-size:14px;color:#797F8B;"><p style="margin:0;">Create a new coloring rule by giving it a name and selecting the target Odoo model.</p></div>
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">No-Code Model Selection</h5>
+      </div>
+      <img src="./assets/04_select_model.png" alt="No-Code Model Selection" style="display:block;width:100%;height:auto;object-fit:contain;">
+      <div style="padding:15px 20px;font-size:14px;color:#797F8B;"><p style="margin:0;">Easily search and pick any standard or custom Odoo model without writing XML or Python code.</p></div>
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Automatic State Discovery &amp; Live Preview</h5>
+      </div>
+      <img src="./assets/05_auto_scan_states.png" alt="Automatic State Discovery and Live Preview" style="display:block;width:100%;height:auto;object-fit:contain;">
+      <div style="padding:15px 20px;font-size:14px;color:#797F8B;"><p style="margin:0;">Statusbar states for the selected model are automatically scanned and rendered in a live mini statusbar preview.</p></div>
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Intuitive Color Editor</h5>
+      </div>
+      <img src="./assets/06_color_picker.png" alt="Intuitive Color Editor" style="display:block;width:100%;height:auto;object-fit:contain;">
+      <div style="padding:15px 20px;font-size:14px;color:#797F8B;"><p style="margin:0;">Pick colors using convenient preset swatches, direct hex input validation, or full color pickers.</p></div>
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Per-State Dual Color Configuration</h5>
+      </div>
+      <img src="./assets/07_dual_color_setup.png" alt="Per-State Dual Color Configuration" style="display:block;width:100%;height:auto;object-fit:contain;">
+      <div style="padding:15px 20px;font-size:14px;color:#797F8B;"><p style="margin:0;">Set independent Default (inactive) and In-State (active) background colors with smart automatic text contrast adjustment.</p></div>
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Multi-State Customization</h5>
+      </div>
+      <img src="./assets/08_state_color_config.png" alt="Multi-State Customization" style="display:block;width:100%;height:auto;object-fit:contain;">
+      <div style="padding:15px 20px;font-size:14px;color:#797F8B;"><p style="margin:0;">Configure custom colors for all states across your workflow sequence with per-state enable toggles.</p></div>
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Comprehensive Rule Management</h5>
+      </div>
+      <img src="./assets/09_rules_overview.png" alt="Comprehensive Rule Management" style="display:block;width:100%;height:auto;object-fit:contain;">
+      <div style="padding:15px 20px;font-size:14px;color:#797F8B;"><p style="margin:0;">Manage multiple model rules effortlessly with clear visibility into active states and custom color combinations.</p></div>
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Automatic Conflict Resolution</h5>
+      </div>
+      <img src="./assets/10_conflict_resolution.png" alt="Automatic Conflict Resolution" style="display:block;width:100%;height:auto;object-fit:contain;">
+      <div style="padding:15px 20px;font-size:14px;color:#797F8B;"><p style="margin:0;">Prevent overlapping color rules for the same model with automated single-active-rule enforcement.</p></div>
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Live Applied Statusbars</h5>
+      </div>
+      <img src="./assets/11_sales_order_statusbar.png" alt="Live Applied Statusbars" style="display:block;width:100%;height:auto;object-fit:contain;">
+      <div style="padding:15px 20px;font-size:14px;color:#797F8B;"><p style="margin:0;">Enjoy vibrant, customized statusbar colors rendered live across form views such as Sales Orders without page refreshes.</p></div>
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Dynamic Active State Highlighting</h5>
+      </div>
+      <img src="./assets/12_active_state_preview.png" alt="Dynamic Active State Highlighting" style="display:block;width:100%;height:auto;object-fit:contain;">
+      <div style="padding:15px 20px;font-size:14px;color:#797F8B;"><p style="margin:0;">Active workflow states stand out clearly with dynamic color highlighting and high-contrast text readability.</p></div>
+    </div>
+
+  </section>
+
+  <!-- 8. Exclusive-feature spotlight sections -->
+  <section style="background:#F7F9FC;border:1px solid #DCE1E8;border-radius:16px;padding:60px 48px;margin-bottom:40px;">
+    <div class="row d-flex align-items-center">
+      <div class="col col-12 col-md-12 col-lg-6">
+        <h4 style="margin:0;font-size:40px;line-height:1.25;color:#001844;font-weight:700;">No-Code Rule-Based Coloring</h4>
+        <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:600px;">Custom Statusbar Color puts statusbar theming in the hands of functional users. Instead of requesting view changes from developers, anyone can define a coloring rule for any model, see its states discovered automatically, and apply the result globally.</p>
+        <ul style="margin-top:1rem;color:#797F8B;">
+          <li>Rule-based configuration from a clean backend interface</li>
+          <li>Automatic state discovery with one-click re-sync</li>
+          <li>No XML, Python, or developer involvement needed</li>
+        </ul>
+      </div>
+      <div class="col col-12 col-md-12 col-lg-6">
+        <img class="img-fluid" src="./assets/03_create_rule.png" alt="No-Code Rule-Based Coloring" style="width:100%;border-radius:16px;object-fit:cover;">
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#F7F9FC;border:1px solid #DCE1E8;border-radius:16px;padding:60px 48px;margin-bottom:40px;">
+    <div class="row d-flex align-items-center">
+      <div class="col col-12 col-md-12 col-lg-6">
+        <img class="img-fluid" src="./assets/11_sales_order_statusbar.png" alt="Live Global Real-Time Application" style="width:100%;border-radius:16px;object-fit:cover;">
+      </div>
+      <div class="col col-12 col-md-12 col-lg-6">
+        <h4 style="margin:0;font-size:40px;line-height:1.25;color:#001844;font-weight:700;">Live Global Real-Time Application</h4>
+        <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:600px;">Colors are pushed to every statusbar widget across the interface in real time. Changes made to a rule are broadcast through the Odoo bus, so all open sessions update instantly without a single page refresh — and without touching any view definition.</p>
+        <ul style="margin-top:1rem;color:#797F8B;">
+          <li>Applies across form, list, and kanban views</li>
+          <li>Real-time updates via bus notifications</li>
+          <li>Instant highlighting of the active workflow state</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Our Services -->
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Our Services</h2>
+    <div class="row g-3">
+      <div class="col-md-3 col-sm-6">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;color:#00A0DB;font-size:22px;">
+            <img src="./assets/gear.svg" alt="Odoo Customization" style="width:44px;height:44px;">
+          </span>
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Customization</h6>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;color:#00A0DB;font-size:22px;">
+            <img src="./assets/wrench-icon.svg" alt="Odoo Implementation" style="width:44px;height:44px;">
+          </span>
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Implementation</h6>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;color:#00A0DB;font-size:22px;">
+            <img src="./assets/life-ring-icon.svg" alt="Odoo Support" style="width:44px;height:44px;">
+          </span>
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Support</h6>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;color:#00A0DB;font-size:22px;">
+            <img src="./assets/arrows-repeat.svg" alt="Odoo Migration" style="width:44px;height:44px;">
+          </span>
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Migration</h6>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;color:#00A0DB;font-size:22px;">
+            <img src="./assets/puzzle-piece-icon.svg" alt="Odoo Integration" style="width:44px;height:44px;">
+          </span>
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Integration</h6>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;color:#00A0DB;font-size:22px;">
+            <img src="./assets/odoo-consultancy.svg" alt="Odoo Consultancy" style="width:44px;height:44px;">
+          </span>
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Consultancy</h6>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;color:#00A0DB;font-size:22px;">
+            <img src="./assets/odoo-licencing.svg" alt="Odoo Licensing" style="width:44px;height:44px;">
+          </span>
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Licensing</h6>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;color:#00A0DB;font-size:22px;">
+            <img src="./assets/hire-odoo.svg" alt="Hire Odoo Developer" style="width:44px;height:44px;">
+          </span>
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Hire Odoo Developer</h6>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Why Choose ERP23 -->
+  <section style="background:#ECF0F1;border-radius:16px;padding:40px;margin-top:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 24px;font-weight:700;text-align:center;">Why Choose ERP23</h2>
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <img src="./assets/silver-partner.webp" alt="Odoo Silver Partner" style="max-height:72px;width:auto;">
+          </div>
+          <div style="padding:24px 24px 28px;text-align:center;">
+            <h5 style="margin:0 0 10px;line-height:1.2;">
+              <span style="display:block;font-size:32px;font-weight:800;color:#00A0DB;">Silver</span>
+              <span style="font-size:16px;font-weight:600;color:#001844;">Odoo Silver Partner</span>
+            </h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Certified partner delivering reliable ERP solutions end to end.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <img src="./assets/years-experience.webp" alt="Years of Experience" style="max-height:72px;width:auto;">
+          </div>
+          <div style="padding:24px 24px 28px;text-align:center;">
+            <h5 style="margin:0 0 10px;line-height:1.2;">
+              <span style="display:block;font-size:32px;font-weight:800;color:#00A0DB;">20+</span>
+              <span style="font-size:16px;font-weight:600;color:#001844;">Years of Experience</span>
+            </h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Two decades of enterprise software expertise.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <img src="./assets/countries-served.webp" alt="Countries Served" style="max-height:72px;width:auto;">
+          </div>
+          <div style="padding:24px 24px 28px;text-align:center;">
+            <h5 style="margin:0 0 10px;line-height:1.2;">
+              <span style="display:block;font-size:32px;font-weight:800;color:#00A0DB;">30+</span>
+              <span style="font-size:16px;font-weight:600;color:#001844;">Countries Served</span>
+            </h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Trusted by businesses across the globe.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <img src="./assets/projects-completed.webp" alt="Projects Completed" style="max-height:72px;width:auto;">
+          </div>
+          <div style="padding:24px 24px 28px;text-align:center;">
+            <h5 style="margin:0 0 10px;line-height:1.2;">
+              <span style="display:block;font-size:32px;font-weight:800;color:#00A0DB;">500+</span>
+              <span style="font-size:16px;font-weight:600;color:#001844;">Projects Completed</span>
+            </h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Hundreds of successful Odoo deployments.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <img src="./assets/certifications.webp" alt="Odoo Certifications" style="max-height:72px;width:auto;">
+          </div>
+          <div style="padding:24px 24px 28px;text-align:center;">
+            <h5 style="margin:0 0 10px;line-height:1.2;">
+              <span style="display:block;font-size:32px;font-weight:800;color:#00A0DB;">100+</span>
+              <span style="font-size:16px;font-weight:600;color:#001844;">Odoo Certifications</span>
+            </h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Deeply certified Odoo specialists on every team.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. Support & Company -->
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;text-align:center;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Support &amp; Company</h2>
+    <img src="./assets/erp23.png" alt="ERP23 logo" style="max-height:48px;width:auto;margin-bottom:16px;">
+    <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.6;">Developed and maintained by ERP23.</p>
+    <p style="margin:8px 0 0;">Website: <a href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer" style="color:#00A0DB;text-decoration:none;font-weight:600;">https://www.erp-23.com/</a></p>
+    <p style="margin:0;">Email: <a href="mailto:erp23@brainstation-23.com" style="color:#00A0DB;text-decoration:none;font-weight:600;">erp23@brainstation-23.com</a></p>
+  </section>
+
+</div>
+</body>
+</html>

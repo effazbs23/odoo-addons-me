@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_module_config_list" model="ir.ui.view">
+        <field name="name">custom.statusbar.module.config.list</field>
+        <field name="model">custom.statusbar.module.config</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="state_config_ids" widget="statusbar_state_preview" string="States">
+                    <!--
+                        Read-only preview of the actual statusbar (colored per
+                        state's Default Color) so you can see the result at a
+                        glance without opening the rule. This inner list only
+                        declares which fields to fetch.
+                    -->
+                    <list>
+                        <field name="state_label"/>
+                        <field name="sequence"/>
+                        <field name="default_color"/>
+                    </list>
+                </field>
+                <field name="state_count" string="States #"/>
+                <field name="enabled" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_module_config_form" model="ir.ui.view">
+        <field name="name">custom.statusbar.module.config.form</field>
+        <field name="model">custom.statusbar.module.config</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="action_scan_states"
+                        type="object"
+                        string="Scan States"
+                        class="btn-secondary"
+                        invisible="not model_id"
+                        help="Re-check the model's views for new or changed statusbar states."
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Sales Order Colors"/></h1>
+                    </div>
+                    <group>
+                        <field name="model_id" options="{'no_create': True}"/>
+                        <field name="enabled" widget="boolean_toggle"/>
+                    </group>
+                    <group string="States" invisible="not model_id">
+                        <field name="state_config_ids" widget="statusbar_state_editor" nolabel="1">
+                            <!--
+                                Not rendered as a table: widget="statusbar_state_editor"
+                                takes over rendering entirely (a mini statusbar preview,
+                                click a state to edit its colors). This inner list only
+                                declares which fields to fetch.
+                            -->
+                            <list>
+                                <field name="model_id"/>
+                                <field name="model_name"/>
+                                <field name="field_name"/>
+                                <field name="state_value"/>
+                                <field name="state_label"/>
+                                <field name="sequence"/>
+                                <field name="default_color"/>
+                                <field name="in_state_color"/>
+                                <field name="enabled"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_module_config" model="ir.actions.act_window">
+        <field name="name">Custom Statusbar Color</field>
+        <field name="res_model">custom.statusbar.module.config</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No coloring rules yet.
+            </p>
+            <p>
+                Click "New", name your rule, and pick the model whose
+                statusbar you want to color.
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,18 @@
+// This module colors statusbar buttons only through the inline style
+// and CSS variable set by getItemStyle() in custom_statusbar.js, which
+// only fires for a state that's explicitly enabled/colored. No
+// default/fallback scheme is applied to any statusbar.
+//
+// The one thing inline styles can't reach is the arrow-shaped
+// connector between buttons (an ::after/::before pseudo-element), so
+// it's colored here via the --o-statusbar-custom-color CSS variable
+// that getItemStyle() sets alongside the background - this only takes
+// effect on buttons carrying the o_statusbar_custom_colored class,
+// i.e. exactly the ones with a custom color applied.
+.o_field_widget.o_field_statusbar .o_statusbar_status > .o_arrow_button.o_statusbar_custom_colored {
+    &:not(.o_first):not(.o_last) {
+        &::after {
+            border-left-color: var(--o-statusbar-custom-color) !important;
+        }
+    }
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t
+        t-name="custom_statusbar.StatusBarField"
+        t-inherit="web.StatusBarField"
+        t-inherit-mode="extension"
+    >
+        <xpath expr="//t[@t-foreach='items.inline']/button" position="attributes">
+            <!--
+                Only ever adds an inline style, and only when this exact
+                state has an explicitly enabled custom color configured
+                (see getItemStyle). No color configured -> no style
+                attribute at all -> Odoo's stock statusbar look, untouched.
+                t-attf-class merges with the original template's classes
+                (leading space keeps it separated when present).
+            -->
+            <attribute name="t-att-style">getItemStyle(item)</attribute>
+            <attribute name="t-attf-class">{{ getItemClassName(item) }}</attribute>
+        </xpath>
+    </t>
+</templates>
