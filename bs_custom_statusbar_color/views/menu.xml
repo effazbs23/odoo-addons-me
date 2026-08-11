@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_custom_statusbar_root"
+        name="Custom Statusbar Color"
+        action="action_module_config"
+        sequence="95"
+        groups="base.group_system"
+        web_icon="bs_custom_statusbar_color,static/description/icon.png"
+    />
+</odoo>

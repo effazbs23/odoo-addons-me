@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="custom_statusbar.StatusbarStatePreview">
+        <div class="o_statusbar_status o_statusbar_state_preview">
+            <t t-if="!records.length">
+                <span class="text-muted">No states</span>
+            </t>
+            <t t-foreach="records" t-as="record" t-key="record.id">
+                <span
+                    class="btn btn-secondary o_arrow_button"
+                    t-att-class="{o_first: record_first, o_last: record_last}"
+                    t-att-style="getButtonStyle(record)"
+                >
+                    <t t-esc="record.data.state_label"/>
+                </span>
+            </t>
+        </div>
+    </t>
+</templates>

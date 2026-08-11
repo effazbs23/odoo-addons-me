@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="custom_statusbar.StatusbarStateEditor">
+        <div class="o_statusbar_state_editor">
+            <t t-if="!groups.length">
+                <p class="text-muted">
+                    No states discovered yet. Use "Scan States" above.
+                </p>
+            </t>
+            <t t-foreach="groups" t-as="group" t-key="group.key">
+                <div class="o_statusbar_state_editor_group">
+                    <div class="o_statusbar_state_editor_group_label" t-esc="group.label"/>
+                    <div class="o_statusbar_status o_statusbar_state_editor_bar">
+                        <t t-foreach="group.records" t-as="record" t-key="record.id">
+                            <button
+                                type="button"
+                                class="btn btn-secondary o_arrow_button"
+                                t-att-class="{
+                                    o_first: record_first,
+                                    o_last: record_last,
+                                    o_statusbar_state_editor_selected: isSelected(record),
+                                    o_statusbar_state_editor_disabled: !record.data.enabled,
+                                }"
+                                t-att-style="getButtonStyle(record)"
+                                t-on-click="() => this.selectRecord(record)"
+                            >
+                                <t t-esc="record.data.state_label"/>
+                            </button>
+                        </t>
+                    </div>
+                    <t t-set="selectedRecord" t-value="getSelectedInGroup(group)"/>
+                    <div class="o_statusbar_state_editor_panel" t-if="selectedRecord">
+                        <div class="o_statusbar_state_editor_panel_header">
+                            Editing <strong t-esc="selectedRecord.data.state_label"/>
+                        </div>
+                        <div class="o_statusbar_state_editor_panel_row">
+                            <span class="o_statusbar_state_editor_panel_label">
+                                Default Color
+                            </span>
+                            <span
+                                class="o_statusbar_color_swatch"
+                                t-att-class="{o_statusbar_color_swatch_unset: !selectedRecord.data.default_color}"
+                                t-att-style="getSwatchStyle(selectedRecord, 'default_color')"
+                                t-on-click="(ev) => this.openColorPicker(ev, selectedRecord, 'default_color')"
+                            />
+                        </div>
+                        <div class="o_statusbar_state_editor_panel_row">
+                            <span class="o_statusbar_state_editor_panel_label">
+                                In State Color
+                            </span>
+                            <span
+                                class="o_statusbar_color_swatch"
+                                t-att-class="{o_statusbar_color_swatch_unset: !selectedRecord.data.in_state_color}"
+                                t-att-style="getSwatchStyle(selectedRecord, 'in_state_color')"
+                                t-on-click="(ev) => this.openColorPicker(ev, selectedRecord, 'in_state_color')"
+                            />
+                        </div>
+                        <div class="o_statusbar_state_editor_panel_row">
+                            <span class="o_statusbar_state_editor_panel_label">Enabled</span>
+                            <input
+                                type="checkbox"
+                                t-att-checked="selectedRecord.data.enabled"
+                                t-on-change="() => this.toggleEnabled(selectedRecord)"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

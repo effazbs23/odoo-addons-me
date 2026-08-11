@@ -1,0 +1,74 @@
+.o_statusbar_state_editor {
+    .o_statusbar_state_editor_group {
+        margin-bottom: 20px;
+    }
+
+    .o_statusbar_state_editor_group_label {
+        font-weight: bold;
+        margin-bottom: 6px;
+        color: $o-main-text-color;
+    }
+
+    // Reuses Odoo's own .o_statusbar_status layout so the preview bar
+    // looks and behaves like a real statusbar widget.
+    .o_statusbar_state_editor_bar {
+        display: flex;
+        flex-flow: row wrap;
+        margin-bottom: 8px;
+
+        .o_arrow_button {
+            cursor: pointer;
+
+            &.o_statusbar_state_editor_selected {
+                outline: 2px solid $o-brand-primary;
+                outline-offset: -2px;
+            }
+
+            &.o_statusbar_state_editor_disabled {
+                opacity: 0.5;
+            }
+        }
+    }
+
+    .o_statusbar_state_editor_panel {
+        display: inline-block;
+        padding: 10px 12px;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        background-color: $o-view-background-color;
+
+        .o_statusbar_state_editor_panel_header {
+            margin-bottom: 8px;
+        }
+
+        .o_statusbar_state_editor_panel_row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            .o_statusbar_state_editor_panel_label {
+                min-width: 110px;
+            }
+        }
+    }
+}
+
+// Compact, non-interactive variant used as a list view column.
+.o_statusbar_state_preview {
+    display: flex;
+    flex-flow: row nowrap;
+    overflow-x: auto;
+
+    .o_arrow_button {
+        cursor: default;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        font-size: 0.85em;
+        white-space: nowrap;
+    }
+}

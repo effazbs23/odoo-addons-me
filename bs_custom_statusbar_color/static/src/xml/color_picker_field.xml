@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="custom_statusbar.StatusbarColorPickerField">
+        <span
+            class="o_statusbar_color_swatch"
+            t-att-class="{o_statusbar_color_swatch_unset: !hasColor}"
+            t-att-style="swatchStyle"
+            t-att-title="hasColor ? value : 'No color set'"
+            t-on-click="togglePicker"
+        />
+    </t>
+
+    <t t-name="custom_statusbar.StatusbarColorPopover">
+        <div class="o_statusbar_color_popover_content">
+            <div class="o_statusbar_color_presets">
+                <t t-foreach="props.presets" t-as="preset" t-key="preset">
+                    <span
+                        class="o_statusbar_color_preset"
+                        t-attf-style="background-color: {{preset}}"
+                        t-on-click="() => props.selectColor(preset)"
+                    />
+                </t>
+            </div>
+            <div class="o_statusbar_color_hex_row">
+                <input
+                    type="text"
+                    class="o_statusbar_color_hex_input"
+                    t-att-class="{o_statusbar_color_hex_invalid: state.hexInput and !isValidHex}"
+                    placeholder="#RRGGBB"
+                    t-att-value="state.hexInput"
+                    t-on-input="onHexInput"
+                    t-on-keydown="onHexKeydown"
+                />
+                <button
+                    type="button"
+                    class="btn btn-sm btn-primary o_statusbar_color_hex_apply"
+                    t-att-disabled="!isValidHex"
+                    t-on-click="applyHex"
+                >
+                    Apply
+                </button>
+            </div>
+            <input
+                type="color"
+                t-att-value="nativeInputValue"
+                t-on-change="(ev) => props.selectColor(ev.target.value)"
+            />
+        </div>
+    </t>
+</templates>
