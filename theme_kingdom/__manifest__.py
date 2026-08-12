@@ -75,6 +75,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
         'views/footer_template.xml',
         'data/header_footer_opt_in_migration.xml',
         'data/sync_kingdom_chrome_on_themed_websites.xml',
+        'data/sync_kingdom_product_page_views.xml',
         'data/header_no_header_guard.xml',
         'data/fix_header_category_roots.xml',
         'data/strip_baked_editor_branding.xml',
@@ -87,6 +88,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
         'views/product_template_views.xml',
         'views/product_price_templates.xml',
         'views/product_image_magnifier_templates.xml',
+        'views/product_detail_templates.xml',
         'views/product_quickview_templates.xml',
         'views/deals_of_day_views.xml',
         'views/pricelist_bulk_products_views.xml',
@@ -135,6 +137,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
             'theme_kingdom/static/src/css/unified_switcher.css',
             'theme_kingdom/static/src/css/shop.css',
             'theme_kingdom/static/src/scss/product_image_magnifier.scss',
+            'theme_kingdom/static/src/scss/product_detail.scss',
             'theme_kingdom/static/content/scss/footer.scss',
             # After website.scss + Kingdom footer.scss so picker colors beat defaults.
             ('after', 'theme_kingdom/static/content/scss/footer.scss', 'theme_kingdom/static/src/scss/chrome_colors.scss'),
@@ -150,6 +153,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
             'theme_kingdom/static/src/interactions/kingdom_carousel_fix.js',
             'theme_kingdom/static/src/interactions/kingdom_shop_layout.js',
             'theme_kingdom/static/src/interactions/kingdom_product_image_magnifier.js',
+            'theme_kingdom/static/src/interactions/kingdom_product_detail.js',
         ],
         'web.assets_frontend_lazy': [
             'theme_kingdom/static/src/css/coming_soon.css',

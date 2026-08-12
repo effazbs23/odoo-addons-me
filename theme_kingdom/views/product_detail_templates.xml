@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Premium Kingdom product detail layout -->
+    <template id="kingdom_product_detail_layout"
+              inherit_id="website_sale.product"
+              name="Kingdom Product Detail Layout"
+              priority="20">
+
+        <xpath expr="//div[@id='wrap']" position="attributes">
+            <attribute name="class" add="kingdom-product-page" separator=" "/>
+        </xpath>
+
+        <!-- Compute PDP data in QWeb so templates stay safe without controller overrides. -->
+        <xpath expr="//section[@id='product_detail']" position="before">
+            <t t-set="kingdom_pdp_bulk_tiers" t-value="product.kingdom_get_bulk_pricing_tiers(website)"/>
+            <t t-set="kingdom_pdp_sold_count" t-value="product.kingdom_get_recent_sold_qty()"/>
+            <t t-set="kingdom_pdp_live_viewers" t-value="product.kingdom_get_live_viewer_count(product, website)"/>
+            <t t-set="kingdom_pdp_countdown_end" t-value="product.kingdom_get_offer_countdown_end(website)"/>
+            <t t-set="kingdom_pdp_product_sku" t-value="product.default_code"/>
+            <t t-set="kingdom_pdp_brand" t-value="product.kingdom_brand_id"/>
+            <t t-set="kingdom_pdp_promotions" t-value="product.kingdom_get_pdp_promotions(website)"/>
+        </xpath>
+
+        <xpath expr="//div[@id='o_wsale_product_details_content']" position="attributes">
+            <attribute name="class" add="kingdom-pdp-content" separator=" "/>
+        </xpath>
+
+        <!-- Bulk pricing tiers -->
+        <xpath expr="//div[hasclass('o_wsale_product_details_content_section_price')]" position="after">
+            <t t-if="kingdom_pdp_bulk_tiers and len(kingdom_pdp_bulk_tiers) > 1">
+                <div class="kingdom-pdp-bulk o_wsale_product_details_content_section mb-4">
+                    <h6 class="kingdom-pdp-bulk__title o_translate_inline">Discounts on Bulk Orders!</h6>
+                    <div class="kingdom-pdp-bulk__grid">
+                        <t t-foreach="kingdom_pdp_bulk_tiers" t-as="tier">
+                            <button type="button"
+                                    t-attf-class="kingdom-pdp-bulk__tier #{tier['selected'] and 'is-active' or ''}"
+                                    t-att-data-min-qty="tier['min_qty']">
+                                <span class="kingdom-pdp-bulk__tier-label" t-esc="tier['label']"/>
+                                <span class="kingdom-pdp-bulk__tier-price">
+                                    <t t-out="tier['unit_price']"
+                                       t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                    <span class="kingdom-pdp-bulk__tier-unit o_translate_inline">/ Unit</span>
+                                </span>
+                            </button>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+
+        <!-- Offer countdown (before variant picker) -->
+        <xpath expr="//t[@name='variant_info']" position="before">
+            <t t-if="kingdom_pdp_countdown_end">
+                <t t-set="kingdom_countdown_ms"
+                   t-value="int(kingdom_pdp_countdown_end.timestamp() * 1000)"/>
+                <div class="kingdom-pdp-countdown o_wsale_product_details_content_section mb-4">
+                    <p class="kingdom-pdp-countdown__title o_translate_inline mb-3">
+                        Hurry Up! Limited time offer
+                    </p>
+                    <div class="k-countdown kingdom-pdp-countdown__timer k-cd--circle-outline carousel-countdown"
+                         t-att-data-deal-end-ms="kingdom_countdown_ms"
+                         aria-label="Offer countdown">
+                        <div class="k-cd-unit count">
+                            <span class="cd-num cd-days">00</span>
+                            <span class="cd-label o_translate_inline">Days</span>
+                        </div>
+                        <div class="k-cd-unit count">
+                            <span class="cd-num cd-hours">00</span>
+                            <span class="cd-label o_translate_inline">Hours</span>
+                        </div>
+                        <div class="k-cd-unit count">
+                            <span class="cd-num cd-mins">00</span>
+                            <span class="cd-label o_translate_inline">Mins</span>
+                        </div>
+                        <div class="k-cd-unit count">
+                            <span class="cd-num cd-secs">00</span>
+                            <span class="cd-label o_translate_inline">Secs</span>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+
+        <!-- CTA card -->
+        <xpath expr="//div[hasclass('o_wsale_product_details_content_section_cta')]" position="attributes">
+            <attribute name="class" add="kingdom-pdp-cart-card" separator=" "/>
+        </xpath>
+
+        <!-- Utility links under CTA -->
+        <xpath expr="//div[hasclass('o_wsale_product_details_content_section_cta')]" position="after">
+            <div class="kingdom-pdp-utilities o_wsale_product_details_content_section mb-4">
+                <button type="button"
+                        class="kingdom-pdp-utilities__link js_kingdom_pdp_wishlist"
+                        aria-label="Add to wishlist">
+                    <i class="fa fa-heart-o" aria-hidden="true"/>
+                    <span class="o_translate_inline">Add to wishlist</span>
+                </button>
+                <button type="button"
+                        class="kingdom-pdp-utilities__link js_kingdom_pdp_compare"
+                        aria-label="Compare">
+                    <i class="fa fa-exchange" aria-hidden="true"/>
+                    <span class="o_translate_inline">Compare</span>
+                </button>
+                <button type="button"
+                        class="kingdom-pdp-utilities__link js_kingdom_pdp_share"
+                        aria-label="Share">
+                    <i class="fa fa-share-alt" aria-hidden="true"/>
+                    <span class="o_translate_inline">Share</span>
+                </button>
+                <a t-att-href="website.contact_us_button_url or '/contactus'"
+                   class="kingdom-pdp-utilities__link">
+                    <i class="fa fa-envelope-o" aria-hidden="true"/>
+                    <span class="o_translate_inline">Contact Us</span>
+                </a>
+            </div>
+
+            <!-- Brand -->
+            <t t-if="kingdom_pdp_brand">
+                <div class="kingdom-pdp-brand o_wsale_product_details_content_section mb-4">
+                    <div class="kingdom-pdp-brand__logo">
+                        <a t-att-href="kingdom_pdp_brand.website_url"
+                           t-att-aria-label="kingdom_pdp_brand.name">
+                            <img t-if="kingdom_pdp_brand.image"
+                                 t-att-src="'/web/image/kingdom.brand/%s/image' % kingdom_pdp_brand.id"
+                                 t-att-alt="kingdom_pdp_brand.name"
+                                 loading="lazy"/>
+                            <span t-else="" class="kingdom-pdp-brand__name" t-esc="kingdom_pdp_brand.name"/>
+                        </a>
+                    </div>
+                    <div class="kingdom-pdp-brand__body">
+                        <h6 class="kingdom-pdp-brand__title" t-esc="kingdom_pdp_brand.name"/>
+                        <p class="kingdom-pdp-brand__text mb-0 o_translate_inline">
+                            Genuine product from an authorized brand partner with warranty support.
+                        </p>
+                    </div>
+                </div>
+            </t>
+
+            <!-- Promotions (click code to copy, Details to expand) -->
+            <div class="kingdom-pdp-offers o_wsale_product_details_content_section mb-4">
+                <t t-if="kingdom_pdp_promotions">
+                    <t t-foreach="kingdom_pdp_promotions" t-as="promo">
+                        <div class="kingdom-pdp-offers__item"
+                             t-att-data-promo-code="promo['code']">
+                            <div class="kingdom-pdp-offers__main">
+                                <div>
+                                    <strong t-esc="promo['title']"/>
+                                    <button type="button"
+                                            class="kingdom-pdp-offers__code js_kingdom_pdp_copy_code"
+                                            t-att-data-promo-code="promo['code']"
+                                            t-att-title="'Copy code %s' % promo['code']">
+                                        (<t t-esc="promo['code']"/>)
+                                    </button>
+                                    <p class="mb-0 text-muted" t-esc="promo['description']"/>
+                                </div>
+                                <button type="button"
+                                        class="kingdom-pdp-offers__details js_kingdom_pdp_offer_toggle"
+                                        aria-expanded="false">
+                                    <span class="o_translate_inline">Details &gt;</span>
+                                </button>
+                            </div>
+                            <div class="kingdom-pdp-offers__panel d-none">
+                                <p class="mb-2" t-esc="promo.get('detail') or promo.get('description') or ''"/>
+                                <button type="button"
+                                        class="btn btn-sm kingdom-pdp-offers__copy-btn js_kingdom_pdp_copy_code"
+                                        t-att-data-promo-code="promo['code']">
+                                    <i class="fa fa-clone me-1" aria-hidden="true"/>
+                                    <span class="o_translate_inline">Copy code</span>
+                                    <strong class="ms-1" t-esc="promo['code']"/>
+                                </button>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+                <t t-else="">
+                    <div class="kingdom-pdp-offers__item">
+                        <div class="kingdom-pdp-offers__main">
+                            <div>
+                                <strong class="o_translate_inline">Discount code</strong>
+                                <p class="mb-0 text-muted o_translate_inline">Use promo codes at checkout for extra savings.</p>
+                            </div>
+                            <a href="/shop/cart"
+                               class="kingdom-pdp-offers__details">
+                                <span class="o_translate_inline">Details &gt;</span>
+                            </a>
+                        </div>
+                    </div>
+                </t>
+            </div>
+
+            <!-- Shipping + checkout trust -->
+            <div class="kingdom-pdp-trust o_wsale_product_details_content_section mb-4">
+                <div class="kingdom-pdp-trust__box kingdom-pdp-trust__box--delivery">
+                    <div class="kingdom-pdp-trust__truck" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 32" width="36" height="24" fill="none">
+                            <path d="M2.5 8.2h22.2c.8 0 1.4.6 1.4 1.4v13.2H6.8c-2.4 0-4.3-1.9-4.3-4.3V8.2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                            <path d="M26.1 12.4h8.4c.5 0 1 .3 1.2.7l3.6 7.2c.2.3.2.7.2 1.1v1.4H26.1V12.4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                            <circle cx="12.2" cy="25.2" r="3.1" stroke="currentColor" stroke-width="1.6"/>
+                            <circle cx="33.6" cy="25.2" r="3.1" stroke="currentColor" stroke-width="1.6"/>
+                            <circle cx="38.6" cy="8.4" r="5.2" fill="#2f6fed"/>
+                            <path d="M38.6 5.8v3.1l2.1 1.2" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <p class="kingdom-pdp-trust__delivery mb-0">
+                        <span class="o_translate_inline">Estimate delivery times:</span>
+                        <strong class="o_translate_inline"> 12-26 days</strong>
+                        <span class="o_translate_inline"> (International)</span>
+                        <strong class="o_translate_inline"> 3-6 days</strong>
+                        <span class="o_translate_inline"> (Domestic).</span>
+                    </p>
+                </div>
+                <div class="kingdom-pdp-trust__box kingdom-pdp-trust__box--checkout">
+                    <div class="kingdom-pdp-trust__shield" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 3.2l7.2 2.4v6.2c0 4.4-3 7.4-7.2 9-4.2-1.6-7.2-4.6-7.2-9V5.6L12 3.2z"/>
+                            <path d="M8.6 12.1l2.2 2.2 4.6-4.8"/>
+                        </svg>
+                    </div>
+                    <h6 class="kingdom-pdp-trust__title">
+                        <span class="o_translate_inline">Guaranteed</span>
+                        <strong class="o_translate_inline"> Safe Checkout</strong>
+                    </h6>
+                    <div class="kingdom-pdp-trust__payments" aria-label="Payment methods">
+                        <img class="kingdom-pdp-payicon"
+                             src="/theme_kingdom/static/src/img/payment/google_pay.png"
+                             alt="Google Pay"
+                             width="48"
+                             height="32"
+                             loading="lazy"/>
+                        <img class="kingdom-pdp-payicon"
+                             src="/theme_kingdom/static/src/img/payment/apple_pay.png"
+                             alt="Apple Pay"
+                             width="48"
+                             height="32"
+                             loading="lazy"/>
+                        <img class="kingdom-pdp-payicon"
+                             src="/theme_kingdom/static/src/img/payment/visa.png"
+                             alt="Visa"
+                             width="48"
+                             height="32"
+                             loading="lazy"/>
+                        <img class="kingdom-pdp-payicon"
+                             src="/theme_kingdom/static/src/img/payment/mastercard.png"
+                             alt="Mastercard"
+                             width="48"
+                             height="32"
+                             loading="lazy"/>
+                        <img class="kingdom-pdp-payicon"
+                             src="/theme_kingdom/static/src/img/payment/paypal.png"
+                             alt="PayPal"
+                             width="48"
+                             height="32"
+                             loading="lazy"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SKU / category / tags -->
+            <div class="kingdom-pdp-info o_wsale_product_details_content_section mb-4">
+                <p t-if="kingdom_pdp_product_sku" class="kingdom-pdp-info__row mb-2">
+                    <span class="kingdom-pdp-info__label o_translate_inline">SKU</span>
+                    <span t-esc="kingdom_pdp_product_sku"/>
+                </p>
+                <p t-if="category" class="kingdom-pdp-info__row mb-2">
+                    <span class="kingdom-pdp-info__label o_translate_inline">Category</span>
+                    <a t-att-href="keep('%s/category/%s' % (shop_path, slug(category)))"
+                       t-esc="category.name"/>
+                </p>
+                <p t-if="product_variant.all_product_tag_ids" class="kingdom-pdp-info__row mb-0">
+                    <span class="kingdom-pdp-info__label o_translate_inline">Tags</span>
+                    <span t-esc="', '.join(product_variant.all_product_tag_ids.mapped('name'))"/>
+                </p>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Larger title + hide duplicate tag chips (shown in info block) -->
+    <template id="kingdom_product_detail_title"
+              inherit_id="website_sale.product_title"
+              name="Kingdom Product Title"
+              priority="20">
+        <xpath expr="//h1" position="attributes">
+            <attribute name="class" add="kingdom-pdp-title" separator=" "/>
+        </xpath>
+        <xpath expr="//h1" position="after">
+            <div class="kingdom-pdp-meta mb-3">
+                <div class="kingdom-pdp-meta__row d-flex flex-wrap align-items-center gap-3">
+                    <t t-if="product.rating_count">
+                        <a href="#o_product_page_reviews"
+                           class="kingdom-pdp-rating o_product_page_reviews_link text-decoration-none">
+                            <t t-call="portal_rating.rating_widget_stars_static">
+                                <t t-set="rating_avg" t-value="product.sudo().rating_avg"/>
+                                <t t-set="trans_text_plural">%s reviews</t>
+                                <t t-set="trans_text_singular">%s review</t>
+                                <t t-set="rating_count"
+                                   t-value="(trans_text_plural if product.rating_count > 1 else trans_text_singular) % product.rating_count"/>
+                            </t>
+                        </a>
+                    </t>
+                    <t t-if="kingdom_pdp_sold_count">
+                        <span class="kingdom-pdp-sold">
+                            <i class="fa fa-fire text-danger me-1" aria-hidden="true"/>
+                            <span class="o_translate_inline">
+                                <t t-esc="kingdom_pdp_sold_count"/> sold in last 24 hours
+                            </span>
+                        </span>
+                    </t>
+                </div>
+                <t t-if="kingdom_pdp_live_viewers">
+                    <p class="kingdom-pdp-viewers mb-0 mt-2">
+                        <span class="kingdom-pdp-viewers__dot" aria-hidden="true"/>
+                        <span class="o_translate_inline">
+                            <t t-esc="kingdom_pdp_live_viewers"/> people are viewing this right now
+                        </span>
+                    </p>
+                </t>
+            </div>
+        </xpath>
+        <xpath expr="//t[@t-if=&quot;is_view_active('website_sale.product_comment')&quot;]" position="replace"/>
+        <xpath expr="//t[@t-call='website_sale.product_tags']" position="replace"/>
+    </template>
+
+    <!-- Restyle core CTA buttons -->
+    <template id="kingdom_product_detail_cta"
+              inherit_id="website_sale.cta_wrapper"
+              name="Kingdom Product CTA"
+              priority="20">
+        <xpath expr="//a[@id='add_to_cart']" position="attributes">
+            <attribute name="class" add="kingdom-pdp-addtocart" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="kingdom_product_detail_buy_now"
+              inherit_id="website_sale.product_buy_now"
+              name="Kingdom Buy Now Button"
+              priority="20">
+        <xpath expr="//a[hasclass('o_we_buy_now')]" position="attributes">
+            <attribute name="class" add="kingdom-pdp-buynow" separator=" "/>
+        </xpath>
+    </template>
+
+    <!-- Compact CTA option block (no full-width gap after icons). -->
+    <template id="kingdom_product_detail_hide_option_buttons"
+              inherit_id="website_sale.cta_wrapper"
+              name="Kingdom CTA Option Buttons"
+              priority="25">
+        <xpath expr="//div[@id='product_option_block']" position="attributes">
+            <attribute name="t-attf-class" add="kingdom-pdp-native-options" remove="w-100 w-sm-auto" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@id='add_to_cart_wrap']" position="attributes">
+            <attribute name="t-attf-class" remove="w-100" separator=" "/>
+        </xpath>
+    </template>
+
+</odoo>

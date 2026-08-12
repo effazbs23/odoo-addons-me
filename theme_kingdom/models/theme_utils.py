@@ -97,6 +97,17 @@ class ThemeUtils(models.AbstractModel):
         self._disable_legacy_kingdom_header()
         self.enable_view('theme_kingdom.template_header_kingdom')
         self.enable_view('theme_kingdom.template_footer_kingdom')
+        self._enable_kingdom_product_page_views()
+
+    def _enable_kingdom_product_page_views(self):
+        """Turn on premium product page blocks (buy now, ratings, wishlist, compare)."""
+        for xml_id in (
+            'website_sale.product_buy_now',
+            'website_sale.product_comment',
+            'website_sale_wishlist.product_add_to_wishlist',
+            'website_sale_comparison.product_add_to_compare',
+        ):
+            self.enable_view(xml_id)
 
     def _theme_kingdom_post_copy(self, mod):
         # When Theme Kingdom is applied to a website, enable Kingdom chrome
@@ -124,6 +135,23 @@ class ThemeUtils(models.AbstractModel):
         if theme:
             for website in self.env['website'].search([('theme_id', '=', theme.id)]):
                 self.with_context(website_id=website.id)._enable_kingdom_chrome()
+        ICP.set_param(flag, '1')
+        return True
+
+    @api.model
+    def _sync_kingdom_product_page_views(self):
+        """One-time: enable premium PDP blocks on every website using Theme Kingdom."""
+        ICP = self.env['ir.config_parameter'].sudo()
+        flag = 'theme_kingdom.sync_product_page_views_v1'
+        if ICP.get_param(flag):
+            return True
+        theme = self.env['ir.module.module'].search([
+            ('name', '=', 'theme_kingdom'),
+            ('state', '=', 'installed'),
+        ], limit=1)
+        if theme:
+            for website in self.env['website'].search([('theme_id', '=', theme.id)]):
+                self.with_context(website_id=website.id)._enable_kingdom_product_page_views()
         ICP.set_param(flag, '1')
         return True
 

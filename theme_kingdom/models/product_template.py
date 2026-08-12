@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import timedelta
+
 from odoo import api, fields, models
 from odoo.fields import Domain
 from odoo.http import request
@@ -249,3 +251,137 @@ class ProductTemplate(models.Model):
                 r.id,
             )
         )
+
+    def kingdom_get_recent_sold_qty(self, hours=24):
+        """Units sold on confirmed orders in the last N hours (social proof)."""
+        self.ensure_one()
+        if not self.product_variant_ids:
+            return 0
+        since = fields.Datetime.now() - timedelta(hours=hours)
+        grouped = self.env['sale.order.line'].sudo()._read_group(
+            domain=[
+                ('state', 'in', ['sale', 'done']),
+                ('product_id', 'in', self.product_variant_ids.ids),
+                ('order_id.date_order', '>=', since),
+            ],
+            aggregates=['product_uom_qty:sum'],
+        )
+        return int(grouped[0][0] or 0) if grouped else 0
+
+    @api.model
+    def kingdom_get_live_viewer_count(self, product, website, minutes=15):
+        """Distinct visitors who opened this product page recently."""
+        if not product or not website:
+            return 0
+        since = fields.Datetime.now() - timedelta(minutes=minutes)
+        url_hint = product.website_url or ''
+        if not url_hint:
+            return 0
+        tracks = self.env['website.track'].sudo().search([
+            ('visit_datetime', '>=', since),
+            ('url', 'ilike', url_hint),
+        ])
+        return len(tracks.mapped('visitor_id'))
+
+    def kingdom_get_offer_countdown_end(self, website=None, pricelist=None):
+        """Nearest active pricelist rule end date for this product."""
+        self.ensure_one()
+        website = (
+            website
+            or self._kingdom_request_website()
+            or self.env['website'].get_current_website()
+        )
+        if not website:
+            return False
+        pricelist = self._kingdom_resolve_pricelist(website, pricelist=pricelist)
+        now = fields.Datetime.now()
+        ends = []
+        PricelistModel = self.env['product.pricelist']
+        for item in pricelist.item_ids:
+            if not PricelistModel._pricelist_item_is_active(item, now):
+                continue
+            if not item.date_end or item.date_end <= now:
+                continue
+            if self.id not in PricelistModel._templates_from_pricelist_item(item).ids:
+                continue
+            ends.append(item.date_end)
+        return min(ends) if ends else False
+
+    def kingdom_get_bulk_pricing_tiers(self, website=None, pricelist=None, max_tiers=4):
+        """Quantity tiers from pricelist min-quantity rules for the PDP table."""
+        self.ensure_one()
+        website = (
+            website
+            or self._kingdom_request_website()
+            or self.env['website'].get_current_website()
+        )
+        pricelist = self._kingdom_resolve_pricelist(website, pricelist=pricelist)
+        currency = pricelist.currency_id or (website.currency_id if website else self.currency_id)
+        now = fields.Datetime.now()
+        PricelistModel = self.env['product.pricelist']
+        items = pricelist.item_ids.filtered(
+            lambda item: item.min_quantity
+            and PricelistModel._pricelist_item_is_active(item, now)
+            and self.id in PricelistModel._templates_from_pricelist_item(item).ids
+        ).sorted('min_quantity')
+
+        breakpoints = [1.0]
+        breakpoints.extend(items.mapped('min_quantity'))
+        breakpoints = sorted(set(breakpoints))[:max_tiers]
+
+        tiers = []
+        for index, min_qty in enumerate(breakpoints):
+            next_qty = breakpoints[index + 1] if index + 1 < len(breakpoints) else None
+            max_qty = (next_qty - 1) if next_qty and next_qty > min_qty else False
+            if max_qty and max_qty >= min_qty:
+                label = f'{int(min_qty)} - {int(max_qty)} Units'
+            elif min_qty <= 1:
+                label = f'1 - {int(max_qty)} Units' if max_qty else '1+ Units'
+            else:
+                label = f'{int(min_qty)}+ Units'
+
+            unit_price = pricelist.get_product_offer_price(self, quantity=min_qty)
+            tiers.append({
+                'label': label,
+                'min_qty': min_qty,
+                'max_qty': max_qty,
+                'unit_price': unit_price,
+                'currency_id': currency.id,
+                'selected': index == 0,
+            })
+        return tiers
+
+    def kingdom_get_pdp_promotions(self, website=None, limit=3):
+        """Visible promo-code programs for the offers block."""
+        website = (
+            website
+            or self._kingdom_request_website()
+            or self.env['website'].get_current_website()
+        )
+        if not website:
+            return []
+        Program = self.env['loyalty.program'].sudo()
+        programs = Program.search([
+            ('active', '=', True),
+            ('trigger', '=', 'with_code'),
+            '|', ('website_id', '=', False), ('website_id', '=', website.id),
+        ], limit=limit, order='sequence, id')
+        promos = []
+        for program in programs:
+            rule = program.rule_ids[:1]
+            code = rule.code if rule else False
+            if not code:
+                continue
+            reward = program.reward_ids[:1]
+            detail = reward.description if reward else False
+            if not detail:
+                detail = (
+                    'Apply code "%s" at checkout to unlock this offer.' % code
+                )
+            promos.append({
+                'title': program.name,
+                'code': code,
+                'description': program.portal_point_name or program.name,
+                'detail': detail,
+            })
+        return promos
