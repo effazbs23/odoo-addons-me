@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Restore / rewrite legacy Brands snippet key after manufacturer → brand rename. -->
+    <function model="theme.utils" name="_fix_legacy_brands_snippet_key"/>
+</odoo>

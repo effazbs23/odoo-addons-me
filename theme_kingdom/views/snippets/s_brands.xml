@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="s_brands" name="Kingdom Brands">
+        <t t-set="brand_slides"
+           t-value="'kingdom.brand' in env and env['kingdom.brand'].sudo().get_website_brand_slides(per_slide=2) or []"/>
+        <t t-set="has_brands" t-value="bool(brand_slides)"/>
+
+        <section class="s_brands home-brands-section carousel-grid"
+                 data-snippet="theme_kingdom.s_brands"
+                 data-kingdom-live-snippet="s_brands"
+                 data-name="Brands"
+                 aria-labelledby="BrandsHeading">
+            <div class="k-container container">
+                <div class="home-brands-head title">
+                    <h2 id="BrandsHeading" class="o_translate_inline"><strong>Brands</strong></h2>
+                </div>
+
+                <div class="carousel-container swiperCarousel carousel-brand">
+                    <div class="swiper-button-prev brand-carousel-arrow" aria-label="Previous brands"/>
+                    <div class="swiper-button-next brand-carousel-arrow" aria-label="Next brands"/>
+                    <div class="swiper brand brand-swiper">
+                        <div class="swiper-wrapper">
+                            <!-- Configured brands from Website → Brands -->
+                            <t t-if="has_brands">
+                                <t t-foreach="brand_slides" t-as="slide_brands">
+                                    <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                        <t t-foreach="slide_brands" t-as="brand">
+                                            <t t-set="brand_href"
+                                               t-value="brand.get_shop_url()"/>
+                                            <div class="brand-item">
+                                                <a class="brand-picture"
+                                                   t-att-href="brand_href"
+                                                   t-att-title="brand.name">
+                                                    <img t-if="brand.image"
+                                                         t-att-src="'/web/image/kingdom.brand/%s/image' % brand.id"
+                                                         t-att-alt="brand.name"
+                                                         loading="lazy"/>
+                                                    <span t-else=""
+                                                          class="brand-picture-fallback"
+                                                          t-esc="brand.name"/>
+                                                </a>
+                                                <div class="brand-name">
+                                                    <a t-att-href="brand_href" t-esc="brand.name"/>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </t>
+                            </t>
+                            <!-- Fallback demo brands when none are configured -->
+                            <t t-else="">
+                                <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Acer">
+                                            <img src="/theme_kingdom/static/src/images/0000151_acer_400.webp" alt="Acer" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Acer</a></div>
+                                    </div>
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Cisco">
+                                            <img src="/theme_kingdom/static/src/images/0000152_cisco_400.webp" alt="Cisco" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Cisco</a></div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Iittala">
+                                            <img src="/theme_kingdom/static/src/images/0000153_iittala_400.webp" alt="Iittala" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Iittala</a></div>
+                                    </div>
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Panasonic">
+                                            <img src="/theme_kingdom/static/src/images/0000154_panasonic_400.webp" alt="Panasonic" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Panasonic</a></div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Philips">
+                                            <img src="/theme_kingdom/static/src/images/0000155_philips_400.webp" alt="Philips" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Philips</a></div>
+                                    </div>
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Sony">
+                                            <img src="/theme_kingdom/static/src/images/0000157_sony_400.webp" alt="Sony" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Sony</a></div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Umbra">
+                                            <img src="/theme_kingdom/static/src/images/0000159_umbra_400.webp" alt="Umbra" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Umbra</a></div>
+                                    </div>
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Canon">
+                                            <img src="/theme_kingdom/static/src/images/0000198_canon_400.webp" alt="Canon" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Canon</a></div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Corkcicle">
+                                            <img src="/theme_kingdom/static/src/images/0000160_corkcicle_400.webp" alt="Corkcicle" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Corkcicle</a></div>
+                                    </div>
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Apple">
+                                            <img src="/theme_kingdom/static/src/images/0000197_apple_400.webp" alt="Apple" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Apple</a></div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Hitachi">
+                                            <img src="/theme_kingdom/static/src/images/0000742_hitachi_400.webp" alt="Hitachi" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Hitachi</a></div>
+                                    </div>
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Haier">
+                                            <img src="/theme_kingdom/static/src/images/0000743_haiser_400.webp" alt="Haier" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Haier</a></div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="BRÜHM">
+                                            <img src="/theme_kingdom/static/src/images/0000744_bruhm_400.webp" alt="BRÜHM" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">BRÜHM</a></div>
+                                    </div>
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Scanfrost">
+                                            <img src="/theme_kingdom/static/src/images/0000745_scanfrost_400.webp" alt="Scanfrost" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Scanfrost</a></div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Walton">
+                                            <img src="/theme_kingdom/static/src/images/0000746_walton_400.webp" alt="Walton" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Walton</a></div>
+                                    </div>
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Dometic">
+                                            <img src="/theme_kingdom/static/src/images/0000747_dometic-coolmatic_400.webp" alt="Dometic" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Dometic</a></div>
+                                    </div>
+                                </div>
+                                <div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="LG">
+                                            <img src="/theme_kingdom/static/src/images/0000121_lg_400.webp" alt="LG" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">LG</a></div>
+                                    </div>
+                                    <div class="brand-item">
+                                        <a class="brand-picture" href="#" title="Corkcicle">
+                                            <img src="/theme_kingdom/static/src/images/0000123_corkcicle_400.webp" alt="Corkcicle" loading="lazy"/>
+                                        </a>
+                                        <div class="brand-name"><a href="#">Corkcicle</a></div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <!-- Legacy key kept so saved pages / live-snippet calls to
+         theme_kingdom.s_manufacturers keep working after the Brands rename. -->
+    <template id="s_manufacturers" name="Kingdom Brands (legacy)">
+        <t t-call="theme_kingdom.s_brands"/>
+    </template>
+
+</odoo>

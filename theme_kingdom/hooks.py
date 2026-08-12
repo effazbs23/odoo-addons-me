@@ -133,7 +133,9 @@ _KINGDOM_SNIPPET_CLASS_FIXES = (
     ('s_promo_banners oe_structure', 's_promo_banners'),
     ('s_promo_banner oe_structure', 's_promo_banner'),
     ('s_blog_news oe_structure', 's_blog_news'),
-    ('s_manufacturers oe_structure', 's_manufacturers'),
+    ('s_brands oe_structure', 's_brands'),
+    ('s_manufacturers oe_structure', 's_brands'),
+    ('s_manufacturers', 's_brands'),
     ('s_service_highlights oe_structure', 's_service_highlights'),
 )
 
@@ -247,6 +249,7 @@ def _fix_stale_multi_website_action_contexts(env):
     """Clear legacy multi-website menu contexts left after reverting to global config."""
     xmlids = (
         'theme_kingdom.action_bestsale_products',
+        'theme_kingdom.action_kingdom_brand',
         'theme_kingdom.action_kingdom_manufacturer',
         'theme_kingdom.action_kingdom_deals_of_day',
         'theme_kingdom.action_featured_products',
@@ -261,8 +264,201 @@ def _fix_stale_multi_website_action_contexts(env):
             action.sudo().write({'context': {}})
 
 
+def _table_exists(cr, name):
+    cr.execute(
+        """
+        SELECT EXISTS (
+            SELECT FROM information_schema.tables
+            WHERE table_name = %s
+        )
+        """,
+        (name,),
+    )
+    return bool(cr.fetchone()[0])
+
+
+def _column_exists(cr, table, column):
+    cr.execute(
+        """
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = %s AND column_name = %s
+        """,
+        (table, column),
+    )
+    return bool(cr.fetchone())
+
+
+def _rename_manufacturer_to_brand(cr):
+    """Rename kingdom.manufacturer → kingdom.brand (table, fields, xmlids)."""
+    if _table_exists(cr, 'kingdom_manufacturer') and not _table_exists(cr, 'kingdom_brand'):
+        cr.execute('ALTER TABLE kingdom_manufacturer RENAME TO kingdom_brand')
+    if _table_exists(cr, 'kingdom_brand'):
+        cr.execute(
+            'ALTER INDEX IF EXISTS kingdom_manufacturer_pkey RENAME TO kingdom_brand_pkey'
+        )
+
+    if _column_exists(cr, 'product_template', 'kingdom_manufacturer_id') and not _column_exists(
+        cr, 'product_template', 'kingdom_brand_id'
+    ):
+        cr.execute(
+            'ALTER TABLE product_template '
+            'RENAME COLUMN kingdom_manufacturer_id TO kingdom_brand_id'
+        )
+        cr.execute(
+            'ALTER INDEX IF EXISTS product_template_kingdom_manufacturer_id_index '
+            'RENAME TO product_template_kingdom_brand_id_index'
+        )
+
+    cr.execute(
+        """
+        UPDATE ir_model
+           SET model = 'kingdom.brand'
+         WHERE model = 'kingdom.manufacturer'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE ir_model_fields
+           SET model = 'kingdom.brand'
+         WHERE model = 'kingdom.manufacturer'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE ir_model_fields
+           SET relation = 'kingdom.brand'
+         WHERE relation = 'kingdom.manufacturer'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE ir_model_fields
+           SET name = 'kingdom_brand_id'
+         WHERE model = 'product.template'
+           AND name = 'kingdom_manufacturer_id'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE ir_model_fields
+           SET relation_field = 'kingdom_brand_id'
+         WHERE relation_field = 'kingdom_manufacturer_id'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE ir_model_data
+           SET name = 'model_kingdom_brand'
+         WHERE module = 'theme_kingdom'
+           AND name = 'model_kingdom_manufacturer'
+           AND model = 'ir.model'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE ir_attachment
+           SET res_model = 'kingdom.brand'
+         WHERE res_model = 'kingdom.manufacturer'
+        """
+    )
+
+    xmlid_renames = [
+        ('view_kingdom_manufacturer_list', 'view_kingdom_brand_list'),
+        ('view_kingdom_manufacturer_form', 'view_kingdom_brand_form'),
+        ('action_kingdom_manufacturer', 'action_kingdom_brand'),
+        ('menu_kingdom_manufacturer', 'menu_kingdom_brand'),
+        ('s_manufacturers', 's_brands'),
+        ('product_template_form_view_manufacturer', 'product_template_form_view_brand'),
+        ('product_template_tree_view_manufacturer', 'product_template_tree_view_brand'),
+        ('access_kingdom_manufacturer', 'access_kingdom_brand'),
+        ('access_kingdom_manufacturer_public', 'access_kingdom_brand_public'),
+        ('access_kingdom_manufacturer_portal', 'access_kingdom_brand_portal'),
+    ]
+    for old, new in xmlid_renames:
+        cr.execute(
+            """
+            SELECT id FROM ir_model_data
+             WHERE module = 'theme_kingdom' AND name = %s
+            """,
+            (new,),
+        )
+        if cr.fetchone():
+            cr.execute(
+                """
+                DELETE FROM ir_model_data
+                 WHERE module = 'theme_kingdom' AND name = %s
+                """,
+                (old,),
+            )
+        else:
+            cr.execute(
+                """
+                UPDATE ir_model_data
+                   SET name = %s
+                 WHERE module = 'theme_kingdom' AND name = %s
+                """,
+                (new, old),
+            )
+
+    # Best-effort QWeb arch rewrite (translated arch_db may be jsonb).
+    try:
+        with cr.savepoint():
+            cr.execute(
+                """
+                UPDATE ir_ui_view
+                   SET arch_db = replace(
+                        replace(
+                            replace(arch_db::text, 'kingdom.manufacturer', 'kingdom.brand'),
+                            's_manufacturers', 's_brands'
+                        ),
+                        'kingdom_manufacturer_id', 'kingdom_brand_id'
+                   )::jsonb
+                 WHERE arch_db::text LIKE '%manufacturer%'
+                """
+            )
+    except Exception:
+        # Non-jsonb DBs / partial installs — theme reload will refresh arches.
+        pass
+
+    if _table_exists(cr, 'theme_ir_ui_view'):
+        try:
+            with cr.savepoint():
+                cr.execute(
+                    """
+                    UPDATE theme_ir_ui_view
+                       SET arch = replace(
+                            replace(
+                                replace(arch::text, 'kingdom.manufacturer', 'kingdom.brand'),
+                                's_manufacturers', 's_brands'
+                            ),
+                            'kingdom_manufacturer_id', 'kingdom_brand_id'
+                       )::jsonb
+                     WHERE arch::text LIKE '%manufacturer%'
+                    """
+                )
+        except Exception:
+            try:
+                with cr.savepoint():
+                    cr.execute(
+                        """
+                        UPDATE theme_ir_ui_view
+                           SET arch = replace(
+                                replace(
+                                    replace(arch, 'kingdom.manufacturer', 'kingdom.brand'),
+                                    's_manufacturers', 's_brands'
+                                ),
+                                'kingdom_manufacturer_id', 'kingdom_brand_id'
+                           )
+                         WHERE arch LIKE '%manufacturer%'
+                        """
+                    )
+            except Exception:
+                pass
+
+
 def pre_init_hook(env):
     """Prepare schema and migrate legacy data before module models load."""
+    _rename_manufacturer_to_brand(env.cr)
     _ensure_website_menu_kingdom_tab_column(env)
     _migrate_deals_pricelist_items_to_products(env)
     _fix_stale_multi_website_action_contexts(env)

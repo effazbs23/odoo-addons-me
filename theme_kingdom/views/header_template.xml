@@ -10,7 +10,7 @@
     </template>
 
     <template id="kingdom_header_category_item" name="Kingdom Header Category Item">
-        <t t-set="category_children" t-value="category.sudo().child_id"/>
+        <t t-set="category_children" t-value="category.child_id"/>
         <li t-attf-class="mm-nav-item #{category_children and 'has-children' or ''}">
             <a t-att-href="category_children and '#' or ('/shop/category/%s' % category.id)"
                t-attf-class="#{category_children and 'mm-nav-image' or ''}">
@@ -22,23 +22,23 @@
                          height="32"
                          loading="lazy"/>
                 </span>
-                <span class="category-name" t-out="category.name"/>
+                <span class="category-name" t-field="category.name"/>
                 <span t-if="category_children" class="right-arrow icon icon-right-arrow" aria-hidden="true"/>
             </a>
             <div t-if="category_children" class="sublist">
                 <ul class="sublist-list ps-0 mb-0">
                     <t t-foreach="category_children" t-as="child">
-                        <t t-set="child_children" t-value="child.sudo().child_id"/>
+                        <t t-set="child_children" t-value="child.child_id"/>
                         <li t-attf-class="mm-nav-item #{child_children and 'has-children' or ''}">
                             <a t-att-href="child_children and '#' or ('/shop/category/%s' % child.id)">
-                                <span class="category-name" t-out="child.name"/>
+                                <span class="category-name" t-field="child.name"/>
                                 <span t-if="child_children" class="right-arrow icon icon-right-arrow" aria-hidden="true"/>
                             </a>
                             <div t-if="child_children" class="sublist">
                                 <ul class="sublist-list ps-0 mb-0">
                                     <li t-foreach="child_children" t-as="grandchild" class="mm-nav-item">
                                         <a t-att-href="'/shop/category/%s' % grandchild.id">
-                                            <span class="category-name" t-out="grandchild.name"/>
+                                            <span class="category-name" t-field="grandchild.name"/>
                                         </a>
                                     </li>
                                 </ul>
@@ -54,14 +54,14 @@
         <t t-set="submenus" t-value="menu_item.child_id"/>
         <li t-attf-class="mm-nav-item #{submenus and 'has-children' or ''}">
             <a t-att-href="menu_item.url or '#'">
-                <span class="category-name" t-out="menu_item.name"/>
+                <span class="category-name" t-field="menu_item.name"/>
                 <span t-if="submenus" class="right-arrow icon icon-right-arrow" aria-hidden="true"/>
             </a>
             <div t-if="submenus" class="sublist">
                 <ul class="sublist-list ps-0 mb-0">
                     <li t-foreach="submenus" t-as="submenu" class="mm-nav-item">
                         <a t-att-href="submenu.url or '#'">
-                            <span class="category-name" t-out="submenu.name"/>
+                            <span class="category-name" t-field="submenu.name"/>
                         </a>
                     </li>
                 </ul>
@@ -108,11 +108,11 @@
                          role="region"
                          aria-label="Announcement">
 
-                        <div id="announcement-slider" class="swiper swiper-fade" dir="ltr">
+                        <div id="announcement-slider" class="swiper swiper-fade">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide" role="group" aria-label="1 / 1">
                                     <span class="announcement-item">
-                                        <span class="announcement-title">
+                                        <span class="announcement-title o_translate_inline">
                                             Up to 25% off Every Friday &amp; Saturday
                                         </span>
                                     </span>
@@ -177,10 +177,10 @@
                             <div class="header-lower-right">
                                 <div class="header-selectors-wrapper">
                                     <div class="header-terms header-link-top">
-                                        <a href="/terms"><i class="bi bi-asterisk" aria-hidden="true"/><span>Terms &amp; conditions</span></a>
+                                        <a href="/terms"><i class="bi bi-asterisk" aria-hidden="true"/><span class="o_translate_inline">Terms &amp; conditions</span></a>
                                     </div>
                                     <div class="header-storelocation header-link-top">
-                                        <a href="/contactus"><i class="bi bi-person" aria-hidden="true"/><span>Contact Us</span></a>
+                                        <a href="/contactus"><i class="bi bi-person" aria-hidden="true"/><span class="o_translate_inline">Contact Us</span></a>
                                     </div>
                                     <div class="header-inline-selectors" aria-label="Store selectors">
                                         <t t-if="hasPricelistDropdown">
@@ -215,7 +215,7 @@
                                         </t>
                                         <t t-call="website.language_selector"
                                            codes="True"
-                                           _div_classes.f="d-inline-block"
+                                           _div_classes.f="d-inline-block dropdown"
                                            _btn_class.f="k-inline-select dropdown-toggle border-0 bg-transparent p-0 shadow-none"
                                            _dropdown_menu_class.f="dropdown-menu-end"/>
                                     </div>
@@ -231,11 +231,13 @@
                                             </li>
                                             <li t-if="website.has_ecommerce_access()" class="o_wsale_my_wish">
                                                 <a href="/shop/wishlist" class="ico-wishlist">
-                                                    Wishlist (<span class="my_wish_quantity" t-out="wishcount"/>)
+                                                    <span class="o_translate_inline">Wishlist</span>
+                                                    (<t> (</t><span class="my_wish_quantity" t-out="wishcount"/><t>)</t>
                                                 </a>
                                             </li>
                                             <li class="user-account">
-                                                <a t-att-href="is_logged_in and '/my/home' or '/web/login'">Account</a>
+                                                <a t-att-href="is_logged_in and '/my/home' or '/web/login'"
+                                                   class="o_translate_inline">Account</a>
                                             </li>
                                             <li t-attf-class="o_wsale_my_cart #{'' if website.has_ecommerce_access() else 'd-none'}"
                                                 id="topcartlink">
@@ -260,7 +262,7 @@
                     <div class="container">
                         <div class="megamenu-wrapper align-items-center gap-1 gap-lg-2 w-100">
                             <div class="header-left-menu-dropdown">
-                                <a class="header-left-menu-button" href="/shop">Categories</a>
+                                <a class="header-left-menu-button o_translate_inline" href="/shop">Categories</a>
                                 <div class="mm-navbar navbar mobile-mm-navbar red-menu list-view show-image border-0 rounded-0 p-0">
                                     <nav class="nav-navbar" aria-label="Browse categories">
                                         <ul class="nav-menu nav-center ps-0 mb-0">
@@ -299,8 +301,9 @@
         <li class="nav-item border-bottom border-light-subtle pb-1 mb-1">
             <div class="d-flex align-items-center justify-content-between gap-2">
                 <a class="nav-link px-0 text-dark flex-grow-1"
-                   t-att-href="'/shop/category/%s' % category.id"
-                   t-out="category.name"/>
+                   t-att-href="'/shop/category/%s' % category.id">
+                    <span t-field="category.name"/>
+                </a>
                 <button t-if="category.child_id"
                         type="button"
                         class="btn btn-sm btn-link text-dark px-2 k-mobile-cat-toggle"
@@ -314,20 +317,17 @@
                 class="nav flex-column ps-3 k-mobile-cat-sub">
                 <li t-foreach="category.child_id" t-as="child">
                     <a class="nav-link px-0 text-dark py-1 small"
-                       t-att-href="'/shop/category/%s' % child.id"
-                       t-out="child.name"/>
+                       t-att-href="'/shop/category/%s' % child.id">
+                        <span t-field="child.name"/>
+                    </a>
                 </li>
             </ul>
         </li>
     </template>
 
     <template id="kingdom_mobile_navigation_drawer" name="Kingdom Mobile Navigation Drawer">
-        <t t-set="website_sale_cart" t-value="request.cart"/>
-        <t t-set="wishcount" t-value="len(request.env['product.wishlist'].current())"/>
-        <t t-set="kingdom_root_categories" t-value="request.env['product.public.category'].kingdom_get_header_roots()"/>
-        <t t-set="kingdom_top_menus" t-value="website.menu_id.child_id"/>
-        <t t-set="is_logged_in" t-value="website.user_id != user_id"/>
-
+        <!-- Caller (Kingdom header) must set: website_sale_cart, wishcount,
+             kingdom_root_categories, kingdom_top_menus, is_logged_in. -->
         <div class="offcanvas offcanvas-start mobile-navigation-drawer"
              tabindex="-1"
              id="MobileNavigationDrawer"
@@ -341,7 +341,7 @@
             <div class="offcanvas-body">
                 <a class="btn btn-outline-secondary w-100 mb-3 fw-semibold" href="/shop">
                     <i class="bi bi-grid-3x3-gap me-2" aria-hidden="true"/>
-                    Categories
+                    <span class="o_translate_inline">Categories</span>
                 </a>
                 <ul class="nav flex-column gap-1 mb-3">
                     <t t-foreach="kingdom_root_categories" t-as="category">
@@ -352,14 +352,16 @@
                     <t t-foreach="kingdom_top_menus" t-as="menu_item">
                         <li>
                             <a class="nav-link px-0 text-dark"
-                               t-att-href="menu_item.url or '#'"
-                               t-out="menu_item.name"/>
+                               t-att-href="menu_item.url or '#'">
+                                <span t-field="menu_item.name"/>
+                            </a>
                         </li>
                         <t t-if="menu_item.child_id">
                             <li t-foreach="menu_item.child_id" t-as="submenu" class="ps-3">
                                 <a class="nav-link px-0 text-dark py-1 small"
-                                   t-att-href="submenu.url or '#'"
-                                   t-out="submenu.name"/>
+                                   t-att-href="submenu.url or '#'">
+                                    <span t-field="submenu.name"/>
+                                </a>
                             </li>
                         </t>
                     </t>
@@ -379,8 +381,14 @@
                     </div>
                 </form>
                 <div class="border-top pt-3 small">
-                    <p class="mb-2"><a href="/terms">Terms &amp; conditions</a></p>
-                    <p class="mb-2"><a href="/contactus">Contact Us</a></p>
+                    <div class="mb-3" t-if="frontend_languages and len(frontend_languages) &gt; 1">
+                        <t t-call="website.language_selector"
+                           codes="True"
+                           _div_classes.f="dropdown"
+                           _btn_class.f="btn btn-outline-secondary btn-sm dropdown-toggle"/>
+                    </div>
+                    <p class="mb-2"><a href="/terms" class="o_translate_inline">Terms &amp; conditions</a></p>
+                    <p class="mb-2"><a href="/contactus" class="o_translate_inline">Contact Us</a></p>
                     <p class="mb-2">
                         <a t-att-href="'tel:%s' % (res_company.phone or '+8801719304086')"
                            t-out="res_company.phone or '+8801719304086'"/>
@@ -388,11 +396,13 @@
                     <p class="mb-0">
                         <span t-if="website.has_ecommerce_access()" class="o_wsale_my_wish d-inline">
                             <a href="/shop/wishlist">
-                                Wishlist (<span class="my_wish_quantity" t-out="wishcount"/>)
+                                <span class="o_translate_inline">Wishlist</span>
+                                <t> (</t><span class="my_wish_quantity" t-out="wishcount"/><t>)</t>
                             </a>
                         </span>
                         <span t-if="website.has_ecommerce_access()" class="text-muted mx-2">|</span>
-                        <a t-att-href="is_logged_in and '/my/home' or '/web/login'">Account</a>
+                        <a t-att-href="is_logged_in and '/my/home' or '/web/login'"
+                           class="o_translate_inline">Account</a>
                     </p>
                 </div>
             </div>

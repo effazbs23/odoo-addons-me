@@ -50,6 +50,7 @@ export class KingdomLiveSnippet extends Interaction {
         'section.category-dual-section[data-snippet]',
         'section.s_category_slider[data-snippet]',
         'section.dealoftheday-wrapper[data-snippet]',
+        'section.s_brands[data-snippet]',
         'section.s_manufacturers[data-snippet]',
         'section.s_coming_soon[data-snippet]',
     ].join(', ');
@@ -101,43 +102,8 @@ export class KingdomLiveSnippet extends Interaction {
         if (this._isWebsiteEditorContext()) {
             return;
         }
-        const snippetKey = this._getSnippetKey();
-        if (!snippetKey) {
-            return;
-        }
-        const html = await this.waitFor(
-            rpc('/theme_kingdom/snippet/render', { snippet_key: snippetKey })
-        );
-        if (!html) {
-            return;
-        }
-        // Editor may have started while the RPC was in flight.
-        if (this._isWebsiteEditorContext()) {
-            return;
-        }
-        const container = this.el.querySelector('.k-container');
-        if (!container) {
-            return;
-        }
-        const temp = document.createElement('div');
-        temp.innerHTML = html;
-        const freshSection = temp.querySelector('[data-kingdom-live-snippet], section[data-snippet]');
-        const freshContainer = freshSection && freshSection.querySelector('.k-container');
-        if (!freshContainer) {
-            return;
-        }
-        this._stripViewBranding(freshContainer);
-        if (freshSection.classList.contains('d-none') && !this.el.classList.contains('d-none')) {
-            this.el.classList.add('d-none');
-        } else if (!freshSection.classList.contains('d-none')) {
-            this.el.classList.remove('d-none');
-        }
-        this.services['public.interactions'].stopInteractions(container);
-        container.replaceWith(freshContainer);
-        await this.waitFor(
-            this.services['public.interactions'].startInteractions(this.el)
-        );
-        this.el.dispatchEvent(new CustomEvent('kingdom-live-refreshed'));
+        // Do not await snippet RPCs before first paint — that made every page with
+        // Kingdom carousels feel sluggish. Refresh after mount instead.
     }
 
     start() {
@@ -145,10 +111,53 @@ export class KingdomLiveSnippet extends Interaction {
         if (!snippetKey) {
             return;
         }
-        window.requestAnimationFrame(() => {
-            this._initSnippetWidgets(snippetKey);
-            this.el.dispatchEvent(new CustomEvent('kingdom-live-refreshed'));
-        });
+        if (this._isWebsiteEditorContext()) {
+            window.requestAnimationFrame(() => {
+                this._initSnippetWidgets(snippetKey);
+                this.el.dispatchEvent(new CustomEvent('kingdom-live-refreshed'));
+            });
+            return;
+        }
+        // Refresh first, then bind Swiper to the final DOM (arrows break if we
+        // init on SSR nodes and then replace the container).
+        this._refreshLiveSnippet(snippetKey);
+    }
+
+    async _refreshLiveSnippet(snippetKey) {
+        let refreshed = false;
+        try {
+            const html = await this.waitFor(
+                rpc('/theme_kingdom/snippet/render', { snippet_key: snippetKey })
+            );
+            if (html && !this._isWebsiteEditorContext()) {
+                const container = this.el.querySelector('.k-container');
+                if (container) {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = html;
+                    const freshSection = temp.querySelector('[data-kingdom-live-snippet], section[data-snippet]');
+                    const freshContainer = freshSection && freshSection.querySelector('.k-container');
+                    if (freshContainer) {
+                        this._stripViewBranding(freshContainer);
+                        if (freshSection.classList.contains('d-none') && !this.el.classList.contains('d-none')) {
+                            this.el.classList.add('d-none');
+                        } else if (!freshSection.classList.contains('d-none')) {
+                            this.el.classList.remove('d-none');
+                        }
+                        this.services['public.interactions'].stopInteractions(container);
+                        container.replaceWith(freshContainer);
+                        await this.waitFor(
+                            this.services['public.interactions'].startInteractions(this.el)
+                        );
+                        refreshed = true;
+                    }
+                }
+            }
+        } catch (_error) {
+            // Keep SSR content if refresh fails.
+        }
+        this._initSnippetWidgets(snippetKey);
+        this.el.dispatchEvent(new CustomEvent('kingdom-live-refreshed'));
+        return refreshed;
     }
 
     destroy() {
@@ -174,7 +183,7 @@ export class KingdomLiveSnippet extends Interaction {
             || snippetKey === 's_bestsale_products'
         ) {
             this._initProductSwiper();
-        } else if (snippetKey === 's_manufacturers') {
+        } else if (snippetKey === 's_brands' || snippetKey === 's_manufacturers') {
             this._initManufacturerCarousel();
         }
     }
@@ -342,9 +351,9 @@ export class KingdomLiveSnippet extends Interaction {
             return;
         }
         const carousel = this.el.querySelector('.carousel-container');
-        const swiperEl = this.el.querySelector('.manufacturer-swiper');
-        const prevEl = this.el.querySelector('.manufacturer-carousel-arrow.swiper-button-prev');
-        const nextEl = this.el.querySelector('.manufacturer-carousel-arrow.swiper-button-next');
+        const swiperEl = this.el.querySelector('.brand-swiper, .manufacturer-swiper');
+        const prevEl = this.el.querySelector('.brand-carousel-arrow.swiper-button-prev, .manufacturer-carousel-arrow.swiper-button-prev');
+        const nextEl = this.el.querySelector('.brand-carousel-arrow.swiper-button-next, .manufacturer-carousel-arrow.swiper-button-next');
         if (!swiperEl || !carousel || !prevEl || !nextEl) {
             return;
         }
@@ -355,6 +364,7 @@ export class KingdomLiveSnippet extends Interaction {
             swiperEl.swiper.destroy(true, true);
         }
         const slideCount = swiperEl.querySelectorAll('.swiper-slide').length;
+        // Fixed slidesPerView keeps logo tiles grid-sized; only gate loop.
         const config = {
             loop: slideCount > 3,
             speed: 450,

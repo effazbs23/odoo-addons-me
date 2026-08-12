@@ -96,11 +96,15 @@ class Website(models.Model):
             return self.env['kingdom.product.tab']
         return Tab.get_website_dual_carousel_tabs(limit=limit)
 
-    def kingdom_manufacturer_slides(self, per_slide=2):
-        Manufacturer = self._kingdom_model('kingdom.manufacturer')
-        if Manufacturer is None:
+    def kingdom_brand_slides(self, per_slide=2):
+        Brand = self._kingdom_model('kingdom.brand')
+        if Brand is None:
             return []
-        return Manufacturer.get_website_manufacturer_slides(per_slide=per_slide)
+        return Brand.get_website_brand_slides(per_slide=per_slide)
+
+    # Backwards-compatible alias for older templates.
+    def kingdom_manufacturer_slides(self, per_slide=2):
+        return self.kingdom_brand_slides(per_slide=per_slide)
 
     def kingdom_product_tab(self):
         Tab = self._kingdom_model('kingdom.product.tab')
@@ -109,6 +113,9 @@ class Website(models.Model):
     def kingdom_should_redirect_coming_soon(self, user=None):
         """True when public (non-designer) visitors must stay on Coming Soon."""
         self.ensure_one()
+        # Guard stale DBs that have not been -u'd after adding coming-soon fields.
+        if 'kingdom_coming_soon_enabled' not in self._fields:
+            return False
         if not self.kingdom_coming_soon_enabled:
             return False
         user = user or self.env.user

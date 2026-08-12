@@ -1,17 +1,16 @@
 //------------------------------------------------------------------------------
-// Theme Kingdom — footer colors (match kingdom.nop-station.com)
-// Upper: #f5f5f5 + dark text | Lower: #fff + dark text
-// Overrides Odoo .o_footer / .o_footer_copyright palette (o_cc / black-15).
+// Theme Kingdom — footer layout / typography
+// Background: Style → Footer → Background (footer / footer-custom) via
+// chrome_colors.scss — do not hardcode solid fills with !important here.
 //------------------------------------------------------------------------------
 
 footer#bottom.o_footer_kingdom,
 footer#bottom.footer.o_footer_kingdom,
 .o_footer.o_footer_kingdom {
-    background-color: #f5f5f5 !important;
-    background-image: none !important;
-    color: #333333 !important;
+    background-image: none;
+    /* Default text only — Builder chrome_colors overrides with !important when set */
+    color: #333333;
     font-family: "Lato", sans-serif;
-    --o-cc-bg: #f5f5f5;
     --o-cc-text: #333333;
     --o-cc-headings: #222222;
     --o-cc-btn-primary: var(--primary-color, #e76e11);
@@ -25,10 +24,8 @@ footer#bottom.o_footer_kingdom .o_footer_copyright,
 footer#bottom.o_footer_kingdom .footer-lower,
 .o_footer.o_footer_kingdom .o_footer_copyright,
 .o_footer.o_footer_kingdom .footer-lower {
-    background-color: #ffffff !important;
-    background-image: none !important;
-    color: #333333 !important;
-    --o-cc-bg: #ffffff;
+    background-image: none;
+    color: #333333;
     --o-cc-text: #333333;
     --o-cc-headings: #222222;
     --o-cc-link: #333333;
@@ -45,24 +42,24 @@ footer#bottom.o_footer_kingdom .footer-upper .list li a,
 footer#bottom.o_footer_kingdom .contact-us .list li,
 .o_footer.o_footer_kingdom .footer-upper .list li,
 .o_footer.o_footer_kingdom .footer-upper .list li a {
-    color: #333333 !important;
+    color: #333333;
 }
 
 footer#bottom.o_footer_kingdom .footer-upper .title strong,
 .o_footer.o_footer_kingdom .footer-upper .title strong {
-    color: #222222 !important;
+    color: #222222;
 }
 
 footer#bottom.o_footer_kingdom .footer-powered-brand,
 footer#bottom.o_footer_kingdom .footer-powered-by a,
 .o_footer.o_footer_kingdom .footer-powered-by a {
-    color: var(--primary-color, #e76e11) !important;
+    color: var(--primary-color, #e76e11);
     font-weight: 700;
 }
 
 footer#bottom.o_footer_kingdom .o_footer_copyright_name,
 .o_footer.o_footer_kingdom .o_footer_copyright_name {
-    color: #333333 !important;
+    color: #333333;
 }
 
 .footer .footer-upper {
@@ -259,10 +256,10 @@ footer#bottom.o_footer_kingdom .o_footer_copyright_name,
     speak: never;
 }
 
-// ---- Bottom bar (white) ----
+// ---- Bottom bar (inherits footer chrome background) ----
 .footer-lower {
     padding: 12px 0;
-    background: #fff;
+    background: transparent;
     border-top: 1px solid #ececec;
     font-size: 14px;
     color: var(--black, #333);

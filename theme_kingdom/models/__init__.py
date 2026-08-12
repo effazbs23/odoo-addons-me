@@ -28,7 +28,7 @@ from . import website_menu
 from . import product_tab_header
 from . import featured_products
 from . import bestsale_products
-from . import manufacturer
+from . import brand
 from . import deals_of_day
 from . import product_pricelist
 from . import loyalty_program

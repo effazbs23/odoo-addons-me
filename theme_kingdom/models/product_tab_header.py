@@ -52,8 +52,11 @@ class KingdomProductTabHeader(models.Model):
                     ('kingdom_product_tab_id', '=', tab.id),
                 ], limit=1)
                 if tab.active and tab.show_in_header_menu:
+                    # Write menu labels in the website default language so
+                    # existing translations (e.g. Arabic) are not overwritten.
+                    lang = website.default_lang_id.code
                     vals = {
-                        'name': tab.name,
+                        'name': tab.with_context(lang=lang).name,
                         'url': tab.get_menu_url(),
                         'parent_id': root.id,
                         'website_id': website.id,
@@ -61,8 +64,8 @@ class KingdomProductTabHeader(models.Model):
                         'kingdom_product_tab_id': tab.id,
                     }
                     if menu:
-                        menu.write(vals)
+                        menu.with_context(lang=lang).write(vals)
                     else:
-                        Menu.create(vals)
+                        Menu.with_context(lang=lang).create(vals)
                 elif menu:
                     menu.unlink()

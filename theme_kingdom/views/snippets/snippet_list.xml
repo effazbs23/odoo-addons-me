@@ -99,12 +99,12 @@
                 <keywords>product, carousel, tabs, feature image, kingdom</keywords>
             </t>
 
-            <t t-snippet="theme_kingdom.s_manufacturers"
+            <t t-snippet="theme_kingdom.s_brands"
                string="Brands"
                label="Brands"
                group="kingdom_snippet"
-               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_manufacturers.svg">
-                <keywords>brands, manufacturers, logos, carousel, kingdom</keywords>
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_brands.svg">
+                <keywords>brands, logos, carousel, kingdom</keywords>
             </t>
 
             <t t-snippet="theme_kingdom.s_service_highlights"

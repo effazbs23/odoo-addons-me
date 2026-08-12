@@ -16,6 +16,23 @@
     return document.querySelector(".js_kingdom_flyout_cart");
   }
 
+  /** Keep /shop/... navigations on the active non-default language URL prefix. */
+  function kingdomLocalizedPath(path) {
+    path = path && path.charAt(0) === "/" ? path : "/" + (path || "");
+    var pathname = window.location.pathname || "/";
+    var active = document.querySelector(
+      ".js_language_selector .js_change_lang.active, .js_language_selector .dropdown-item.active"
+    );
+    var urlCode = active && active.getAttribute("data-url_code");
+    if (
+      urlCode &&
+      (pathname === "/" + urlCode || pathname.indexOf("/" + urlCode + "/") === 0)
+    ) {
+      return "/" + urlCode + path;
+    }
+    return path;
+  }
+
   function kingdomSetFlyoutOpen(open) {
     var flyout = kingdomGetFlyout();
     document.documentElement.classList.toggle("flyout-cart-open", open);
@@ -202,13 +219,13 @@
       if (ev.target.closest(".js_kingdom_flyout_go_cart")) {
         ev.preventDefault();
         ev.stopPropagation();
-        window.location.href = "/shop/cart";
+        window.location.href = kingdomLocalizedPath("/shop/cart");
         return;
       }
       if (ev.target.closest(".js_kingdom_flyout_checkout")) {
         ev.preventDefault();
         ev.stopPropagation();
-        window.location.href = "/shop/checkout";
+        window.location.href = kingdomLocalizedPath("/shop/checkout");
         return;
       }
 
@@ -786,31 +803,7 @@
       }
     }
 
-    function initHeaderSelectors() {
-      document.querySelectorAll(".header-inline-selectors .js_change_lang").forEach(function (link) {
-        link.addEventListener("click", function (ev) {
-          if (document.body.classList.contains("editor_enable")) {
-            return;
-          }
-          ev.preventDefault();
-          var urlCode = link.getAttribute("data-url_code");
-          if (!urlCode) {
-            return;
-          }
-          var target = (link.getAttribute("href") || "/").replace(/[&?]edit_translations[^&?]+/, "");
-          var hash = window.location.hash || "";
-          window.location.href =
-            "/website/lang/" +
-            encodeURIComponent(urlCode) +
-            "?r=" +
-            encodeURIComponent(target) +
-            (hash ? encodeURIComponent(hash) : "");
-        });
-      });
-    }
-
     initMobileChrome();
-    initHeaderSelectors();
     initHeaderMegaMenu();
     initMobileNavigationDrawer();
     initKingdomFooterAccordion();
@@ -1270,13 +1263,17 @@
       navigation: false,
     });
 
-    function initManufacturerCarousel() {
-      var section = document.querySelector(".home-manufacturers-section");
+    function initBrandCarousel() {
+      var section = document.querySelector(".home-brands-section, .home-manufacturers-section");
       if (!section || section.classList.contains("d-none") || typeof Swiper === "undefined") return;
+      // Live-snippet owns Swiper after it refreshes; avoid fighting it with loop:true.
+      if (section.getAttribute("data-kingdom-live-snippet") && section.querySelector(".brand-swiper.swiper-initialized, .manufacturer-swiper.swiper-initialized")) {
+        return;
+      }
       var carousel = section.querySelector(".carousel-container");
-      var swiperEl = section.querySelector(".manufacturer-swiper");
-      var prevEl = section.querySelector(".manufacturer-carousel-arrow.swiper-button-prev");
-      var nextEl = section.querySelector(".manufacturer-carousel-arrow.swiper-button-next");
+      var swiperEl = section.querySelector(".brand-swiper, .manufacturer-swiper");
+      var prevEl = section.querySelector(".brand-carousel-arrow.swiper-button-prev, .manufacturer-carousel-arrow.swiper-button-prev");
+      var nextEl = section.querySelector(".brand-carousel-arrow.swiper-button-next, .manufacturer-carousel-arrow.swiper-button-next");
       if (!swiperEl || !carousel || !prevEl || !nextEl) return;
       if (!swiperEl.querySelector(".swiper-slide")) return;
 
@@ -1284,8 +1281,11 @@
         swiperEl.swiper.destroy(true, true);
       }
 
+      var slideCount = swiperEl.querySelectorAll(".swiper-slide").length;
+      // Keep fixed slidesPerView so logo tiles stay grid-sized (not stretched).
+      // Only disable loop when there aren't enough slides — loop+few slides = blank boxes.
       var config = {
-        loop: true,
+        loop: slideCount > 3,
         speed: 450,
         spaceBetween: 15,
         slidesPerView: 3,
@@ -1319,15 +1319,15 @@
       }
     }
 
-    initManufacturerCarousel();
-    window.addEventListener("load", initManufacturerCarousel);
+    initBrandCarousel();
+    window.addEventListener("load", initBrandCarousel);
     if (typeof MutationObserver !== "undefined") {
       var wrapRoot = document.getElementById("wrap") || document.body;
       if (wrapRoot) {
         new MutationObserver(function () {
-          var swiperEl = document.querySelector(".home-manufacturers-section .manufacturer-swiper");
+          var swiperEl = document.querySelector(".home-brands-section .brand-swiper, .home-manufacturers-section .manufacturer-swiper");
           if (swiperEl && !swiperEl.classList.contains("swiper-initialized")) {
-            initManufacturerCarousel();
+            initBrandCarousel();
           }
         }).observe(wrapRoot, { childList: true, subtree: true });
       }
@@ -1433,14 +1433,8 @@
   }
   window.addEventListener("load", scheduleKingdomFlyoutInit);
 
-  if (typeof MutationObserver !== "undefined") {
-    var flyoutObserver = new MutationObserver(function () {
-      if (!kingdomFlyoutInitialized && kingdomGetFlyout()) {
-        scheduleKingdomFlyoutInit();
-      }
-    });
-    flyoutObserver.observe(document.documentElement, { childList: true, subtree: true });
-  }
+  // Avoid a document-wide MutationObserver — it runs on every DOM change and
+  // makes navigation feel sluggish. Flyout init is covered by DOMContentLoaded/load.
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", runKingdomFrontend);

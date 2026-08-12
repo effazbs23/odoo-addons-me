@@ -1,0 +1,202 @@
+//------------------------------------------------------------------------------
+// Theme Kingdom — chrome colors (Top Bar / Header / Navbar / Footer)
+//
+// Core Style → Header → Background:
+//   - Theme presets (o_ccN) write `menu` as a CC index and clear `menu-custom`
+//   - Solids / custom write `menu-custom`
+// Core applies that on `.navbar-light`; Kingdom paints `.header.header-main`.
+//------------------------------------------------------------------------------
+
+@function kingdom-format-color($color) {
+    @if not $color {
+        @return null;
+    }
+    @return if(
+        str-index(inspect($color), '"') == 1 or str-index(inspect($color), "'") == 1,
+        o-color($color),
+        $color
+    );
+}
+
+// Resolve *-custom solid, or *-combination index → that CC's background color.
+@function kingdom-resolve-bg($custom-name, $combo-name: null) {
+    $-custom: o-color($custom-name);
+    @if $-custom {
+        @return $-custom;
+    }
+    @if $combo-name {
+        $-combo: o-related-color($combo-name, $max-recursions: 10);
+        @if type-of($-combo) == 'number' {
+            // o-color(N) → use-cc-bg → o-ccN-bg
+            @return o-color($-combo);
+        }
+        @if $-combo {
+            @return o-color($-combo);
+        }
+    }
+    @return null;
+}
+
+// —— Top Bar (announcement) ——
+// kingdom.css / customCss paint slides + close/minimize with
+// var(--secondary-color). Text color already reached those nodes; bg must too.
+header.o_header_kingdom #AnnouncementBanner,
+header.o_header_kingdom .announcement-bar {
+    $-bg: kingdom-resolve-bg('kingdom-topbar-custom', 'kingdom-topbar');
+    @if $-bg {
+        background-color: $-bg !important;
+        background-image: none !important;
+
+        #announcement-slider .swiper-slide,
+        #announcement-close,
+        #announcement-minimize {
+            background-color: $-bg !important;
+            background-image: none !important;
+        }
+    }
+
+    $-text: kingdom-format-color(o-website-value('kingdom-topbar-text-color'));
+    @if $-text {
+        color: $-text !important;
+
+        .announcement-item,
+        .announcement-title,
+        a,
+        button,
+        .swiper-slide,
+        #announcement-close,
+        #announcement-minimize {
+            color: $-text !important;
+        }
+    }
+}
+
+// —— Header main (logo / search / account) ——
+header.o_header_kingdom .header.header-main,
+header.o_header_kingdom .master-header-panel .header.header-main {
+    // Prefer Kingdom chrome picker, else core Header → Background (menu*).
+    $-bg: kingdom-resolve-bg('kingdom-header-custom', 'kingdom-header');
+    @if not $-bg {
+        $-bg: kingdom-resolve-bg('menu-custom', 'menu');
+    }
+    @if $-bg {
+        background-color: $-bg !important;
+        background-image: none !important;
+        --o-cc-bg: #{$-bg};
+    }
+    @include o-add-gradient('menu-gradient');
+
+    $-text: kingdom-format-color(o-website-value('kingdom-header-text-color'));
+    @if not $-text {
+        $-text: kingdom-format-color(o-website-value('header-text-color'));
+    }
+    @if $-text {
+        color: $-text !important;
+
+        a,
+        .header-link,
+        .header-links a,
+        .header-links span,
+        .k-inline-select,
+        .js_language_selector .dropdown-toggle,
+        .header-lower .header-lower-right .header-selectors-wrapper .header-link-top a,
+        .header-lower .header-lower-right .header-selectors-wrapper .header-link-top a span,
+        .header-lower .header-lower-right .header-selectors-wrapper .k-inline-select,
+        .header-lower .header-lower-right .header-selectors-wrapper .js_language_selector .dropdown-toggle,
+        .header-lower .header-lower-right .header-selectors-wrapper .header-link-top a i {
+            color: $-text !important;
+        }
+    }
+}
+
+// Keep sticky/mobile wrapper in sync with the same header background.
+header.o_header_kingdom .master-header,
+header.o_header_kingdom .master-header-panel {
+    $-bg: kingdom-resolve-bg('kingdom-header-custom', 'kingdom-header');
+    @if not $-bg {
+        $-bg: kingdom-resolve-bg('menu-custom', 'menu');
+    }
+    @if $-bg {
+        background-color: $-bg !important;
+        background-image: none !important;
+    }
+}
+
+// —— Navbar (dark menu bar) ——
+header.o_header_kingdom .header-menu.header-menu-static {
+    $-bg: kingdom-resolve-bg('kingdom-navbar-custom', 'kingdom-navbar');
+    @if $-bg {
+        background-color: $-bg !important;
+        background-image: none !important;
+    }
+
+    $-text: kingdom-format-color(o-website-value('kingdom-navbar-text-color'));
+    @if $-text {
+        color: $-text !important;
+
+        .nav-link,
+        .nav-link span,
+        a.nav-link,
+        .k-btn-categories,
+        .k-btn-categories span {
+            color: $-text !important;
+        }
+    }
+}
+
+// —— Footer ——
+// Core Style → Footer → Background writes footer-custom (solid) or footer (CC).
+// Also match `footer#bottom.footer` — Kingdom adds `.footer`; older saved views
+// may omit `o_footer_kingdom` while still using Kingdom markup.
+footer#bottom.o_footer_kingdom,
+footer#bottom.footer.o_footer_kingdom,
+footer#bottom.footer.o_footer,
+.o_footer.o_footer_kingdom {
+    $-bg: kingdom-resolve-bg('kingdom-footer-custom', 'kingdom-footer');
+    @if not $-bg {
+        $-bg: kingdom-resolve-bg('footer-custom', 'footer');
+    }
+    @if $-bg {
+        background-color: $-bg !important;
+        background-image: none !important;
+        --o-cc-bg: #{$-bg};
+        // kingdom.css: `.footer { background: var(--footer-bg) }` and
+        // `.footer-lower { background: #fff }` otherwise cover the picker.
+        --footer-bg: #{$-bg};
+
+        .footer-upper,
+        .footer-lower,
+        .o_footer_copyright,
+        .footer-lower.o_footer_copyright,
+        #footer,
+        .oe_structure {
+            background-color: $-bg !important;
+            background-image: none !important;
+            --o-cc-bg: #{$-bg};
+        }
+    }
+    @include o-add-gradient('footer-gradient');
+
+    $-text: kingdom-format-color(o-website-value('kingdom-footer-text-color'));
+    @if $-text {
+        color: $-text !important;
+        --o-cc-text: #{$-text};
+        --o-cc-headings: #{$-text};
+        --o-cc-link: #{$-text};
+
+        a,
+        .footer-upper .list li,
+        .footer-upper .list li a,
+        .footer-upper .title,
+        .footer-upper .title strong,
+        .contact-us .list li,
+        .o_footer_copyright_name,
+        .footer-lower,
+        .footer-lower a,
+        .o_footer_copyright,
+        .footer-powered-by,
+        .footer-disclaimer {
+            color: $-text !important;
+        }
+    }
+}

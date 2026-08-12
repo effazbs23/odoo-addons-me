@@ -21,6 +21,31 @@
         </xpath>
     </template>
 
+    <!-- Reusable Brands filter list (sidebar + offcanvas) -->
+    <template id="products_brands_list" name="Kingdom Shop Brands Filter">
+        <t t-set="kingdom_brands" t-value="kingdom_brands or []"/>
+        <div t-if="kingdom_brands"
+             t-attf-class="products_brands k-shop-sidebar-brands mb-3 {{_brands_extra_classes or ''}}">
+            <div t-if="not _hide_brands_title"
+                 class="o_categories_collapse_title k-shop-sidebar-brands__title mb-2">
+                <b class="o_translate_inline">Brands</b>
+            </div>
+            <ul class="nav flex-column k-shop-sidebar-nav">
+                <li class="nav-item">
+                    <a t-att-href="keep(brand=0)"
+                       t-attf-class="k-shop-sidebar-link {{not kingdom_brand and 'is-active'}} p-0">
+                        All Brands
+                    </a>
+                </li>
+                <li t-foreach="kingdom_brands" t-as="brand" class="nav-item">
+                    <a t-att-href="keep(brand=brand.id)"
+                       t-attf-class="k-shop-sidebar-link {{kingdom_brand and kingdom_brand.id == brand.id and 'is-active'}} p-0"
+                       t-esc="brand.name"/>
+                </li>
+            </ul>
+        </div>
+    </template>
+
     <!-- Shop page structure: chips heading, toolbar count, grid/list -->
     <template id="kingdom_products"
               inherit_id="website_sale.products"
@@ -42,6 +67,29 @@
             </div>
         </xpath>
 
+        <!-- Brand filter in left sidebar (after categories, before attributes) -->
+        <xpath expr="//div[contains(@t-attf-class, 'products_attributes_filters')]" position="before">
+            <t t-call="theme_kingdom.products_brands_list">
+                <t t-set="_brands_extra_classes"
+                   t-value="'border-top pt-3' if opt_wsale_categories else ''"/>
+            </t>
+        </xpath>
+
+        <!-- Clear Filters also clears brand -->
+        <xpath expr="//aside[@id='products_grid_before']//div[hasclass('py-3')][hasclass('border-bottom')]" position="replace">
+            <div t-if="attrib_values or tags or kingdom_brand or (
+                           show_price_filter and isFilteringByPrice
+                       )"
+                 class="py-3 border-bottom">
+                <a t-att-href="keep(attribute_values=0, tags=0, min_price=0, max_price=0, brand=0)"
+                   t-attf-class="btn btn-{{navClass}} d-flex align-items-center py-1"
+                   title="Clear Filters">
+                    <small class="mx-auto"><b>Clear Filters</b></small>
+                    <i class="oi oi-close" role="presentation"/>
+                </a>
+            </div>
+        </xpath>
+
         <!-- Replace products toolbar with Kingdom structure -->
         <xpath expr="//div[hasclass('products_header')]" position="replace">
             <div t-if="not opt_wsale_floating_bar"
@@ -49,6 +97,7 @@
                 <div class="k-shop-toolbar__meta me-auto">
                     <span class="k-shop-toolbar__label">
                         <t t-if="category" t-esc="category.name"/>
+                        <t t-elif="kingdom_brand" t-esc="kingdom_brand.name"/>
                         <t t-elif="search">
                             Search results
                         </t>
@@ -88,13 +137,49 @@
                             data-bs-target="#o_wsale_offcanvas">
                         <i class="oi oi-settings-adjust" role="img"/>
                         <small class="ms-1 d-none d-md-inline-block">Filters</small>
-                        <span t-if="isFilteringByPrice or attrib_set or tags"
+                        <span t-if="isFilteringByPrice or attrib_set or tags or kingdom_brand"
                               t-attf-class="position-absolute top-0 start-100 translate-middle border border-{{navClass}} rounded-circle bg-danger p-1">
                             <span class="visually-hidden">filters active</span>
                         </span>
                     </button>
                 </div>
             </div>
+        </xpath>
+    </template>
+
+    <!-- Mobile offcanvas: Brands accordion (after Categories) -->
+    <template id="kingdom_wsale_offcanvas_brands"
+              inherit_id="website_sale.o_wsale_offcanvas"
+              name="Kingdom Shop Brands Offcanvas"
+              priority="30">
+        <xpath expr="//div[@id='o_wsale_offcanvas_categories']/.." position="after">
+            <div t-if="kingdom_brands" class="accordion-item d-lg-none">
+                <h2 id="o_wsale_offcanvas_brands_header" class="accordion-header mb-0">
+                    <button t-attf-class="o_wsale_offcanvas_title accordion-button rounded-0 {{not kingdom_brand and 'collapsed'}}"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#o_wsale_offcanvas_brands"
+                            t-att-aria-expanded="'true' if kingdom_brand else 'false'"
+                            aria-controls="o_wsale_offcanvas_brands">
+                        <b class="o_translate_inline">Brands</b>
+                    </button>
+                </h2>
+                <div id="o_wsale_offcanvas_brands"
+                     t-attf-class="accordion-collapse collapse {{kingdom_brand and 'show'}}"
+                     aria-labelledby="o_wsale_offcanvas_brands_header">
+                    <div class="accordion-body pt-0">
+                        <t t-call="theme_kingdom.products_brands_list">
+                            <t t-set="_hide_brands_title" t-value="True"/>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <!-- Offcanvas Clear Filters includes brand -->
+        <xpath expr="//aside[@id='o_wsale_offcanvas']/div[hasclass('offcanvas-body')][hasclass('border-top')]/a" position="attributes">
+            <attribute name="t-att-href">keep(attribute_values=0, tags=0, min_price=0, max_price=0, brand=0)</attribute>
+            <attribute name="t-attf-class">btn btn-{{navClass}} d-flex py-1 mb-2 {{(not attrib_values and not isFilteringByPrice and not tags and not kingdom_brand) and 'disabled' }}</attribute>
+            <attribute name="t-att-aria-disabled">(not attrib_values and not isFilteringByPrice and not tags and not kingdom_brand) and 'true' or 'false'</attribute>
         </xpath>
     </template>
 

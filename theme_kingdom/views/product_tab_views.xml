@@ -33,7 +33,6 @@
         <field name="model">kingdom.product.tab</field>
         <field name="arch" type="xml">
             <list string="Product Carousel">
-                <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="tab_type"/>
                 <field name="product_source"/>
@@ -43,7 +42,6 @@
                 <field name="category_id" optional="hide"/>
                 <field name="snippet_placement"/>
                 <field name="use_as_carousel_banner" widget="boolean_toggle" optional="show"/>
-                <field name="show_in_header_menu" widget="boolean_toggle" optional="hide"/>
                 <field name="active" widget="boolean_toggle"/>
             </list>
         </field>
@@ -55,7 +53,6 @@
         <field name="model">kingdom.product.tab</field>
         <field name="arch" type="xml">
             <list string="Dual Carousel">
-                <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="tab_type"/>
                 <field name="category_id"/>
@@ -65,7 +62,6 @@
                 <field name="snippet_placement"/>
                 <field name="subtab_new_label" optional="hide"/>
                 <field name="subtab_best_label" optional="hide"/>
-                <field name="show_in_header_menu" widget="boolean_toggle" optional="hide"/>
                 <field name="active" widget="boolean_toggle"/>
             </list>
         </field>
@@ -93,7 +89,6 @@
                     </div>
                     <group>
                         <group string="General">
-                            <field name="sequence"/>
                             <field name="active"/>
                             <field name="tab_type"/>
                             <field name="product_source"/>
@@ -118,7 +113,6 @@
                                      invisible="snippet_placement != 'dual_carousel'"/>
                             <field name="subtab_best_label"
                                      invisible="snippet_placement != 'dual_carousel'"/>
-                            <field name="show_in_header_menu"/>
                         </group>
                     </group>
                     <notebook>

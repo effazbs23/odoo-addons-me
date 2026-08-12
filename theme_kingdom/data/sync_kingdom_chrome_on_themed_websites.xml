@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Enable Kingdom header/footer on websites that already use Theme Kingdom. -->
+    <function model="theme.utils" name="_sync_kingdom_chrome_on_themed_websites"/>
+</odoo>

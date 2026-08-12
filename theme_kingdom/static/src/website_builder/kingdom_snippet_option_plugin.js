@@ -14,7 +14,8 @@ const KINGDOM_SNIPPET_ACTIONS = {
     "theme_kingdom.s_featured_products": "theme_kingdom.action_featured_products",
     "theme_kingdom.s_bestsale_products": "theme_kingdom.action_bestsale_products",
     "theme_kingdom.s_deal_of_the_day": "theme_kingdom.action_kingdom_deals_of_day",
-    "theme_kingdom.s_manufacturers": "theme_kingdom.action_kingdom_manufacturer",
+    "theme_kingdom.s_brands": "theme_kingdom.action_kingdom_brand",
+    "theme_kingdom.s_manufacturers": "theme_kingdom.action_kingdom_brand",
     "theme_kingdom.s_product_carousel": "theme_kingdom.kingdom_product_tab_action",
     "theme_kingdom.s_category_dual_carousels": "theme_kingdom.kingdom_dual_carousel_tab_action",
 };

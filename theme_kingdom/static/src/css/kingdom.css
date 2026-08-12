@@ -3046,7 +3046,8 @@ input[type=radio]:checked + label::before {
 
 .footer-lower {
   padding: 10px 0;
-  background: #fff;
+  /* Inherit footer chrome bg — do not force white over Style → Footer → Background */
+  background: transparent;
 }
 @media (max-width: 991px) {
   .footer-lower .footer-lower-contents > div {

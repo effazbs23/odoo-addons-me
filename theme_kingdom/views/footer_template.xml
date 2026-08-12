@@ -171,18 +171,16 @@
             </div>
         </xpath>
         <xpath expr="//div[hasclass('o_footer_copyright')]" position="replace">
-            <!-- Force Kingdom reference colors (white bar + dark text); ignore Odoo palette. -->
+            <!-- Colors via footer.scss + Builder (kingdom-footer-custom / kingdom-footer-text-color). -->
             <div t-if="not no_copyright"
-                 class="footer-lower o_footer_copyright"
-                 style="background-color: #ffffff !important; background-image: none !important; color: #333333 !important;">
+                 class="footer-lower o_footer_copyright">
                 <div class="container footer-lower-contents">
                     <div class="footer-powered-by">
                         Powered by
                         <a href="https://www.odoo.com/"
                            target="_blank"
                            rel="noopener"
-                           class="footer-powered-brand"
-                           style="color: #d4af37 !important; font-weight: 700;">Odoo</a>
+                           class="footer-powered-brand">Odoo</a>
                     </div>
                     <div class="footer-designed-by">
                         Designed By
@@ -204,11 +202,14 @@
                              loading="lazy"/>
                     </div>
                     <div class="footer-disclaimer">
-                        <span class="o_footer_copyright_name" style="color: #333333 !important;">
+                        <span class="o_footer_copyright_name">
                             Copyright © <t t-esc="datetime.datetime.now().year"/>
                             <t t-esc="website.name"/>.
                             All rights reserved.
                         </span>
+                        <!-- Kingdom footer replaces o_footer_copyright, so re-add the selector here. -->
+                        <t t-call="website.language_selector"
+                           _div_classes="'dropup d-inline-block'"/>
                     </div>
                 </div>
             </div>

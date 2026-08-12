@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Style → Header (when Kingdom header is active) -->
+    <t t-name="theme_kingdom.KingdomHeaderChromeColorsOption">
+        <BuilderRow label.translate="Top Bar">
+            <BuilderColorPicker
+                title.translate="Background"
+                enabledTabs="['theme', 'custom', 'gradient']"
+                preview="false"
+                defaultColor="''"
+                action="'customizeWebsiteColor'"
+                actionParam="{
+                    mainParam: 'kingdom-topbar-custom',
+                    combinationColor: 'kingdom-topbar',
+                    nullValue: 'NULL',
+                }"/>
+            <BuilderColorPicker
+                title.translate="Text"
+                enabledTabs="['solid', 'custom']"
+                preview="false"
+                action="'customizeWebsiteVariable'"
+                actionParam="'kingdom-topbar-text-color'"/>
+        </BuilderRow>
+
+        <BuilderRow label.translate="Header">
+            <BuilderColorPicker
+                title.translate="Background"
+                enabledTabs="['theme', 'custom', 'gradient']"
+                preview="false"
+                defaultColor="''"
+                action="'customizeWebsiteColor'"
+                actionParam="{
+                    mainParam: 'kingdom-header-custom',
+                    combinationColor: 'kingdom-header',
+                    nullValue: 'NULL',
+                }"/>
+            <BuilderColorPicker
+                title.translate="Text"
+                enabledTabs="['solid', 'custom']"
+                preview="false"
+                action="'customizeWebsiteVariable'"
+                actionParam="'kingdom-header-text-color'"/>
+        </BuilderRow>
+
+        <BuilderRow label.translate="Navbar">
+            <BuilderColorPicker
+                title.translate="Background"
+                enabledTabs="['theme', 'custom', 'gradient']"
+                preview="false"
+                defaultColor="''"
+                action="'customizeWebsiteColor'"
+                actionParam="{
+                    mainParam: 'kingdom-navbar-custom',
+                    combinationColor: 'kingdom-navbar',
+                    nullValue: 'NULL',
+                }"/>
+            <BuilderColorPicker
+                title.translate="Text"
+                enabledTabs="['solid', 'custom']"
+                preview="false"
+                action="'customizeWebsiteVariable'"
+                actionParam="'kingdom-navbar-text-color'"/>
+        </BuilderRow>
+    </t>
+
+    <!-- Style → Footer (when Kingdom footer is active) -->
+    <t t-name="theme_kingdom.KingdomFooterChromeColorsOption">
+        <BuilderRow label.translate="Background">
+            <BuilderColorPicker
+                enabledTabs="['theme', 'custom', 'gradient']"
+                preview="false"
+                defaultColor="''"
+                action="'customizeWebsiteColor'"
+                actionParam="{
+                    mainParam: 'kingdom-footer-custom',
+                    combinationColor: 'kingdom-footer',
+                    nullValue: 'NULL',
+                }"/>
+        </BuilderRow>
+        <BuilderRow label.translate="Text">
+            <BuilderColorPicker
+                enabledTabs="['solid', 'custom']"
+                preview="false"
+                action="'customizeWebsiteVariable'"
+                actionParam="'kingdom-footer-text-color'"/>
+        </BuilderRow>
+    </t>
+
+</templates>

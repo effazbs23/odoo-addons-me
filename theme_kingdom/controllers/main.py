@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
+import logging
 import werkzeug
+from werkzeug.exceptions import NotFound
 
 from odoo import http
-from odoo.http import request
+from odoo.exceptions import AccessError
+from odoo.http import request, route
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 from odoo.tools import is_html_empty
+
+_logger = logging.getLogger(__name__)
 
 _KINGDOM_LIVE_SNIPPETS = {
     's_featured_products': 'theme_kingdom.s_featured_products',
@@ -13,9 +18,18 @@ _KINGDOM_LIVE_SNIPPETS = {
     's_product_carousel': 'theme_kingdom.s_product_carousel',
     's_category_dual_carousels': 'theme_kingdom.s_category_dual_carousels',
     's_category_slider': 'theme_kingdom.s_category_slider',
-    's_manufacturers': 'theme_kingdom.s_manufacturers',
+    's_brands': 'theme_kingdom.s_brands',
+    's_manufacturers': 'theme_kingdom.s_brands',
     's_coming_soon': 'theme_kingdom.s_coming_soon',
 }
+
+
+def sitemap_brands(env, rule, qs):
+    """List active brands in the website sitemap."""
+    Brand = env['kingdom.brand'].sudo()
+    slug = env['ir.http']._slug
+    for brand in Brand.search([('active', '=', True)]):
+        yield {'loc': f'/brand/{slug(brand)}'}
 
 
 class KingdomComingSoon(http.Controller):
@@ -42,8 +56,23 @@ class KingdomComingSoon(http.Controller):
             },
         )
 
-class WebsiteSaleManufacturer(WebsiteSale):
-    """Filter /shop by manufacturer assigned on product.template."""
+
+class WebsiteSaleBrand(WebsiteSale):
+    """Shop filter + pretty URLs for Kingdom brands."""
+
+    def _kingdom_parse_brand_id(self, post):
+        """Accept ``brand`` (preferred) or legacy ``manufacturer`` query values."""
+        for key in ('brand', 'manufacturer'):
+            value = post.get(key)
+            if value is None or value is False or value == '':
+                continue
+            if hasattr(value, 'id'):
+                return int(value.id)
+            try:
+                return int(value)
+            except (TypeError, ValueError):
+                continue
+        return None
 
     def _get_search_options(self, category=None, attribute_value_dict=None, tags=None,
                             min_price=0.0, max_price=0.0, conversion_rate=1, **post):
@@ -56,22 +85,94 @@ class WebsiteSaleManufacturer(WebsiteSale):
             conversion_rate=conversion_rate,
             **post,
         )
-        manufacturer = post.get('manufacturer')
-        if manufacturer:
-            try:
-                options['kingdom_manufacturer_id'] = int(manufacturer)
-            except (TypeError, ValueError):
-                pass
+        brand_id = self._kingdom_parse_brand_id(post)
+        if brand_id:
+            options['kingdom_brand_id'] = brand_id
         return options
 
     def _shop_get_query_url_kwargs(self, search, min_price, max_price, order=None, tags=None, **kwargs):
         res = super()._shop_get_query_url_kwargs(
             search, min_price, max_price, order=order, tags=tags, **kwargs
         )
-        manufacturer = kwargs.get('manufacturer')
-        if manufacturer:
-            res['manufacturer'] = manufacturer
+        brand_id = self._kingdom_parse_brand_id(kwargs)
+        if brand_id:
+            res['brand'] = brand_id
         return res
+
+    def _get_additional_shop_values(self, values, **kwargs):
+        res = super()._get_additional_shop_values(values, **kwargs)
+        Brand = request.env['kingdom.brand'].sudo()
+        brand_id = self._kingdom_parse_brand_id(kwargs)
+        kingdom_brand = Brand.browse(brand_id).exists() if brand_id else Brand.browse()
+        res.update({
+            'kingdom_brands': Brand.get_shop_filter_brands(request.website),
+            'kingdom_brand': kingdom_brand[:1] if kingdom_brand else False,
+        })
+        return res
+
+    @route()
+    def shop(self, page=0, category=None, search='', min_price=0.0, max_price=0.0, tags='', **post):
+        # Redirect legacy /shop?manufacturer=ID (and /shop?brand=ID) to /brand/<slug>.
+        path = request.httprequest.path.rstrip('/') or '/'
+        brand_id = self._kingdom_parse_brand_id(post)
+        if brand_id and (path == '/shop' or path.startswith('/shop/page/')):
+            brand = request.env['kingdom.brand'].sudo().browse(brand_id).exists()
+            if brand and brand.active:
+                query = request.httprequest.query_string.decode()
+                filtered = self._get_filtered_query_string(
+                    query, keys_to_remove=['brand', 'manufacturer']
+                )
+                try:
+                    page_num = int(page or 0)
+                except (TypeError, ValueError):
+                    page_num = 0
+                target = brand.get_shop_url()
+                if page_num > 1:
+                    target = f'{target}/page/{page_num}'
+                if filtered:
+                    target = f'{target}?{filtered}'
+                return request.redirect(target, code=301)
+        return super().shop(
+            page=page,
+            category=category,
+            search=search,
+            min_price=min_price,
+            max_price=max_price,
+            tags=tags,
+            **post,
+        )
+
+    @route(
+        [
+            '/brand',
+            '/brand/page/<int:page>',
+            '/brand/<model("kingdom.brand"):brand>',
+            '/brand/<model("kingdom.brand"):brand>/page/<int:page>',
+            '/shop/brand',
+            '/shop/brand/page/<int:page>',
+            '/shop/brand/<model("kingdom.brand"):brand>',
+            '/shop/brand/<model("kingdom.brand"):brand>/page/<int:page>',
+        ],
+        type='http',
+        auth='public',
+        website=True,
+        sitemap=sitemap_brands,
+        handle_params_access_error=lambda e, **kwargs: NotFound.code,
+    )
+    def brand_shop(self, page=0, brand=None, search='', min_price=0.0, max_price=0.0, tags='', **post):
+        """Shop listing filtered by brand — public Brand URL entry point."""
+        if brand is not None and not brand.active:
+            raise NotFound()
+        if brand is not None:
+            post = dict(post, brand=brand.id)
+        return self.shop(
+            page=page,
+            search=search,
+            min_price=min_price,
+            max_price=max_price,
+            tags=tags,
+            **post,
+        )
 
 
 class ThemeKingdomSnippetController(http.Controller):
@@ -117,15 +218,32 @@ class ThemeKingdomSnippetController(http.Controller):
         readonly=True,
     )
     def render_live_snippet(self, snippet_key):
-        template_key = _KINGDOM_LIVE_SNIPPETS.get(snippet_key)
+        # Accept short keys (s_brands) and full keys (theme_kingdom.s_brands).
+        key = (snippet_key or '').strip()
+        if key.startswith('theme_kingdom.'):
+            key = key[len('theme_kingdom.'):]
+        template_key = _KINGDOM_LIVE_SNIPPETS.get(key)
+        if not template_key and key in _KINGDOM_LIVE_SNIPPETS.values():
+            template_key = key if key.startswith('theme_kingdom.') else f'theme_kingdom.{key}'
         if not template_key:
-            raise werkzeug.exceptions.NotFound()
-        # Never inject editor branding into live HTML — if that markup is later
-        # saved into a page, #wrap loses its own branding and Blocks are disabled.
-        return request.env['ir.qweb'].with_context(
-            inherit_branding=False,
-            inherit_branding_auto=False,
-        )._render(template_key)
+            # Unknown snippet — keep the baked markup instead of hard-failing the page.
+            return False
+        try:
+            # Never inject editor branding into live HTML — if that markup is later
+            # saved into a page, #wrap loses its own branding and Blocks are disabled.
+            return request.env['ir.qweb'].with_context(
+                inherit_branding=False,
+                inherit_branding_auto=False,
+            )._render(template_key)
+        except Exception:
+            # Missing/broken template (e.g. stale arch_fs under --dev=xml).
+            _logger.warning(
+                'theme_kingdom live snippet render failed for %s → %s',
+                snippet_key,
+                template_key,
+                exc_info=True,
+            )
+            return False
 
     @http.route(
         [

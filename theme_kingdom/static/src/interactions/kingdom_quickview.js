@@ -242,6 +242,9 @@ export class KingdomQuickView extends Interaction {
                     isCombo,
                 },
                 {
+                    // Skip optional-product configurator; add the main product only.
+                    isBuyNow: true,
+                    redirectToCart: false,
                     isConfigured: true,
                     showQuantity: false,
                 }

@@ -92,17 +92,39 @@ class ThemeUtils(models.AbstractModel):
         _cleanup_stale_oe_view_refs(self.env)
         return res
 
+    def _enable_kingdom_chrome(self):
+        """Activate Kingdom header + footer on the website in context."""
+        self._disable_legacy_kingdom_header()
+        self.enable_view('theme_kingdom.template_header_kingdom')
+        self.enable_view('theme_kingdom.template_footer_kingdom')
+
     def _theme_kingdom_post_copy(self, mod):
-        # Kingdom header/footer are opt-in via Website Builder — do not auto-enable.
-        self._ensure_kingdom_templates_inactive()
-        self.enable_view('website.template_header_default')
-        self.enable_view('website.footer_custom')
+        # When Theme Kingdom is applied to a website, enable Kingdom chrome
+        # (Style → Header/Footer gallery still allows switching templates).
+        self._enable_kingdom_chrome()
         self._ensure_kingdom_shop_layout()
         _migrate_kingdom_snippet_oe_structure(self.env)
         _strip_saved_snippet_editor_hints(self.env)
         _strip_baked_editor_branding(self.env)
         remove_dynamic_product_tabs_feature(self.env)
         _cleanup_stale_oe_view_refs(self.env)
+        return True
+
+    @api.model
+    def _sync_kingdom_chrome_on_themed_websites(self):
+        """One-time: enable Kingdom header/footer on every website using this theme."""
+        ICP = self.env['ir.config_parameter'].sudo()
+        flag = 'theme_kingdom.sync_chrome_on_themed_websites_v1'
+        if ICP.get_param(flag):
+            return True
+        theme = self.env['ir.module.module'].search([
+            ('name', '=', 'theme_kingdom'),
+            ('state', '=', 'installed'),
+        ], limit=1)
+        if theme:
+            for website in self.env['website'].search([('theme_id', '=', theme.id)]):
+                self.with_context(website_id=website.id)._enable_kingdom_chrome()
+        ICP.set_param(flag, '1')
         return True
 
     @api.model
@@ -159,5 +181,211 @@ class ThemeUtils(models.AbstractModel):
                     1,
                 )
             if 'not no_header' in patched and patched != arch:
+                view.with_context(no_save_prev=True).write({'arch_db': patched})
+        return True
+
+    @api.model
+    def _fix_header_category_roots_arch(self):
+        """Replace stale kingdom_get_header_roots() in website theme copies.
+
+        Theme XML updates do not always rewrite per-website ir.ui.view arch, which
+        leaves AttributeError on product.public.category when the method is missing
+        from an old registry / copy.
+        """
+        import re
+
+        new = (
+            "request.env['product.public.category'].sudo()"
+            ".search([('parent_id', '=', False)], order='sequence, name, id')"
+        )
+        # Match any kwargs / sudo() variants of the old helper call.
+        pattern = re.compile(
+            r"request\.env\['product\.public\.category'\]"
+            r"(?:\.sudo\(\))?"
+            r"\.kingdom_get_header_roots\([^)]*\)"
+        )
+
+        def _patch_arch(arch):
+            if not isinstance(arch, str) or 'kingdom_get_header_roots' not in arch:
+                return arch
+            return pattern.sub(new, arch)
+
+        View = self.env['ir.ui.view'].sudo().with_context(active_test=False)
+        for view in View.search([('arch_db', 'like', 'kingdom_get_header_roots')]):
+            patched = _patch_arch(view.arch_db or '')
+            if patched != (view.arch_db or ''):
+                view.with_context(no_save_prev=True).write({'arch_db': patched})
+
+        if 'theme.ir.ui.view' in self.env:
+            ThemeView = self.env['theme.ir.ui.view'].sudo().with_context(active_test=False)
+            for view in ThemeView.search([('arch', 'like', 'kingdom_get_header_roots')]):
+                patched = _patch_arch(view.arch or '')
+                if patched != (view.arch or ''):
+                    view.write({'arch': patched})
+
+        # Prefer fresh XML from disk for website copies after patching theme templates.
+        Mod = self.env['ir.module.module'].sudo().search([('name', '=', 'theme_kingdom')], limit=1)
+        if Mod and Mod.state == 'installed':
+            for website in self.env['website'].search([]):
+                Mod._theme_load(website)
+            # Patch again in case any leftover website copy still has the call.
+            for view in View.search([('arch_db', 'like', 'kingdom_get_header_roots')]):
+                patched = _patch_arch(view.arch_db or '')
+                if patched != (view.arch_db or ''):
+                    view.with_context(no_save_prev=True).write({'arch_db': patched})
+        self.env.registry.clear_cache('templates')
+        return True
+
+    @api.model
+    def _fix_legacy_brands_snippet_key(self):
+        """Ensure theme_kingdom.s_manufacturers exists and update saved page arches.
+
+        After renaming the Brands snippet to s_brands, website pages that still
+        reference theme_kingdom.s_manufacturers (data-snippet / t-call / live
+        render) raised Missing Record. Keep a legacy template and rewrite arches.
+
+        Also fix arch_fs that still points at the deleted s_manufacturers.xml
+        path (breaks ``--dev=xml`` live reload → 404 on snippet/render).
+        """
+        View = self.env['ir.ui.view'].sudo().with_context(active_test=False)
+        old_fs = 'theme_kingdom/views/snippets/s_manufacturers.xml'
+        new_fs = 'theme_kingdom/views/snippets/s_brands.xml'
+
+        # Fix stale arch_fs after file rename (critical with --dev=xml).
+        for view in View.search([('arch_fs', '=', old_fs)]):
+            view.write({'arch_fs': new_fs})
+        if 'theme.ir.ui.view' in self.env:
+            ThemeView = self.env['theme.ir.ui.view'].sudo()
+            for view in ThemeView.search([('arch_fs', '=', old_fs)]):
+                view.write({'arch_fs': new_fs})
+
+        # Ensure the legacy key resolves (XML may not have been reloaded yet).
+        legacy = self.env.ref('theme_kingdom.s_manufacturers', raise_if_not_found=False)
+        modern = self.env.ref('theme_kingdom.s_brands', raise_if_not_found=False)
+        if modern and not legacy:
+            View.create({
+                'name': 'Kingdom Brands (legacy)',
+                'type': 'qweb',
+                'key': 'theme_kingdom.s_manufacturers',
+                'arch': '<t t-name="theme_kingdom.s_manufacturers"><t t-call="theme_kingdom.s_brands"/></t>',
+            })
+
+        replacements = (
+            ('theme_kingdom.s_manufacturers', 'theme_kingdom.s_brands'),
+            ('data-kingdom-live-snippet="s_manufacturers"', 'data-kingdom-live-snippet="s_brands"'),
+            ('home-manufacturers-section', 'home-brands-section'),
+            ('s_manufacturers ', 's_brands '),
+            ('class="s_manufacturers"', 'class="s_brands"'),
+        )
+        views = View.search([
+            '|', '|',
+            ('arch_db', 'ilike', 's_manufacturers'),
+            ('arch_db', 'ilike', 'home-manufacturers-section'),
+            ('key', '=', 'theme_kingdom.s_manufacturers'),
+        ])
+        for view in views:
+            arch = view.arch_db or ''
+            if not isinstance(arch, str):
+                continue
+            # Do not rewrite the legacy alias template itself into a self-call.
+            if view.key == 'theme_kingdom.s_manufacturers' and 't-call="theme_kingdom.s_brands"' in arch:
+                continue
+            patched = arch
+            for old, new in replacements:
+                patched = patched.replace(old, new)
+            if patched != arch:
+                view.with_context(no_save_prev=True).write({'arch_db': patched})
+
+        self._refresh_baked_brands_snippets()
+        self.env.registry.clear_cache('templates')
+        return True
+
+    @api.model
+    def _refresh_baked_brands_snippets(self):
+        """Replace stale Brands sections in saved pages with current brand markup.
+
+        Website Builder bakes brand IDs into homepage arch. After manufacturer→brand
+        migration (or deleted brands), those IDs serve transparent placeholders and
+        the carousel looks empty. Rewrite arches from live brand records (no HTTP
+        request needed).
+        """
+        import re
+        from markupsafe import escape
+
+        View = self.env['ir.ui.view'].sudo().with_context(active_test=False)
+        Brand = self.env['kingdom.brand'].sudo()
+        slides = Brand.get_website_brand_slides(per_slide=2)
+        slide_html = []
+        if slides:
+            for slide_brands in slides:
+                items = []
+                for brand in slide_brands:
+                    href = escape(brand.get_shop_url())
+                    name = escape(brand.name or '')
+                    if brand.image:
+                        picture = (
+                            f'<img loading="lazy" '
+                            f'src="/web/image/kingdom.brand/{brand.id}/image" '
+                            f'alt="{name}"/>'
+                        )
+                    else:
+                        picture = f'<span class="brand-picture-fallback">{name}</span>'
+                    items.append(
+                        '<div class="brand-item">'
+                        f'<a class="brand-picture" href="{href}" title="{name}">'
+                        f'{picture}</a>'
+                        f'<div class="brand-name"><a href="{href}">{name}</a></div>'
+                        '</div>'
+                    )
+                slide_html.append(
+                    '<div class="swiper-slide col-4 col-sm-3 col-lg-2 col-xl-1_5">'
+                    + ''.join(items)
+                    + '</div>'
+                )
+            slides_body = ''.join(slide_html)
+        else:
+            # Keep an empty wrapper; live-snippet / demo fallback fills on next render
+            # if the snippet template is used. For baked pages, leave a clear shell.
+            slides_body = ''
+
+        fresh_section = (
+            '<section class="s_brands home-brands-section carousel-grid" '
+            'data-snippet="theme_kingdom.s_brands" '
+            'data-kingdom-live-snippet="s_brands" '
+            'data-name="Brands" aria-labelledby="BrandsHeading">'
+            '<div class="k-container container">'
+            '<div class="home-brands-head title">'
+            '<h2 id="BrandsHeading" class="o_translate_inline"><strong>Brands</strong></h2>'
+            '</div>'
+            '<div class="carousel-container swiperCarousel carousel-brand">'
+            '<div class="swiper-button-prev brand-carousel-arrow" aria-label="Previous brands"/>'
+            '<div class="swiper-button-next brand-carousel-arrow" aria-label="Next brands"/>'
+            '<div class="swiper brand brand-swiper">'
+            f'<div class="swiper-wrapper">{slides_body}</div>'
+            '</div></div></div></section>'
+        )
+
+        pattern = re.compile(
+            r'<section\b[^>]*\b(?:s_brands|s_manufacturers|home-brands-section|home-manufacturers-section)\b[^>]*>.*?</section>',
+            re.IGNORECASE | re.DOTALL,
+        )
+        views = View.search([
+            '|', '|', '|',
+            ('arch_db', 'ilike', 'home-brands-section'),
+            ('arch_db', 'ilike', 'home-manufacturers-section'),
+            ('arch_db', 'ilike', 'data-snippet="theme_kingdom.s_brands"'),
+            ('arch_db', 'ilike', 'data-snippet="theme_kingdom.s_manufacturers"'),
+        ])
+        for view in views:
+            if view.key in (
+                'theme_kingdom.s_brands',
+                'theme_kingdom.s_manufacturers',
+            ):
+                continue
+            arch = view.arch_db or ''
+            if not isinstance(arch, str) or not pattern.search(arch):
+                continue
+            patched = pattern.sub(fresh_section, arch)
+            if patched != arch:
                 view.with_context(no_save_prev=True).write({'arch_db': patched})
         return True

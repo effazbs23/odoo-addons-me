@@ -6,7 +6,7 @@ class KingdomProductTab(models.Model):
     _name = 'kingdom.product.tab'
     _inherit = ['kingdom.website.cache.mixin']
     _description = 'Kingdom Product Tab'
-    _order = 'sequence, id'
+    _order = 'id'
 
     name = fields.Char(
         string='Tab Name',
@@ -15,6 +15,7 @@ class KingdomProductTab(models.Model):
     sequence = fields.Integer(
         string='Sequence',
         default=10,
+        help='Technical order field (hidden). Records are ordered by id.',
     )
     active = fields.Boolean(
         string='Active',
@@ -272,7 +273,7 @@ class KingdomProductTab(models.Model):
             {
                 'name': 'New Arrivals',
                 'tab_type': 'new_arrival',
-                'show_in_header_menu': True,
+                'show_in_header_menu': False,
                 'snippet_placement': 'product_carousel',
                 'use_as_carousel_banner': True,
                 'sequence': 10,
@@ -280,7 +281,7 @@ class KingdomProductTab(models.Model):
             {
                 'name': 'Best Sellers',
                 'tab_type': 'best_seller',
-                'show_in_header_menu': True,
+                'show_in_header_menu': False,
                 'snippet_placement': 'product_carousel',
                 'sequence': 20,
             },
@@ -298,12 +299,8 @@ class KingdomProductTab(models.Model):
                 Tab.create(vals)
             else:
                 write_vals = {}
-                if (
-                    'show_in_header_menu' in existing._fields
-                    and not existing.show_in_header_menu
-                    and vals.get('show_in_header_menu')
-                ):
-                    write_vals['show_in_header_menu'] = True
+                # Do not force Header menu entries — those duplicate Website menus
+                # and stay English until translated separately.
                 if (
                     vals.get('snippet_placement') == 'product_carousel'
                     and existing.snippet_placement == 'none'
@@ -312,13 +309,18 @@ class KingdomProductTab(models.Model):
                     write_vals['snippet_placement'] = 'product_carousel'
                 if write_vals:
                     existing.write(write_vals)
+        # Older seeds forced Header menu entries for New Arrivals / Best Sellers,
+        # which duplicated Website menus and left English clones after translate.
+        legacy_header = Tab.search([('show_in_header_menu', '=', True)])
+        if legacy_header:
+            legacy_header.write({'show_in_header_menu': False})
         Tab._migrate_snippet_placement()
         # Prefer New Arrivals as banner when none is set.
         if not Tab.search([('use_as_carousel_banner', '=', True)], limit=1):
             banner = Tab.search([
                 ('active', '=', True),
                 ('show_in_product_carousel', '=', True),
-            ], order='sequence asc, id asc', limit=1)
+            ], order='id asc', limit=1)
             if banner:
                 banner.write({'use_as_carousel_banner': True})
         if hasattr(Tab, '_sync_header_menus'):
@@ -333,7 +335,7 @@ class KingdomProductTab(models.Model):
                 ('active', '=', True),
                 ('show_in_homepage', '=', True),
             ],
-            order='sequence asc, id asc',
+            order='id asc',
             limit=limit,
         )
 
@@ -345,7 +347,7 @@ class KingdomProductTab(models.Model):
                 ('active', '=', True),
                 ('show_in_product_carousel', '=', True),
             ],
-            order='sequence asc, id asc',
+            order='id asc',
         )
 
     @api.model
@@ -356,7 +358,7 @@ class KingdomProductTab(models.Model):
                 ('active', '=', True),
                 ('use_as_carousel_banner', '=', True),
             ],
-            order='sequence asc, id asc',
+            order='id asc',
             limit=1,
         )
         if banner:
@@ -380,7 +382,7 @@ class KingdomProductTab(models.Model):
         domain = [('active', '=', True), ('tab_type', '=', tab_type)]
         if product_carousel:
             domain.append(('show_in_product_carousel', '=', True))
-        return self.sudo().search(domain, order='sequence asc, id asc', limit=1)
+        return self.sudo().search(domain, order='id asc', limit=1)
 
     @api.model
     def get_product_carousel_tab(self, tab_type):
@@ -398,7 +400,7 @@ class KingdomProductTab(models.Model):
                 ('tab_type', '=', tab_type),
                 ('show_in_product_carousel', '=', True),
             ],
-            order='sequence asc, id asc',
+            order='id asc',
             limit=1,
         )
         if not tab:

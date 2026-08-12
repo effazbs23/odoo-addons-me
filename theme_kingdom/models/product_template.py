@@ -7,8 +7,8 @@ from odoo.http import request
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    kingdom_manufacturer_id = fields.Many2one(
-        'kingdom.manufacturer',
+    kingdom_brand_id = fields.Many2one(
+        'kingdom.brand',
         string='Brand',
         index=True,
         ondelete='set null',
@@ -38,9 +38,9 @@ class ProductTemplate(models.Model):
 
     def _search_get_detail(self, website, order, options):
         result = super()._search_get_detail(website, order, options)
-        manufacturer_id = options.get('kingdom_manufacturer_id')
-        if manufacturer_id:
-            result['base_domain'].append([('kingdom_manufacturer_id', '=', int(manufacturer_id))])
+        brand_id = options.get('kingdom_brand_id')
+        if brand_id:
+            result['base_domain'].append([('kingdom_brand_id', '=', int(brand_id))])
         return result
 
     def _kingdom_resolve_pricelist(self, website, pricelist=None):

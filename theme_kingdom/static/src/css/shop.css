@@ -513,6 +513,13 @@
     margin-left: 0.35rem;
 }
 
+/* ---- Left sidebar brands ---- */
+
+.o_wsale_products_page .k-shop-sidebar-brands__title {
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
 @media (max-width: 991.98px) {
     #o_wsale_categories_filmstrip.o_wsale_filmstrip_kingdom_chips .o_wsale_filmstrip {
         flex-wrap: nowrap;

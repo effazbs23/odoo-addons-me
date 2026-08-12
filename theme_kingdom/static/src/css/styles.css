@@ -93,7 +93,8 @@ body {
     position: sticky;
     top: 0;
     z-index: 1020;
-    background: var(--white);
+    /* Inherit Style → Header → Background from .header-main / chrome_colors */
+    background: transparent;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   }
 }
@@ -148,9 +149,11 @@ html.k-no-topbar #AnnouncementBanner {
   }
 }
 
-/* —— Main header (theme `.header` / `.header-lower` from Content) —— */
+/* —— Main header (theme `.header` / `.header-lower` from Content) ——
+   Do not hardcode white here — Style → Header → Background (menu / menu-custom)
+   and chrome_colors.scss own the background. Keep only the border. */
 .header.header-main {
-  background: var(--white);
+  background-image: none;
   border-bottom: 1px solid var(--light-grey);
 }
 
@@ -283,7 +286,7 @@ html.k-no-topbar #AnnouncementBanner {
 @media (max-width: 991px) {
   .announcement-bar {
     min-height: 38px;
-    background: #7a60bf;
+    /* Background comes from chrome_colors / --secondary-color — do not hardcode */
   }
 
   .announcement-bar .announcement-item {
@@ -3017,7 +3020,7 @@ body.flyout-cart-open::after {
   }
 }
 
-/* Brands */
+/* Brands — generic compact tiles (not homepage stacked logos) */
 .brand-swiper .swiper-slide {
   display: flex;
   align-items: center;
@@ -3029,6 +3032,21 @@ body.flyout-cart-open::after {
   font-weight: 600;
   font-size: 0.8rem;
   color: var(--k-muted);
+}
+
+/* Homepage brands: neutralize generic tile chrome; keep logo-card layout */
+.home-brands-section .brand-swiper .swiper-slide {
+  height: auto;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-weight: inherit;
+  font-size: inherit;
+  color: inherit;
+  display: block;
+  align-items: stretch;
+  justify-content: flex-start;
 }
 
 /* Trust bar */
@@ -4415,35 +4433,35 @@ body.flyout-cart-open::after {
 }
 
 /* —— Brands —— */
-.home-manufacturers-section.carousel-grid {
+.home-brands-section.carousel-grid {
   padding: 1.75rem 0 1.5rem;
   background: #fff;
   margin-bottom: 0;
 }
 
-.home-manufacturers-section .home-manufacturers-head.title {
+.home-brands-section .home-brands-head.title {
   position: relative;
   margin-bottom: 1rem;
 }
 
-.home-manufacturers-section .home-manufacturers-head h2 {
+.home-brands-section .home-brands-head h2 {
   margin: 0;
   font-size: 1.35rem;
   font-weight: 700;
   color: var(--k-heading);
 }
 
-.home-manufacturers-section .carousel-container {
+.home-brands-section .carousel-container {
   position: relative;
   overflow: visible;
 }
 
-.home-manufacturers-section .manufacturer-swiper {
+.home-brands-section .brand-swiper {
   overflow: hidden;
 }
 
 /* kingdom.css sets col-* to width:100% — restore grid fractions until Swiper inline width applies */
-.home-manufacturers-section .carousel-manufacturer .swiper-slide.col-4 {
+.home-brands-section .carousel-brand .swiper-slide.col-4 {
   width: 33.3333333333%;
   padding-left: 0;
   padding-right: 0;
@@ -4454,24 +4472,24 @@ body.flyout-cart-open::after {
 }
 
 @media (min-width: 576px) {
-  .home-manufacturers-section .carousel-manufacturer .swiper-slide.col-sm-3 {
+  .home-brands-section .carousel-brand .swiper-slide.col-sm-3 {
     width: 25%;
   }
 }
 
 @media (min-width: 992px) {
-  .home-manufacturers-section .carousel-manufacturer .swiper-slide.col-lg-2 {
+  .home-brands-section .carousel-brand .swiper-slide.col-lg-2 {
     width: 16.6666666667%;
   }
 }
 
 @media (min-width: 1600px) {
-  .home-manufacturers-section .carousel-manufacturer .swiper-slide.col-xl-1_5 {
+  .home-brands-section .carousel-brand .swiper-slide.col-xl-1_5 {
     width: 12.5%;
   }
 }
 
-.home-manufacturers-section .manufacturer-carousel-arrow {
+.home-brands-section .brand-carousel-arrow {
   position: absolute;
   top: -2.35rem;
   right: 0;
@@ -4490,35 +4508,35 @@ body.flyout-cart-open::after {
   cursor: pointer;
 }
 
-.home-manufacturers-section .manufacturer-carousel-arrow.swiper-button-prev {
+.home-brands-section .brand-carousel-arrow.swiper-button-prev {
   right: 2rem;
 }
 
-.home-manufacturers-section .manufacturer-carousel-arrow::after {
+.home-brands-section .brand-carousel-arrow::after {
   font-size: 0.55rem;
   font-weight: 900;
 }
 
-.home-manufacturers-section .manufacturer-carousel-arrow.swiper-button-disabled {
+.home-brands-section .brand-carousel-arrow.swiper-button-disabled {
   opacity: 1;
   border: 1px solid var(--k-yellow);
   background: #fff;
   color: var(--k-yellow);
 }
 
-.home-manufacturers-section .carousel-manufacturer .manufacturer-item {
+.home-brands-section .carousel-brand .brand-item {
   display: block;
 }
 
-.home-manufacturers-section .carousel-manufacturer .manufacturer-item:first-child {
+.home-brands-section .carousel-brand .brand-item:first-child {
   margin-bottom: 15px;
 }
 
-.home-manufacturers-section .carousel-manufacturer .manufacturer-name {
+.home-brands-section .carousel-brand .brand-name {
   display: none;
 }
 
-.home-manufacturers-section .carousel-manufacturer .manufacturer-picture {
+.home-brands-section .carousel-brand .brand-picture {
   display: block;
   position: relative;
   border: 1px solid #d3d3db;
@@ -4528,13 +4546,13 @@ body.flyout-cart-open::after {
   text-decoration: none;
 }
 
-.home-manufacturers-section .carousel-manufacturer .manufacturer-picture::before {
+.home-brands-section .carousel-brand .brand-picture::before {
   content: "";
   display: block;
   padding-top: 60%;
 }
 
-.home-manufacturers-section .carousel-manufacturer .manufacturer-picture img {
+.home-brands-section .carousel-brand .brand-picture img {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -4546,7 +4564,7 @@ body.flyout-cart-open::after {
   object-fit: contain;
 }
 
-.home-manufacturers-section .carousel-manufacturer .manufacturer-picture-fallback {
+.home-brands-section .carousel-brand .brand-picture-fallback {
   position: absolute;
   inset: 0;
   display: flex;
@@ -4560,8 +4578,8 @@ body.flyout-cart-open::after {
   line-height: 1.2;
 }
 
-.home-manufacturers-section .carousel-manufacturer .manufacturer-picture:hover,
-.home-manufacturers-section .carousel-manufacturer .manufacturer-picture:focus-visible {
+.home-brands-section .carousel-brand .brand-picture:hover,
+.home-brands-section .carousel-brand .brand-picture:focus-visible {
   border-color: var(--k-yellow);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
@@ -4720,25 +4738,23 @@ body.flyout-cart-open::after {
 }
 
 /* ============================================================================
- * Kingdom footer colors — match https://kingdom.nop-station.com/
- * Upper: #f5f5f5 + dark text | Copyright bar: #ffffff + dark text
- * Beats Odoo .o_footer / .o_footer_copyright palette (orange copyright).
+ * Kingdom footer — layout/typography only.
+ * Background comes from Style → Footer → Background (footer / footer-custom)
+ * via chrome_colors.scss — do not hardcode #f5f5f5 / #fff here.
  * ============================================================================ */
 #bottom.footer.o_footer,
 #bottom.o_footer_kingdom,
 #bottom.footer {
-  background-color: #f5f5f5 !important;
-  background-image: none !important;
-  color: #333333 !important;
+  background-image: none;
+  color: #333333;
 }
 
 #bottom.footer .footer-lower.o_footer_copyright,
 #bottom.o_footer_kingdom .footer-lower,
 #bottom.footer .o_footer_copyright,
 #bottom .footer-lower.o_footer_copyright {
-  background-color: #ffffff !important;
-  background-image: none !important;
-  color: #333333 !important;
+  background-image: none;
+  color: #333333;
   border-top: 1px solid #ececec;
 }
 
@@ -4748,12 +4764,24 @@ body.flyout-cart-open::after {
 #bottom.footer .footer-upper .list li,
 #bottom.footer .footer-upper .list li a,
 #bottom.footer .footer-upper .title strong {
-  color: #333333 !important;
+  /* Defaults only — chrome_colors.scss applies Builder colors with !important */
+  color: #333333;
+}
+
+#bottom.footer .footer-disclaimer .js_language_selector {
+  display: inline-block;
+  margin-left: 0.75rem;
+  vertical-align: middle;
+}
+
+#bottom.footer .footer-disclaimer .js_language_selector .dropdown-toggle {
+  font-size: inherit;
+  color: inherit;
 }
 
 #bottom.footer .footer-powered-brand,
 #bottom.footer .footer-powered-by a {
-  color: #d4af37 !important;
+  color: #d4af37;
   font-weight: 700;
 }
 
