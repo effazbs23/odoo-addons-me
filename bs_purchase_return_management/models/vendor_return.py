@@ -134,10 +134,16 @@ class ReturnRequest(models.Model):
             }
 
             if product.tracking == 'none':
-                on_hand = Quant._get_available_quantity(product, location) if location else 0.0
                 received = pol.product_uom_id._compute_quantity(
                     max(pol.qty_received, 0.0), uom)
-                delivered_qty = min(received, on_hand) if location else received
+                if location and product.is_storable:
+                    # non-storable products (Track Inventory unchecked) never
+                    # have quants -- on-hand is meaningless for them, so cap
+                    # only storable products by what's physically there
+                    on_hand = Quant._get_available_quantity(product, location)
+                    delivered_qty = min(received, on_hand)
+                else:
+                    delivered_qty = received
                 line_vals.append((0, 0, dict(
                     common_vals, product_id=product.id, delivered_qty=delivered_qty, lot_id=False)))
                 continue
@@ -232,6 +238,10 @@ class ReturnRequest(models.Model):
             raise UserError(_('Please set the location the goods will be returned from.'))
         Quant = self.env['stock.quant']
         for line in lines:
+            if not line.product_id.is_storable:
+                # no quants exist for non-storable products -- there is no
+                # location-based on-hand to verify against
+                continue
             on_hand = Quant._get_available_quantity(
                 line.product_id, location, lot_id=line.lot_id or None)
             if float_compare(line.return_qty, on_hand,
@@ -633,6 +643,10 @@ class ReturnRequestLine(models.Model):
             pol = self.purchase_line_id
             received = pol.product_uom_id._compute_quantity(
                 max(pol.qty_received, 0.0), self.product_id.uom_id)
+            if not self.product_id.is_storable:
+                # non-storable products (Track Inventory unchecked) have no
+                # quants -- on-hand at the location is not a meaningful cap
+                return received
             # cap by on-hand at the selected location (scoped to this line's
             # lot when tracked, so different lots of the same product never
             # share the same on-hand pool)

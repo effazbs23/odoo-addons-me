@@ -21,6 +21,7 @@
         'stock',
         'account',
         'purchase',
+        'purchase_stock',
     ],
     'data': [
         'security/security.xml',

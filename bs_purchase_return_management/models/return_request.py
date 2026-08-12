@@ -160,6 +160,9 @@ class ReturnRequest(models.Model):
         self.ensure_one()
         if self.state != 'processing':
             raise UserError(_('Only requests being processed can be marked done.'))
+        if self.return_picking_id:
+            self.return_picking_id.with_context(skip_backorder=True).button_validate()
+
         self.state = 'done'
         self.message_post(body=_('Return request completed.'))
 
