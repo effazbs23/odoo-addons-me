@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_return_request_user,return.request.user,model_return_request,group_return_user,1,1,1,0
+access_return_request_manager,return.request.manager,model_return_request,group_return_manager,1,1,1,1
+access_return_request_line_user,return.request.line.user,model_return_request_line,group_return_user,1,1,1,0
+access_return_request_line_manager,return.request.line.manager,model_return_request_line,group_return_manager,1,1,1,1
+bs_purchase_return_management.access_return_report,access_return_report,bs_purchase_return_management.model_return_report,base.group_user,1,0,0,0
+

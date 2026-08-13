@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vendor Return Form View -->
+    <record id="view_vendor_return_form" model="ir.ui.view">
+        <field name="name">vendor.return.form</field>
+        <field name="model">return.request</field>
+        <field name="arch" type="xml">
+            <form string="Purchase Return Request">
+                <header>
+                    <button name="action_submit" string="Submit" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve" type="object"
+                            class="oe_highlight" invisible="state != 'submitted'"
+                            groups="bs_purchase_return_management.group_return_manager"/>
+                    <button name="action_process" string="Process" type="object"
+                            class="oe_highlight" invisible="state != 'approved'"/>
+                    <button name="action_done" string="Done" type="object"
+                            class="oe_highlight" invisible="state != 'processing'"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state not in ('draft','submitted','approved')"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,processing,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_return_picking" type="object"
+                                class="oe_stat_button" icon="fa-truck"
+                                invisible="not return_picking_id">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Return to</span>
+                                <span class="o_stat_text">Vendor</span>
+                            </div>
+                        </button>
+                        <button name="action_view_credit_note" type="object"
+                                class="oe_stat_button" icon="fa-money"
+                                invisible="not credit_note_id">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Vendor</span>
+                                <span class="o_stat_text">Credit Note</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <field name="return_operation_type" invisible="1"/>
+
+                    <group>
+                        <group>
+                            <field name="partner_id" string="Vendor"
+                                   options="{'no_create': True}"
+                                   domain="[('supplier_rank', '>', 0)]"/>
+                            <field name="request_date"/>
+                            <field name="expected_return_date" string="Return Date"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="company_id"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="priority" widget="priority"/>
+
+                        </group>
+                    </group>
+
+                    <group>
+                        <group>
+                            <field name="purchase_order_id"
+                                   options="{'no_create': True}"
+                                   readonly="state != 'draft'"/>
+                            <field name="return_source_location_id"
+                                   required="1" string="Location"
+                                   readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="picking_id"
+                                   string="Receipt (optional reference)"
+                                   readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="invoice_id"
+                                   string="Bill (optional reference)"
+                                   readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Return Lines">
+                            <field name="return_line_ids">
+                                <list editable="bottom"
+                                      create="false"
+                                >
+                                    <field name="product_id"/>
+                                    <field name="lot_id" readonly="1" force_save="1" optional="show"/>
+                                    <field name="uom_id"/>
+                                    <field name="ordered_qty" readonly="1" string="Ordered Qty" force_save="1"
+                                           optional="show"/>
+                                    <field name="qty_received_at_location" readonly="1" force_save="1"
+                                           optional="hide"/>
+                                    <field name="delivered_qty" string="Received Qty" readonly="1" force_save="1"/>
+                                    <field name="invoiced_qty" string="Billed Qty" readonly="1" force_save="1"/>
+                                    <field name="available_qty" readonly="1" force_save="1"/>
+                                    <field name="already_returned_qty" optional="hide"/>
+                                    <field name="return_reason" optional="hide"/>
+                                    <field name="return_condition" optional="hide"/>
+                                    <field name="qty_on_hand_at_source" readonly="1" optional="show"
+                                           string="On Hand Qty"/>
+                                    <field name="return_qty" string="Return Qty"/>
+                                    <field name="price_unit" readonly="1" force_save="1"/>
+                                    <field name="return_amount" sum="Total Return Amount"/>
+                                    <field name="move_id" column_invisible="1"/>
+                                    <field name="purchase_line_id" column_invisible="1"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+<!--                            <group class="oe_subtotal_footer oe_right">-->
+<!--                                <field name="total_return_qty"/>-->
+<!--                                <field name="total_return_amount"/>-->
+<!--                            </group>-->
+                        </page>
+                        <page string="Return Reason">
+                            <field name="reason"
+                                   placeholder="Describe the reason for returning goods to the vendor..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vendor Return List View -->
+    <record id="view_vendor_return_list" model="ir.ui.view">
+        <field name="name">vendor.return.list</field>
+        <field name="model">return.request</field>
+        <field name="arch" type="xml">
+            <list string="Vendor Returns" decoration-info="state=='draft'"
+                  decoration-warning="state=='submitted'" decoration-success="state=='done'">
+                <field name="name"/>
+                <field name="partner_id" string="Vendor"/>
+                <field name="invoice_id" string="Vendor Bill" optional="show"/>
+                <field name="picking_id" string="Receipt" optional="show"/>
+                <field name="request_date"/>
+                <field name="total_return_qty" sum="Total Qty"/>
+                <field name="total_return_amount" sum="Total Amount"/>
+                <field name="priority" widget="priority"/>
+                <field name="state" decoration-info="state=='draft'"
+                       decoration-warning="state=='submitted'" decoration-success="state=='done'"/>
+                <field name="user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vendor Return Kanban View -->
+    <record id="view_vendor_return_kanban" model="ir.ui.view">
+        <field name="name">vendor.return.kanban</field>
+        <field name="model">return.request</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="state"/>
+                <field name="priority"/>
+                <field name="total_return_amount"/>
+                <field name="user_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                </div>
+                                <div class="o_kanban_record_top_right">
+                                    <field name="priority" widget="priority"/>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <field name="partner_id"/>
+                                <br/>
+                                <span class="text-muted">Amount:</span>
+                                <field name="total_return_amount"/>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="user_id" widget="many2one_avatar_user"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Return Request Search View (shared by all return.request actions) -->
+    <record id="view_return_request_search" model="ir.ui.view">
+        <field name="name">return.request.search</field>
+        <field name="model">return.request</field>
+        <field name="arch" type="xml">
+            <search string="Return Requests">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="invoice_id"/>
+                <field name="picking_id"/>
+                <field name="purchase_order_id"/>
+                <field name="user_id"/>
+                <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_submitted" string="Submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter name="filter_approved" string="Approved" domain="[('state', '=', 'approved')]"/>
+                <filter name="filter_processing" string="Processing" domain="[('state', '=', 'processing')]"/>
+                <filter name="filter_done" string="Done" domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <filter name="filter_my_requests" string="My Requests"
+                        domain="[('user_id', '=', uid)]"/>
+                <group>
+                    <filter name="group_by_partner" string="Partner" context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_purchase_order" string="Purchase Order"
+                            context="{'group_by': 'purchase_order_id'}"/>
+                    <filter name="group_by_user" string="Responsible" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Purchase Order: Vendor Returns stat button -->
+    <record id="view_purchase_order_form_return" model="ir.ui.view">
+        <field name="name">purchase.order.form.vendor.return</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_return_requests" type="object"
+                        class="oe_stat_button" icon="fa-undo"
+                        invisible="return_request_count == 0">
+                    <field name="return_request_count" widget="statinfo" string="Returns"/>
+                </button>
+            </div>
+        </field>
+    </record>
+
+    <!-- Vendor Return Action -->
+    <record id="action_vendor_return" model="ir.actions.act_window">
+        <field name="name">Purchase Return Request</field>
+        <field name="res_model">return.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('return_operation_type', '=', 'vendor')]</field>
+        <field name="context">{'default_return_operation_type': 'vendor'}</field>
+        <field name="search_view_id" ref="view_return_request_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_vendor_return_kanban')}),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_vendor_return_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_vendor_return_form')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first vendor return
+            </p>
+            <p>
+                Send goods back to your vendors against a bill or a receipt and
+                generate the matching vendor credit note.
+            </p>
+        </field>
+    </record>
+</odoo>
