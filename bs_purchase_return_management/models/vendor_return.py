@@ -83,6 +83,17 @@ class ReturnRequest(models.Model):
                 or po.picking_type_id.warehouse_id.lot_stock_id)
         self._generate_po_return_lines()
 
+    @api.onchange('picking_id')
+    def _onchange_vendor_picking(self):
+        """Selecting a receipt for reference defaults the return location to
+        where that receipt actually put the goods (its destination location),
+        since that is normally where the returned units still sit. The user
+        can still change it afterwards."""
+        if self.return_operation_type != 'vendor' or not self.picking_id:
+            return
+        self.return_source_location_id = self.picking_id.location_dest_id
+        self._generate_po_return_lines()
+
     @api.onchange('return_source_location_id')
     def _onchange_vendor_source_location(self):
         """Regenerate return lines when the return location changes so that
