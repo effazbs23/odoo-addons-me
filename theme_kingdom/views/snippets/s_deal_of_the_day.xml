@@ -96,7 +96,7 @@
                                 </div>
                             </div>
 
-                            <div class="deals-products">
+                            <div class="deals-products k-live-body o_not_editable o_prevent_link_editor" contenteditable="false">
                                 <div class="swiper deal-swiper">
                                     <div class="swiper-wrapper">
                                         <t t-if="deal_products">
@@ -118,7 +118,8 @@
                                                         </t>
                                                         <div class="picture">
                                                             <t t-call="theme_kingdom.product_card_ribbons"/>
-                                                            <a t-att-href="product.website_url">
+                                                            <a t-att-href="product.website_url"
+                                                               contenteditable="false">
                                                                 <img t-att-src="'/web/image/product.template/%s/image_256' % product.id"
                                                                      t-att-alt="product.name"
                                                                      loading="lazy"/>
@@ -128,6 +129,7 @@
                                                         <div class="details">
                                                             <h2 class="product-title">
                                                                 <a t-att-href="product.website_url"
+                                                                   contenteditable="false"
                                                                    t-esc="product.name"/>
                                                             </h2>
                                                             <div class="add-info">

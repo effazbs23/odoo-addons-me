@@ -32,6 +32,7 @@
                     </div>
                 </div>
 
+                <div class="k-live-body o_not_editable o_prevent_link_editor" contenteditable="false">
                 <div class="swiper featured-swiper featured-products-swiper">
                     <div class="swiper-wrapper">
                         <t t-if="featured_products">
@@ -55,7 +56,9 @@
                                              t-att-data-product-template-id="product.id"
                                              t-att-data-product-type="product.type">
                                         <t t-call="theme_kingdom.product_card_ribbons"/>
-                                        <a t-att-href="product.website_url" class="featured-product-picture">
+                                        <a t-att-href="product.website_url"
+                                           class="featured-product-picture"
+                                           contenteditable="false">
                                             <img t-att-src="'/web/image/product.template/%s/image_512' % product.id"
                                                  t-att-alt="product.name"
                                                  loading="lazy"/>
@@ -63,7 +66,9 @@
                                         <t t-call="theme_kingdom.product_card_action_buttons"/>
                                         <div class="featured-product-body">
                                             <h3>
-                                                <a t-att-href="product.website_url" t-esc="product.name"/>
+                                                <a t-att-href="product.website_url"
+                                                   contenteditable="false"
+                                                   t-esc="product.name"/>
                                             </h3>
                                             <div class="featured-product-stars"
                                                  t-att-aria-label="'%s out of 5 stars' % rating_rounded">
@@ -199,6 +204,7 @@
                             </div>
                         </t>
                     </div>
+                </div>
                 </div>
             </div>
         </section>

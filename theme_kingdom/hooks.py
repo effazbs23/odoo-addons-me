@@ -456,6 +456,66 @@ def _rename_manufacturer_to_brand(cr):
                 pass
 
 
+def _migrate_promo_banners_to_img(env):
+    """Convert twin promo cards from CSS background-image to <img> (Replace in Builder)."""
+    ICP = env['ir.config_parameter'].sudo()
+    flag = 'theme_kingdom.promo_banners_img_migrated_v2'
+    if ICP.get_param(flag):
+        return
+
+    bg_url_re = re.compile(
+        r"""background-image:\s*url\(\s*['"]?([^'")]+)['"]?\s*\)\s*;?""",
+        re.IGNORECASE,
+    )
+    View = env['ir.ui.view'].sudo()
+    views = View.search([
+        ('type', '=', 'qweb'),
+        ('arch_db', 'ilike', 'promo-banner-blocks__card'),
+        ('arch_db', 'ilike', 'background-image'),
+    ])
+    for view in views:
+        arch = view.arch_db
+        if not arch:
+            continue
+        try:
+            root = etree.fromstring(arch)
+        except etree.XMLSyntaxError:
+            continue
+        changed = False
+        for card in root.xpath(
+            '//*[contains(concat(" ", normalize-space(@class), " "), " promo-banner-blocks__card ")]'
+        ):
+            if card.xpath('.//img[contains(@class, "promo-banner-blocks__img")]'):
+                continue
+            style = card.get('style') or ''
+            match = bg_url_re.search(style)
+            if not match:
+                continue
+            src = match.group(1)
+            new_style = bg_url_re.sub('', style).strip().strip(';').strip()
+            if new_style:
+                card.set('style', new_style)
+            elif 'style' in card.attrib:
+                del card.attrib['style']
+            for child in list(card):
+                card.remove(child)
+            img = etree.SubElement(card, 'img')
+            img.set('src', src)
+            img.set('alt', card.get('aria-label') or '')
+            img.set('width', '1320')
+            img.set('height', '423')
+            img.set('loading', 'lazy')
+            img.set('class', 'img img-fluid w-100 promo-banner-blocks__img')
+            img.set('data-name', 'Promo Banner Image')
+            changed = True
+        if changed:
+            view.with_context(no_save_prev=True).write({
+                'arch_db': etree.tostring(root, encoding='unicode'),
+            })
+
+    ICP.set_param(flag, '1')
+
+
 def pre_init_hook(env):
     """Prepare schema and migrate legacy data before module models load."""
     _rename_manufacturer_to_brand(env.cr)
@@ -514,7 +574,8 @@ def post_init_hook(env):
                     'perm_read': True,
                 })
 
-    # Kingdom header/footer are selectable in Website Builder only — do not auto-enable.
+    # Mark Kingdom theme templates inactive by default (gallery opt-in).
+    # Do not force-disable applied chrome — that raced with theme post_copy.
     env['theme.utils']._migrate_header_footer_opt_in()
     env['theme.utils']._ensure_header_respects_no_header()
 
@@ -526,8 +587,12 @@ def post_init_hook(env):
     _migrate_kingdom_snippet_oe_structure(env)
     _strip_saved_snippet_editor_hints(env)
     _strip_baked_editor_branding(env)
+    _migrate_promo_banners_to_img(env)
     _remove_dynamic_product_tabs_feature(env)
     _cleanup_stale_oe_view_refs(env)
+
+    # Theme may have been applied during this install; re-enable Kingdom chrome last.
+    env['theme.utils']._sync_kingdom_chrome_on_themed_websites()
 
 
 def _ensure_homepage_featured_categories(env):

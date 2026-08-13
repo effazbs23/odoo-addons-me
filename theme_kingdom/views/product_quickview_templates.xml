@@ -21,7 +21,7 @@
         </button>
     </template>
 
-    <!-- Quick View trigger button -->
+    <!-- Quick View trigger (homepage / snippet cards — Kingdom icon button) -->
     <template id="product_quickview_button" name="Kingdom Quick View Button">
         <button type="button"
                 class="button-2 quick-view-button kingdom-quickview-btn"
@@ -212,18 +212,13 @@
         </div>
     </template>
 
-    <!-- Shop list panel: keep variant swatches with price/actions -->
+    <!-- Shop list panel: mark price/actions cluster for list styling only -->
     <template id="kingdom_products_item_list_panel"
               inherit_id="website_sale.products_item"
               name="Kingdom Shop List Panel"
               priority="30">
-        <!-- Drop attributes from the text column -->
-        <xpath expr="//div[hasclass('o_wsale_product_info_attributes_wrapper')]/t[@t-call='website_sale.product_variant_preview']"
-               position="replace"/>
-        <!-- Re-inject at top of price/actions cluster -->
-        <xpath expr="//div[hasclass('o_wsale_product_sub')]" position="inside">
-            <t t-if="product_ptavs_data" t-call="website_sale.product_variant_preview"/>
-        </xpath>
+        <!-- Keep variant swatches in attributes wrapper (grid needs them there).
+             Moving them into product_sub caused absolute positioning to overlap the title. -->
         <xpath expr="//div[hasclass('o_wsale_product_sub')]" position="attributes">
             <attribute name="class" add="k-shop-list-panel" separator=" "/>
         </xpath>
@@ -280,7 +275,14 @@
             </t>
         </xpath>
         <xpath expr="//div[hasclass('o_wsale_product_action_row')]" position="inside">
-            <t t-call="theme_kingdom.product_quickview_button"/>
+            <!-- Inline: theme QWeb converts inherits before new standalone templates. -->
+            <button type="button"
+                    class="btn kingdom-quickview-btn"
+                    title="Quick view"
+                    aria-label="Quick view"
+                    t-att-data-product-template-id="product.id">
+                <span class="visually-hidden o_translate_inline">Quick view</span>
+            </button>
         </xpath>
     </template>
 

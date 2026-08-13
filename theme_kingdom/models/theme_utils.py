@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from odoo import api, models
 
 from odoo.addons.theme_kingdom.hooks import (
     _cleanup_stale_oe_view_refs,
     _migrate_kingdom_snippet_oe_structure,
+    _migrate_promo_banners_to_img,
     _remove_dynamic_product_tabs_feature as remove_dynamic_product_tabs_feature,
     _strip_baked_editor_branding,
     _strip_saved_snippet_editor_hints,
 )
 
+_logger = logging.getLogger(__name__)
 _OPT_IN_MIGRATION_KEY = 'theme_kingdom.header_footer_opt_in_migrated'
 
 
@@ -63,21 +67,17 @@ class ThemeUtils(models.AbstractModel):
 
     @api.model
     def _migrate_header_footer_opt_in(self):
-        """One-time conversion from always-on Kingdom templates to builder opt-in.
+        """One-time: mark theme templates inactive by default (builder opt-in).
 
-        Safe to call repeatedly; gated by an ir.config_parameter flag.
+        Does NOT force-disable already-applied Kingdom chrome on themed websites —
+        that raced with ``_theme_kingdom_post_copy`` on fresh installs and hid the
+        header/footer from the Style gallery selection state.
         """
         ICP = self.env['ir.config_parameter'].sudo()
         if ICP.get_param(_OPT_IN_MIGRATION_KEY):
             return True
         self._set_kingdom_theme_views_inactive()
         self._disable_legacy_kingdom_header()
-        for website in self.env['website'].search([]):
-            utils = self.with_context(website_id=website.id)
-            utils.disable_view('theme_kingdom.template_header_kingdom')
-            utils.disable_view('theme_kingdom.template_footer_kingdom')
-            utils.enable_view('website.template_header_default')
-            utils.enable_view('website.footer_custom')
         ICP.set_param(_OPT_IN_MIGRATION_KEY, '1')
         return True
 
@@ -85,6 +85,11 @@ class ThemeUtils(models.AbstractModel):
     def _strip_baked_editor_branding(self):
         """Expose hooks._strip_baked_editor_branding for XML <function> upgrades."""
         _strip_baked_editor_branding(self.env)
+
+    @api.model
+    def _migrate_promo_banners_to_img(self):
+        """Expose hooks._migrate_promo_banners_to_img for XML <function> upgrades."""
+        _migrate_promo_banners_to_img(self.env)
         return True
 
     def _post_copy(self, mod):
@@ -97,6 +102,15 @@ class ThemeUtils(models.AbstractModel):
         self._disable_legacy_kingdom_header()
         self.enable_view('theme_kingdom.template_header_kingdom')
         self.enable_view('theme_kingdom.template_footer_kingdom')
+        # Keep Style → Template gallery in sync (otherwise label stays "None").
+        website = self.env['website'].get_current_website()
+        self.env['website.assets'].with_context(website_id=website.id).make_scss_customization(
+            '/website/static/src/scss/options/user_values.scss',
+            {
+                'header-template': 'kingdom',
+                'footer-template': 'kingdom',
+            },
+        )
         self._enable_kingdom_product_page_views()
 
     def _enable_kingdom_product_page_views(self):
@@ -107,7 +121,16 @@ class ThemeUtils(models.AbstractModel):
             'website_sale_wishlist.product_add_to_wishlist',
             'website_sale_comparison.product_add_to_compare',
         ):
-            self.enable_view(xml_id)
+            try:
+                with self.env.cr.savepoint():
+                    self.enable_view(xml_id)
+            except Exception:
+                _logger.warning(
+                    'Could not enable %s on website %s',
+                    xml_id,
+                    self.env.context.get('website_id'),
+                    exc_info=True,
+                )
 
     def _theme_kingdom_post_copy(self, mod):
         # When Theme Kingdom is applied to a website, enable Kingdom chrome
@@ -117,25 +140,25 @@ class ThemeUtils(models.AbstractModel):
         _migrate_kingdom_snippet_oe_structure(self.env)
         _strip_saved_snippet_editor_hints(self.env)
         _strip_baked_editor_branding(self.env)
+        _migrate_promo_banners_to_img(self.env)
         remove_dynamic_product_tabs_feature(self.env)
         _cleanup_stale_oe_view_refs(self.env)
         return True
 
     @api.model
     def _sync_kingdom_chrome_on_themed_websites(self):
-        """One-time: enable Kingdom header/footer on every website using this theme."""
-        ICP = self.env['ir.config_parameter'].sudo()
-        flag = 'theme_kingdom.sync_chrome_on_themed_websites_v1'
-        if ICP.get_param(flag):
-            return True
+        """Enable Kingdom header/footer on every website that uses this theme.
+
+        Idempotent. Safe on install/upgrade after theme apply + post_init ordering.
+        """
         theme = self.env['ir.module.module'].search([
             ('name', '=', 'theme_kingdom'),
             ('state', '=', 'installed'),
         ], limit=1)
-        if theme:
-            for website in self.env['website'].search([('theme_id', '=', theme.id)]):
-                self.with_context(website_id=website.id)._enable_kingdom_chrome()
-        ICP.set_param(flag, '1')
+        if not theme:
+            return True
+        for website in self.env['website'].search([('theme_id', '=', theme.id)]):
+            self.with_context(website_id=website.id)._enable_kingdom_chrome()
         return True
 
     @api.model

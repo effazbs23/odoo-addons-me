@@ -39,8 +39,8 @@ class KingdomHeaderFooterTemplatePlugin extends Plugin {
 
     resources = {
         footer_templates_providers: [
-            // After core website footers (default sequence 10) so Kingdom is last.
-            withSequence(100, () => this.getKingdomFooterTemplates()),
+            // Right after core website footers so Kingdom is visible near the top.
+            withSequence(11, () => this.getKingdomFooterTemplates()),
         ],
         theme_options: [
             withSequence(

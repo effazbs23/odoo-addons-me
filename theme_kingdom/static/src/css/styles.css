@@ -3757,27 +3757,33 @@ body.flyout-cart-open::after {
 
 .promo-banner-blocks__card {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  display: block;
   min-height: 11rem;
   aspect-ratio: 1320 / 423;
   background-color: #e8eaed;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   border-radius: 0.35rem;
   overflow: hidden;
   border: 1px solid var(--k-border);
   text-decoration: none;
   color: inherit;
+  line-height: 0;
   transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+/* Same as s_promo_banner: real <img> so Website Builder shows Replace */
+.promo-banner-blocks__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 1320 / 423;
 }
 
 .promo-banner-blocks__card::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 1;
   pointer-events: none;
   background: linear-gradient(90deg, rgba(0, 0, 0, 0.12) 0%, transparent 55%);
   opacity: 0.85;

@@ -99,6 +99,30 @@ class KingdomSnippetOptionPlugin extends Plugin {
         on_removed_handlers: this.onRemovedKingdomSnippet.bind(this),
         // Keep #wrap editable: never persist ir.ui.view branding inside page arches.
         clean_for_save_handlers: this.cleanViewBrandingForSave.bind(this),
+        // DB-driven Kingdom snippet links stay fixed (not editable via link popover).
+        // Promo banners / hero CTAs are excluded — they have no data-kingdom-live-snippet.
+        immutable_link_selectors: [
+            ".k-live-body a",
+            ".o_prevent_link_editor a",
+            "[data-kingdom-live-snippet] a",
+            "section.s_blog_news a",
+            "section.s_category_slider a",
+            "section.s_featured_products a",
+            "section.s_bestsale_products a",
+            "section.s_product_carousel a",
+            "section.s_category_dual_carousels a",
+            "section.s_brands a",
+            "section.s_manufacturers a",
+            "section.dealoftheday-wrapper a",
+            "section.s_coming_soon a",
+            ".product-carousel-cell a",
+            ".product-carousel-feature a",
+            ".product-carousel-feature__bg-link",
+            ".product-carousel-feature__title",
+            ".k-cat-card",
+            ".brand-picture",
+            ".brand-name a",
+        ],
     };
 
     cleanViewBrandingForSave({ root }) {

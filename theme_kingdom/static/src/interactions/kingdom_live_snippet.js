@@ -1,6 +1,7 @@
 import { Interaction } from '@web/public/interaction';
 import { registry } from '@web/core/registry';
 import { rpc } from '@web/core/network/rpc';
+import { ProductComparison } from '@website_sale_comparison/interactions/product_comparison';
 
 const PRODUCT_ROW_SWIPER_OPTS = {
     spaceBetween: 14,
@@ -16,6 +17,11 @@ const PRODUCT_ROW_SWIPER_OPTS = {
 
 function padCountdown(n) {
     return String(n).padStart(2, '0');
+}
+
+function kingdomSwiperCanLoop(slideCount, maxSlidesPerView) {
+    const max = Math.max(1, Math.ceil(Number(maxSlidesPerView) || 1));
+    return slideCount > max;
 }
 
 function parseDealEndMs(root) {
@@ -69,12 +75,76 @@ export class KingdomLiveSnippet extends Interaction {
     }
 
     /**
-     * Live refresh runs on public pages and in Website Builder.
-     * Server render uses inherit_branding=False; we also strip any view
-     * branding attrs before injecting HTML so #wrap Blocks stay usable.
+     * True while Website Builder is editing this page (iframe or parent).
+     * Live RPC must not replace markup in the editor — widgets only.
      */
     _isWebsiteEditorContext() {
+        if (typeof document === 'undefined') {
+            return false;
+        }
+        if (document.body.classList.contains('editor_enable')) {
+            return true;
+        }
+        if (document.getElementById('oe_snippets')) {
+            return true;
+        }
+        if (this.el.closest('.o_editable, #wrapwrap.o_editable, #wrap.o_editable')) {
+            return true;
+        }
+        try {
+            if (window.parent && window.parent !== window) {
+                const parentDoc = window.parent.document;
+                if (
+                    parentDoc.body.classList.contains('editor_enable')
+                    || parentDoc.body.classList.contains('o_builder_open')
+                    || parentDoc.querySelector('.o_website_preview, #oe_snippets')
+                ) {
+                    return true;
+                }
+            }
+        } catch (_err) {
+            // Cross-origin parent — treat as public.
+        }
         return false;
+    }
+
+    /**
+     * Prefer `.k-live-body` so section headings stay intact on public refresh;
+     * fall back to `.k-container` for older saved markup.
+     */
+    _getLiveReplaceTarget(sectionEl, preferLiveBody = true) {
+        if (!sectionEl) {
+            return null;
+        }
+        if (preferLiveBody) {
+            const liveBody = sectionEl.querySelector('.k-live-body');
+            if (liveBody) {
+                return liveBody;
+            }
+        }
+        return sectionEl.querySelector('.k-container');
+    }
+
+    /**
+     * Live refresh swaps product cards inside js_sale snippets but keeps the
+     * section-level ProductComparison interaction. Re-bind compare click handlers
+     * on the fresh .o_add_compare buttons (wishlist/cart bind per button).
+     */
+    _rebindProductComparisons() {
+        const service = this.services['public.interactions'];
+        if (!service?.interactions) {
+            return;
+        }
+        const section = this.el;
+        for (const colibri of service.interactions) {
+            if (colibri.el !== section || colibri.isDestroyed || !colibri.hasStarted) {
+                continue;
+            }
+            if (colibri.interaction?.constructor !== ProductComparison) {
+                continue;
+            }
+            colibri.updateContent();
+        }
     }
 
     _stripViewBranding(rootEl) {
@@ -130,26 +200,28 @@ export class KingdomLiveSnippet extends Interaction {
                 rpc('/theme_kingdom/snippet/render', { snippet_key: snippetKey })
             );
             if (html && !this._isWebsiteEditorContext()) {
-                const container = this.el.querySelector('.k-container');
-                if (container) {
-                    const temp = document.createElement('div');
-                    temp.innerHTML = html;
-                    const freshSection = temp.querySelector('[data-kingdom-live-snippet], section[data-snippet]');
-                    const freshContainer = freshSection && freshSection.querySelector('.k-container');
-                    if (freshContainer) {
-                        this._stripViewBranding(freshContainer);
+                const temp = document.createElement('div');
+                temp.innerHTML = html;
+                const freshSection = temp.querySelector('[data-kingdom-live-snippet], section[data-snippet]');
+                const useLiveBody = Boolean(this.el.querySelector('.k-live-body'));
+                const liveTarget = this._getLiveReplaceTarget(this.el, useLiveBody);
+                const freshTarget = this._getLiveReplaceTarget(freshSection, useLiveBody);
+                if (liveTarget && freshTarget) {
+                    this._stripViewBranding(freshTarget);
+                    if (freshSection) {
                         if (freshSection.classList.contains('d-none') && !this.el.classList.contains('d-none')) {
                             this.el.classList.add('d-none');
                         } else if (!freshSection.classList.contains('d-none')) {
                             this.el.classList.remove('d-none');
                         }
-                        this.services['public.interactions'].stopInteractions(container);
-                        container.replaceWith(freshContainer);
-                        await this.waitFor(
-                            this.services['public.interactions'].startInteractions(this.el)
-                        );
-                        refreshed = true;
                     }
+                    this.services['public.interactions'].stopInteractions(liveTarget);
+                    liveTarget.replaceWith(freshTarget);
+                    await this.waitFor(
+                        this.services['public.interactions'].startInteractions(this.el)
+                    );
+                    this._rebindProductComparisons();
+                    refreshed = true;
                 }
             }
         } catch (_error) {
@@ -244,19 +316,22 @@ export class KingdomLiveSnippet extends Interaction {
         }
         const slideCount = swiperEl.querySelectorAll('.swiper-slide').length;
         const nav = this.el.querySelector('.deal-swiper-nav');
+        const inEditor = this._isWebsiteEditorContext();
         new Swiper(swiperEl, {
             slidesPerView: 'auto',
-            observer: true,
-            observeParents: true,
+            observer: !inEditor,
+            observeParents: !inEditor,
             lazy: true,
-            loop: slideCount > 1,
+            loop: !inEditor && slideCount > 3,
             centeredSlides: false,
             initialSlide: 0,
-            autoplay: {
-                delay: 5000,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-            },
+            autoplay: inEditor
+                ? false
+                : {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                },
             pagination: {
                 el: swiperEl.querySelector('.swiper-pagination'),
                 clickable: true,
@@ -294,11 +369,12 @@ export class KingdomLiveSnippet extends Interaction {
                 swiperEl.swiper.destroy(true, true);
             }
             const nav = this.el.querySelector('.featured-products-nav');
+            const inEditor = this._isWebsiteEditorContext();
             new Swiper(
                 swiperEl,
                 Object.assign({}, PRODUCT_ROW_SWIPER_OPTS, {
-                    observer: true,
-                    observeParents: true,
+                    observer: !inEditor,
+                    observeParents: !inEditor,
                     watchOverflow: true,
                     preventClicks: false,
                     preventClicksPropagation: false,
@@ -364,15 +440,16 @@ export class KingdomLiveSnippet extends Interaction {
             swiperEl.swiper.destroy(true, true);
         }
         const slideCount = swiperEl.querySelectorAll('.swiper-slide').length;
+        const inEditor = this._isWebsiteEditorContext();
         // Fixed slidesPerView keeps logo tiles grid-sized; only gate loop.
         const config = {
-            loop: slideCount > 3,
+            loop: !inEditor && kingdomSwiperCanLoop(slideCount, 8),
             speed: 450,
             spaceBetween: 15,
             slidesPerView: 3,
             watchOverflow: true,
-            observer: true,
-            observeParents: true,
+            observer: !inEditor,
+            observeParents: !inEditor,
             navigation: {
                 prevEl,
                 nextEl,

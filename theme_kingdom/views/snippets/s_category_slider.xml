@@ -17,60 +17,66 @@
                        ('show_in_homepage', '=', True),
                    ], order='sequence, name, id', limit=8)"/>
 
-                <t t-if="cats">
-                    <!-- Desktop ≥992: plain grid -->
-                    <div class="k-cat-desktop">
-                        <t t-foreach="cats" t-as="cat">
-                            <div class="k-cat-desktop__cell">
-                                <a class="k-cat-card" t-att-href="'/shop/category/%s' % cat.id">
-                                    <span class="k-cat-card__media">
-                                        <img t-att-src="'/web/image/product.public.category/%s/image_256' % cat.id"
-                                             t-att-alt="cat.name"
-                                             loading="lazy"/>
-                                    </span>
-                                    <span class="k-cat-card__body">
-                                        <span class="k-cat-card__name" t-esc="cat.name"/>
-                                    </span>
-                                </a>
-                            </div>
-                        </t>
-                    </div>
+                <div class="k-live-body o_not_editable o_prevent_link_editor" contenteditable="false">
+                    <t t-if="cats">
+                        <!-- Desktop ≥992: plain grid -->
+                        <div class="k-cat-desktop">
+                            <t t-foreach="cats" t-as="cat">
+                                <div class="k-cat-desktop__cell">
+                                    <a class="k-cat-card"
+                                       t-att-href="'/shop/category/%s' % cat.id"
+                                       contenteditable="false">
+                                        <span class="k-cat-card__media">
+                                            <img t-att-src="'/web/image/product.public.category/%s/image_256' % cat.id"
+                                                 t-att-alt="cat.name"
+                                                 loading="lazy"/>
+                                        </span>
+                                        <span class="k-cat-card__body">
+                                            <span class="k-cat-card__name" t-esc="cat.name"/>
+                                        </span>
+                                    </a>
+                                </div>
+                            </t>
+                        </div>
 
-                    <!-- Mobile: Swiper strip -->
-                    <div class="k-cat-mobile category-grid category-grid-static">
-                        <div class="swiper home-category-swiper">
-                            <div class="swiper-wrapper">
-                                <t t-foreach="cats" t-as="cat">
-                                    <div class="swiper-slide">
-                                        <div class="item-box">
-                                            <div class="category-item">
-                                                <div class="picture">
-                                                    <a t-att-href="'/shop/category/%s' % cat.id">
-                                                        <img t-att-src="'/web/image/product.public.category/%s/image_128' % cat.id"
-                                                             t-att-alt="cat.name"
-                                                             loading="lazy"/>
-                                                    </a>
-                                                </div>
-                                                <div class="title">
-                                                    <a t-att-href="'/shop/category/%s' % cat.id"
-                                                       t-esc="cat.name"/>
+                        <!-- Mobile: Swiper strip -->
+                        <div class="k-cat-mobile category-grid category-grid-static">
+                            <div class="swiper home-category-swiper">
+                                <div class="swiper-wrapper">
+                                    <t t-foreach="cats" t-as="cat">
+                                        <div class="swiper-slide">
+                                            <div class="item-box">
+                                                <div class="category-item">
+                                                    <div class="picture">
+                                                        <a t-att-href="'/shop/category/%s' % cat.id"
+                                                           contenteditable="false">
+                                                            <img t-att-src="'/web/image/product.public.category/%s/image_128' % cat.id"
+                                                                 t-att-alt="cat.name"
+                                                                 loading="lazy"/>
+                                                        </a>
+                                                    </div>
+                                                    <div class="title">
+                                                        <a t-att-href="'/shop/category/%s' % cat.id"
+                                                           contenteditable="false"
+                                                           t-esc="cat.name"/>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </t>
+                                    </t>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </t>
-                <t t-elif="editable">
-                    <div class="css_non_editable_mode_hidden">
-                        <div class="alert alert-info mb-0 o_not_editable">
-                            Enable <strong>Show in Homepage</strong> on eCommerce categories
-                            (Website → eCommerce → Categories) to populate Featured Categories.
+                    </t>
+                    <t t-elif="editable">
+                        <div class="css_non_editable_mode_hidden">
+                            <div class="alert alert-info mb-0">
+                                Enable <strong>Show in Homepage</strong> on eCommerce categories
+                                (Website → eCommerce → Categories) to populate Featured Categories.
+                            </div>
                         </div>
-                    </div>
-                </t>
+                    </t>
+                </div>
             </div>
         </section>
     </template>

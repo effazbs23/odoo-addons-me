@@ -1,29 +1,28 @@
 <svg width="234" height="60" viewBox="0 0 234 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect y="5" width="234" height="50" fill="url(#kingdom_footer_bg)"/>
-    <rect x="16" y="14" width="40" height="8" rx="1" fill="white"/>
-    <circle cx="24" cy="32" r="3" fill="white" fill-opacity=".85"/>
-    <circle cx="36" cy="32" r="3" fill="white" fill-opacity=".85"/>
-    <circle cx="48" cy="32" r="3" fill="white" fill-opacity=".85"/>
-    <rect x="16" y="40" width="40" height="4" rx="1" fill="white" fill-opacity=".5"/>
-    <rect x="70" y="14" width="32" height="4" rx="1" fill="white"/>
-    <rect x="70" y="22" width="28" height="3" rx="1" fill="white" fill-opacity=".6"/>
-    <rect x="70" y="28" width="28" height="3" rx="1" fill="white" fill-opacity=".6"/>
-    <rect x="70" y="34" width="28" height="3" rx="1" fill="white" fill-opacity=".6"/>
-    <rect x="70" y="40" width="28" height="3" rx="1" fill="white" fill-opacity=".6"/>
-    <rect x="116" y="14" width="32" height="4" rx="1" fill="white"/>
-    <rect x="116" y="22" width="28" height="3" rx="1" fill="white" fill-opacity=".6"/>
-    <rect x="116" y="28" width="28" height="3" rx="1" fill="white" fill-opacity=".6"/>
-    <rect x="116" y="34" width="28" height="3" rx="1" fill="white" fill-opacity=".6"/>
-    <rect x="116" y="40" width="28" height="3" rx="1" fill="white" fill-opacity=".6"/>
-    <rect x="162" y="14" width="32" height="4" rx="1" fill="white"/>
-    <rect x="162" y="22" width="28" height="3" rx="1" fill="white" fill-opacity=".6"/>
-    <rect x="162" y="28" width="28" height="3" rx="1" fill="white" fill-opacity=".6"/>
-    <rect x="162" y="34" width="28" height="3" rx="1" fill="white" fill-opacity=".6"/>
-    <rect x="162" y="40" width="28" height="3" rx="1" fill="white" fill-opacity=".6"/>
+    <!-- Announcement strip -->
+    <rect y="5" width="234" height="8" fill="#5b2d8e"/>
+    <!-- Main header band -->
+    <rect y="13" width="234" height="28" fill="url(#kingdom_header_bg)"/>
+    <!-- Logo -->
+    <rect x="10" y="20" width="36" height="14" rx="2" fill="#fff" fill-opacity=".92"/>
+    <!-- Search -->
+    <rect x="56" y="22" width="92" height="10" rx="2" fill="#fff" fill-opacity=".85"/>
+    <rect x="140" y="22" width="12" height="10" rx="2" fill="#e8b923"/>
+    <!-- Utility links -->
+    <rect x="162" y="24" width="18" height="3" rx="1" fill="#fff" fill-opacity=".75"/>
+    <rect x="184" y="24" width="18" height="3" rx="1" fill="#fff" fill-opacity=".75"/>
+    <rect x="206" y="24" width="18" height="3" rx="1" fill="#fff" fill-opacity=".75"/>
+    <!-- Categories / nav bar -->
+    <rect y="41" width="234" height="14" fill="#2a2a2a"/>
+    <rect x="10" y="45" width="42" height="6" rx="1" fill="#fff" fill-opacity=".9"/>
+    <rect x="62" y="46" width="18" height="4" rx="1" fill="#fff" fill-opacity=".65"/>
+    <rect x="86" y="46" width="18" height="4" rx="1" fill="#fff" fill-opacity=".65"/>
+    <rect x="110" y="46" width="18" height="4" rx="1" fill="#fff" fill-opacity=".65"/>
+    <rect x="134" y="46" width="22" height="4" rx="1" fill="#fff" fill-opacity=".65"/>
     <defs>
-        <linearGradient id="kingdom_footer_bg" x1="0" y1="5" x2="234" y2="55" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#1a1a1a"/>
-            <stop offset="1" stop-color="#333333"/>
+        <linearGradient id="kingdom_header_bg" x1="0" y1="13" x2="234" y2="41" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#357C83"/>
+            <stop offset="1" stop-color="#01A09D"/>
         </linearGradient>
     </defs>
 </svg>

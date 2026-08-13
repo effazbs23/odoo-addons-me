@@ -84,9 +84,9 @@
         </BuilderRow>
     </t>
 
-    <!-- Style → Header → Template: add Kingdom (core list already present) -->
+    <!-- Style → Header → Template: insert Kingdom right after Default (always visible). -->
     <t t-inherit="website.HeaderTemplateOption" t-inherit-mode="extension">
-        <xpath expr="//BuilderSelect[@action=&quot;'reloadComposite'&quot;]" position="inside">
+        <xpath expr="//BuilderSelectItem[@id=&quot;'header_default_opt'&quot;]" position="after">
             <BuilderSelectItem
                 id="'header_kingdom_opt'"
                 title.translate="Kingdom"

@@ -41,6 +41,7 @@
                 <div class="product-carousel-feature product-carousel-feature--category">
                     <a t-att-href="feature_href"
                        class="product-carousel-feature__bg-link"
+                       contenteditable="false"
                        t-att-aria-label="title">
                         <span class="product-carousel-feature__bg"
                               t-att-style="'background-image: url(%s);' % feature_bg"/>
@@ -48,12 +49,14 @@
                     <div class="product-carousel-feature__overlay">
                         <a t-att-href="feature_href"
                            class="product-carousel-feature__title"
+                           contenteditable="false"
                            t-esc="title"/>
                         <t t-if="subcats">
                             <ul class="product-carousel-feature__subs">
                                 <t t-foreach="subcats" t-as="subcat">
                                     <li>
                                         <a t-att-href="tab._get_category_shop_url(subcat)"
+                                           contenteditable="false"
                                            t-esc="subcat.name"/>
                                     </li>
                                 </t>
@@ -158,6 +161,7 @@
                 <t t-set="dual_tabs"
                    t-value="request.env['kingdom.product.tab'].sudo().get_website_dual_carousel_tabs(2) if 'kingdom.product.tab' in request.env else False"/>
 
+                <div class="k-live-body o_not_editable o_prevent_link_editor" contenteditable="false">
                 <t t-if="dual_tabs">
                     <div class="category-dual-grid">
                         <t t-foreach="dual_tabs" t-as="tab">
@@ -175,6 +179,7 @@
                         </div>
                     </div>
                 </t>
+                </div>
             </div>
         </section>
     </template>

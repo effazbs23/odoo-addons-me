@@ -7,7 +7,9 @@
            t-value="min(5, max(0, int(round(product.sudo().rating_avg or 0))))"/>
         <article class="product-carousel-cell">
             <div class="product-carousel-cell__media">
-                <a t-att-href="product.website_url" class="product-carousel-cell__img-link">
+                <a t-att-href="product.website_url"
+                   class="product-carousel-cell__img-link"
+                   contenteditable="false">
                     <img t-att-src="'/web/image/product.template/%s/image_128' % product.id"
                          t-att-alt="product.name"
                          width="96"
@@ -23,7 +25,9 @@
             </div>
             <div class="product-carousel-cell__text">
                 <h3 class="product-carousel-cell__title">
-                    <a t-att-href="product.website_url" t-esc="product.name"/>
+                    <a t-att-href="product.website_url"
+                       contenteditable="false"
+                       t-esc="product.name"/>
                 </h3>
                 <div class="product-carousel-cell__stars" t-att-aria-label="'%s out of 5 stars' % rating_rounded">
                     <t t-foreach="range(1, 6)" t-as="star_i">
@@ -100,10 +104,12 @@
                    t-value="(banner_tab and banner_tab.get_display_title()) or (carousel_tabs[:1].name if carousel_tabs else 'Product Carousel')"/>
                 <h2 t-att-id="'ProductCarouselHeading'" class="visually-hidden" t-esc="heading_label"/>
 
+                <div class="k-live-body o_not_editable o_prevent_link_editor" contenteditable="false">
                 <t t-if="carousel_tabs">
                     <div class="product-carousel-shell">
                         <a t-att-href="banner_tab.get_feature_href() if banner_tab else '/shop'"
-                           class="product-carousel-feature">
+                           class="product-carousel-feature"
+                           contenteditable="false">
                             <span class="product-carousel-feature__bg"
                                   t-att-style="'background-image: url(%s);' % (banner_tab.get_feature_bg_url() if banner_tab else '/theme_kingdom/static/src/images/categories/cat-3.jpg')"/>
                             <span class="product-carousel-feature__caption"
@@ -172,6 +178,7 @@
                         </div>
                     </div>
                 </t>
+                </div>
             </div>
         </section>
     </template>

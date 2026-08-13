@@ -10,17 +10,29 @@
                 <div class="promo-banner-blocks__grid">
 
                     <a href="/shop"
-                       class="promo-banner-blocks__card promo-banner-blocks__card--light"
-                       style="background-image: url('/theme_kingdom/static/src/images/banner/left.webp');"
+                       class="promo-banner-blocks__card promo-banner-blocks__card--light o_translate_inline"
+                       data-name="Left Promo Banner"
                        aria-label="Washing Machine — Explore more.">
-                        <span class="visually-hidden o_translate_inline">Washing Machine — Explore more.</span>
+                        <img src="/theme_kingdom/static/src/images/banner/left.webp"
+                             alt="Washing Machine — Explore more."
+                             width="1320"
+                             height="423"
+                             loading="lazy"
+                             class="img img-fluid w-100 promo-banner-blocks__img"
+                             data-name="Promo Banner Image"/>
                     </a>
 
                     <a href="/shop"
-                       class="promo-banner-blocks__card promo-banner-blocks__card--dark"
-                       style="background-image: url('/theme_kingdom/static/src/images/banner/right.webp');"
+                       class="promo-banner-blocks__card promo-banner-blocks__card--dark o_translate_inline"
+                       data-name="Right Promo Banner"
                        aria-label="Air Conditioner — up to 25% off. Shop now.">
-                        <span class="visually-hidden o_translate_inline">Air Conditioner — up to 25% off. Shop now.</span>
+                        <img src="/theme_kingdom/static/src/images/banner/right.webp"
+                             alt="Air Conditioner — up to 25% off. Shop now."
+                             width="1320"
+                             height="423"
+                             loading="lazy"
+                             class="img img-fluid w-100 promo-banner-blocks__img"
+                             data-name="Promo Banner Image"/>
                     </a>
 
                 </div>

@@ -335,8 +335,8 @@
               inherit_id="website_sale.product_buy_now"
               name="Kingdom Buy Now Button"
               priority="20">
-        <xpath expr="//a[hasclass('o_we_buy_now')]" position="attributes">
-            <attribute name="class" add="kingdom-pdp-buynow" separator=" "/>
+        <xpath expr="//a[contains(@t-attf-class, 'o_we_buy_now')]" position="attributes">
+            <attribute name="t-attf-class" add="kingdom-pdp-buynow" separator=" "/>
         </xpath>
     </template>
 

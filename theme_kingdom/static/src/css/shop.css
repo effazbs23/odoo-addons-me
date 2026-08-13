@@ -152,12 +152,21 @@
     background: transparent;
 }
 
+/* Catalog: swatches stay on the image (Odoo absolute + translateY); never over the title */
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .o_wsale_product_sub .o_wsale_attribute_previewer {
+    position: static !important;
+    transform: none !important;
+    margin: 0 0 0.35rem;
+}
+
 #o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_attribute_previewer {
+    position: static !important;
+    transform: none !important;
     width: auto !important;
     justify-content: flex-start;
     padding: 0 !important;
     order: 0;
-    margin: 0;
+    margin: 0 0 0.35rem;
 }
 
 #o_wsale_products_grid.o_wsale_products_opt_layout_list .product_price {
@@ -279,18 +288,18 @@
     color: #fff;
 }
 
-/* Icon cluster: cart / compare / wishlist / quick view */
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-left: auto;
-    order: 2;
-    flex: 0 0 auto;
+/* ---- Unified shop action icons (grid + list): cart / compare / wishlist / QV ---- */
+
+/* Kill global .button-2 homepage styles if any leak into /shop tiles */
+#o_wsale_products_grid .o_wsale_product_btn .button-2.quick-view-button,
+#o_wsale_products_grid .o_wsale_product_btn .button-2.add-to-wishlist-button,
+#o_wsale_products_grid .o_wsale_product_btn .button-2.add-to-compare-list-button,
+#o_wsale_products_grid .o_wsale_product_btn .button-2.product-box-add-to-cart-button {
+    all: unset;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .btn,
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .kingdom-quickview-btn {
+#o_wsale_products_grid .o_wsale_product_action_row .btn,
+#o_wsale_products_grid .o_wsale_product_action_row .kingdom-quickview-btn {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
@@ -304,7 +313,7 @@
     border: 1px solid var(--primary-color, #d4af37) !important;
     background: #fff !important;
     color: var(--primary-color, #d4af37) !important;
-    box-shadow: none !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
     font-size: 0 !important;
     line-height: 1 !important;
     overflow: hidden !important;
@@ -314,13 +323,14 @@
     top: auto !important;
     right: auto !important;
     left: auto !important;
-    transform: none !important;
-    opacity: 1 !important;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .btn .o_label,
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .btn .visually-hidden,
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_btn .o_label {
+#o_wsale_products_grid .o_wsale_product_action_row .btn .o_label,
+#o_wsale_products_grid .o_wsale_product_action_row .btn .visually-hidden,
+#o_wsale_products_grid .o_wsale_product_btn .o_label {
     display: none !important;
     visibility: hidden !important;
     width: 0 !important;
@@ -331,55 +341,55 @@
     font-size: 0 !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .btn .fa,
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .btn .oi {
+#o_wsale_products_grid .o_wsale_product_action_row .btn .fa,
+#o_wsale_products_grid .o_wsale_product_action_row .btn .oi {
     font-size: 0.95rem !important;
     margin: 0 !important;
     width: auto !important;
     color: inherit !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .o_wsale_product_btn_primary {
+#o_wsale_products_grid .o_wsale_product_action_row .o_wsale_product_btn_primary {
     order: 1 !important;
     border-color: var(--secondary-color, #7359bb) !important;
     background: var(--secondary-color, #7359bb) !important;
     color: #fff !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .o_wsale_product_btn_primary .fa {
+#o_wsale_products_grid .o_wsale_product_action_row .o_wsale_product_btn_primary .fa {
     color: #fff !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .btn:hover,
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .kingdom-quickview-btn:hover {
+#o_wsale_products_grid .o_wsale_product_action_row .btn:hover,
+#o_wsale_products_grid .o_wsale_product_action_row .kingdom-quickview-btn:hover {
     border-color: var(--secondary-color, #7359bb) !important;
     background: var(--secondary-color, #7359bb) !important;
     color: #fff !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .btn:hover .fa,
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .btn:hover .oi,
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .kingdom-quickview-btn:hover::before {
+#o_wsale_products_grid .o_wsale_product_action_row .btn:hover .fa,
+#o_wsale_products_grid .o_wsale_product_action_row .btn:hover .oi,
+#o_wsale_products_grid .o_wsale_product_action_row .kingdom-quickview-btn:hover::before {
     color: #fff !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .o_add_compare {
+#o_wsale_products_grid .o_wsale_product_action_row .o_add_compare {
     order: 2 !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .o_add_compare_placeholder {
+#o_wsale_products_grid .o_wsale_product_action_row .o_add_compare_placeholder {
     display: none !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .o_add_wishlist {
+#o_wsale_products_grid .o_wsale_product_action_row .o_add_wishlist {
     order: 3 !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .kingdom-quickview-btn {
+#o_wsale_products_grid .o_wsale_product_action_row .kingdom-quickview-btn {
     order: 4 !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .kingdom-quickview-btn::before {
+#o_wsale_products_grid .o_wsale_product_action_row .kingdom-quickview-btn::before {
     font-family: "icomoon" !important;
     content: "\e94d" !important;
     font-size: 0.95rem !important;
@@ -396,15 +406,107 @@
     margin: 0 !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .o_add_wishlist.o_in_wishlist,
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .o_add_wishlist:disabled {
+#o_wsale_products_grid .o_wsale_product_action_row .o_add_wishlist.o_in_wishlist,
+#o_wsale_products_grid .o_wsale_product_action_row .o_add_wishlist:disabled {
     background: var(--primary-color, #d4af37) !important;
     border-color: var(--primary-color, #d4af37) !important;
     color: #fff !important;
 }
 
-/* Fallback before JS moves wishlist into the action row */
+/* Catalog/grid: icons on image — hidden until product hover */
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .oe_product_cart,
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .oe_product_image {
+    position: relative;
+}
+
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .o_wsale_product_btn {
+    position: absolute !important;
+    inset: 0 0 auto 0 !important;
+    z-index: 3 !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0.45rem !important;
+    pointer-events: none !important;
+    aspect-ratio: auto !important;
+    overflow: visible !important;
+}
+
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .o_wsale_product_action_row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    gap: 0.4rem !important;
+    margin: 0 0 0 auto !important;
+    padding: 0 !important;
+    pointer-events: none !important;
+    transform: none !important;
+}
+
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .o_wsale_product_action_row .btn,
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .o_wsale_product_action_row .kingdom-quickview-btn,
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .o_wsale_product_btn > .o_add_wishlist {
+    opacity: 0 !important;
+    transform: translateX(0.4rem) !important;
+    pointer-events: none !important;
+}
+
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .oe_product_cart:hover .o_wsale_product_action_row .btn,
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .oe_product_cart:hover .o_wsale_product_action_row .kingdom-quickview-btn,
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .oe_product_cart:hover .o_wsale_product_btn > .o_add_wishlist,
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .oe_product_cart:focus-within .o_wsale_product_action_row .btn,
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .oe_product_cart:focus-within .o_wsale_product_action_row .kingdom-quickview-btn,
+#o_wsale_products_grid.o_wsale_products_opt_layout_catalog .oe_product_cart:focus-within .o_wsale_product_btn > .o_add_wishlist {
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+}
+
+/* Touch / no-hover: keep icons visible */
+@media (hover: none), (max-width: 991.98px) {
+    #o_wsale_products_grid.o_wsale_products_opt_layout_catalog .o_wsale_product_action_row .btn,
+    #o_wsale_products_grid.o_wsale_products_opt_layout_catalog .o_wsale_product_action_row .kingdom-quickview-btn,
+    #o_wsale_products_grid.o_wsale_products_opt_layout_catalog .o_wsale_product_btn > .o_add_wishlist {
+        opacity: 1 !important;
+        transform: none !important;
+        pointer-events: auto !important;
+    }
+}
+
+/* List view: icons always visible in the side panel */
+#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_btn {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    width: 100%;
+    margin: 0;
+    order: 2;
+    position: relative;
+}
+
+#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+    order: 2;
+    flex: 0 0 auto;
+    pointer-events: auto !important;
+}
+
+#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .btn,
+#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row .kingdom-quickview-btn,
 #o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_btn > .o_add_wishlist {
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+}
+
+/* Fallback before JS moves wishlist into the action row */
+#o_wsale_products_grid .o_wsale_product_btn > .o_add_wishlist {
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
@@ -421,21 +523,22 @@
     overflow: hidden !important;
     position: static !important;
     inset: auto !important;
-    opacity: 1 !important;
     order: 2;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_btn > .o_add_wishlist .o_label {
+#o_wsale_products_grid .o_wsale_product_btn > .o_add_wishlist .o_label {
     display: none !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_btn > .o_add_wishlist .fa {
+#o_wsale_products_grid .o_wsale_product_btn > .o_add_wishlist .fa {
     font-size: 0.95rem !important;
     margin: 0 !important;
     color: inherit !important;
 }
 
-#o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_btn > .o_add_wishlist:hover {
+#o_wsale_products_grid .o_wsale_product_btn > .o_add_wishlist:hover {
     border-color: var(--secondary-color, #7359bb) !important;
     background: var(--secondary-color, #7359bb) !important;
     color: #fff !important;
@@ -447,10 +550,6 @@
 }
 
 @media (max-width: 767.98px) {
-    #o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_sub {
-        min-width: 100%;
-    }
-
     #o_wsale_products_grid.o_wsale_products_opt_layout_list .o_wsale_product_action_row {
         margin-left: 0;
         width: 100%;

@@ -12,6 +12,20 @@
 
   window.KingdomTheme = window.KingdomTheme || {};
 
+  function kingdomIsWebsiteEditor() {
+    return (
+      document.body.classList.contains("editor_enable") ||
+      document.body.classList.contains("o_editable") ||
+      !!document.getElementById("oe_snippets")
+    );
+  }
+
+  /** Swiper loop needs more slides than the largest slidesPerView. */
+  function kingdomSwiperCanLoop(slideCount, maxSlidesPerView) {
+    var max = Math.max(1, Math.ceil(Number(maxSlidesPerView) || 1));
+    return slideCount > max;
+  }
+
   function kingdomGetFlyout() {
     return document.querySelector(".js_kingdom_flyout_cart");
   }
@@ -838,7 +852,12 @@
       speed: 450,
       autoplay: { delay: 6000, disableOnInteraction: false },
       watchOverflow: true,
-      loop: document.querySelectorAll("#announcement-slider .swiper-slide").length > 1,
+      loop:
+        !kingdomIsWebsiteEditor() &&
+        kingdomSwiperCanLoop(
+          document.querySelectorAll("#announcement-slider .swiper-slide").length,
+          1
+        ),
     });
 
     /* Featured categories — mobile strip only (.k-cat-mobile) */
@@ -888,11 +907,13 @@
       var opts = {
         slidesPerView: 1,
         spaceBetween: 0,
-        loop: slides.length > 1,
+        loop: !kingdomIsWebsiteEditor() && kingdomSwiperCanLoop(slides.length, 1),
         speed: isNaN(speed) ? 650 : speed,
         watchOverflow: true,
         autoHeight: false,
         effect: effect === "fade" ? "fade" : "slide",
+        observer: !kingdomIsWebsiteEditor(),
+        observeParents: !kingdomIsWebsiteEditor(),
         navigation: {
           nextEl: heroEl.querySelector(".swiper-button-next"),
           prevEl: heroEl.querySelector(".swiper-button-prev"),
@@ -938,17 +959,20 @@
       try {
         new Swiper(swiperEl, {
           slidesPerView: "auto",
-          observer: true,
-          observeParents: true,
+          observer: !kingdomIsWebsiteEditor(),
+          observeParents: !kingdomIsWebsiteEditor(),
           lazy: true,
-          loop: slideCount > 1,
+          // slidesPerView:auto + few deal cards → Swiper loop warning
+          loop: !kingdomIsWebsiteEditor() && slideCount > 3,
           centeredSlides: false,
           initialSlide: 0,
-          autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-          },
+          autoplay: kingdomIsWebsiteEditor()
+            ? false
+            : {
+                delay: 5000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              },
           pagination: {
             el: swiperEl.querySelector(".swiper-pagination"),
             clickable: true,
@@ -973,8 +997,8 @@
         spaceBetween: 0,
         speed: 450,
         watchOverflow: true,
-        observer: true,
-        observeParents: true,
+        observer: !kingdomIsWebsiteEditor(),
+        observeParents: !kingdomIsWebsiteEditor(),
         // Allow cart / wishlist / compare clicks inside slides.
         preventClicks: false,
         preventClicksPropagation: false,
@@ -1104,16 +1128,18 @@
         try {
           swipers[panelId] = new Swiper(swiperEl, {
             slidesPerView: "auto",
-            observer: true,
-            observeParents: true,
+            observer: !kingdomIsWebsiteEditor(),
+            observeParents: !kingdomIsWebsiteEditor(),
             lazy: true,
-            loop: slideCount > 1,
+            loop: !kingdomIsWebsiteEditor() && slideCount > 3,
             centeredSlides: false,
-            autoplay: {
-              delay: 5000,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            },
+            autoplay: kingdomIsWebsiteEditor()
+              ? false
+              : {
+                  delay: 5000,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: true,
+                },
             pagination: {
               el: swiperEl.querySelector(".swiper-pagination"),
               type: "fraction",
@@ -1182,8 +1208,8 @@
     var productRowOpts = {
       spaceBetween: 14,
       slidesPerView: 2,
-      observer: true,
-      observeParents: true,
+      observer: !kingdomIsWebsiteEditor(),
+      observeParents: !kingdomIsWebsiteEditor(),
       breakpoints: {
         576: { slidesPerView: 2 },
         768: { slidesPerView: 3 },
@@ -1197,8 +1223,12 @@
       if (!section || typeof Swiper === "undefined") return null;
       var swiperEl = section.querySelector(swiperSelector || ".featured-swiper, .bestsale-swiper");
       if (!swiperEl || !swiperEl.querySelector(".swiper-slide")) return null;
-      if (swiperEl.swiper && swiperEl.swiper.destroy) {
-        swiperEl.swiper.destroy(true, true);
+      // Avoid destroy/recreate loops in Website Builder (selection mutation spam).
+      if (swiperEl.swiper) {
+        try {
+          swiperEl.swiper.update();
+        } catch (e) {}
+        return swiperEl.swiper;
       }
       var nav = section.querySelector(".featured-products-nav");
       var opts = swiperOpts || productRowOpts;
@@ -1247,21 +1277,50 @@
     initProductRowSwiper(".featured-products-section", ".featured-swiper");
     initProductRowSwiper(".bestsale-products-section", ".bestsale-swiper");
 
-    if (document.body.classList.contains("editor_enable") && typeof MutationObserver !== "undefined") {
+    // Only attach uninitialized product-row swipers in the editor (no destroy/recreate).
+    if (kingdomIsWebsiteEditor() && typeof MutationObserver !== "undefined") {
+      var productRowObserverTimer = null;
       var productRowObserver = new MutationObserver(function () {
-        window.KingdomInitProductRowSwiper();
+        if (productRowObserverTimer) {
+          return;
+        }
+        productRowObserverTimer = window.setTimeout(function () {
+          productRowObserverTimer = null;
+          document
+            .querySelectorAll(
+              ".featured-products-section .featured-swiper:not(.swiper-initialized), " +
+                ".bestsale-products-section .bestsale-swiper:not(.swiper-initialized)"
+            )
+            .forEach(function (swiperEl) {
+              var section = swiperEl.closest(
+                ".featured-products-section, .bestsale-products-section"
+              );
+              if (!section) return;
+              var selector = swiperEl.classList.contains("bestsale-swiper")
+                ? ".bestsale-swiper"
+                : ".featured-swiper";
+              initProductRowSwiperInSection(section, selector, productRowOpts);
+            });
+        }, 200);
       });
       var observeRoot = document.getElementById("wrapwrap") || document.body;
       productRowObserver.observe(observeRoot, { childList: true, subtree: true });
     }
 
-    initSwiper(".secondary-hero-swiper", {
-      loop: true,
-      speed: 600,
-      autoplay: { delay: 6500, disableOnInteraction: false },
-      pagination: { el: ".secondary-hero-swiper .swiper-pagination", clickable: true },
-      navigation: false,
-    });
+    (function initSecondaryHero() {
+      var secondary = document.querySelector(".secondary-hero-swiper");
+      if (!secondary) return;
+      var secondarySlides = secondary.querySelectorAll(".swiper-slide").length;
+      initSwiper(".secondary-hero-swiper", {
+        loop: !kingdomIsWebsiteEditor() && kingdomSwiperCanLoop(secondarySlides, 1),
+        speed: 600,
+        autoplay: kingdomIsWebsiteEditor()
+          ? false
+          : { delay: 6500, disableOnInteraction: false },
+        pagination: { el: ".secondary-hero-swiper .swiper-pagination", clickable: true },
+        navigation: false,
+      });
+    })();
 
     function initBrandCarousel() {
       var section = document.querySelector(".home-brands-section, .home-manufacturers-section");
@@ -1277,21 +1336,23 @@
       if (!swiperEl || !carousel || !prevEl || !nextEl) return;
       if (!swiperEl.querySelector(".swiper-slide")) return;
 
-      if (swiperEl.swiper && swiperEl.swiper.destroy) {
-        swiperEl.swiper.destroy(true, true);
+      if (swiperEl.swiper) {
+        try {
+          swiperEl.swiper.update();
+        } catch (e) {}
+        return;
       }
 
       var slideCount = swiperEl.querySelectorAll(".swiper-slide").length;
-      // Keep fixed slidesPerView so logo tiles stay grid-sized (not stretched).
-      // Only disable loop when there aren't enough slides — loop+few slides = blank boxes.
+      // Largest breakpoint slidesPerView is 8 — loop only when we have more slides.
       var config = {
-        loop: slideCount > 3,
+        loop: !kingdomIsWebsiteEditor() && kingdomSwiperCanLoop(slideCount, 8),
         speed: 450,
         spaceBetween: 15,
         slidesPerView: 3,
         watchOverflow: true,
-        observer: true,
-        observeParents: true,
+        observer: !kingdomIsWebsiteEditor(),
+        observeParents: !kingdomIsWebsiteEditor(),
         navigation: {
           prevEl: prevEl,
           nextEl: nextEl,

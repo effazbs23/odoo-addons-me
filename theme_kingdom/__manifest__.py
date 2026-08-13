@@ -49,7 +49,7 @@ Website → Configuration → Deals of the Day, Featured Products, Best Sale Pro
 Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discounts.
     ''',
     'category': 'Theme/eCommerce',
-    'version': '19.0.1.2',
+    'version': '19.0.1.4',
     'author': 'ERP23',
     'company': 'nopStation, Brainstation 23 PLC',
     'maintainer': 'ERP 23',
@@ -79,6 +79,7 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
         'data/header_no_header_guard.xml',
         'data/fix_header_category_roots.xml',
         'data/strip_baked_editor_branding.xml',
+        'data/migrate_promo_banners_to_img.xml',
         'views/product_category_views.xml',
         'views/flyout_cart_template.xml',
         'views/product_related_template.xml',
