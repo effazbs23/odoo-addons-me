@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_dashboard_tile_list" model="ir.ui.view">
+        <field name="name">ai.dashboard.tile.list</field>
+        <field name="model">ai.dashboard.tile</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="prompt"/>
+                <field name="chart_type"/>
+                <field name="user_id"/>
+                <field name="shared"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_ai_dashboard_tile" model="ir.actions.act_window">
+        <field name="name">Saved KPI Tiles</field>
+        <field name="res_model">ai.dashboard.tile</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

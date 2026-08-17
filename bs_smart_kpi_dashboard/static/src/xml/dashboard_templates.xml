@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="bs_smart_kpi_dashboard.Dashboard">
+        <div class="o_bs_smart_kpi_dashboard p-3">
+
+            <div class="o_kpi_prompt_wrapper d-flex flex-column align-items-center">
+                <p class="o_kpi_prompt_heading">What KPI do you want to see?</p>
+                <div class="o_kpi_prompt_bar_wrap">
+                    <div class="o_kpi_prompt_bar d-flex align-items-center">
+                        <input type="text"
+                               class="o_kpi_prompt_input"
+                               placeholder="e.g. 'revenue by region this quarter, bar chart'"
+                               t-model="state.prompt"
+                               t-on-input="onPromptInput"
+                               t-on-focus="onPromptFocus"
+                               t-on-blur="onPromptBlur"
+                               t-on-keydown="onPromptKeydown"/>
+                        <button class="o_kpi_prompt_send"
+                                t-on-click="onSubmitPrompt"
+                                t-att-disabled="state.loading || !state.prompt.trim()"
+                                title="Ask">
+                            <i t-if="!state.loading" class="fa fa-arrow-up"/>
+                            <i t-else="" class="fa fa-circle-o-notch fa-spin"/>
+                        </button>
+                    </div>
+                    <div t-if="state.showSuggestions and state.suggestions.length" class="o_kpi_suggestions">
+                        <t t-foreach="state.suggestions" t-as="s" t-key="s_index">
+                            <button type="button"
+                                    class="o_kpi_suggestion_item"
+                                    t-att-class="{ active: s_index === state.highlightIndex }"
+                                    t-on-pointerdown.prevent="() => this.onSuggestionClick(s)">
+                                <i class="fa fa-search o_kpi_suggestion_icon"/>
+                                <span t-esc="s"/>
+                            </button>
+                        </t>
+                    </div>
+                </div>
+            </div>
+
+            <GuidedForm t-if="state.guidedSpec"
+                        partialSpec="state.guidedSpec"
+                        options="state.options"
+                        onSubmit.bind="onGuidedFormSubmit"/>
+
+            <div t-if="state.preview" class="o_kpi_preview card mb-3 p-2">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong t-esc="state.preview.name"/>
+                    <button class="btn btn-sm btn-outline-primary" t-on-click="onPinPreview">
+                        Pin to dashboard
+                    </button>
+                </div>
+                <KpiTile name="state.preview.name"
+                         chart_type="state.preview.chart_type"
+                         chart="state.preview.chart"/>
+            </div>
+
+            <div t-if="state.tiles.length" class="o_kpi_kanban_wrapper">
+                <h3 class="o_kpi_kanban_title">Saved Tiles</h3>
+                <t t-foreach="groupedTiles" t-as="group" t-key="group.label">
+                    <div class="o_kpi_kanban_group">
+                        <div class="o_kpi_kanban_group_header">
+                            <span class="o_kpi_kanban_dot" t-attf-style="background-color: {{group.color}};"/>
+                            <span class="o_kpi_kanban_group_label" t-esc="group.label"/>
+                            <span class="o_kpi_kanban_count" t-esc="group.tiles.length"/>
+                        </div>
+                        <div class="o_kpi_kanban_cards">
+                            <t t-foreach="group.tiles" t-as="tile" t-key="tile.id">
+                                <div class="o_kpi_kanban_card"
+                                     t-attf-style="width: {{tile.width}}px; height: {{tile.height}}px; border-left-color: {{group.color}};">
+                                    <div class="o_kpi_kanban_card_header">
+                                        <strong t-esc="tile.name"/>
+                                        <button class="o_kpi_kanban_delete"
+                                                title="Delete tile"
+                                                t-on-click="() => this.onDeleteTile(tile.id)">×</button>
+                                    </div>
+                                    <div class="o_kpi_kanban_card_body">
+                                        <KpiTile name="tile.name"
+                                                 chart_type="tile.chart_type"
+                                                 chart="tile.chart"
+                                                 error="tile.error"/>
+                                    </div>
+                                    <div class="o_kpi_kanban_resize_handle"
+                                         t-on-pointerdown="(ev) => this.onResizeStart(tile, ev)"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </div>
+            <p t-else="" class="o_kpi_empty_state text-center">
+                No saved tiles yet — ask a question above and pin the result to see it here, live.
+            </p>
+
+        </div>
+    </t>
+
+    <t t-name="bs_smart_kpi_dashboard.GuidedForm">
+        <div class="o_kpi_guided_form card p-3 mb-3 border-warning">
+            <p class="text-muted mb-2">
+                Couldn't fully understand that — pre-filled what I could, please finish the rest:
+            </p>
+            <div class="row g-2">
+                <div class="col-md-3">
+                    <label>Model</label>
+                    <select class="form-select" t-model="state.model">
+                        <t t-foreach="props.options" t-as="opt" t-key="opt.model">
+                            <option t-att-value="opt.model" t-esc="opt.label"/>
+                        </t>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Group by</label>
+                    <div>
+                        <t t-foreach="currentModelOptions.groupby_fields" t-as="f" t-key="f.name">
+                            <div class="form-check form-check-inline">
+                                <input type="checkbox" class="form-check-input"
+                                       t-att-checked="state.groupby.includes(f.name)"
+                                       t-on-change="() => this.toggleGroupby(f.name)"/>
+                                <label class="form-check-label" t-esc="f.label"/>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Measure</label>
+                    <select class="form-select" t-model="state.measure">
+                        <t t-foreach="currentModelOptions.measure_fields" t-as="f" t-key="f.name">
+                            <option t-attf-value="{{f.name}}:sum" t-esc="f.label"/>
+                        </t>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>Chart</label>
+                    <select class="form-select" t-model="state.chart_type">
+                        <option value="bar">Bar</option>
+                        <option value="line">Line</option>
+                        <option value="pie">Pie</option>
+                        <option value="number">Single KPI</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-primary mt-3" t-on-click="onSubmit">Run</button>
+        </div>
+    </t>
+
+    <t t-name="bs_smart_kpi_dashboard.KpiTile">
+        <div class="o_kpi_tile">
+            <div t-if="props.error" class="text-danger small p-2" t-esc="props.error"/>
+            <div t-elif="props.chart_type === 'number'" class="o_kpi_number">
+                <div class="display-5" t-esc="singleNumberValue"/>
+            </div>
+            <div t-else="" class="o_kpi_tile_canvas_wrap">
+                <canvas t-ref="canvas"/>
+            </div>
+        </div>
+    </t>
+
+</templates>

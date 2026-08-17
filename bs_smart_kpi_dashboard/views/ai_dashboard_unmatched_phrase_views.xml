@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_dashboard_unmatched_phrase_list" model="ir.ui.view">
+        <field name="name">ai.dashboard.unmatched_phrase.list</field>
+        <field name="model">ai.dashboard.unmatched_phrase</field>
+        <field name="arch" type="xml">
+            <list create="false" default_order="hit_count desc, last_seen desc">
+                <field name="phrase"/>
+                <field name="hit_count"/>
+                <field name="last_seen"/>
+                <field name="candidate_model"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'reviewed'"
+                       decoration-muted="state == 'dismissed'"
+                       decoration-warning="state == 'new'"/>
+                <button name="action_create_synonym" type="object"
+                        string="Create Synonym" class="btn-link"
+                        invisible="state == 'dismissed'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ai_dashboard_unmatched_phrase_search" model="ir.ui.view">
+        <field name="name">ai.dashboard.unmatched_phrase.search</field>
+        <field name="model">ai.dashboard.unmatched_phrase</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="phrase"/>
+                <field name="candidate_model"/>
+                <filter name="filter_new" string="New" domain="[('state', '=', 'new')]"/>
+                <filter name="filter_reviewed" string="Reviewed" domain="[('state', '=', 'reviewed')]"/>
+                <filter name="filter_dismissed" string="Dismissed" domain="[('state', '=', 'dismissed')]"/>
+                <group>
+                    <filter name="group_by_model" string="Candidate Model" context="{'group_by': 'candidate_model'}"/>
+                    <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Bulk "Dismiss" from the Action menu (select rows, no synonym
+         worth creating) — a pure state flip, same as action_dismiss(). -->
+    <record id="action_ai_dashboard_dismiss_unmatched" model="ir.actions.server">
+        <field name="name">Dismiss</field>
+        <field name="model_id" ref="model_ai_dashboard_unmatched_phrase"/>
+        <field name="binding_model_id" ref="model_ai_dashboard_unmatched_phrase"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">records.action_dismiss()</field>
+    </record>
+
+    <record id="action_ai_dashboard_unmatched_phrase" model="ir.actions.act_window">
+        <field name="name">Unmatched Prompts</field>
+        <field name="res_model">ai.dashboard.unmatched_phrase</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_ai_dashboard_unmatched_phrase_search"/>
+        <field name="context">{'search_default_filter_new': 1}</field>
+        <field name="help">Phrases users typed that the parser couldn't
+            confidently resolve, ranked by how often they recur. Use
+            "Create Synonym" on a row to turn a recurring miss into new
+            vocabulary, or bulk-select and "Dismiss" ones not worth
+            adding.</field>
+    </record>
+</odoo>

@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- ===================== MODEL ===================== -->
+        <record id="syn_model_sales" model="ai.dashboard.synonym">
+            <field name="phrase">sales</field>
+            <field name="slot_type">model</field>
+            <field name="value">sale.order</field>
+        </record>
+        <record id="syn_model_orders" model="ai.dashboard.synonym">
+            <field name="phrase">orders</field>
+            <field name="slot_type">model</field>
+            <field name="value">sale.order</field>
+        </record>
+        <record id="syn_model_invoices" model="ai.dashboard.synonym">
+            <field name="phrase">invoices</field>
+            <field name="slot_type">model</field>
+            <field name="value">account.move</field>
+        </record>
+        <record id="syn_model_billing" model="ai.dashboard.synonym">
+            <field name="phrase">billing</field>
+            <field name="slot_type">model</field>
+            <field name="value">account.move</field>
+        </record>
+        <record id="syn_model_leads" model="ai.dashboard.synonym">
+            <field name="phrase">leads</field>
+            <field name="slot_type">model</field>
+            <field name="value">crm.lead</field>
+        </record>
+        <record id="syn_model_pipeline" model="ai.dashboard.synonym">
+            <field name="phrase">pipeline</field>
+            <field name="slot_type">model</field>
+            <field name="value">crm.lead</field>
+        </record>
+        <record id="syn_model_opportunities" model="ai.dashboard.synonym">
+            <field name="phrase">opportunities</field>
+            <field name="slot_type">model</field>
+            <field name="value">crm.lead</field>
+        </record>
+        <record id="syn_model_stock" model="ai.dashboard.synonym">
+            <field name="phrase">stock movements</field>
+            <field name="slot_type">model</field>
+            <field name="value">stock.move</field>
+        </record>
+        <record id="syn_model_inventory" model="ai.dashboard.synonym">
+            <field name="phrase">inventory</field>
+            <field name="slot_type">model</field>
+            <field name="value">stock.move</field>
+        </record>
+
+        <!-- ===================== MEASURES (model-scoped) ===================== -->
+        <record id="syn_measure_sales_revenue" model="ai.dashboard.synonym">
+            <field name="phrase">revenue</field>
+            <field name="slot_type">measure</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="value">amount_total:sum</field>
+        </record>
+        <record id="syn_measure_sales_total" model="ai.dashboard.synonym">
+            <field name="phrase">total sales</field>
+            <field name="slot_type">measure</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="value">amount_total:sum</field>
+        </record>
+        <record id="syn_measure_avg_order" model="ai.dashboard.synonym">
+            <field name="phrase">average order value</field>
+            <field name="slot_type">measure</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="value">amount_total:avg</field>
+        </record>
+        <record id="syn_measure_invoice_amount" model="ai.dashboard.synonym">
+            <field name="phrase">amount</field>
+            <field name="slot_type">measure</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="value">amount_total:sum</field>
+        </record>
+        <record id="syn_measure_expected_revenue" model="ai.dashboard.synonym">
+            <field name="phrase">expected revenue</field>
+            <field name="slot_type">measure</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="value">expected_revenue:sum</field>
+        </record>
+        <record id="syn_measure_qty" model="ai.dashboard.synonym">
+            <field name="phrase">quantity</field>
+            <field name="slot_type">measure</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="value">product_qty:sum</field>
+        </record>
+
+        <!-- ===================== GROUPBY (model-scoped) ===================== -->
+        <record id="syn_groupby_region" model="ai.dashboard.synonym">
+            <field name="phrase">region</field>
+            <field name="slot_type">groupby</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="value">team_id</field>
+        </record>
+        <record id="syn_groupby_salesperson" model="ai.dashboard.synonym">
+            <field name="phrase">salesperson</field>
+            <field name="slot_type">groupby</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="value">user_id</field>
+        </record>
+        <record id="syn_groupby_customer_sale" model="ai.dashboard.synonym">
+            <field name="phrase">customer</field>
+            <field name="slot_type">groupby</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="value">partner_id</field>
+        </record>
+        <record id="syn_groupby_status_sale" model="ai.dashboard.synonym">
+            <field name="phrase">status</field>
+            <field name="slot_type">groupby</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="value">state</field>
+        </record>
+        <record id="syn_groupby_customer_invoice" model="ai.dashboard.synonym">
+            <field name="phrase">client</field>
+            <field name="slot_type">groupby</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="value">partner_id</field>
+        </record>
+        <record id="syn_groupby_stage" model="ai.dashboard.synonym">
+            <field name="phrase">stage</field>
+            <field name="slot_type">groupby</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="value">stage_id</field>
+        </record>
+        <record id="syn_groupby_product" model="ai.dashboard.synonym">
+            <field name="phrase">product</field>
+            <field name="slot_type">groupby</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="value">product_id</field>
+        </record>
+
+        <!-- ===================== GROUPBY TIME (model-agnostic) ===================== -->
+        <record id="syn_gbtime_by_month" model="ai.dashboard.synonym">
+            <field name="phrase">by month</field>
+            <field name="slot_type">groupby_time</field>
+            <field name="value">month</field>
+        </record>
+        <record id="syn_gbtime_by_week" model="ai.dashboard.synonym">
+            <field name="phrase">by week</field>
+            <field name="slot_type">groupby_time</field>
+            <field name="value">week</field>
+        </record>
+        <record id="syn_gbtime_by_quarter" model="ai.dashboard.synonym">
+            <field name="phrase">by quarter</field>
+            <field name="slot_type">groupby_time</field>
+            <field name="value">quarter</field>
+        </record>
+        <record id="syn_gbtime_trend" model="ai.dashboard.synonym">
+            <field name="phrase">trend</field>
+            <field name="slot_type">groupby_time</field>
+            <field name="value">month</field>
+        </record>
+        <record id="syn_gbtime_over_time" model="ai.dashboard.synonym">
+            <field name="phrase">over time</field>
+            <field name="slot_type">groupby_time</field>
+            <field name="value">month</field>
+        </record>
+
+        <!-- ===================== CHART TYPE (model-agnostic) ===================== -->
+        <record id="syn_chart_bar" model="ai.dashboard.synonym">
+            <field name="phrase">bar chart</field>
+            <field name="slot_type">chart_type</field>
+            <field name="value">bar</field>
+        </record>
+        <record id="syn_chart_pie" model="ai.dashboard.synonym">
+            <field name="phrase">pie chart</field>
+            <field name="slot_type">chart_type</field>
+            <field name="value">pie</field>
+        </record>
+        <record id="syn_chart_line" model="ai.dashboard.synonym">
+            <field name="phrase">line chart</field>
+            <field name="slot_type">chart_type</field>
+            <field name="value">line</field>
+        </record>
+        <record id="syn_chart_number" model="ai.dashboard.synonym">
+            <field name="phrase">total only</field>
+            <field name="slot_type">chart_type</field>
+            <field name="value">number</field>
+        </record>
+
+        <!-- ===================== TIME RANGE (model-agnostic) ===================== -->
+        <record id="syn_time_today" model="ai.dashboard.synonym">
+            <field name="phrase">today</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">today</field>
+        </record>
+        <record id="syn_time_yesterday" model="ai.dashboard.synonym">
+            <field name="phrase">yesterday</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">yesterday</field>
+        </record>
+        <record id="syn_time_this_week" model="ai.dashboard.synonym">
+            <field name="phrase">this week</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">this_week</field>
+        </record>
+        <record id="syn_time_last_week" model="ai.dashboard.synonym">
+            <field name="phrase">last week</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">last_week</field>
+        </record>
+        <record id="syn_time_this_month" model="ai.dashboard.synonym">
+            <field name="phrase">this month</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">this_month</field>
+        </record>
+        <record id="syn_time_last_month" model="ai.dashboard.synonym">
+            <field name="phrase">last month</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">last_month</field>
+        </record>
+        <record id="syn_time_this_quarter" model="ai.dashboard.synonym">
+            <field name="phrase">this quarter</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">this_quarter</field>
+        </record>
+        <record id="syn_time_last_quarter" model="ai.dashboard.synonym">
+            <field name="phrase">last quarter</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">last_quarter</field>
+        </record>
+        <record id="syn_time_this_year" model="ai.dashboard.synonym">
+            <field name="phrase">this year</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">this_year</field>
+        </record>
+        <record id="syn_time_last_year" model="ai.dashboard.synonym">
+            <field name="phrase">last year</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">last_year</field>
+        </record>
+
+        <!-- ===================== SORT (model-agnostic) ===================== -->
+        <record id="syn_sort_highest" model="ai.dashboard.synonym">
+            <field name="phrase">highest</field>
+            <field name="slot_type">sort</field>
+            <field name="value">desc</field>
+        </record>
+        <record id="syn_sort_lowest" model="ai.dashboard.synonym">
+            <field name="phrase">lowest</field>
+            <field name="slot_type">sort</field>
+            <field name="value">asc</field>
+        </record>
+        <record id="syn_sort_biggest" model="ai.dashboard.synonym">
+            <field name="phrase">biggest</field>
+            <field name="slot_type">sort</field>
+            <field name="value">desc</field>
+        </record>
+        <record id="syn_sort_smallest" model="ai.dashboard.synonym">
+            <field name="phrase">smallest</field>
+            <field name="slot_type">sort</field>
+            <field name="value">asc</field>
+        </record>
+        <record id="syn_sort_most" model="ai.dashboard.synonym">
+            <field name="phrase">most</field>
+            <field name="slot_type">sort</field>
+            <field name="value">desc</field>
+        </record>
+        <record id="syn_sort_least" model="ai.dashboard.synonym">
+            <field name="phrase">least</field>
+            <field name="slot_type">sort</field>
+            <field name="value">asc</field>
+        </record>
+
+        <!-- ===================== MORE VOCABULARY (Aug 2026 expansion) ===================== -->
+
+        <!-- Extra model phrasings -->
+        <record id="syn_model_quotations" model="ai.dashboard.synonym">
+            <field name="phrase">quotations</field>
+            <field name="slot_type">model</field>
+            <field name="value">sale.order</field>
+        </record>
+        <record id="syn_model_deals" model="ai.dashboard.synonym">
+            <field name="phrase">deals</field>
+            <field name="slot_type">model</field>
+            <field name="value">crm.lead</field>
+        </record>
+
+        <!-- Extra measure phrasings (kept model-distinct on purpose: this
+             parser resolves each phrase to exactly one synonym row, so
+             reusing the same word across two models would make whichever
+             one wins the match arbitrarily override the other, regardless
+             of which model the prompt is actually about). -->
+        <record id="syn_measure_earnings" model="ai.dashboard.synonym">
+            <field name="phrase">earnings</field>
+            <field name="slot_type">measure</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="value">amount_total:sum</field>
+        </record>
+        <record id="syn_measure_turnover" model="ai.dashboard.synonym">
+            <field name="phrase">turnover</field>
+            <field name="slot_type">measure</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="value">amount_total:sum</field>
+        </record>
+        <record id="syn_measure_sales_value" model="ai.dashboard.synonym">
+            <field name="phrase">sales value</field>
+            <field name="slot_type">measure</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="value">amount_total:sum</field>
+        </record>
+        <record id="syn_measure_invoice_total" model="ai.dashboard.synonym">
+            <field name="phrase">invoice total</field>
+            <field name="slot_type">measure</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="value">amount_total:sum</field>
+        </record>
+        <record id="syn_measure_billed_amount" model="ai.dashboard.synonym">
+            <field name="phrase">billed amount</field>
+            <field name="slot_type">measure</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="value">amount_total:sum</field>
+        </record>
+        <record id="syn_measure_units" model="ai.dashboard.synonym">
+            <field name="phrase">units</field>
+            <field name="slot_type">measure</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="value">product_qty:sum</field>
+        </record>
+        <record id="syn_measure_volume" model="ai.dashboard.synonym">
+            <field name="phrase">volume</field>
+            <field name="slot_type">measure</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="value">product_qty:sum</field>
+        </record>
+
+        <!-- Extra groupby phrasings (again model-distinct where a word
+             like 'team'/'owner' could otherwise collide) -->
+        <record id="syn_groupby_crm_team" model="ai.dashboard.synonym">
+            <field name="phrase">team</field>
+            <field name="slot_type">groupby</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="value">team_id</field>
+        </record>
+        <record id="syn_groupby_crm_owner" model="ai.dashboard.synonym">
+            <field name="phrase">owner</field>
+            <field name="slot_type">groupby</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="value">user_id</field>
+        </record>
+        <record id="syn_groupby_crm_customer" model="ai.dashboard.synonym">
+            <field name="phrase">contact</field>
+            <field name="slot_type">groupby</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="value">partner_id</field>
+        </record>
+        <record id="syn_groupby_stock_location" model="ai.dashboard.synonym">
+            <field name="phrase">location</field>
+            <field name="slot_type">groupby</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="value">location_id</field>
+        </record>
+        <record id="syn_groupby_stock_warehouse" model="ai.dashboard.synonym">
+            <field name="phrase">warehouse</field>
+            <field name="slot_type">groupby</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="value">location_id</field>
+        </record>
+        <record id="syn_groupby_stock_status" model="ai.dashboard.synonym">
+            <field name="phrase">move status</field>
+            <field name="slot_type">groupby</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="value">state</field>
+        </record>
+
+        <!-- Extra time-range phrasings (model-agnostic, no collision risk) -->
+        <record id="syn_time_current_month" model="ai.dashboard.synonym">
+            <field name="phrase">current month</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">this_month</field>
+        </record>
+        <record id="syn_time_current_quarter" model="ai.dashboard.synonym">
+            <field name="phrase">current quarter</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">this_quarter</field>
+        </record>
+        <record id="syn_time_current_year" model="ai.dashboard.synonym">
+            <field name="phrase">current year</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">this_year</field>
+        </record>
+        <record id="syn_time_ytd" model="ai.dashboard.synonym">
+            <field name="phrase">ytd</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">this_year</field>
+        </record>
+        <record id="syn_time_past_week" model="ai.dashboard.synonym">
+            <field name="phrase">past week</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">last_week</field>
+        </record>
+        <record id="syn_time_past_month" model="ai.dashboard.synonym">
+            <field name="phrase">past month</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">last_month</field>
+        </record>
+        <record id="syn_time_past_quarter" model="ai.dashboard.synonym">
+            <field name="phrase">past quarter</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">last_quarter</field>
+        </record>
+        <record id="syn_time_past_year" model="ai.dashboard.synonym">
+            <field name="phrase">past year</field>
+            <field name="slot_type">time_range</field>
+            <field name="value">last_year</field>
+        </record>
+
+        <!-- Extra chart-type phrasings (model-agnostic) -->
+        <record id="syn_chart_donut" model="ai.dashboard.synonym">
+            <field name="phrase">donut chart</field>
+            <field name="slot_type">chart_type</field>
+            <field name="value">pie</field>
+        </record>
+        <record id="syn_chart_trend" model="ai.dashboard.synonym">
+            <field name="phrase">trend chart</field>
+            <field name="slot_type">chart_type</field>
+            <field name="value">line</field>
+        </record>
+        <record id="syn_chart_column" model="ai.dashboard.synonym">
+            <field name="phrase">column chart</field>
+            <field name="slot_type">chart_type</field>
+            <field name="value">bar</field>
+        </record>
+        <record id="syn_chart_single_value" model="ai.dashboard.synonym">
+            <field name="phrase">single value</field>
+            <field name="slot_type">chart_type</field>
+            <field name="value">number</field>
+        </record>
+
+    </data>
+</odoo>

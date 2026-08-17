@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_dashboard_synonym_list" model="ir.ui.view">
+        <field name="name">ai.dashboard.synonym.list</field>
+        <field name="model">ai.dashboard.synonym</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="phrase"/>
+                <field name="slot_type"/>
+                <field name="model_id"/>
+                <field name="value"/>
+                <field name="priority"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ai_dashboard_synonym_search" model="ir.ui.view">
+        <field name="name">ai.dashboard.synonym.search</field>
+        <field name="model">ai.dashboard.synonym</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="phrase"/>
+                <field name="model_id"/>
+                <filter name="filter_active" string="Enabled" domain="[('active', '=', True)]"/>
+                <filter name="filter_draft" string="Needs Review (Auto-Discovered)" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="group_by_slot_type" string="Slot Type" context="{'group_by': 'slot_type'}"/>
+                    <filter name="group_by_model" string="Model" context="{'group_by': 'model_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_ai_dashboard_synonym" model="ir.actions.act_window">
+        <field name="name">Vocabulary (Phrase Mappings)</field>
+        <field name="res_model">ai.dashboard.synonym</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_ai_dashboard_synonym_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a row here any time a user's phrasing isn't recognized.
+            </p>
+        </field>
+    </record>
+</odoo>

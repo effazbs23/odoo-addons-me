@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ai_dashboard_allowlist_admin,ai.dashboard.allowlist admin,model_ai_dashboard_allowlist,base.group_system,1,1,1,1
+access_ai_dashboard_synonym_admin,ai.dashboard.synonym admin,model_ai_dashboard_synonym,base.group_system,1,1,1,1
+access_ai_dashboard_tile_user,ai.dashboard.tile user,model_ai_dashboard_tile,base.group_user,1,1,1,1
+access_ai_dashboard_unmatched_phrase_admin,ai.dashboard.unmatched_phrase admin,model_ai_dashboard_unmatched_phrase,base.group_system,1,1,1,1
