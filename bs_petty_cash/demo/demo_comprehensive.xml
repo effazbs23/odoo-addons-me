@@ -1,0 +1,791 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Petty Cash demo data for Odoo 18.
+
+        This fixture avoids hard-coded chart-of-account records so it can load
+        on a normal database after the petty_cash module dependencies are ready.
+        Accounting-heavy flows such as paid advances and posted settlements
+        should be created from the UI after selecting your real cash journal
+        and employee advance account.
+    -->
+
+    <!-- Departments -->
+    <record id="demo_department_operations" model="hr.department">
+        <field name="name">Demo Operations</field>
+    </record>
+    <record id="demo_department_finance" model="hr.department">
+        <field name="name">Demo Finance</field>
+    </record>
+    <record id="demo_department_procurement" model="hr.department">
+        <field name="name">Demo Procurement</field>
+    </record>
+    <record id="demo_department_hr" model="hr.department">
+        <field name="name">Demo HR</field>
+    </record>
+
+    <!-- Partners used as employee work contacts and vendor-bill partners -->
+    <record id="demo_partner_amina" model="res.partner">
+        <field name="name">Amina Rahman</field>
+        <field name="email">amina.rahman@example.com</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="demo_partner_farhan" model="res.partner">
+        <field name="name">Farhan Ahmed</field>
+        <field name="email">farhan.ahmed@example.com</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="demo_partner_nusrat" model="res.partner">
+        <field name="name">Nusrat Chowdhury</field>
+        <field name="email">nusrat.chowdhury@example.com</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="demo_partner_sajid" model="res.partner">
+        <field name="name">Sajid Karim</field>
+        <field name="email">sajid.karim@example.com</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="demo_partner_maliha" model="res.partner">
+        <field name="name">Maliha Sultana</field>
+        <field name="email">maliha.sultana@example.com</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="demo_partner_tanvir" model="res.partner">
+        <field name="name">Tanvir Hossain</field>
+        <field name="email">tanvir.hossain@example.com</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="demo_partner_rumana" model="res.partner">
+        <field name="name">Rumana Islam</field>
+        <field name="email">rumana.islam@example.com</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="demo_partner_imran" model="res.partner">
+        <field name="name">Imran Hasan</field>
+        <field name="email">imran.hasan@example.com</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <!-- Employees -->
+    <record id="demo_employee_operations_1" model="hr.employee">
+        <field name="name">Amina Rahman</field>
+        <field name="department_id" ref="demo_department_operations"/>
+        <field name="work_contact_id" ref="demo_partner_amina"/>
+        <field name="work_email">amina.rahman@example.com</field>
+    </record>
+    <record id="demo_employee_operations_2" model="hr.employee">
+        <field name="name">Farhan Ahmed</field>
+        <field name="department_id" ref="demo_department_operations"/>
+        <field name="work_contact_id" ref="demo_partner_farhan"/>
+        <field name="work_email">farhan.ahmed@example.com</field>
+    </record>
+    <record id="demo_employee_finance_1" model="hr.employee">
+        <field name="name">Nusrat Chowdhury</field>
+        <field name="department_id" ref="demo_department_finance"/>
+        <field name="work_contact_id" ref="demo_partner_nusrat"/>
+        <field name="work_email">nusrat.chowdhury@example.com</field>
+    </record>
+    <record id="demo_employee_procurement_1" model="hr.employee">
+        <field name="name">Sajid Karim</field>
+        <field name="department_id" ref="demo_department_procurement"/>
+        <field name="work_contact_id" ref="demo_partner_sajid"/>
+        <field name="work_email">sajid.karim@example.com</field>
+    </record>
+    <record id="demo_employee_hr_1" model="hr.employee">
+        <field name="name">Maliha Sultana</field>
+        <field name="department_id" ref="demo_department_hr"/>
+        <field name="work_contact_id" ref="demo_partner_maliha"/>
+        <field name="work_email">maliha.sultana@example.com</field>
+    </record>
+    <record id="demo_employee_operations_3" model="hr.employee">
+        <field name="name">Tanvir Hossain</field>
+        <field name="department_id" ref="demo_department_operations"/>
+        <field name="work_contact_id" ref="demo_partner_tanvir"/>
+        <field name="work_email">tanvir.hossain@example.com</field>
+    </record>
+    <record id="demo_employee_finance_2" model="hr.employee">
+        <field name="name">Rumana Islam</field>
+        <field name="department_id" ref="demo_department_finance"/>
+        <field name="work_contact_id" ref="demo_partner_rumana"/>
+        <field name="work_email">rumana.islam@example.com</field>
+    </record>
+    <record id="demo_employee_procurement_2" model="hr.employee">
+        <field name="name">Imran Hasan</field>
+        <field name="department_id" ref="demo_department_procurement"/>
+        <field name="work_contact_id" ref="demo_partner_imran"/>
+        <field name="work_email">imran.hasan@example.com</field>
+    </record>
+
+    <!-- Demo accounting scaffolding for dashboard-only advance/settlement records -->
+    <record id="demo_account_petty_cash" model="account.account">
+        <field name="name">Demo Petty Cash Account</field>
+        <field name="code">998801</field>
+        <field name="account_type">asset_cash</field>
+        <field name="company_ids" eval="[Command.link(ref('base.main_company'))]"/>
+    </record>
+    <record id="demo_account_employee_advance" model="account.account">
+        <field name="name">Demo Employee Advance Account</field>
+        <field name="code">998802</field>
+        <field name="account_type">asset_current</field>
+        <field name="company_ids" eval="[Command.link(ref('base.main_company'))]"/>
+    </record>
+    <record id="demo_account_expense" model="account.account">
+        <field name="name">Demo Petty Cash Expense</field>
+        <field name="code">998803</field>
+        <field name="account_type">expense</field>
+        <field name="company_ids" eval="[Command.link(ref('base.main_company'))]"/>
+    </record>
+    <record id="demo_account_payable" model="account.account">
+        <field name="name">Demo Employee Payable</field>
+        <field name="code">998804</field>
+        <field name="account_type">liability_payable</field>
+        <field name="reconcile">1</field>
+        <field name="company_ids" eval="[Command.link(ref('base.main_company'))]"/>
+    </record>
+    <record id="demo_cash_journal" model="account.journal">
+        <field name="name">Demo Petty Cash Journal</field>
+        <field name="code">PC18C</field>
+        <field name="type">cash</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="default_account_id" ref="demo_account_petty_cash"/>
+    </record>
+    <record id="demo_purchase_journal" model="account.journal">
+        <field name="name">Demo Petty Cash Bills</field>
+        <field name="code">PC18B</field>
+        <field name="type">purchase</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="default_account_id" ref="demo_account_expense"/>
+    </record>
+
+    <!-- Draft request -->
+    <record id="demo_request_draft_stationery" model="petty.cash.request">
+        <field name="date" eval="(datetime.now() - relativedelta(days=2)).date()"/>
+        <field name="employee_id" ref="demo_employee_operations_1"/>
+        <field name="request_type">purchase</field>
+        <field name="purpose">Stationery and printing supplies for the operations desk.</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_operations_cost_center"/>
+        <field name="notes">Draft example for a requester still collecting quotations.</field>
+        <field name="state">draft</field>
+    </record>
+    <record id="demo_request_draft_stationery_line_1" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_draft_stationery"/>
+        <field name="purpose">Printer paper and envelopes</field>
+        <field name="amount">4200.00</field>
+    </record>
+    <record id="demo_request_draft_stationery_line_2" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_draft_stationery"/>
+        <field name="purpose">Toner refill</field>
+        <field name="amount">6800.00</field>
+    </record>
+
+    <!-- Submitted requests -->
+    <record id="demo_request_submitted_travel" model="petty.cash.request">
+        <field name="date" eval="(datetime.now() - relativedelta(days=5)).date()"/>
+        <field name="employee_id" ref="demo_employee_operations_2"/>
+        <field name="request_type">tour_travel</field>
+        <field name="purpose">Local transport, meals, and field visit costs.</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_vessel_operations"/>
+        <field name="notes">Submitted example awaiting approval.</field>
+        <field name="state">submitted</field>
+    </record>
+    <record id="demo_request_submitted_travel_line_1" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_submitted_travel"/>
+        <field name="purpose">Local transport</field>
+        <field name="amount">9000.00</field>
+    </record>
+    <record id="demo_request_submitted_travel_line_2" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_submitted_travel"/>
+        <field name="purpose">Meals during site visit</field>
+        <field name="amount">3500.00</field>
+    </record>
+
+    <record id="demo_request_submitted_vendor" model="petty.cash.request">
+        <field name="date" eval="(datetime.now() - relativedelta(days=4)).date()"/>
+        <field name="employee_id" ref="demo_employee_procurement_1"/>
+        <field name="request_type">operational_expenses</field>
+        <field name="purpose">Small vendor payments required before the next payment run.</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_admin_cost_center"/>
+        <field name="state">submitted</field>
+    </record>
+    <record id="demo_request_submitted_vendor_line_1" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_submitted_vendor"/>
+        <field name="purpose">Courier and document handling</field>
+        <field name="amount">2500.00</field>
+    </record>
+    <record id="demo_request_submitted_vendor_line_2" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_submitted_vendor"/>
+        <field name="purpose">Emergency maintenance consumables</field>
+        <field name="amount">7800.00</field>
+    </record>
+
+    <!-- Approved requests ready for issue or advance creation -->
+    <record id="demo_request_approved_office" model="petty.cash.request">
+        <field name="date" eval="(datetime.now() - relativedelta(days=8)).date()"/>
+        <field name="employee_id" ref="demo_employee_finance_1"/>
+        <field name="request_type">expense</field>
+        <field name="purpose">Office pantry and meeting expenses.</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_admin_cost_center"/>
+        <field name="approved_by" ref="base.user_admin"/>
+        <field name="approved_date" eval="datetime.now() - relativedelta(days=6)"/>
+        <field name="state">approved</field>
+    </record>
+    <record id="demo_request_approved_office_line_1" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_approved_office"/>
+        <field name="purpose">Meeting refreshments</field>
+        <field name="amount">5200.00</field>
+    </record>
+    <record id="demo_request_approved_office_line_2" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_approved_office"/>
+        <field name="purpose">Pantry supplies</field>
+        <field name="amount">4600.00</field>
+    </record>
+
+    <record id="demo_request_approved_training" model="petty.cash.request">
+        <field name="date" eval="(datetime.now() - relativedelta(days=12)).date()"/>
+        <field name="employee_id" ref="demo_employee_hr_1"/>
+        <field name="request_type">other</field>
+        <field name="purpose">Training workshop materials and participant support.</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_operations_cost_center"/>
+        <field name="approved_by" ref="base.user_admin"/>
+        <field name="approved_date" eval="datetime.now() - relativedelta(days=10)"/>
+        <field name="state">approved</field>
+    </record>
+    <record id="demo_request_approved_training_line_1" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_approved_training"/>
+        <field name="purpose">Workshop materials</field>
+        <field name="amount">6500.00</field>
+    </record>
+    <record id="demo_request_approved_training_line_2" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_approved_training"/>
+        <field name="purpose">Participant local travel support</field>
+        <field name="amount">8000.00</field>
+    </record>
+
+    <!-- Issued requests linked to advances for dashboard funnel and charts -->
+    <record id="demo_request_paid_field_visit" model="petty.cash.request">
+        <field name="date" eval="(datetime.now() - relativedelta(days=18)).date()"/>
+        <field name="employee_id" ref="demo_employee_operations_2"/>
+        <field name="request_type">tour_travel</field>
+        <field name="purpose">Field team visit to Chattogram client site.</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_vessel_operations"/>
+        <field name="approved_by" ref="base.user_admin"/>
+        <field name="approved_date" eval="datetime.now() - relativedelta(days=17)"/>
+        <field name="state">issued</field>
+    </record>
+    <record id="demo_request_paid_field_visit_line_1" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_paid_field_visit"/>
+        <field name="purpose">Transport and lodging</field>
+        <field name="amount">26000.00</field>
+    </record>
+    <record id="demo_request_paid_field_visit_line_2" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_paid_field_visit"/>
+        <field name="purpose">Meals and site logistics</field>
+        <field name="amount">9000.00</field>
+    </record>
+
+    <record id="demo_request_partial_emergency" model="petty.cash.request">
+        <field name="date" eval="(datetime.now() - relativedelta(days=28)).date()"/>
+        <field name="employee_id" ref="demo_employee_procurement_1"/>
+        <field name="request_type">operational_expenses</field>
+        <field name="purpose">Emergency maintenance parts and local service fees.</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_operations_cost_center"/>
+        <field name="approved_by" ref="base.user_admin"/>
+        <field name="approved_date" eval="datetime.now() - relativedelta(days=27)"/>
+        <field name="state">issued</field>
+    </record>
+    <record id="demo_request_partial_emergency_line_1" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_partial_emergency"/>
+        <field name="purpose">Repair consumables</field>
+        <field name="amount">42000.00</field>
+    </record>
+    <record id="demo_request_partial_emergency_line_2" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_partial_emergency"/>
+        <field name="purpose">Local technician service fee</field>
+        <field name="amount">18000.00</field>
+    </record>
+
+    <record id="demo_request_settled_offsite" model="petty.cash.request">
+        <field name="date" eval="(datetime.now() - relativedelta(months=1, days=6)).date()"/>
+        <field name="employee_id" ref="demo_employee_hr_1"/>
+        <field name="request_type">other</field>
+        <field name="purpose">Employee offsite support expenses.</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_admin_cost_center"/>
+        <field name="approved_by" ref="base.user_admin"/>
+        <field name="approved_date" eval="datetime.now() - relativedelta(months=1, days=5)"/>
+        <field name="state">issued</field>
+    </record>
+    <record id="demo_request_settled_offsite_line_1" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_settled_offsite"/>
+        <field name="purpose">Venue support</field>
+        <field name="amount">12000.00</field>
+    </record>
+    <record id="demo_request_settled_offsite_line_2" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_settled_offsite"/>
+        <field name="purpose">Training supplies</field>
+        <field name="amount">8000.00</field>
+    </record>
+
+    <record id="demo_request_overdue_large" model="petty.cash.request">
+        <field name="date" eval="(datetime.now() - relativedelta(days=44)).date()"/>
+        <field name="employee_id" ref="demo_employee_operations_3"/>
+        <field name="request_type">purchase</field>
+        <field name="purpose">High-value operational purchase pending bill submission.</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_vessel_general"/>
+        <field name="approved_by" ref="base.user_admin"/>
+        <field name="approved_date" eval="datetime.now() - relativedelta(days=43)"/>
+        <field name="state">issued</field>
+    </record>
+    <record id="demo_request_overdue_large_line_1" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_overdue_large"/>
+        <field name="purpose">Operational equipment deposit</field>
+        <field name="amount">85000.00</field>
+    </record>
+    <record id="demo_request_overdue_large_line_2" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_overdue_large"/>
+        <field name="purpose">Local purchase transport</field>
+        <field name="amount">7000.00</field>
+    </record>
+
+    <record id="demo_request_old_missing_bill" model="petty.cash.request">
+        <field name="date" eval="(datetime.now() - relativedelta(days=52)).date()"/>
+        <field name="employee_id" ref="demo_employee_finance_2"/>
+        <field name="request_type">expense</field>
+        <field name="purpose">Older advance with missing bill documentation.</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_admin_cost_center"/>
+        <field name="approved_by" ref="base.user_admin"/>
+        <field name="approved_date" eval="datetime.now() - relativedelta(days=51)"/>
+        <field name="state">issued</field>
+    </record>
+    <record id="demo_request_old_missing_bill_line_1" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_old_missing_bill"/>
+        <field name="purpose">Long-pending reimbursable expenses</field>
+        <field name="amount">31000.00</field>
+    </record>
+
+    <record id="demo_request_recent_salary" model="petty.cash.request">
+        <field name="date" eval="(datetime.now() - relativedelta(days=9)).date()"/>
+        <field name="employee_id" ref="demo_employee_procurement_2"/>
+        <field name="request_type">salary</field>
+        <field name="purpose">Temporary worker wage disbursement.</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_operations_cost_center"/>
+        <field name="approved_by" ref="base.user_admin"/>
+        <field name="approved_date" eval="datetime.now() - relativedelta(days=8)"/>
+        <field name="state">issued</field>
+    </record>
+    <record id="demo_request_recent_salary_line_1" model="petty.cash.request.line">
+        <field name="request_id" ref="demo_request_recent_salary"/>
+        <field name="purpose">Temporary worker wages</field>
+        <field name="amount">24000.00</field>
+    </record>
+
+    <!-- Advances: approved, paid, partially settled, settled, overdue, and missing-bill examples -->
+    <record id="demo_advance_awaiting_office" model="petty.cash.advance">
+        <field name="request_id" ref="demo_request_approved_office"/>
+        <field name="employee_id" ref="demo_employee_finance_1"/>
+        <field name="date" eval="(datetime.now() - relativedelta(days=5)).date()"/>
+        <field name="requested_amount">9800.00</field>
+        <field name="expected_settlement_date" eval="(datetime.now() + relativedelta(days=20)).date()"/>
+        <field name="state">approved</field>
+        <field name="purpose">Approved office expense advance awaiting payment.</field>
+        <field name="journal_id" ref="demo_cash_journal"/>
+        <field name="employee_advance_account_id" ref="demo_account_employee_advance"/>
+        <field name="vessel_id" ref="petty_cash.analytic_account_admin_cost_center"/>
+    </record>
+    <record id="demo_advance_awaiting_office_line_1" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_awaiting_office"/>
+        <field name="purpose">Meeting refreshments</field>
+        <field name="amount">5200.00</field>
+    </record>
+    <record id="demo_advance_awaiting_office_line_2" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_awaiting_office"/>
+        <field name="purpose">Pantry supplies</field>
+        <field name="amount">4600.00</field>
+    </record>
+
+    <record id="demo_advance_paid_field_visit" model="petty.cash.advance">
+        <field name="request_id" ref="demo_request_paid_field_visit"/>
+        <field name="employee_id" ref="demo_employee_operations_2"/>
+        <field name="date" eval="(datetime.now() - relativedelta(days=16)).date()"/>
+        <field name="requested_amount">35000.00</field>
+        <field name="expected_settlement_date" eval="(datetime.now() + relativedelta(days=12)).date()"/>
+        <field name="state">paid</field>
+        <field name="purpose">Field team visit to Chattogram client site.</field>
+        <field name="journal_id" ref="demo_cash_journal"/>
+        <field name="employee_advance_account_id" ref="demo_account_employee_advance"/>
+        <field name="vessel_id" ref="petty_cash.analytic_account_vessel_operations"/>
+    </record>
+    <record id="demo_advance_paid_field_visit_line_1" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_paid_field_visit"/>
+        <field name="purpose">Transport and lodging</field>
+        <field name="amount">26000.00</field>
+    </record>
+    <record id="demo_advance_paid_field_visit_line_2" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_paid_field_visit"/>
+        <field name="purpose">Meals and site logistics</field>
+        <field name="amount">9000.00</field>
+    </record>
+
+    <record id="demo_advance_partial_emergency" model="petty.cash.advance">
+        <field name="request_id" ref="demo_request_partial_emergency"/>
+        <field name="employee_id" ref="demo_employee_procurement_1"/>
+        <field name="date" eval="(datetime.now() - relativedelta(days=25)).date()"/>
+        <field name="requested_amount">60000.00</field>
+        <field name="expected_settlement_date" eval="(datetime.now() + relativedelta(days=5)).date()"/>
+        <field name="state">partially_settled</field>
+        <field name="purpose">Emergency maintenance parts and local service fees.</field>
+        <field name="journal_id" ref="demo_cash_journal"/>
+        <field name="employee_advance_account_id" ref="demo_account_employee_advance"/>
+        <field name="vessel_id" ref="petty_cash.analytic_account_operations_cost_center"/>
+    </record>
+    <record id="demo_advance_partial_emergency_line_1" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_partial_emergency"/>
+        <field name="purpose">Repair consumables</field>
+        <field name="amount">42000.00</field>
+    </record>
+    <record id="demo_advance_partial_emergency_line_2" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_partial_emergency"/>
+        <field name="purpose">Local technician service fee</field>
+        <field name="amount">18000.00</field>
+    </record>
+
+    <record id="demo_advance_settled_offsite" model="petty.cash.advance">
+        <field name="request_id" ref="demo_request_settled_offsite"/>
+        <field name="employee_id" ref="demo_employee_hr_1"/>
+        <field name="date" eval="(datetime.now() - relativedelta(months=1, days=4)).date()"/>
+        <field name="requested_amount">20000.00</field>
+        <field name="expected_settlement_date" eval="(datetime.now() - relativedelta(days=15)).date()"/>
+        <field name="state">settled</field>
+        <field name="purpose">Employee offsite support expenses.</field>
+        <field name="journal_id" ref="demo_cash_journal"/>
+        <field name="employee_advance_account_id" ref="demo_account_employee_advance"/>
+        <field name="vessel_id" ref="petty_cash.analytic_account_admin_cost_center"/>
+    </record>
+    <record id="demo_advance_settled_offsite_line_1" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_settled_offsite"/>
+        <field name="purpose">Venue support</field>
+        <field name="amount">12000.00</field>
+    </record>
+    <record id="demo_advance_settled_offsite_line_2" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_settled_offsite"/>
+        <field name="purpose">Training supplies</field>
+        <field name="amount">8000.00</field>
+    </record>
+
+    <record id="demo_advance_overdue_large" model="petty.cash.advance">
+        <field name="request_id" ref="demo_request_overdue_large"/>
+        <field name="employee_id" ref="demo_employee_operations_3"/>
+        <field name="date" eval="(datetime.now() - relativedelta(days=42)).date()"/>
+        <field name="requested_amount">92000.00</field>
+        <field name="expected_settlement_date" eval="(datetime.now() - relativedelta(days=3)).date()"/>
+        <field name="state">paid</field>
+        <field name="purpose">High-value operational purchase pending bill submission.</field>
+        <field name="journal_id" ref="demo_cash_journal"/>
+        <field name="employee_advance_account_id" ref="demo_account_employee_advance"/>
+        <field name="vessel_id" ref="petty_cash.analytic_account_vessel_general"/>
+    </record>
+    <record id="demo_advance_overdue_large_line_1" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_overdue_large"/>
+        <field name="purpose">Operational equipment deposit</field>
+        <field name="amount">85000.00</field>
+    </record>
+    <record id="demo_advance_overdue_large_line_2" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_overdue_large"/>
+        <field name="purpose">Local purchase transport</field>
+        <field name="amount">7000.00</field>
+    </record>
+
+    <record id="demo_advance_old_missing_bill" model="petty.cash.advance">
+        <field name="request_id" ref="demo_request_old_missing_bill"/>
+        <field name="employee_id" ref="demo_employee_finance_2"/>
+        <field name="date" eval="(datetime.now() - relativedelta(days=50)).date()"/>
+        <field name="requested_amount">31000.00</field>
+        <field name="expected_settlement_date" eval="(datetime.now() - relativedelta(days=20)).date()"/>
+        <field name="state">paid</field>
+        <field name="purpose">Older advance with missing bill documentation.</field>
+        <field name="journal_id" ref="demo_cash_journal"/>
+        <field name="employee_advance_account_id" ref="demo_account_employee_advance"/>
+        <field name="vessel_id" ref="petty_cash.analytic_account_admin_cost_center"/>
+    </record>
+    <record id="demo_advance_old_missing_bill_line_1" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_old_missing_bill"/>
+        <field name="purpose">Long-pending reimbursable expenses</field>
+        <field name="amount">31000.00</field>
+    </record>
+
+    <record id="demo_advance_recent_salary" model="petty.cash.advance">
+        <field name="request_id" ref="demo_request_recent_salary"/>
+        <field name="employee_id" ref="demo_employee_procurement_2"/>
+        <field name="date" eval="(datetime.now() - relativedelta(days=7)).date()"/>
+        <field name="requested_amount">24000.00</field>
+        <field name="expected_settlement_date" eval="(datetime.now() + relativedelta(days=23)).date()"/>
+        <field name="state">paid</field>
+        <field name="purpose">Temporary worker wage disbursement.</field>
+        <field name="journal_id" ref="demo_cash_journal"/>
+        <field name="employee_advance_account_id" ref="demo_account_employee_advance"/>
+        <field name="vessel_id" ref="petty_cash.analytic_account_operations_cost_center"/>
+    </record>
+    <record id="demo_advance_recent_salary_line_1" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_recent_salary"/>
+        <field name="purpose">Temporary worker wages</field>
+        <field name="amount">24000.00</field>
+    </record>
+
+    <!-- Extra month-spread dashboard records -->
+    <record id="demo_advance_month_m2_operations" model="petty.cash.advance">
+        <field name="employee_id" ref="demo_employee_operations_1"/>
+        <field name="date" eval="(datetime.now() - relativedelta(months=2, days=4)).date()"/>
+        <field name="requested_amount">18000.00</field>
+        <field name="expected_settlement_date" eval="(datetime.now() - relativedelta(months=1, days=4)).date()"/>
+        <field name="state">paid</field>
+        <field name="purpose">Month-spread demo advance for operations.</field>
+        <field name="journal_id" ref="demo_cash_journal"/>
+        <field name="employee_advance_account_id" ref="demo_account_employee_advance"/>
+        <field name="vessel_id" ref="petty_cash.analytic_account_operations_cost_center"/>
+    </record>
+    <record id="demo_advance_month_m2_operations_line_1" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_month_m2_operations"/>
+        <field name="purpose">Operations support</field>
+        <field name="amount">18000.00</field>
+    </record>
+
+    <record id="demo_advance_month_m3_finance" model="petty.cash.advance">
+        <field name="employee_id" ref="demo_employee_finance_1"/>
+        <field name="date" eval="(datetime.now() - relativedelta(months=3, days=2)).date()"/>
+        <field name="requested_amount">15000.00</field>
+        <field name="expected_settlement_date" eval="(datetime.now() - relativedelta(months=2, days=2)).date()"/>
+        <field name="state">settled</field>
+        <field name="purpose">Month-spread settled finance advance.</field>
+        <field name="journal_id" ref="demo_cash_journal"/>
+        <field name="employee_advance_account_id" ref="demo_account_employee_advance"/>
+        <field name="vessel_id" ref="petty_cash.analytic_account_admin_cost_center"/>
+    </record>
+    <record id="demo_advance_month_m3_finance_line_1" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_month_m3_finance"/>
+        <field name="purpose">Finance branch support</field>
+        <field name="amount">15000.00</field>
+    </record>
+
+    <record id="demo_advance_month_m4_procurement" model="petty.cash.advance">
+        <field name="employee_id" ref="demo_employee_procurement_2"/>
+        <field name="date" eval="(datetime.now() - relativedelta(months=4, days=8)).date()"/>
+        <field name="requested_amount">45500.00</field>
+        <field name="expected_settlement_date" eval="(datetime.now() - relativedelta(months=3, days=8)).date()"/>
+        <field name="state">paid</field>
+        <field name="purpose">Older procurement advance for outstanding chart depth.</field>
+        <field name="journal_id" ref="demo_cash_journal"/>
+        <field name="employee_advance_account_id" ref="demo_account_employee_advance"/>
+        <field name="vessel_id" ref="petty_cash.analytic_account_vessel_general"/>
+    </record>
+    <record id="demo_advance_month_m4_procurement_line_1" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_month_m4_procurement"/>
+        <field name="purpose">Procurement local purchase</field>
+        <field name="amount">45500.00</field>
+    </record>
+
+    <record id="demo_advance_month_m5_hr_partial" model="petty.cash.advance">
+        <field name="employee_id" ref="demo_employee_hr_1"/>
+        <field name="date" eval="(datetime.now() - relativedelta(months=5, days=6)).date()"/>
+        <field name="requested_amount">27000.00</field>
+        <field name="expected_settlement_date" eval="(datetime.now() - relativedelta(months=4, days=6)).date()"/>
+        <field name="state">partially_settled</field>
+        <field name="purpose">Older partial HR advance for balance testing.</field>
+        <field name="journal_id" ref="demo_cash_journal"/>
+        <field name="employee_advance_account_id" ref="demo_account_employee_advance"/>
+        <field name="vessel_id" ref="petty_cash.analytic_account_admin_cost_center"/>
+    </record>
+    <record id="demo_advance_month_m5_hr_partial_line_1" model="petty.cash.advance.line">
+        <field name="advance_id" ref="demo_advance_month_m5_hr_partial"/>
+        <field name="purpose">HR operational support</field>
+        <field name="amount">27000.00</field>
+    </record>
+
+    <!-- Vendor bills used only to give posted settlement dashboard totals -->
+    <record id="demo_bill_partial_emergency" model="account.move">
+        <field name="move_type">in_invoice</field>
+        <field name="partner_id" ref="demo_partner_sajid"/>
+        <field name="journal_id" ref="demo_purchase_journal"/>
+        <field name="invoice_date" eval="(datetime.now() - relativedelta(days=10)).date()"/>
+        <field name="invoice_line_ids" eval="[Command.create({'name': 'Emergency maintenance bill', 'quantity': 1.0, 'price_unit': 38000.0, 'account_id': ref('demo_account_expense')})]"/>
+    </record>
+    <record id="demo_bill_settled_offsite" model="account.move">
+        <field name="move_type">in_invoice</field>
+        <field name="partner_id" ref="demo_partner_maliha"/>
+        <field name="journal_id" ref="demo_purchase_journal"/>
+        <field name="invoice_date" eval="(datetime.now() - relativedelta(days=25)).date()"/>
+        <field name="invoice_line_ids" eval="[Command.create({'name': 'Employee offsite bill', 'quantity': 1.0, 'price_unit': 20000.0, 'account_id': ref('demo_account_expense')})]"/>
+    </record>
+    <record id="demo_bill_submitted_field_visit" model="account.move">
+        <field name="move_type">in_invoice</field>
+        <field name="partner_id" ref="demo_partner_farhan"/>
+        <field name="journal_id" ref="demo_purchase_journal"/>
+        <field name="invoice_date" eval="(datetime.now() - relativedelta(days=2)).date()"/>
+        <field name="invoice_line_ids" eval="[Command.create({'name': 'Field visit bill awaiting review', 'quantity': 1.0, 'price_unit': 17000.0, 'account_id': ref('demo_account_expense')})]"/>
+    </record>
+    <record id="demo_bill_month_m3_finance" model="account.move">
+        <field name="move_type">in_invoice</field>
+        <field name="partner_id" ref="demo_partner_nusrat"/>
+        <field name="journal_id" ref="demo_purchase_journal"/>
+        <field name="invoice_date" eval="(datetime.now() - relativedelta(months=3)).date()"/>
+        <field name="invoice_line_ids" eval="[Command.create({'name': 'Finance support settlement bill', 'quantity': 1.0, 'price_unit': 15000.0, 'account_id': ref('demo_account_expense')})]"/>
+    </record>
+    <record id="demo_bill_month_m5_hr_partial" model="account.move">
+        <field name="move_type">in_invoice</field>
+        <field name="partner_id" ref="demo_partner_maliha"/>
+        <field name="journal_id" ref="demo_purchase_journal"/>
+        <field name="invoice_date" eval="(datetime.now() - relativedelta(months=4, days=20)).date()"/>
+        <field name="invoice_line_ids" eval="[Command.create({'name': 'HR support partial bill', 'quantity': 1.0, 'price_unit': 12000.0, 'account_id': ref('demo_account_expense')})]"/>
+    </record>
+
+    <!-- Settlements linked to advances for posted totals, submitted-bill funnel, and pending KPI -->
+    <record id="demo_settlement_posted_partial" model="petty.cash.settlement">
+        <field name="date" eval="(datetime.now() - relativedelta(days=9)).date()"/>
+        <field name="employee_id" ref="demo_employee_procurement_1"/>
+        <field name="settlement_type">with_advance</field>
+        <field name="settlement_mode">partial</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_operations_cost_center"/>
+        <field name="tagged_bill_id" ref="demo_bill_partial_emergency"/>
+        <field name="signed_settlement_document_name">demo-partial-settlement.pdf</field>
+        <field name="state">draft</field>
+    </record>
+    <record id="demo_settlement_posted_partial_line_1" model="petty.cash.advance.settlement.line">
+        <field name="settlement_id" ref="demo_settlement_posted_partial"/>
+        <field name="advance_id" ref="demo_advance_partial_emergency"/>
+        <field name="settled_amount">38000.00</field>
+    </record>
+
+    <record id="demo_settlement_posted_full" model="petty.cash.settlement">
+        <field name="date" eval="(datetime.now() - relativedelta(days=22)).date()"/>
+        <field name="employee_id" ref="demo_employee_hr_1"/>
+        <field name="settlement_type">with_advance</field>
+        <field name="settlement_mode">full</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_admin_cost_center"/>
+        <field name="tagged_bill_id" ref="demo_bill_settled_offsite"/>
+        <field name="signed_settlement_document_name">demo-full-settlement.pdf</field>
+        <field name="state">draft</field>
+    </record>
+    <record id="demo_settlement_posted_full_line_1" model="petty.cash.advance.settlement.line">
+        <field name="settlement_id" ref="demo_settlement_posted_full"/>
+        <field name="advance_id" ref="demo_advance_settled_offsite"/>
+        <field name="settled_amount">20000.00</field>
+    </record>
+
+    <record id="demo_settlement_submitted_field_visit" model="petty.cash.settlement">
+        <field name="date" eval="(datetime.now() - relativedelta(days=2)).date()"/>
+        <field name="employee_id" ref="demo_employee_operations_2"/>
+        <field name="settlement_type">with_advance</field>
+        <field name="settlement_mode">partial</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_vessel_operations"/>
+        <field name="tagged_bill_id" ref="demo_bill_submitted_field_visit"/>
+        <field name="state">submitted</field>
+    </record>
+    <record id="demo_settlement_submitted_field_visit_line_1" model="petty.cash.advance.settlement.line">
+        <field name="settlement_id" ref="demo_settlement_submitted_field_visit"/>
+        <field name="advance_id" ref="demo_advance_paid_field_visit"/>
+        <field name="settled_amount">17000.00</field>
+    </record>
+
+    <record id="demo_settlement_posted_month_m3" model="petty.cash.settlement">
+        <field name="date" eval="(datetime.now() - relativedelta(months=3)).date()"/>
+        <field name="employee_id" ref="demo_employee_finance_1"/>
+        <field name="settlement_type">with_advance</field>
+        <field name="settlement_mode">full</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_admin_cost_center"/>
+        <field name="tagged_bill_id" ref="demo_bill_month_m3_finance"/>
+        <field name="signed_settlement_document_name">demo-m3-settlement.pdf</field>
+        <field name="state">draft</field>
+    </record>
+    <record id="demo_settlement_posted_month_m3_line_1" model="petty.cash.advance.settlement.line">
+        <field name="settlement_id" ref="demo_settlement_posted_month_m3"/>
+        <field name="advance_id" ref="demo_advance_month_m3_finance"/>
+        <field name="settled_amount">15000.00</field>
+    </record>
+
+    <record id="demo_settlement_posted_month_m5_partial" model="petty.cash.settlement">
+        <field name="date" eval="(datetime.now() - relativedelta(months=4, days=20)).date()"/>
+        <field name="employee_id" ref="demo_employee_hr_1"/>
+        <field name="settlement_type">with_advance</field>
+        <field name="settlement_mode">partial</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_admin_cost_center"/>
+        <field name="tagged_bill_id" ref="demo_bill_month_m5_hr_partial"/>
+        <field name="signed_settlement_document_name">demo-m5-partial-settlement.pdf</field>
+        <field name="state">draft</field>
+    </record>
+    <record id="demo_settlement_posted_month_m5_partial_line_1" model="petty.cash.advance.settlement.line">
+        <field name="settlement_id" ref="demo_settlement_posted_month_m5_partial"/>
+        <field name="advance_id" ref="demo_advance_month_m5_hr_partial"/>
+        <field name="settled_amount">12000.00</field>
+    </record>
+
+    <!-- Mark posted settlements after settlement lines exist. This avoids
+         validating settlement lines against the post-compute reduced balance. -->
+    <record id="demo_settlement_posted_partial" model="petty.cash.settlement">
+        <field name="state">posted</field>
+    </record>
+    <record id="demo_settlement_posted_full" model="petty.cash.settlement">
+        <field name="state">posted</field>
+    </record>
+    <record id="demo_settlement_posted_month_m3" model="petty.cash.settlement">
+        <field name="state">posted</field>
+    </record>
+    <record id="demo_settlement_posted_month_m5_partial" model="petty.cash.settlement">
+        <field name="state">posted</field>
+    </record>
+
+    <!-- Back-links used by the dashboard request funnel -->
+    <record id="demo_request_approved_office" model="petty.cash.request">
+        <field name="advance_id" ref="demo_advance_awaiting_office"/>
+    </record>
+    <record id="demo_request_paid_field_visit" model="petty.cash.request">
+        <field name="advance_id" ref="demo_advance_paid_field_visit"/>
+    </record>
+    <record id="demo_request_partial_emergency" model="petty.cash.request">
+        <field name="advance_id" ref="demo_advance_partial_emergency"/>
+    </record>
+    <record id="demo_request_settled_offsite" model="petty.cash.request">
+        <field name="advance_id" ref="demo_advance_settled_offsite"/>
+    </record>
+    <record id="demo_request_overdue_large" model="petty.cash.request">
+        <field name="advance_id" ref="demo_advance_overdue_large"/>
+    </record>
+    <record id="demo_request_old_missing_bill" model="petty.cash.request">
+        <field name="advance_id" ref="demo_advance_old_missing_bill"/>
+    </record>
+    <record id="demo_request_recent_salary" model="petty.cash.request">
+        <field name="advance_id" ref="demo_advance_recent_salary"/>
+    </record>
+    <record id="demo_advance_paid_field_visit" model="petty.cash.advance">
+        <field name="settlement_ids" eval="[Command.link(ref('demo_settlement_submitted_field_visit'))]"/>
+    </record>
+    <record id="demo_advance_partial_emergency" model="petty.cash.advance">
+        <field name="settlement_ids" eval="[Command.link(ref('demo_settlement_posted_partial'))]"/>
+    </record>
+    <record id="demo_advance_settled_offsite" model="petty.cash.advance">
+        <field name="settlement_ids" eval="[Command.link(ref('demo_settlement_posted_full'))]"/>
+    </record>
+    <record id="demo_advance_month_m3_finance" model="petty.cash.advance">
+        <field name="settlement_ids" eval="[Command.link(ref('demo_settlement_posted_month_m3'))]"/>
+    </record>
+    <record id="demo_advance_month_m5_hr_partial" model="petty.cash.advance">
+        <field name="settlement_ids" eval="[Command.link(ref('demo_settlement_posted_month_m5_partial'))]"/>
+    </record>
+
+    <!-- Pending settlement shells for dashboard and list-view testing -->
+    <record id="demo_settlement_draft_bill" model="petty.cash.settlement">
+        <field name="date" eval="(datetime.now() - relativedelta(days=1)).date()"/>
+        <field name="employee_id" ref="demo_employee_finance_1"/>
+        <field name="settlement_type">without_advance</field>
+        <field name="settlement_mode">partial</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_admin_cost_center"/>
+        <field name="notes">Draft bill settlement example. Tag a vendor bill before posting.</field>
+        <field name="state">draft</field>
+    </record>
+    <record id="demo_settlement_submitted_bill" model="petty.cash.settlement">
+        <field name="date" eval="(datetime.now() - relativedelta(days=3)).date()"/>
+        <field name="employee_id" ref="demo_employee_procurement_1"/>
+        <field name="settlement_type">without_advance</field>
+        <field name="settlement_mode">partial</field>
+        <field name="vessel_id" ref="petty_cash.analytic_account_operations_cost_center"/>
+        <field name="notes">Submitted settlement example for approval/review flow testing.</field>
+        <field name="state">submitted</field>
+    </record>
+</odoo>

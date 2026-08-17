@@ -37,4 +37,5 @@ Note: Net Method (IFRS 16) support is currently under development.
     'installable': True,
     'auto_install': False,
     'application': False,
+    'company': 'ERP23',
 }

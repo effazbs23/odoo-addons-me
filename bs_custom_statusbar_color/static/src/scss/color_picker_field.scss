@@ -1,0 +1,74 @@
+.o_statusbar_color_swatch {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid $border-color;
+    cursor: pointer;
+
+    // No color has been set yet: plain transparent fill (just the
+    // border stays visible) instead of a fake color, so it's always
+    // obvious at a glance whether a state has a color configured.
+    &.o_statusbar_color_swatch_unset {
+        background-color: transparent;
+        border-style: dashed;
+    }
+}
+
+// Rendered inside Odoo's <Popover> portal (attached to <body>), so no
+// manual position/z-index handling is needed here.
+.o_statusbar_color_popover_content {
+    padding: 8px;
+    min-width: 160px;
+
+    .o_statusbar_color_presets {
+        display: grid;
+        grid-template-columns: repeat(5, 20px);
+        gap: 6px;
+        margin-bottom: 8px;
+
+        .o_statusbar_color_preset {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+
+            &:hover {
+                outline: 2px solid $o-brand-primary;
+            }
+        }
+    }
+
+    .o_statusbar_color_hex_row {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 8px;
+
+        .o_statusbar_color_hex_input {
+            flex: 1 1 auto;
+            width: 0;
+            min-width: 0;
+            padding: 2px 6px;
+            border: 1px solid $border-color;
+            border-radius: 3px;
+            font-family: monospace;
+
+            &.o_statusbar_color_hex_invalid {
+                border-color: $o-danger;
+            }
+        }
+
+        .o_statusbar_color_hex_apply {
+            flex: 0 0 auto;
+        }
+    }
+
+    input[type="color"] {
+        width: 100%;
+        height: 32px;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+}

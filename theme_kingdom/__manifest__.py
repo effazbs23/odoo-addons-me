@@ -51,9 +51,9 @@ Sales → Pricelists for offer pricing. eCommerce → Promotions for cart discou
     'category': 'Theme/eCommerce',
     'version': '19.0.1.4',
     'author': 'ERP23',
-    'company': 'nopStation, Brainstation 23 PLC',
+    'company': 'ERP23',
     'maintainer': 'ERP 23',
-    'website': 'https://www.erp-23.com',
+    'website': 'https://erp-23.com',
     'support': 'erp23@brainstation-23.com',
     'license': 'OPL-1',
     'depends': [

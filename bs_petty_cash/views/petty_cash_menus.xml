@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_petty_cash_root"
+              name="Petty Cash"
+              sequence="50"
+              web_icon="petty_cash,static/description/logo.png"
+              groups="petty_cash.group_petty_cash_user"
+    />
+
+    <menuitem id="menu_petty_cash_dashboard" name="Dashboard"
+              parent="menu_petty_cash_root"
+              action="action_petty_cash_dashboard_client"
+              sequence="1"
+              groups="petty_cash.group_petty_cash_user"/>
+
+    <menuitem id="menu_petty_cash_operations" name="Operations"
+              parent="menu_petty_cash_root" sequence="10"
+              groups="petty_cash.group_petty_cash_user"/>
+
+    <menuitem id="menu_petty_cash_request" name="Cash Requests"
+              parent="menu_petty_cash_operations"
+              action="action_petty_cash_request" sequence="20"
+              groups="petty_cash.group_petty_cash_user"/>
+
+    <menuitem id="menu_petty_cash_advance" name="Cash Advances"
+              parent="menu_petty_cash_operations"
+              action="action_petty_cash_advance" sequence="40"
+              groups="petty_cash.group_petty_cash_user"/>
+
+    <menuitem id="menu_petty_cash_settlement" name="Settlements"
+              parent="menu_petty_cash_operations"
+              action="action_petty_cash_settlement" sequence="50"
+              groups="petty_cash.group_petty_cash_user"/>
+    <!-- <menuitem id="menu_petty_cash_expense_analysis" name="Expense Analysis"
+               parent="menu_petty_cash_reports"
+               action="action_petty_cash_expense_analysis" sequence="20"/>
+ -->
+    <!--<menuitem id="menu_petty_cash_pending_settlements" name="Pending Settlements"
+              parent="menu_petty_cash_reports"
+              action="action_petty_cash_pending_settlements" sequence="30"/>-->
+</odoo>

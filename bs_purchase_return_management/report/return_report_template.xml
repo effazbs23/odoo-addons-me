@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Return Report Action -->
+    <record id="action_return_report" model="ir.actions.act_window">
+        <field name="name">Return Analysis</field>
+        <field name="res_model">return.report</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Return Report list View -->
+    <record id="view_return_report_list" model="ir.ui.view">
+        <field name="name">return.report.list</field>
+        <field name="model">return.report</field>
+        <field name="arch" type="xml">
+            <list string="Return Analysis">
+                <field name="return_request_id"/>
+                <field name="purchase_order_id" optional="show"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="return_qty" sum="Total Return Qty"/>
+                <field name="return_amount" sum="Total Return Amount"/>
+                <field name="request_date"/>
+                <field name="state"/>
+                <field name="return_reason"/>
+                <field name="user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Return Report Graph View -->
+    <record id="view_return_report_graph" model="ir.ui.view">
+        <field name="name">return.report.graph</field>
+        <field name="model">return.report</field>
+        <field name="arch" type="xml">
+            <graph string="Return Analysis">
+                <field name="request_date" type="row" interval="month"/>
+                <field name="return_amount" type="measure"/>
+                <field name="state" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Return Report Pivot View -->
+    <record id="view_return_report_pivot" model="ir.ui.view">
+        <field name="name">return.report.pivot</field>
+        <field name="model">return.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Return Analysis">
+                <field name="partner_id" type="row"/>
+                <field name="product_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="return_amount" type="measure"/>
+                <field name="return_qty" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Add to Reports Menu -->
+    <menuitem id="menu_return_analysis"
+              name="Return Analysis"
+              parent="menu_return_reports"
+              action="action_return_report"
+              sequence="10"/>
+
+    <!-- Return Request Report Template -->
+    <template id="return_request_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Return Request:</strong>
+                                <span t-field="doc.name"/>
+                                <br/>
+                                <strong>Vendor:</strong>
+                                <span t-field="doc.partner_id"/>
+                                <br/>
+                                <strong>Request Date:</strong>
+                                <span t-field="doc.request_date"/>
+                                <br/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Status:</strong>
+                                <span t-field="doc.state"/>
+                                <br/>
+                                <strong>Responsible:</strong>
+                                <span t-field="doc.user_id"/>
+                                <br/>
+                            </div>
+                        </div>
+
+                        <h3>Return Lines</h3>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Available Qty</th>
+                                    <th>Return Qty</th>
+                                    <th>Unit Price</th>
+                                    <th>Return Amount</th>
+                                    <th>Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.return_line_ids" t-as="line">
+                                    <td>
+                                        <span t-field="line.product_id"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.available_qty"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.return_qty"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.price_unit"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.return_amount"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.return_reason"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Return Reason:</strong>
+                                <br/>
+                                <span t-field="doc.reason"/>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td>
+                                            <strong>Total Return Quantity:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.total_return_qty"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Total Return Amount:</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.total_return_amount"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Return Request Report Action -->
+    <record id="action_report_return_request" model="ir.actions.report">
+        <field name="name">Return Request</field>
+        <field name="model">return.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">bs_purchase_return_management.return_request_document</field>
+        <field name="report_file">bs_purchase_return_management.return_request_document</field>
+        <field name="binding_model_id" ref="model_return_request"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="petty_cash.PettyCashDashboard">
+        <div class="o_petty_cash_dashboard">
+            <!-- Load Chart.js from CDN if not already loaded -->
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 HERO SECTION
+            ══════════════════════════════════════════════════════════════ -->
+            <div class="pcd-hero">
+                <div class="pcd-hero-inner">
+                    <!-- Left: Brand and Title -->
+                    <div class="pcd-hero-brand">
+                        <div class="pcd-hero-icon-wrap">
+                            <i class="fa fa-dashboard pcd-hero-icon" />
+                        </div>
+                        <div>
+                            <div class="pcd-hero-eyebrow">Financial Management</div>
+                            <h1 class="pcd-hero-title">
+                                <span class="pcd-hero-title-white">Petty Cash </span>
+                                <span class="pcd-hero-title-blue">Dashboard</span>
+                            </h1>
+                            <p
+                                class="pcd-hero-sub"
+                            >Track advances, monitor settlements, and manage outstanding balances</p>
+                        </div>
+                    </div>
+
+                    <!-- Right: Summary KPIs -->
+                    <div class="pcd-hero-kpis">
+                        <div class="pcd-summary-card">
+                            <i class="fa fa-exclamation-triangle pcd-summary-icon" />
+                            <div class="pcd-summary-num">
+                                <t t-esc="totalOverdue" />
+                            </div>
+                            <div class="pcd-summary-lbl">Overdue</div>
+                        </div>
+                        <div class="pcd-summary-card">
+                            <i class="fa fa-hourglass-half pcd-summary-icon" />
+                            <div class="pcd-summary-num">
+                                <t t-esc="totalPendingApprovals" />
+                            </div>
+                            <div class="pcd-summary-lbl">Pending</div>
+                        </div>
+                        <div class="pcd-summary-card">
+                            <i class="fa fa-money pcd-summary-icon" />
+                            <div class="pcd-summary-num">
+                                <t t-esc="totalOutstanding" />
+                            </div>
+                            <div class="pcd-summary-lbl">Outstanding</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 COMPANY INDICATOR
+            ══════════════════════════════════════════════════════════════ -->
+            <div class="pcd-company-bar">
+                <span class="pcd-company-badge">
+                    <i class="fa fa-building-o" />
+                    <t t-esc="state.currentCompanyName" />
+                </span>
+            </div>
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 FILTERS BAR
+            ══════════════════════════════════════════════════════════════ -->
+            <div class="pcd-filters-bar">
+                <div class="pcd-filters">
+                    <div class="pcd-filter-group">
+                        <label class="pcd-filter-label">Date Range:</label>
+                        <input
+                            type="date"
+                            class="pcd-filter-input"
+                            t-att-value="state.filters.date_from || ''"
+                            t-on-change="(ev) => this._onFilterChange('date_from', ev.target.value)"
+                        />
+                        <span class="pcd-filter-separator">to</span>
+                        <input
+                            type="date"
+                            class="pcd-filter-input"
+                            t-att-value="state.filters.date_to || ''"
+                            t-on-change="(ev) => this._onFilterChange('date_to', ev.target.value)"
+                        />
+                    </div>
+
+                    <div class="pcd-filter-group">
+                        <label class="pcd-filter-label">Request Type:</label>
+                        <select
+                            class="pcd-filter-select"
+                            t-att-value="state.filters.request_type || ''"
+                            t-on-change="(ev) => this._onFilterChange('request_type', ev.target.value)"
+                        >
+                            <option value="">All Types</option>
+                            <t
+                                t-foreach="state.requestTypes"
+                                t-as="type"
+                                t-key="type.value"
+                            >
+                                <option t-att-value="type.value">
+                                    <t t-esc="type.label" />
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <button
+                        class="pcd-filter-refresh btn btn-primary"
+                        t-on-click="this._loadDashboardData"
+                    >
+                        <i class="fa fa-refresh" /> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 LOADING STATE
+            ══════════════════════════════════════════════════════════════ -->
+            <div t-if="state.loading" class="pcd-loading">
+                <div class="text-center py-5">
+                    <i class="fa fa-spinner fa-spin fa-3x text-primary" />
+                    <p class="mt-3">Loading dashboard data...</p>
+                </div>
+            </div>
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 DASHBOARD CONTENT
+            ══════════════════════════════════════════════════════════════ -->
+            <div t-if="!state.loading" class="pcd-content">
+                <!-- KPI CARDS ROW -->
+                <div class="pcd-kpi-row">
+                    <!-- Total Advance Issued -->
+                    <div
+                        class="pcd-kpi-card pcd-kpi-success"
+                        t-on-click="() => this._onKpiClick('total_advance_issued')"
+                    >
+                        <div class="pcd-kpi-icon-wrap">
+                            <i
+                                t-att-class="'fa ' + (state.kpis.total_advance_issued?.icon || 'fa-money')"
+                            />
+                        </div>
+                        <div class="pcd-kpi-body">
+                            <div
+                                class="pcd-kpi-value"
+                                t-if="state.kpis.total_advance_issued?.currency"
+                            >
+                                <t
+                                    t-esc="this._formatCurrency(state.kpis.total_advance_issued?.value || 0)"
+                                />
+                            </div>
+                            <div class="pcd-kpi-value" t-else="">
+                                <t
+                                    t-esc="this._formatNumber(state.kpis.total_advance_issued?.value || 0)"
+                                />
+                            </div>
+                            <div class="pcd-kpi-label">
+                                <t t-esc="state.kpis.total_advance_issued?.label" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Settled Amount -->
+                    <div
+                        class="pcd-kpi-card pcd-kpi-warning"
+                        t-on-click="() => this._onKpiClick('total_settled')"
+                    >
+                        <div class="pcd-kpi-icon-wrap">
+                            <i
+                                t-att-class="'fa ' + (state.kpis.total_settled?.icon || 'fa-check')"
+                            />
+                        </div>
+                        <div class="pcd-kpi-body">
+                            <div class="pcd-kpi-value">
+                                <t
+                                    t-esc="this._formatCurrency(state.kpis.total_settled?.value || 0)"
+                                />
+                            </div>
+                            <div class="pcd-kpi-label">
+                                <t t-esc="state.kpis.total_settled?.label" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Outstanding Advance -->
+                    <div
+                        class="pcd-kpi-card pcd-kpi-warning"
+                        t-on-click="() => this._onKpiClick('outstanding_advance')"
+                    >
+                        <div class="pcd-kpi-icon-wrap">
+                            <i
+                                t-att-class="'fa ' + (state.kpis.outstanding_advance?.icon || 'fa-hourglass')"
+                            />
+                        </div>
+                        <div class="pcd-kpi-body">
+                            <div class="pcd-kpi-value">
+                                <t
+                                    t-esc="this._formatCurrency(state.kpis.outstanding_advance?.value || 0)"
+                                />
+                            </div>
+                            <div class="pcd-kpi-label">
+                                <t t-esc="state.kpis.outstanding_advance?.label" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Overdue Advances -->
+                    <div
+                        class="pcd-kpi-card pcd-kpi-danger"
+                        t-on-click="() => this._onKpiClick('overdue_advances')"
+                    >
+                        <div class="pcd-kpi-icon-wrap">
+                            <i
+                                t-att-class="'fa ' + (state.kpis.overdue_advances?.icon || 'fa-warning')"
+                            />
+                        </div>
+                        <div class="pcd-kpi-body">
+                            <div class="pcd-kpi-value">
+                                <t t-esc="state.kpis.overdue_advances?.value || 0" />
+                            </div>
+                            <div class="pcd-kpi-label">
+                                <t t-esc="state.kpis.overdue_advances?.label" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Advances -->
+                    <div
+                        class="pcd-kpi-card pcd-kpi-info"
+                        t-on-click="() => this._onKpiClick('active_advances')"
+                    >
+                        <div class="pcd-kpi-icon-wrap">
+                            <i
+                                t-att-class="'fa ' + (state.kpis.active_advances?.icon || 'fa-file')"
+                            />
+                        </div>
+                        <div class="pcd-kpi-body">
+                            <div class="pcd-kpi-value">
+                                <t t-esc="state.kpis.active_advances?.value || 0" />
+                            </div>
+                            <div class="pcd-kpi-label">
+                                <t t-esc="state.kpis.active_advances?.label" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Settlements -->
+                    <div
+                        class="pcd-kpi-card pcd-kpi-warning"
+                        t-on-click="() => this._onKpiClick('pending_settlements')"
+                    >
+                        <div class="pcd-kpi-icon-wrap">
+                            <i
+                                t-att-class="'fa ' + (state.kpis.pending_settlements?.icon || 'fa-inbox')"
+                            />
+                        </div>
+                        <div class="pcd-kpi-body">
+                            <div class="pcd-kpi-value">
+                                <t t-esc="state.kpis.pending_settlements?.value || 0" />
+                            </div>
+                            <div class="pcd-kpi-label">
+                                <t t-esc="state.kpis.pending_settlements?.label" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirmed Advances (Awaiting Payment) -->
+                    <div
+                        class="pcd-kpi-card pcd-kpi-secondary"
+                        t-on-click="() => this._onKpiClick('confirmed_advances')"
+                    >
+                        <div class="pcd-kpi-icon-wrap">
+                            <i
+                                t-att-class="'fa ' + (state.kpis.confirmed_advances?.icon || 'fa-clock-o')"
+                            />
+                        </div>
+                        <div class="pcd-kpi-body">
+                            <div class="pcd-kpi-value">
+                                <t t-esc="state.kpis.confirmed_advances?.value || 0" />
+                            </div>
+                            <div class="pcd-kpi-label">
+                                <t t-esc="state.kpis.confirmed_advances?.label" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHARTS ROW 1: Monthly Trend (full width) -->
+                <div class="pcd-charts-row pcd-charts-row--full">
+                    <div class="pcd-chart-card">
+                        <div class="pcd-chart-header">
+                            <h3 class="pcd-chart-title">Monthly Trend</h3>
+                        </div>
+                        <div class="pcd-chart-body">
+                            <canvas id="monthlyTrendChart" height="250" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHARTS ROW 2: Pie + Employees (side by side) -->
+                <div class="pcd-charts-row pcd-charts-row--half">
+                    <!-- Pie Chart: Advance Type Distribution -->
+                    <div class="pcd-chart-card">
+                        <div class="pcd-chart-header">
+                            <h3 class="pcd-chart-title">Advance Type Distribution</h3>
+                        </div>
+                        <div class="pcd-chart-body">
+                            <canvas id="advanceTypePieChart" height="300" />
+                        </div>
+                    </div>
+
+                    <!-- Horizontal Bar: Top Outstanding Employees -->
+                    <div class="pcd-chart-card">
+                        <div class="pcd-chart-header">
+                            <h3 class="pcd-chart-title">Top Outstanding Employees</h3>
+                        </div>
+                        <div class="pcd-chart-body">
+                            <canvas id="topEmployeesChart" height="300" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOTTOM ROW -->
+                <div class="pcd-bottom-row pcd-bottom-row--split">
+                    <!-- Activities -->
+                    <div class="pcd-bottom-left">
+                        <!-- Funnel Chart -->
+                        <div class="pcd-chart-card pcd-funnel-card">
+                            <div class="pcd-chart-header">
+                                <h3 class="pcd-chart-title">Request Status</h3>
+                            </div>
+                            <div class="pcd-chart-body">
+                                <canvas id="funnelChart" height="250" />
+                            </div>
+                        </div>
+
+                        <!-- Recent Activities -->
+                        <div class="pcd-activities-card">
+                            <div class="pcd-activities-header">
+                                <h3 class="pcd-activities-title">Recent Activities</h3>
+                            </div>
+                            <div class="pcd-activities-body">
+                                <t t-if="state.recentActivities.length === 0">
+                                    <div class="pcd-activities-empty">
+                                        <i class="fa fa-inbox fa-2x text-muted" />
+                                        <p
+                                            class="text-muted mt-2"
+                                        >No recent activities</p>
+                                    </div>
+                                </t>
+                                <t t-else="">
+                                    <div
+                                        t-foreach="state.recentActivities"
+                                        t-as="activity"
+                                        t-key="activity_index"
+                                        class="pcd-activity-item"
+                                        t-on-click="() => this._onActivityClick(activity)"
+                                    >
+                                        <div
+                                            class="pcd-activity-icon"
+                                            t-att-style="'color: ' + activity.color"
+                                        >
+                                            <i t-att-class="'fa ' + activity.icon" />
+                                        </div>
+                                        <div class="pcd-activity-content">
+                                            <div class="pcd-activity-desc">
+                                                <t t-esc="activity.description" />
+                                            </div>
+                                            <div class="pcd-activity-meta">
+                                                <span class="pcd-activity-date">
+                                                    <t t-esc="activity.date" />
+                                                </span>
+                                                <span
+                                                    class="pcd-activity-amount"
+                                                    t-if="activity.amount"
+                                                >
+                                                    <t
+                                                        t-esc="this._formatCurrency(activity.amount)"
+                                                    />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Alerts -->
+                    <div class="pcd-bottom-right">
+                        <div class="pcd-alerts-card">
+                            <div class="pcd-alerts-header">
+                                <h3 class="pcd-alerts-title">
+                                    <i class="fa fa-bell" /> Alerts
+                                </h3>
+                            </div>
+                            <div class="pcd-alerts-body">
+                                <div
+                                    class="pcd-alert-item pcd-alert-danger"
+                                    t-on-click="() => this._onKpiClick('overdue_advances')"
+                                >
+                                    <i class="fa fa-exclamation-triangle" />
+                                    <span>
+                                        <t t-esc="state.alerts.overdue_advances_count || 0" />
+                                        Overdue Advances
+                                    </span>
+                                </div>
+                                <div class="pcd-alert-item pcd-alert-warning">
+                                    <i class="fa fa-file-o" />
+                                    <span>
+                                        <t t-esc="state.alerts.missing_bills_count || 0" />
+                                        Missing Bills (&gt;30 days)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>
