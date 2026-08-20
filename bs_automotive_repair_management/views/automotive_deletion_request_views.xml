@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_automotive_deletion_request_list" model="ir.ui.view">
+        <field name="name">automotive.deletion.request.list</field>
+        <field name="model">automotive.deletion.request</field>
+        <field name="arch" type="xml">
+            <list string="Deletion Requests" class="o_automotive_repair_bg">
+                <field name="record_name"/>
+                <field name="res_model"/>
+                <field name="requested_by"/>
+                <field name="reason"/>
+                <field name="state" widget="badge" decoration-success="state == 'approved'"
+                       decoration-danger="state == 'rejected'" decoration-info="state == 'pending'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_automotive_deletion_request_form" model="ir.ui.view">
+        <field name="name">automotive.deletion.request.form</field>
+        <field name="model">automotive.deletion.request</field>
+        <field name="arch" type="xml">
+            <form string="Deletion Request" class="o_automotive_repair_bg">
+                <header>
+                    <button name="action_approve" string="Approve &amp; Delete" type="object"
+                            class="oe_highlight" invisible="state != 'pending'"
+                            groups="bs_automotive_repair_management.group_shop_manager"
+                            confirm="This will permanently delete the record. Continue?"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            invisible="state != 'pending'"
+                            groups="bs_automotive_repair_management.group_shop_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="record_name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="res_model" readonly="1"/>
+                            <field name="requested_by" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="reviewed_by" readonly="1" invisible="not reviewed_by"/>
+                            <field name="review_date" readonly="1" invisible="not review_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason" readonly="1"/>
+                        <field name="review_notes" readonly="state != 'pending'"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_automotive_deletion_request" model="ir.actions.act_window">
+        <field name="name">Deletion Requests</field>
+        <field name="res_model">automotive.deletion.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_pending': 1}</field>
+    </record>
+
+    <record id="view_automotive_deletion_request_search" model="ir.ui.view">
+        <field name="name">automotive.deletion.request.search</field>
+        <field name="model">automotive.deletion.request</field>
+        <field name="arch" type="xml">
+            <search string="Deletion Requests">
+                <field name="record_name"/>
+                <field name="requested_by"/>
+                <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
+                <group name="groupby">
+                    <filter string="Status" name="group_by_state" domain="[]" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_automotive_deletion_request_wizard_form" model="ir.ui.view">
+        <field name="name">automotive.deletion.request.wizard.form</field>
+        <field name="model">automotive.deletion.request.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Request Deletion" class="o_automotive_repair_bg">
+                <field name="res_model" invisible="1"/>
+                <field name="res_id" invisible="1"/>
+                <group>
+                    <field name="record_name" readonly="1"/>
+                    <field name="reason" placeholder="Why should this record be deleted?"/>
+                </group>
+                <footer>
+                    <button name="action_submit" string="Send Request" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="demo_partner_customer" model="res.partner">
+        <field name="name">Alex Rivera</field>
+        <field name="phone">+1 555 010 2020</field>
+        <field name="street">42 Garage Row</field>
+        <field name="city">Springfield</field>
+        <field name="email">alex.rivera@example.com</field>
+        <field name="company_type">person</field>
+    </record>
+
+    <record id="demo_vehicle_1" model="automotive.vehicle">
+        <field name="partner_id" ref="demo_partner_customer"/>
+        <field name="manufacturer">Toyota</field>
+        <field name="model">Corolla</field>
+        <field name="year">2019</field>
+        <field name="vin">JTDBR32E720012345</field>
+        <field name="license_plate">DEMO-001</field>
+        <field name="color">Silver</field>
+        <field name="fuel_type">petrol</field>
+        <field name="current_mileage">54200</field>
+    </record>
+
+    <record id="demo_product_alternator" model="product.product">
+        <field name="name">Alternator (Demo)</field>
+        <field name="type">consu</field>
+        <field name="is_storable">True</field>
+        <field name="tracking">lot</field>
+        <field name="list_price">180.0</field>
+        <field name="standard_price">95.0</field>
+    </record>
+
+    <record id="demo_lot_alternator" model="stock.lot">
+        <field name="name">ALT-DEMO-0001</field>
+        <field name="product_id" ref="demo_product_alternator"/>
+    </record>
+
+    <record id="demo_quant_alternator" model="stock.quant">
+        <field name="product_id" ref="demo_product_alternator"/>
+        <field name="lot_id" ref="demo_lot_alternator"/>
+        <field name="location_id" ref="stock.stock_location_stock"/>
+        <field name="quantity">5</field>
+    </record>
+
+    <record id="demo_service_catalog_brake_pads" model="automotive.service.catalog">
+        <field name="name">Brake Pad Replacement</field>
+        <field name="estimated_hours">1.5</field>
+        <field name="default_hourly_rate">75.0</field>
+    </record>
+
+    <record id="demo_workshop_resource_bay1" model="automotive.workshop.resource">
+        <field name="name">Bay 1</field>
+        <field name="resource_calendar_id" ref="resource.resource_calendar_std"/>
+        <field name="concurrent_capacity">1</field>
+    </record>
+
+    <record id="demo_repair_order_1" model="automotive.repair.order">
+        <field name="vehicle_id" ref="demo_vehicle_1"/>
+        <field name="customer_complaint">Battery light stays on, suspect alternator.</field>
+        <field name="workshop_resource_ids" eval="[(6, 0, [ref('demo_workshop_resource_bay1')])]"/>
+        <field name="labor_ids" eval="[(0, 0, {
+            'service_id': ref('demo_service_catalog_brake_pads'),
+            'description': 'Diagnose and replace alternator',
+            'hours': 2.0,
+            'hourly_rate': 80.0,
+        })]"/>
+        <field name="part_ids" eval="[(0, 0, {
+            'product_id': ref('demo_product_alternator'),
+            'quantity': 1,
+            'unit_cost': 180.0,
+            'warranty_months': 12,
+        })]"/>
+    </record>
+</odoo>

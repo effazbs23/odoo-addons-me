@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="bs_automotive_repair_management.SystrayItem">
+        <div class="o_automotive_repair_systray"
+             t-if="state.visible and state.total"
+             t-on-click="onClick"
+             title="Auto Repair — needs manager attention"
+             role="button">
+            <i class="fa fa-wrench" role="img" aria-label="Auto Repair"/>
+            <span class="o_automotive_menu_badge" t-esc="displayCount"/>
+        </div>
+    </t>
+
+</templates>
