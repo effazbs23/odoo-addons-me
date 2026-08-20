@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_form_repair_shop" model="ir.ui.view">
+        <field name="name">res.users.form.repair.shop</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='preferences']" position="after">
+                <page string="Repair Shop" name="repair_shop"
+                      groups="bs_automotive_repair_management.group_shop_salesperson">
+                    <group>
+                        <field name="max_discount_percent"
+                               groups="bs_automotive_repair_management.group_shop_manager"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

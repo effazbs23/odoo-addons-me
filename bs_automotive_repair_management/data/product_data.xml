@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Generic invoicing line for a repair order's negotiated final
+             price (§4) — the order itself carries the real labor/parts
+             breakdown, this product just gives the sale/invoice line
+             something billable to point at. -->
+        <record id="product_repair_order_service" model="product.product">
+            <field name="name">Repair Order Services</field>
+            <field name="type">service</field>
+            <field name="invoice_policy">order</field>
+            <field name="sale_ok">True</field>
+            <field name="purchase_ok">False</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_automotive_repair_order_list" model="ir.ui.view">
+        <field name="name">automotive.repair.order.list</field>
+        <field name="model">automotive.repair.order</field>
+        <field name="arch" type="xml">
+            <list string="Repair Orders" class="o_automotive_repair_bg">
+                <field name="name"/>
+                <field name="vehicle_id"/>
+                <field name="partner_id"/>
+                <field name="order_type"/>
+                <field name="lead_technician_id"/>
+                <field name="expected_pickup_datetime"/>
+                <field name="final_price" sum="Total"/>
+                <field name="state" widget="badge" decoration-success="state in ('ready', 'invoiced', 'closed')"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_automotive_repair_order_kanban" model="ir.ui.view">
+        <field name="name">automotive.repair.order.kanban</field>
+        <field name="model">automotive.repair.order</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column o_automotive_repair_bg">
+                <field name="name"/>
+                <field name="vehicle_id"/>
+                <field name="partner_id"/>
+                <field name="expected_pickup_datetime"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="name"/></strong>
+                            <div><field name="vehicle_id"/></div>
+                            <div class="text-muted"><field name="partner_id"/></div>
+                            <div><field name="expected_pickup_datetime"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_automotive_repair_order_search" model="ir.ui.view">
+        <field name="name">automotive.repair.order.search</field>
+        <field name="model">automotive.repair.order</field>
+        <field name="arch" type="xml">
+            <search string="Repair Orders">
+                <field name="name"/>
+                <field name="vehicle_id"/>
+                <field name="partner_id"/>
+                <field name="lead_technician_id"/>
+                <filter string="Standard" name="filter_standard" domain="[('order_type', '=', 'standard')]"/>
+                <filter string="Warranty Claim" name="filter_warranty_claim" domain="[('order_type', '=', 'warranty_claim')]"/>
+                <separator/>
+                <filter string="Open" name="filter_open" domain="[('state', 'not in', ('closed', 'cancelled'))]"/>
+                <group name="groupby">
+                    <filter string="State" name="group_by_state" domain="[]" context="{'group_by': 'state'}"/>
+                    <filter string="Vehicle" name="group_by_vehicle" domain="[]" context="{'group_by': 'vehicle_id'}"/>
+                    <filter string="Lead Technician" name="group_by_technician" domain="[]" context="{'group_by': 'lead_technician_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_automotive_repair_order_form" model="ir.ui.view">
+        <field name="name">automotive.repair.order.form</field>
+        <field name="model">automotive.repair.order</field>
+        <field name="arch" type="xml">
+            <form string="Repair Order" class="o_automotive_repair_bg">
+                <header>
+                    <button name="action_confirm_estimate" string="Confirm Estimate" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve" type="object"
+                            class="oe_highlight" invisible="state != 'estimate'"
+                            groups="bs_automotive_repair_management.group_shop_salesperson"/>
+                    <button name="action_start" string="Start Work" type="object"
+                            class="oe_highlight" invisible="state != 'approved'"/>
+                    <button name="action_quality_check" string="Send to Quality Check" type="object"
+                            class="oe_highlight" invisible="state != 'in_progress'"/>
+                    <button name="action_ready" string="Mark Ready" type="object"
+                            class="oe_highlight" invisible="state != 'quality_check'"/>
+                    <button name="action_invoice" string="Invoice" type="object"
+                            class="oe_highlight" invisible="state != 'ready'"
+                            groups="bs_automotive_repair_management.group_shop_salesperson"/>
+                    <button name="action_close" string="Close" type="object"
+                            class="oe_highlight" invisible="state != 'invoiced'"/>
+                    <button name="action_recalculate_pickup" string="Recalculate Pickup Estimate" type="object"
+                            invisible="state not in ('approved', 'in_progress', 'quality_check')"
+                            groups="bs_automotive_repair_management.group_shop_manager"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state not in ('draft', 'estimate', 'approved')"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                            invisible="state != 'cancelled'"/>
+                    <button name="action_request_deletion" string="Request Deletion" type="object"
+                            invisible="user_can_delete_directly"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,estimate,approved,in_progress,quality_check,ready,invoiced,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="vehicle_id" options="{'no_create': True}"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="order_type"/>
+                            <field name="warranty_claim_id" invisible="order_type != 'warranty_claim'"
+                                   domain="[('state', '=', 'approved'), ('resolution_repair_order_id', '=', False)]"
+                                   options="{'no_create': True}"/>
+                            <field name="lead_technician_id"/>
+                            <field name="mileage_in"/>
+                        </group>
+                        <group>
+                            <field name="salesperson_id"/>
+                            <field name="workshop_resource_ids" widget="many2many_tags"/>
+                            <field name="expected_pickup_datetime" readonly="1"/>
+                            <field name="actual_start_datetime" readonly="1"/>
+                            <field name="actual_end_datetime" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Diagnosis">
+                            <group>
+                                <field name="customer_complaint"/>
+                                <field name="diagnosis_notes"/>
+                            </group>
+                        </page>
+                        <page string="Labor">
+                            <field name="labor_ids" context="{'default_order_id': id}">
+                                <list editable="bottom">
+                                    <field name="technician_id"/>
+                                    <field name="work_date"/>
+                                    <field name="service_id"/>
+                                    <field name="description"/>
+                                    <field name="hours"/>
+                                    <field name="hourly_rate" groups="bs_automotive_repair_management.group_shop_manager"/>
+                                    <field name="covered_by_warranty" column_invisible="parent.order_type != 'warranty_claim'"/>
+                                    <field name="subtotal" sum="Total"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Parts">
+                            <field name="part_ids" context="{'default_order_id': id}">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_cost" groups="bs_automotive_repair_management.group_shop_manager"/>
+                                    <field name="lot_id" readonly="1"/>
+                                    <field name="manual_tracking_ref"/>
+                                    <field name="warranty_months"/>
+                                    <field name="warranty_end_date" readonly="1"/>
+                                    <field name="covered_by_warranty" column_invisible="parent.order_type != 'warranty_claim'"/>
+                                    <field name="subtotal" sum="Total"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Pricing">
+                            <group>
+                                <group>
+                                    <field name="subtotal"/>
+                                    <field name="discount_input_mode"/>
+                                    <field name="discount_percent" readonly="discount_input_mode == 'fixed_price'"/>
+                                    <field name="final_price" readonly="discount_input_mode == 'percentage'"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Handover">
+                            <group>
+                                <field name="checkin_id" readonly="1"/>
+                                <field name="checkout_id" readonly="1"/>
+                            </group>
+                            <field name="inspection_ids" readonly="1">
+                                <list>
+                                    <field name="inspection_type"/>
+                                    <field name="datetime"/>
+                                    <field name="recorded_by"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Billing/Stock">
+                            <group>
+                                <field name="sale_order_id" readonly="1"/>
+                                <field name="picking_id" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_automotive_repair_order" model="ir.actions.act_window">
+        <field name="name">Repair Orders</field>
+        <field name="res_model">automotive.repair.order</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_automotive_repair_order_search"/>
+        <field name="context">{'search_default_filter_open': 1}</field>
+    </record>
+</odoo>

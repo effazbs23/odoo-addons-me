@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_automotive_employee_stats_list" model="ir.ui.view">
+        <field name="name">hr.employee.automotive.stats.list</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <list string="Employee Stats" class="o_automotive_repair_bg" create="false" delete="false">
+                <field name="name"/>
+                <field name="department_id"/>
+                <field name="automotive_total_hours" sum="Total"/>
+                <field name="automotive_vehicle_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_automotive_employee_stats_form" model="ir.ui.view">
+        <field name="name">hr.employee.automotive.stats.form</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <form string="Employee Stats" class="o_automotive_repair_bg" create="false" delete="false">
+                <sheet>
+                    <field name="avatar_128" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                        <h3><field name="job_title" readonly="1"/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="department_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="automotive_total_hours" readonly="1"/>
+                            <field name="automotive_vehicle_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Labor / Services">
+                            <field name="automotive_labor_ids" readonly="1">
+                                <list default_order="work_date desc">
+                                    <field name="work_date"/>
+                                    <field name="order_id"/>
+                                    <field name="vehicle_id"/>
+                                    <field name="description"/>
+                                    <field name="hours" sum="Total"/>
+                                    <field name="covered_by_warranty"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Upcoming Schedule">
+                            <field name="automotive_open_order_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="vehicle_id"/>
+                                    <field name="state"/>
+                                    <field name="expected_pickup_datetime"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_automotive_employee_stats_search" model="ir.ui.view">
+        <field name="name">hr.employee.automotive.stats.search</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <search string="Employee Stats">
+                <field name="name"/>
+                <field name="automotive_vehicle_ids" string="Vehicle"/>
+                <filter string="Worked This Week" name="filter_this_week"
+                        domain="[('automotive_labor_ids.work_date', '>=',
+                                  (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Worked This Month" name="filter_this_month"
+                        domain="[('automotive_labor_ids.work_date', '>=',
+                                  (context_today() - relativedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                <group name="groupby">
+                    <filter string="Department" name="group_by_department" domain="[]"
+                            context="{'group_by': 'department_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_automotive_employee_stats" model="ir.actions.act_window">
+        <field name="name">Employee Stats</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('automotive_labor_ids', '!=', False)]</field>
+        <field name="search_view_id" ref="view_automotive_employee_stats_search"/>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_automotive_employee_stats_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_automotive_employee_stats_form')}),
+        ]"/>
+    </record>
+</odoo>
