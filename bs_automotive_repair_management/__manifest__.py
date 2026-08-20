@@ -68,5 +68,6 @@
     'license': 'LGPL-3',
     'images': [
         'static/description/icon.png',
+        'static/description/banner.gif'
     ],
 }
