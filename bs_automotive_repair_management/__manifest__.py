@@ -69,7 +69,7 @@
     'currency': 'USD',
     'price': 99.99,
     'images': [
-        'static/description/icon.png',
         'static/description/banner.gif'
     ],
+    'icon' : 'static/description/icon.png',
 }
