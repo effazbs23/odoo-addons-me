@@ -65,7 +65,9 @@
     'installable': True,
     'application': True,
     'auto_install': False,
-    'license': 'LGPL-3',
+    'license': 'OPL-1',
+    'currency': 'USD',
+    'price': 99.99,
     'images': [
         'static/description/icon.png',
         'static/description/banner.gif'
