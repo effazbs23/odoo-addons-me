@@ -20,7 +20,7 @@ module falls back to plain string matching): `rapidfuzz` (better fuzzy
 product-name matching), `fastembed` (semantic/typo-tolerant product-name
 matching), `pymupdf` (PDF invoice upload support).
 """,
-    'version': '19.0.1.0.1',
+    'version': '19.0.1.0.0',
     'category': 'Sales/Purchase',
     'author': 'ERP23',
     'website': 'https://erp-23.com',
