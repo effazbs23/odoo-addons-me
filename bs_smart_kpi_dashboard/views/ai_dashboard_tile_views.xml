@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_dashboard_tile_list" model="ir.ui.view">
+        <field name="name">ai.dashboard.tile.list</field>
+        <field name="model">ai.dashboard.tile</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="prompt"/>
+                <field name="chart_type"/>
+                <field name="user_id"/>
+                <field name="shared"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ai_dashboard_tile_form" model="ir.ui.view">
+        <field name="name">ai.dashboard.tile.form</field>
+        <field name="model">ai.dashboard.tile</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Revenue by Region"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="prompt" readonly="1"
+                                   help="Original natural-language request — display only; editing it would not change what this tile queries."/>
+                            <field name="chart_type"/>
+                            <field name="shared"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Query Definition (system-generated)">
+                        <!-- Readonly on purpose: this is the VALIDATED spec
+                             the tile executes. Hand-editing it here invites
+                             mangled JSON and confusing broken tiles; delete
+                             and re-create the tile instead. (Execution stays
+                             safe regardless — every reload re-runs
+                             _validate_spec — but the field is not a user
+                             surface.) -->
+                        <field name="spec_json" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ai_dashboard_tile" model="ir.actions.act_window">
+        <field name="name">Saved KPI Tiles</field>
+        <field name="res_model">ai.dashboard.tile</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
