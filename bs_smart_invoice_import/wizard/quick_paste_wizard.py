@@ -527,7 +527,7 @@ class QuickPasteWizardLine(models.TransientModel):
         for line in self:
             if (
                 line.product_id and line.uom_id
-                and line.uom_id.category_id != line.product_id.uom_id.category_id
+                and not line.uom_id._has_common_reference(line.product_id.uom_id)
             ):
                 line.uom_id = line.product_id.uom_id
                 return {'warning': {
@@ -547,7 +547,7 @@ class QuickPasteWizardLine(models.TransientModel):
         than trusted at face value), else the product's default.
         """
         self.ensure_one()
-        if self.uom_id and self.uom_id.category_id == self.product_id.uom_id.category_id:
+        if self.uom_id and self.uom_id._has_common_reference(self.product_id.uom_id):
             return self.uom_id
         return self.product_id.uom_id
 
