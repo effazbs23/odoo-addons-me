@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import fields, models, api, _
-from odoo.exceptions import ValidationError
+from odoo import fields, models
 
 
 class AiDashboardSynonym(models.Model):
@@ -50,32 +49,3 @@ class AiDashboardSynonym(models.Model):
     priority = fields.Integer(
         default=10, help="Higher wins if two phrases of equal length overlap.")
     active = fields.Boolean(default=True)
-
-    # _discover_new_models()/_create_draft_synonyms() only de-dupe against
-    # their OWN inserts. The list view is editable=bottom, so a human can
-    # freely add a second row with the same (phrase, slot_type, model_id)
-    # but a different value — _consume_matches() would then resolve that
-    # phrase deterministically-but-arbitrarily (whichever row comes first
-    # in priority/id order), with no error surfaced to the admin who
-    # created the conflict. Enforce uniqueness explicitly, including
-    # inactive/draft rows (active_test=False) so a still-pending
-    # auto-discovery draft counts too, and treating a NULL model_id
-    # (the model-agnostic slot types) as its own single bucket rather than
-    # something SQL would let repeat freely.
-    @api.constrains('phrase', 'slot_type', 'model_id')
-    def _check_phrase_unique(self):
-        for rec in self:
-            domain = [
-                ('id', '!=', rec.id),
-                ('phrase', '=', rec.phrase),
-                ('slot_type', '=', rec.slot_type),
-                ('model_id', '=', rec.model_id.id if rec.model_id else False),
-            ]
-            if self.with_context(active_test=False).search_count(domain):
-                suffix = _(" and model") if rec.model_id else ""
-                raise ValidationError(
-                    _("A synonym for phrase '%s' already exists for this "
-                      "slot type%s. Edit the existing row instead of adding "
-                      "a duplicate — the parser can only resolve a phrase "
-                      "to one row.")
-                    % (rec.phrase, suffix))

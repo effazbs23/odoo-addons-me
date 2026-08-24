@@ -3,9 +3,16 @@
     'category': 'Productivity',
     'summary': 'Type a KPI request in plain English, get a live chart — no external AI API, no data leaves your server.',
     'version': '19.0.1.0.0',
-    'license': 'LGPL-3',
+    'license': 'OPL-1',
+    'price': 29,
+    'currency': 'USD',
+    'icon': '/bs_smart_kpi_dashboard/static/description/icon.png',
+    'images': [
+        'static/description/banner.gif',
+    ],
     'author': 'ERP23',
     'website': 'https://erp-23.com',
+    'support': 'erp23@brainstation-23.com',
     'depends': ['base', 'web', 'sale', 'account', 'crm', 'stock'],
     'data': [
         'security/ai_dashboard_security.xml',
@@ -28,7 +35,6 @@
             'bs_smart_kpi_dashboard/static/src/css/**/*',
         ],
     },
-    'images': ['static/description/assets/main_screenshot.png'],
     'installable': True,
     'application': True,
 }

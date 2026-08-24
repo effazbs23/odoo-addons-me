@@ -471,8 +471,16 @@ class KpiPromptParser:
         # matters for "this quarter"/"this month" boundaries near midnight.
         return odoo_fields.Date.context_today(self.env['ai.dashboard.allowlist'])
 
-    def _resolve_time_range(self, code, date_field):
-        today = self._today()
+    # Every code _resolve_time_range understands, in no particular order —
+    # shared with _detect_time_range_code below so the two stay in sync
+    # without a separate list to maintain.
+    _TIME_RANGE_CODES = (
+        'today', 'yesterday', 'this_week', 'last_week', 'this_month',
+        'last_month', 'this_quarter', 'last_quarter', 'this_year', 'last_year',
+    )
+
+    def _resolve_time_range(self, code, date_field, today=None):
+        today = today or self._today()
 
         def domain(d_from, d_to):
             return [(date_field, '>=', d_from.isoformat()),
@@ -518,6 +526,21 @@ class KpiPromptParser:
             end = today.replace(year=today.year - 1, month=12, day=31)
             return domain(start, end)
         return []
+
+    def _detect_time_range_code(self, date_field, lo, hi, as_of):
+        """Reverse of _resolve_time_range: does the literal (lo, hi) ISO-date
+        pair match one of the canonical relative ranges above, evaluated as
+        of `as_of`? Used to recognize that a spec's literal date bounds
+        actually meant e.g. 'this_year' relative to the day it was produced
+        — see ai.dashboard.unmatched_phrase's spec-caching, the only caller.
+        Exact-match only (no tolerance): a close-but-not-exact pair is
+        treated as a genuine literal range, never guessed at.
+        """
+        for code in self._TIME_RANGE_CODES:
+            candidate = self._resolve_time_range(code, date_field, today=as_of)
+            if candidate and candidate[0][2] == lo and candidate[1][2] == hi:
+                return code
+        return None
 
     # ------------------------------------------------------------------ #
     # Confidence scoring

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="0">
+    <!-- noupdate="1": admins curate this vocabulary live (reword a
+         phrase, re-prioritize, deactivate) — upgrades must never stomp
+         those edits. Ship new phrases as NEW xml ids in future versions. -->
+    <data noupdate="1">
 
         <!-- ===================== MODEL ===================== -->
         <record id="syn_model_sales" model="ai.dashboard.synonym">
@@ -15,6 +18,11 @@
         </record>
         <record id="syn_model_invoices" model="ai.dashboard.synonym">
             <field name="phrase">invoices</field>
+            <field name="slot_type">model</field>
+            <field name="value">account.move</field>
+        </record>
+        <record id="syn_model_invoicing" model="ai.dashboard.synonym">
+            <field name="phrase">invoicing</field>
             <field name="slot_type">model</field>
             <field name="value">account.move</field>
         </record>

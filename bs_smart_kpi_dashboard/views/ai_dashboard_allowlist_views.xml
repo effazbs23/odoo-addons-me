@@ -26,6 +26,8 @@
                         domain="[('active', '=', True)]"/>
                 <filter name="filter_draft" string="Needs Review (Auto-Discovered)"
                         domain="[('active', '=', False)]"/>
+                <filter name="filter_pending_fields" string="Has New Fields Pending Review"
+                        domain="[('discovered_field_ids', '!=', False)]"/>
             </search>
         </field>
     </record>
@@ -40,6 +42,18 @@
         <field name="binding_view_types">list</field>
         <field name="state">code</field>
         <field name="code">action = model._discover_new_models_action()</field>
+    </record>
+
+    <!-- Same, but for fields added to a model this dashboard already
+         knows about (e.g. a module extending sale.order after this entry
+         was set up) — see ai_dashboard_allowlist.py's _discover_new_fields. -->
+    <record id="action_ai_dashboard_discover_new_fields" model="ir.actions.server">
+        <field name="name">Discover New Fields on Existing Models</field>
+        <field name="model_id" ref="model_ai_dashboard_allowlist"/>
+        <field name="binding_model_id" ref="model_ai_dashboard_allowlist"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = model._discover_new_fields_action()</field>
     </record>
 
     <record id="view_ai_dashboard_allowlist_form" model="ir.ui.view">
@@ -58,6 +72,13 @@
                         <field name="default_measure_field_id"/>
                         <field name="default_aggregation"/>
                         <field name="date_field_id"/>
+                    </group>
+                    <group string="Newly Discovered Fields (Pending Review)"
+                           invisible="not discovered_field_ids">
+                        <field name="discovered_field_ids" widget="many2many_tags" readonly="1" nolabel="1" colspan="2"/>
+                        <button name="action_promote_discovered_fields" type="object"
+                                string="Promote to Allow-List" class="btn-primary"
+                                help="Move these fields into Groupable/Filterable or Measurable above, and activate their draft synonym phrases, so prompts can actually use them."/>
                     </group>
                 </sheet>
             </form>

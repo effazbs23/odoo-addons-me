@@ -14,12 +14,16 @@ _logger = logging.getLogger(__name__)
 class SmartKpiDashboardController(http.Controller):
 
     # -------------------------------------------------------------- #
-    # Parse a prompt and either run it immediately (high confidence)
-    # or hand back a partial spec for the guided form (low confidence)
+    # Parse a prompt with the local, deterministic parser. Confident
+    # results run immediately; anything below the confidence threshold
+    # (or missing a measure) drops to the guided form instead. Every
+    # spec, however it was produced, still has to clear the same
+    # _validate_spec() gate before anything executes.
     # -------------------------------------------------------------- #
     @http.route('/bs_smart_kpi_dashboard/generate', type='jsonrpc', auth='user')
     def generate(self, prompt):
         env = request.env
+
         parser = KpiPromptParser(env)
         spec = parser.parse(prompt)
 
@@ -37,7 +41,8 @@ class SmartKpiDashboardController(http.Controller):
             return {'error': str(e)}
 
         chart = self._run_and_format(env, spec)
-        return {'spec': spec, 'chart': chart}
+        desc = env['ai.dashboard.tile']._describe_spec(spec)
+        return {'spec': spec, 'chart': chart, 'source': 'local', **desc}
 
     # -------------------------------------------------------------- #
     # Telemetry only, for the low-confidence branch above. Wrapped so a
@@ -81,7 +86,8 @@ class SmartKpiDashboardController(http.Controller):
         except ValidationError as e:
             return {'error': str(e)}
         chart = self._run_and_format(env, spec)
-        return {'spec': spec, 'chart': chart}
+        desc = env['ai.dashboard.tile']._describe_spec(spec)
+        return {'spec': spec, 'chart': chart, 'source': 'manual', **desc}
 
     # -------------------------------------------------------------- #
     # Options for the guided-form dropdowns — only allow-listed data,

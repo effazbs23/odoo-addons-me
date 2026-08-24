@@ -185,11 +185,16 @@ export class SmartKpiDashboard extends Component {
                 this.state.guidedSpec = result.partial_spec;
             } else {
                 this.state.preview = {
-                    name: this.state.prompt,
+                    // Derived from the spec's actual fields, never the raw
+                    // prompt — a typo or vague phrasing in what was typed
+                    // should never end up as the tile's heading.
+                    name: result.title,
+                    description: result.description,
                     prompt: this.state.prompt,
                     chart_type: result.spec.chart_type,
                     chart: result.chart,
                     spec: result.spec,
+                    source: result.source,
                 };
             }
         } finally {
@@ -206,11 +211,13 @@ export class SmartKpiDashboard extends Component {
                 return;
             }
             this.state.preview = {
-                name: this.state.prompt || "Custom KPI",
+                name: result.title || "Custom KPI",
+                description: result.description,
                 prompt: this.state.prompt,
                 chart_type: spec.chart_type,
                 chart: result.chart,
                 spec: result.spec,
+                source: result.source,
             };
             this.state.guidedSpec = null;
         } finally {

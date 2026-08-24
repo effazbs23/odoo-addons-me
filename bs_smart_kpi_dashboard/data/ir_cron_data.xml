@@ -2,32 +2,19 @@
 <odoo>
     <data noupdate="1">
 
-        <!-- Catches modules installed outside the Apps UI (server -i/-u
-             flags, a restored database, etc.) — the ir.module.module
-             override in models/ir_module_module.py handles the Apps UI
-             path immediately, this is the once-a-day safety net. -->
+        <!-- The ONLY automatic discovery trigger, on purpose: hooking
+             Apps-UI install/upgrade buttons (ir.module.module) would add
+             a full vocabulary scan to every module operation on the
+             instance. Modules installed via -i/-u or the Apps UI are
+             picked up here within a day; admins can also run discovery
+             immediately from the Configuration menu / list-view server
+             actions at any time. -->
         <record id="ir_cron_discover_new_models" model="ir.cron">
             <field name="name">Smart KPI Dashboard: Discover New Vocabulary</field>
             <field name="model_id" ref="model_ai_dashboard_allowlist"/>
-            <field name="user_id" ref="base.user_root"/>
             <field name="state">code</field>
-            <field name="code">model._discover_new_models()</field>
-            <field name="interval_number">1</field>
-            <field name="interval_type">days</field>
-            <field name="active">True</field>
-        </record>
-
-        <!-- Bounds the unmatched_phrase telemetry table's growth — see
-             ai.dashboard.unmatched_phrase._cleanup()'s docstring. Any
-             authenticated user can add rows there via a normal /generate
-             request, unthrottled, so this needs to run regardless of how
-             busy the dashboard is. -->
-        <record id="ir_cron_cleanup_unmatched_phrases" model="ir.cron">
-            <field name="name">Smart KPI Dashboard: Clean Up Unmatched Prompts</field>
-            <field name="model_id" ref="model_ai_dashboard_unmatched_phrase"/>
-            <field name="user_id" ref="base.user_root"/>
-            <field name="state">code</field>
-            <field name="code">model._cleanup()</field>
+            <field name="code">model._discover_new_models()
+model._discover_new_fields()</field>
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
             <field name="active">True</field>

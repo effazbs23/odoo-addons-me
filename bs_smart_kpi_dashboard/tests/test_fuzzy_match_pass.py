@@ -55,6 +55,14 @@ class TestFuzzyMatchPass(TransactionCase):
         self.ICP = self.env['ir.config_parameter'].sudo()
         self.ICP.set_param(FUZZY_MATCH_CONFIG_PARAM, 'False')
 
+        # Enforce the isolation this file promises in its docstring: the
+        # seed vocabulary has grown to include phrases identical to the
+        # fixtures below ('quantity', 'bar chart', 'region'), and an
+        # identically-phrased seed synonym would fuzzy-match alongside the
+        # fixture and break the exact-match-count assertions. Park every
+        # pre-existing synonym — rolled back by TransactionCase.
+        self.env['ai.dashboard.synonym'].search([]).write({'active': False})
+
         Synonym = self.env['ai.dashboard.synonym']
         sale_model = self.env.ref('sale.model_sale_order')
         # 'quantitty' (typo'd leftover text below) is a clean one-edit

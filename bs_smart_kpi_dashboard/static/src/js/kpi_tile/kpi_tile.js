@@ -8,7 +8,7 @@ import { Component, onMounted, onWillUnmount, useRef, onWillUpdateProps } from "
  */
 export class KpiTile extends Component {
     static template = "bs_smart_kpi_dashboard.KpiTile";
-    static props = ["name", "chart_type", "chart", "error?", "onDelete?", "onPin?"];
+    static props = ["name", "chart_type", "chart?", "error?", "description?", "onDelete?", "onPin?"];
 
     setup() {
         this.canvasRef = useRef("canvas");
