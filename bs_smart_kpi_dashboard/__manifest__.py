@@ -13,6 +13,13 @@
     'author': 'ERP23',
     'website': 'https://erp-23.com',
     'support': 'erp23@brainstation-23.com',
+    # All four business apps are intentionally hard dependencies for this
+    # SKU: data/allowlist_data.xml seeds one ready-to-use allow-list entry
+    # per app (Sales, Invoicing, CRM, Inventory) so the dashboard has
+    # something chartable out of the box on every one of them. This is a
+    # deliberate "batteries included" trade-off for a $29 productivity
+    # add-on, not an oversight — see README.md's "Requirements" section
+    # for the customer-facing version of this note.
     'depends': ['base', 'web', 'sale', 'account', 'crm', 'stock'],
     'data': [
         'security/ai_dashboard_security.xml',
@@ -37,4 +44,5 @@
     },
     'installable': True,
     'application': True,
+    'uninstall_hook': 'uninstall_hook',
 }

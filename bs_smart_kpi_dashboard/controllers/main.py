@@ -4,14 +4,43 @@ import logging
 
 from odoo import http, _
 from odoo.http import request
-from odoo.exceptions import ValidationError
+from odoo.exceptions import AccessError, ValidationError
 
 from ..logic.kpi_prompt_parser import KpiPromptParser
 
 _logger = logging.getLogger(__name__)
 
+# Every route below is meant for internal back-office users only (the
+# dashboard menu is gated to base.group_user and isn't shown to portal
+# contacts) — but auth='user' alone admits ANY authenticated res.users
+# record, portal included. Enforced explicitly here so all six routes
+# fail the same clean way instead of some silently working (via the
+# module's own sudo()'d metadata reads) and others crashing with an
+# unhandled AccessError deep in the ORM (e.g. ai.dashboard.tile has no
+# ir.model.access grant for portal users at all).
+_INTERNAL_GROUP = 'base.group_user'
+
+# Hard cap on free-text prompt length: KpiPromptParser's fuzzy-match
+# fallback runs a Levenshtein DP per synonym per prompt, unconditionally,
+# on every /generate and /suggest call — an unbounded prompt is a cheap
+# CPU-cost amplification vector for any authenticated user. Comfortably
+# above any realistic KPI request.
+_MAX_PROMPT_LENGTH = 300
+
 
 class SmartKpiDashboardController(http.Controller):
+
+    @staticmethod
+    def _check_internal_user(env):
+        if not env.user.has_group(_INTERNAL_GROUP):
+            raise AccessError(
+                _("Smart KPI Dashboard is only available to internal users."))
+
+    @staticmethod
+    def _check_prompt_length(prompt):
+        if not isinstance(prompt, str) or len(prompt) > _MAX_PROMPT_LENGTH:
+            raise ValidationError(
+                _("Prompt is too long (maximum %s characters).") % _MAX_PROMPT_LENGTH)
 
     # -------------------------------------------------------------- #
     # Parse a prompt with the local, deterministic parser. Confident
@@ -23,6 +52,11 @@ class SmartKpiDashboardController(http.Controller):
     @http.route('/bs_smart_kpi_dashboard/generate', type='jsonrpc', auth='user')
     def generate(self, prompt):
         env = request.env
+        self._check_internal_user(env)
+        try:
+            self._check_prompt_length(prompt)
+        except ValidationError as e:
+            return {'error': str(e)}
 
         parser = KpiPromptParser(env)
         spec = parser.parse(prompt)
@@ -71,7 +105,10 @@ class SmartKpiDashboardController(http.Controller):
     # -------------------------------------------------------------- #
     @http.route('/bs_smart_kpi_dashboard/suggest', type='jsonrpc', auth='user')
     def suggest(self, prompt=''):
-        parser = KpiPromptParser(request.env)
+        env = request.env
+        self._check_internal_user(env)
+        self._check_prompt_length(prompt or '')
+        parser = KpiPromptParser(env)
         return parser.suggest(prompt)
 
     # -------------------------------------------------------------- #
@@ -81,6 +118,7 @@ class SmartKpiDashboardController(http.Controller):
     @http.route('/bs_smart_kpi_dashboard/run_manual', type='jsonrpc', auth='user')
     def run_manual(self, spec):
         env = request.env
+        self._check_internal_user(env)
         try:
             env['ai.dashboard.allowlist']._validate_spec(spec, env)
         except ValidationError as e:
@@ -130,11 +168,14 @@ class SmartKpiDashboardController(http.Controller):
     # -------------------------------------------------------------- #
     @http.route('/bs_smart_kpi_dashboard/tiles', type='jsonrpc', auth='user')
     def list_tiles(self):
-        return request.env['ai.dashboard.tile'].get_dashboard_tiles()
+        env = request.env
+        self._check_internal_user(env)
+        return env['ai.dashboard.tile'].get_dashboard_tiles()
 
     @http.route('/bs_smart_kpi_dashboard/tile/save', type='jsonrpc', auth='user')
     def save_tile(self, name, prompt, spec, chart_type, shared=False):
         env = request.env
+        self._check_internal_user(env)
         try:
             env['ai.dashboard.allowlist']._validate_spec(spec, env)
         except ValidationError as e:
@@ -152,6 +193,7 @@ class SmartKpiDashboardController(http.Controller):
     @http.route('/bs_smart_kpi_dashboard/tile/delete', type='jsonrpc', auth='user')
     def delete_tile(self, tile_id):
         env = request.env
+        self._check_internal_user(env)
         tile = env['ai.dashboard.tile'].search(
             [('id', '=', tile_id), ('user_id', '=', env.uid)], limit=1)
         if not tile:

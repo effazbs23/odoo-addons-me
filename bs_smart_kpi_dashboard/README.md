@@ -39,6 +39,16 @@ Type a KPI request in plain English, get a live chart — no external AI API, no
 
 - Odoo 19.0 Community or Enterprise
 - Depends on: `base`, `web`, `sale`, `account`, `crm`, `stock`
+- **Why all four business apps are required:** the module ships one
+  ready-to-use allow-list entry per app (Sales, Invoicing, CRM, Inventory),
+  so Installing it also installs any of those four apps you don't already
+  have, purely to seed that app's out-of-the-box KPI entry. This is a
+  deliberate "batteries included" choice for this SKU, not an accidental
+  footprint — if your business doesn't use CRM or Inventory, you can
+  simply leave those seeded allow-list entries inactive (or deactivate
+  them) under *Settings → Smart KPI Dashboard → Allowed Models*; the
+  dashboard itself adds no menus, security groups, or demo data beyond
+  its own four models regardless of which business apps you actually use.
 
 ## Installation
 

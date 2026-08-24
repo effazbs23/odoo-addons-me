@@ -124,6 +124,11 @@ class AiDashboardAllowlist(models.Model):
     # groups formatted_read_group must build, so a crafted spec can't ask
     # for an unbounded cross-product aggregation over a high-volume table.
     _MAX_GROUPBY = 3
+    # Same cost-cap philosophy as _MAX_GROUPBY/_MAX_QUERY_LIMIT: nothing
+    # else here bounds how many clauses a client-built domain (run_manual /
+    # tile/save) may contain, even though every clause is individually
+    # allow-listed.
+    _MAX_DOMAIN_CLAUSES = 50
 
     @api.model
     def _validate_spec(self, spec, env=None):
@@ -218,6 +223,38 @@ class AiDashboardAllowlist(models.Model):
         domain = spec.get('domain') or []
         if not isinstance(domain, list):
             raise ValidationError(_("Invalid filter in query spec."))
+        if len(domain) > self._MAX_DOMAIN_CLAUSES:
+            raise ValidationError(
+                _("Too many filter clauses (maximum %s).") % self._MAX_DOMAIN_CLAUSES)
+        # Arity balance: each token above is checked in isolation (a lone
+        # '&'/'|'/'!' is itself a syntactically valid token, and a lone
+        # 3-tuple leaf is itself a syntactically valid, allow-listed leaf),
+        # but nothing yet verifies the domain as a WHOLE is a balanced
+        # prefix expression. An unbalanced domain (e.g. ['&', (leaf,)])
+        # passes every per-token check below and then raises a plain
+        # ValueError deep inside formatted_read_group() — never an
+        # odoo.exceptions.ValidationError — which nothing else in this
+        # module catches. Verify arity here, before any clause reaches
+        # the ORM, by walking the domain in reverse: each leaf pushes one
+        # completed operand, '!' consumes/replaces one, and '&'/'|'
+        # consume two and replace them with one. A balanced domain must
+        # end with exactly one operand left on the stack.
+        operand_count = 0
+        for clause in reversed(domain):
+            if isinstance(clause, str) and clause in ('&', '|'):
+                if operand_count < 2:
+                    raise ValidationError(
+                        _("Malformed filter: '%s' is missing an operand.") % clause)
+                operand_count -= 1
+            elif isinstance(clause, str) and clause == '!':
+                if operand_count < 1:
+                    raise ValidationError(
+                        _("Malformed filter: '!' is missing an operand."))
+            else:
+                operand_count += 1
+        if domain and operand_count != 1:
+            raise ValidationError(
+                _("Malformed filter: operators and clauses are unbalanced."))
         for clause in domain:
             if isinstance(clause, str) and clause in self._DOMAIN_LOGIC_OPERATORS:
                 continue
