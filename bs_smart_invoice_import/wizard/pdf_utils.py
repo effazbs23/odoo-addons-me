@@ -16,10 +16,6 @@ except ImportError:
 MAX_PDF_PAGES = 5
 
 
-def is_available():
-    return fitz is not None
-
-
 def pdf_to_images(pdf_bytes, dpi=150):
     """Render up to MAX_PDF_PAGES pages of the given PDF bytes to PNG page
     images. Returns a list of PNG bytes, one per page. Raises RuntimeError

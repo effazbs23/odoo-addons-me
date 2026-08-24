@@ -99,10 +99,6 @@ class QuickPasteWizard(models.TransientModel):
     raw_text = fields.Text(string="Pasted Text")
     invoice_file = fields.Binary(string="Invoice File")
     invoice_filename = fields.Char(string="Invoice Filename")
-    order_model = fields.Selection(
-        [('sale.order', "Sales Order"), ('purchase.order', "Purchase Order")],
-        string="Order Type",
-    )
     order_id = fields.Reference(
         selection=[('sale.order', "Sales Order"), ('purchase.order', "Purchase Order")],
         string="Order",
@@ -145,7 +141,6 @@ class QuickPasteWizard(models.TransientModel):
         active_model = self.env.context.get('active_model')
         active_id = self.env.context.get('active_id')
         if active_model in ('sale.order', 'purchase.order') and active_id:
-            res['order_model'] = active_model
             res['order_id'] = f'{active_model},{active_id}'
         if res.get('mode') == 'invoice' and not self._get_llm_config():
             res['state'] = 'setup_required'

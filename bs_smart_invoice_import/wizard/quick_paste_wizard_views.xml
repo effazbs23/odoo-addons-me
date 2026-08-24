@@ -5,7 +5,6 @@
         <field name="model">quick.paste.wizard</field>
         <field name="arch" type="xml">
             <form string="Smart Invoice Import" class="o_quick_paste_wizard_form">
-                <field name="order_model" invisible="1"/>
                 <field name="state" invisible="1"/>
 
                 <div class="d-flex align-items-center mb-3">

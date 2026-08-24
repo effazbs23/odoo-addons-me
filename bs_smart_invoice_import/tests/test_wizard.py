@@ -94,7 +94,6 @@ class TestQuickPasteWizard(TransactionCase):
 
     def test_default_get_populates_order_reference(self):
         wizard = self._make_wizard(self.sale_order, '')
-        self.assertEqual(wizard.order_model, 'sale.order')
         self.assertEqual(wizard.order_id, self.sale_order)
 
     def test_match_product_exact_default_code(self):
