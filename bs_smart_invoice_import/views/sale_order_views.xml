@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_quick_paste" model="ir.ui.view">
+        <field name="name">sale.order.form.quick.paste</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="order_line" position="before">
+                <button name="%(bs_smart_invoice_import.action_quick_paste_wizard)d"
+                        type="action" string="Quick Paste Table"
+                        class="btn-secondary mb-2"
+                        invisible="state == 'cancel' or locked"/>
+            </field>
+        </field>
+    </record>
+</odoo>

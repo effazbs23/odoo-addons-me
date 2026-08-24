@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_quick_paste_llm_prompt_wizard_form" model="ir.ui.view">
+        <field name="name">quick.paste.llm.prompt.wizard.form</field>
+        <field name="model">quick.paste.llm.prompt.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Invoice Extraction Prompt">
+                <group>
+                    <field name="prompt" nolabel="1"
+                           placeholder="Instructions sent to the LLM together with the invoice image(s). Must ask for a JSON array of {name, sku, qty} line items."/>
+                </group>
+                <footer>
+                    <button name="action_save" string="Save" type="object" class="btn-primary"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_quick_paste_llm_prompt_wizard" model="ir.actions.act_window">
+        <field name="name">Extraction Prompt</field>
+        <field name="res_model">quick.paste.llm.prompt.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_quick_paste_llm_prompt_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>
