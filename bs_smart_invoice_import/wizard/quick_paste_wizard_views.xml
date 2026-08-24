@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_quick_paste_wizard_form" model="ir.ui.view">
+        <field name="name">quick.paste.wizard.form</field>
+        <field name="model">quick.paste.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Smart Invoice Import" class="o_quick_paste_wizard_form">
+                <field name="order_model" invisible="1"/>
+                <field name="state" invisible="1"/>
+
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fa fa-magic fa-lg text-primary me-2"/>
+                    <h4 class="mb-0">Smart Invoice Import</h4>
+                </div>
+
+                <div class="mb-3" invisible="state == 'preview'">
+                    <field name="mode" widget="radio" options="{'horizontal': true}" nolabel="1"/>
+                </div>
+
+                <div class="alert alert-info d-flex align-items-center gap-3" role="alert"
+                     invisible="state != 'setup_required'">
+                    <i class="fa fa-info-circle fa-lg"/>
+                    <div class="flex-grow-1">
+                        <strong>LLM API not configured yet.</strong>
+                        <div class="text-muted">Set up an OpenAI-compatible endpoint once to start extracting invoices automatically.</div>
+                    </div>
+                    <button name="action_open_llm_settings" string="Configure LLM API" type="object"
+                            class="btn-primary" groups="base.group_system"/>
+                </div>
+
+                <group invisible="mode != 'paste' or state != 'input'">
+                    <field name="order_id" readonly="1"/>
+                    <field name="raw_text" nolabel="1" placeholder="Paste your SKU / quantity table here"/>
+                </group>
+
+                <group invisible="mode != 'invoice' or state != 'input'">
+                    <field name="order_id" readonly="1"/>
+                    <field name="invoice_filename" invisible="1"/>
+                    <field name="invoice_file" filename="invoice_filename" string="Invoice (image or PDF)"/>
+                </group>
+                <p class="text-muted mt-n2" invisible="mode != 'invoice' or state != 'input'">
+                    <i class="fa fa-lightbulb-o me-1"/>Photos and PDFs both work. Extraction is AI-powered and can take a few seconds.
+                </p>
+
+                <group invisible="state != 'preview'">
+                    <field name="order_id" readonly="1"/>
+                </group>
+                <div invisible="state != 'preview'">
+                    <field name="preview_summary" nolabel="1" class="text-muted d-block mb-2"/>
+                    <field name="preview_line_ids" nolabel="1">
+                        <list editable="bottom"
+                              decoration-warning="status == 'ambiguous'"
+                              decoration-danger="status == 'unmatched'">
+                            <field name="raw_line" readonly="1" optional="show"/>
+                            <field name="sku" optional="show"/>
+                            <field name="name"/>
+                            <button name="action_create_product_from_line" type="object"
+                                    string="Create" icon="fa-plus-circle" class="btn-link p-0"
+                                    invisible="status != 'unmatched'"
+                                    help="Create a new product from the parsed name and use it here"/>
+                            <field name="product_id"/>
+                            <field name="qty"/>
+                            <field name="uom_id"/>
+                            <field name="status" widget="badge"
+                                   decoration-success="status == 'matched'"
+                                   decoration-warning="status == 'ambiguous'"
+                                   decoration-danger="status == 'unmatched'"/>
+                        </list>
+                    </field>
+                </div>
+
+                <widget name="quick_paste_loading_bar"/>
+
+                <footer>
+                    <button name="action_parse" type="object"
+                            class="btn-primary" invisible="mode != 'paste' or state != 'input'">
+                        <i class="fa fa-magic me-1"/>Parse
+                    </button>
+                    <button name="action_extract_invoice" type="object"
+                            class="btn-primary" invisible="mode != 'invoice' or state != 'input'">
+                        <i class="fa fa-cloud-upload me-1"/>Extract
+                    </button>
+                    <button name="action_confirm" type="object"
+                            class="btn-primary" invisible="state != 'preview'">
+                        <i class="fa fa-check me-1"/>Add Lines to Order
+                    </button>
+                    <button class="btn-secondary" special="cancel">
+                        <i class="fa fa-times me-1"/>Discard
+                    </button>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_quick_paste_wizard" model="ir.actions.act_window">
+        <field name="name">Smart Invoice Import</field>
+        <field name="res_model">quick.paste.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_quick_paste_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>
