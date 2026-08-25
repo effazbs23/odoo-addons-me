@@ -1,4 +1,5 @@
-from odoo import fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 from .bs_einvoice_archive import INVOICE_TYPES
 
@@ -16,3 +17,12 @@ class BsEinvoiceRetentionPolicy(models.Model):
         'unique(invoice_type, company_id)',
         'A retention policy for this invoice type and company already exists.',
     )
+
+    @api.constrains('retention_years')
+    def _check_retention_years(self):
+        for policy in self:
+            if policy.retention_years <= 0:
+                raise UserError(_(
+                    "Retention period must be at least 1 year -- a %s value here would make "
+                    "every newly-archived invoice of this type immediately eligible for disposal."
+                ) % policy.retention_years)

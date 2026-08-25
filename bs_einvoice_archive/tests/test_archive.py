@@ -33,6 +33,12 @@ class TestArchiveImmutability(EinvoiceArchiveCommon):
         with self.assertRaises(UserError):
             archive.unlink()
 
+    def test_retention_policy_rejects_non_positive_years(self):
+        with self.assertRaises(UserError):
+            self.env['bs.einvoice.retention.policy'].create({
+                'invoice_type': 'standard', 'retention_years': 0, 'company_id': self.env.company.id,
+            })
+
     def test_archiving_disabled_skips_archive_creation(self):
         self.env.company.einvoice_archive_enabled = False
         move = self.init_invoice('out_invoice', partner=self.partner_a, products=self.product_a, post=True)
