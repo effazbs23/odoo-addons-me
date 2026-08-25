@@ -18,6 +18,11 @@ class TestHealthCheckCron(EinvoiceArchiveCommon):
         self.assertIn(move, flagged)
         self.assertTrue(move.activity_ids)
 
+        # A second run on the same still-broken record must not pile on a
+        # second identical activity.
+        self.env['bs.einvoice.archive']._cron_flag_missing_archives()
+        self.assertEqual(len(move.activity_ids), 1)
+
     def test_cron_flags_broken_correction_link(self):
         original_move = self.init_invoice('out_invoice', partner=self.partner_a, products=self.product_a, post=True)
         original_archive = self.env['bs.einvoice.archive'].search([('move_id', '=', original_move.id)])

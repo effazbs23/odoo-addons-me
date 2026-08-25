@@ -209,6 +209,17 @@ class BsEinvoiceArchive(models.Model):
             self._cron_notify_admins(' '.join(str(m) for m in messages))
         return failed, error_configs
 
+    def _schedule_activity_once(self, record, summary, note):
+        """Schedules the health-check todo activity only if an identical one
+        isn't already open on the record -- otherwise a persistently broken
+        record (e.g. one nobody ever fixes) picks up one more activity every
+        single day, forever.
+        """
+        activity_type = self.env.ref('mail.mail_activity_data_todo')
+        if record.activity_ids.filtered(lambda a: a.activity_type_id == activity_type and a.summary == summary):
+            return
+        record.activity_schedule('mail.mail_activity_data_todo', summary=summary, note=note)
+
     @api.model
     def _cron_flag_missing_archives(self):
         moves = self.env['account.move'].sudo().search([
@@ -219,10 +230,9 @@ class BsEinvoiceArchive(models.Model):
         ])
         for move in moves:
             _logger.warning("bs_einvoice_archive: posted invoice %s has no archive record.", move.name)
-            move.activity_schedule(
-                'mail.mail_activity_data_todo',
-                summary=_("E-Invoice archive missing"),
-                note=_("This posted invoice has no bs.einvoice.archive record."),
+            self._schedule_activity_once(
+                move, _("E-Invoice archive missing"),
+                _("This posted invoice has no bs.einvoice.archive record."),
             )
         if moves:
             self._cron_notify_admins(_("%s posted invoice(s) missing an e-invoice archive.") % len(moves))
@@ -235,10 +245,9 @@ class BsEinvoiceArchive(models.Model):
                                     or (a.xml_attachment_id and not a.xml_attachment_id.exists()))
         for archive in broken:
             _logger.warning("bs_einvoice_archive: archive %s has a missing/broken attachment.", archive.name)
-            archive.move_id.activity_schedule(
-                'mail.mail_activity_data_todo',
-                summary=_("E-Invoice archive attachment missing"),
-                note=_("Archive %s is missing its PDF/XML attachment.") % archive.name,
+            self._schedule_activity_once(
+                archive.move_id, _("E-Invoice archive attachment missing"),
+                _("Archive %s is missing its PDF/XML attachment.") % archive.name,
             )
         if broken:
             self._cron_notify_admins(_("%s archive(s) have a missing/broken attachment.") % len(broken))
@@ -260,10 +269,9 @@ class BsEinvoiceArchive(models.Model):
                 "bs_einvoice_archive: %s archive %s has a broken original_archive_id link.",
                 archive.invoice_type, archive.name,
             )
-            archive.move_id.activity_schedule(
-                'mail.mail_activity_data_todo',
-                summary=_("E-Invoice correction link broken"),
-                note=_("%s archive %s does not resolve to a valid, non-disposed original archive.")
+            self._schedule_activity_once(
+                archive.move_id, _("E-Invoice correction link broken"),
+                _("%s archive %s does not resolve to a valid, non-disposed original archive.")
                 % (archive.invoice_type, archive.name),
             )
         if broken:
