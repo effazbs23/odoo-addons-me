@@ -9,6 +9,7 @@ from cryptography.fernet import Fernet, InvalidToken
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 
@@ -108,7 +109,15 @@ class BsEinvoiceDriveConfig(models.Model):
         """
         self.ensure_one()
         self._check_admin()
-        state = json.dumps({'company_id': self.company_id.id, 'csrf': uuid.uuid4().hex})
+        csrf_token = uuid.uuid4().hex
+        # Stashed in this admin's own session and checked back by the
+        # callback controller -- without it, 'state' is just attacker-
+        # suppliable JSON with no proof it originated from this session
+        # (classic OAuth CSRF: a stolen 'code' plus a forged company_id
+        # would otherwise let an attacker wire ANY company's Drive backup
+        # to their own Google account).
+        request.session['bs_einvoice_drive_oauth_csrf'] = csrf_token
+        state = json.dumps({'company_id': self.company_id.id, 'csrf': csrf_token})
         url = self.env['google.service']._get_authorize_uri(
             DRIVE_SERVICE, DRIVE_SCOPE, self._redirect_uri(),
             state=state, approval_prompt='force', access_type='offline',

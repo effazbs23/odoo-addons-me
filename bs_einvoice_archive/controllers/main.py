@@ -28,19 +28,30 @@ class BsEinvoiceDriveOAuthController(http.Controller):
         if not company_id:
             raise BadRequest()
 
-        Config = request.env['bs.einvoice.drive.config'].sudo()
-        config = Config.search([('company_id', '=', company_id)], limit=1) or Config.create({'company_id': company_id})
         action = request.env.ref('bs_einvoice_archive.action_einvoice_drive_config')
         redirect_url = f'/odoo/action-{action.id}'
 
         if kw.get('error'):
             return request.redirect(f'{redirect_url}?drive_error={kw["error"]}')
 
+        # Authorization must be fully checked -- group membership, that this
+        # company is one the current user actually belongs to, and that the
+        # 'state' round-trip matches the nonce action_connect() stashed in
+        # this session -- before anything is written for an arbitrary
+        # company_id supplied by (Google-relayed, but attacker-authored)
+        # request data.
         if not request.env.user.has_group('bs_einvoice_archive.group_einvoice_archive_admin'):
             raise BadRequest()
-
+        if company_id not in request.env.user.company_ids.ids:
+            raise BadRequest()
+        session_csrf = request.session.pop('bs_einvoice_drive_oauth_csrf', None)
+        if not session_csrf or session_csrf != state.get('csrf'):
+            raise BadRequest()
         if not kw.get('code'):
             raise BadRequest()
+
+        Config = request.env['bs.einvoice.drive.config'].sudo()
+        config = Config.search([('company_id', '=', company_id)], limit=1) or Config.create({'company_id': company_id})
 
         base_url = request.env['ir.config_parameter'].sudo().get_param('web.base.url')
         redirect_uri = f'{base_url}/bs_einvoice_archive/google_oauth/callback'
