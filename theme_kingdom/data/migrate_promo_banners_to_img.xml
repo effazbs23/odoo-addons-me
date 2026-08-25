@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <function model="theme.utils" name="_migrate_promo_banners_to_img"/>
+</odoo>

@@ -1,0 +1,37 @@
+//------------------------------------------------------------------------------
+// Theme Kingdom — font faces
+// From .context/Content/sources/font-family/_fonts.scss
+// Font files: theme_kingdom/static/src/fonts/
+//------------------------------------------------------------------------------
+
+@font-face {
+    font-family: 'Lato';
+    font-weight: 700;
+    font-display: swap;
+    src: url('/theme_kingdom/static/src/fonts/lato-bold-webfont.woff2') format('woff2'),
+         url('/theme_kingdom/static/src/fonts/lato-bold-webfont.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-weight: 500;
+    font-display: swap;
+    src: url('/theme_kingdom/static/src/fonts/lato-regular-webfont.woff2') format('woff2'),
+         url('/theme_kingdom/static/src/fonts/lato-regular-webfont.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-weight: 300;
+    font-display: swap;
+    src: url('/theme_kingdom/static/src/fonts/lato-light-webfont.woff2') format('woff2'),
+         url('/theme_kingdom/static/src/fonts/lato-light-webfont.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-style: italic;
+    font-display: swap;
+    src: url('/theme_kingdom/static/src/fonts/lato-italic-webfont.woff2') format('woff2'),
+         url('/theme_kingdom/static/src/fonts/lato-italic-webfont.woff') format('woff');
+}

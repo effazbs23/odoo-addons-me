@@ -12,8 +12,39 @@
 
   window.KingdomTheme = window.KingdomTheme || {};
 
+  function kingdomIsWebsiteEditor() {
+    return (
+      document.body.classList.contains("editor_enable") ||
+      document.body.classList.contains("o_editable") ||
+      !!document.getElementById("oe_snippets")
+    );
+  }
+
+  /** Swiper loop needs more slides than the largest slidesPerView. */
+  function kingdomSwiperCanLoop(slideCount, maxSlidesPerView) {
+    var max = Math.max(1, Math.ceil(Number(maxSlidesPerView) || 1));
+    return slideCount > max;
+  }
+
   function kingdomGetFlyout() {
     return document.querySelector(".js_kingdom_flyout_cart");
+  }
+
+  /** Keep /shop/... navigations on the active non-default language URL prefix. */
+  function kingdomLocalizedPath(path) {
+    path = path && path.charAt(0) === "/" ? path : "/" + (path || "");
+    var pathname = window.location.pathname || "/";
+    var active = document.querySelector(
+      ".js_language_selector .js_change_lang.active, .js_language_selector .dropdown-item.active"
+    );
+    var urlCode = active && active.getAttribute("data-url_code");
+    if (
+      urlCode &&
+      (pathname === "/" + urlCode || pathname.indexOf("/" + urlCode + "/") === 0)
+    ) {
+      return "/" + urlCode + path;
+    }
+    return path;
   }
 
   function kingdomSetFlyoutOpen(open) {
@@ -202,13 +233,13 @@
       if (ev.target.closest(".js_kingdom_flyout_go_cart")) {
         ev.preventDefault();
         ev.stopPropagation();
-        window.location.href = "/shop/cart";
+        window.location.href = kingdomLocalizedPath("/shop/cart");
         return;
       }
       if (ev.target.closest(".js_kingdom_flyout_checkout")) {
         ev.preventDefault();
         ev.stopPropagation();
-        window.location.href = "/shop/checkout";
+        window.location.href = kingdomLocalizedPath("/shop/checkout");
         return;
       }
 
@@ -493,7 +524,10 @@
       var msAttr = root.getAttribute("data-deal-end-ms");
       if (msAttr) {
         var parsed = parseInt(msAttr, 10);
-        if (!Number.isNaN(parsed) && parsed > 0) return parsed;
+        if (!Number.isNaN(parsed) && parsed > 0) {
+          // BuilderDateTimePicker stores unix seconds; deals use epoch ms.
+          return parsed < 1e12 ? parsed * 1000 : parsed;
+        }
       }
       var iso = root.getAttribute("data-deal-countdown") || "";
       if (iso) {
@@ -783,31 +817,7 @@
       }
     }
 
-    function initHeaderSelectors() {
-      document.querySelectorAll(".header-inline-selectors .js_change_lang").forEach(function (link) {
-        link.addEventListener("click", function (ev) {
-          if (document.body.classList.contains("editor_enable")) {
-            return;
-          }
-          ev.preventDefault();
-          var urlCode = link.getAttribute("data-url_code");
-          if (!urlCode) {
-            return;
-          }
-          var target = (link.getAttribute("href") || "/").replace(/[&?]edit_translations[^&?]+/, "");
-          var hash = window.location.hash || "";
-          window.location.href =
-            "/website/lang/" +
-            encodeURIComponent(urlCode) +
-            "?r=" +
-            encodeURIComponent(target) +
-            (hash ? encodeURIComponent(hash) : "");
-        });
-      });
-    }
-
     initMobileChrome();
-    initHeaderSelectors();
     initHeaderMegaMenu();
     initMobileNavigationDrawer();
     initKingdomFooterAccordion();
@@ -842,7 +852,12 @@
       speed: 450,
       autoplay: { delay: 6000, disableOnInteraction: false },
       watchOverflow: true,
-      loop: document.querySelectorAll("#announcement-slider .swiper-slide").length > 1,
+      loop:
+        !kingdomIsWebsiteEditor() &&
+        kingdomSwiperCanLoop(
+          document.querySelectorAll("#announcement-slider .swiper-slide").length,
+          1
+        ),
     });
 
     /* Featured categories — mobile strip only (.k-cat-mobile) */
@@ -892,11 +907,13 @@
       var opts = {
         slidesPerView: 1,
         spaceBetween: 0,
-        loop: slides.length > 1,
+        loop: !kingdomIsWebsiteEditor() && kingdomSwiperCanLoop(slides.length, 1),
         speed: isNaN(speed) ? 650 : speed,
         watchOverflow: true,
         autoHeight: false,
         effect: effect === "fade" ? "fade" : "slide",
+        observer: !kingdomIsWebsiteEditor(),
+        observeParents: !kingdomIsWebsiteEditor(),
         navigation: {
           nextEl: heroEl.querySelector(".swiper-button-next"),
           prevEl: heroEl.querySelector(".swiper-button-prev"),
@@ -942,17 +959,20 @@
       try {
         new Swiper(swiperEl, {
           slidesPerView: "auto",
-          observer: true,
-          observeParents: true,
+          observer: !kingdomIsWebsiteEditor(),
+          observeParents: !kingdomIsWebsiteEditor(),
           lazy: true,
-          loop: slideCount > 1,
+          // slidesPerView:auto + few deal cards → Swiper loop warning
+          loop: !kingdomIsWebsiteEditor() && slideCount > 3,
           centeredSlides: false,
           initialSlide: 0,
-          autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-          },
+          autoplay: kingdomIsWebsiteEditor()
+            ? false
+            : {
+                delay: 5000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              },
           pagination: {
             el: swiperEl.querySelector(".swiper-pagination"),
             clickable: true,
@@ -977,8 +997,11 @@
         spaceBetween: 0,
         speed: 450,
         watchOverflow: true,
-        observer: true,
-        observeParents: true,
+        observer: !kingdomIsWebsiteEditor(),
+        observeParents: !kingdomIsWebsiteEditor(),
+        // Allow cart / wishlist / compare clicks inside slides.
+        preventClicks: false,
+        preventClicksPropagation: false,
       };
 
       var swipers = {};
@@ -1105,16 +1128,18 @@
         try {
           swipers[panelId] = new Swiper(swiperEl, {
             slidesPerView: "auto",
-            observer: true,
-            observeParents: true,
+            observer: !kingdomIsWebsiteEditor(),
+            observeParents: !kingdomIsWebsiteEditor(),
             lazy: true,
-            loop: slideCount > 1,
+            loop: !kingdomIsWebsiteEditor() && slideCount > 3,
             centeredSlides: false,
-            autoplay: {
-              delay: 5000,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            },
+            autoplay: kingdomIsWebsiteEditor()
+              ? false
+              : {
+                  delay: 5000,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: true,
+                },
             pagination: {
               el: swiperEl.querySelector(".swiper-pagination"),
               type: "fraction",
@@ -1183,8 +1208,8 @@
     var productRowOpts = {
       spaceBetween: 14,
       slidesPerView: 2,
-      observer: true,
-      observeParents: true,
+      observer: !kingdomIsWebsiteEditor(),
+      observeParents: !kingdomIsWebsiteEditor(),
       breakpoints: {
         576: { slidesPerView: 2 },
         768: { slidesPerView: 3 },
@@ -1198,8 +1223,12 @@
       if (!section || typeof Swiper === "undefined") return null;
       var swiperEl = section.querySelector(swiperSelector || ".featured-swiper, .bestsale-swiper");
       if (!swiperEl || !swiperEl.querySelector(".swiper-slide")) return null;
-      if (swiperEl.swiper && swiperEl.swiper.destroy) {
-        swiperEl.swiper.destroy(true, true);
+      // Avoid destroy/recreate loops in Website Builder (selection mutation spam).
+      if (swiperEl.swiper) {
+        try {
+          swiperEl.swiper.update();
+        } catch (e) {}
+        return swiperEl.swiper;
       }
       var nav = section.querySelector(".featured-products-nav");
       var opts = swiperOpts || productRowOpts;
@@ -1222,7 +1251,21 @@
 
     window.KingdomInitProductRowSwiper = function (root) {
       var scope = root || document;
-      scope.querySelectorAll(".featured-products-section, .bestsale-products-section").forEach(function (section) {
+      var sectionSel = ".featured-products-section, .bestsale-products-section";
+      var sections = [];
+      // Live snippet passes the section itself as root; querySelectorAll only
+      // matches descendants, so include the root when it is the section.
+      if (scope.nodeType === 1 && scope.matches && scope.matches(sectionSel)) {
+        sections.push(scope);
+      }
+      if (scope.querySelectorAll) {
+        scope.querySelectorAll(sectionSel).forEach(function (section) {
+          if (sections.indexOf(section) === -1) {
+            sections.push(section);
+          }
+        });
+      }
+      sections.forEach(function (section) {
         var swiperEl = section.querySelector(".featured-swiper, .bestsale-swiper");
         var selector = swiperEl && swiperEl.classList.contains("bestsale-swiper")
           ? ".bestsale-swiper"
@@ -1234,44 +1277,82 @@
     initProductRowSwiper(".featured-products-section", ".featured-swiper");
     initProductRowSwiper(".bestsale-products-section", ".bestsale-swiper");
 
-    if (document.body.classList.contains("editor_enable") && typeof MutationObserver !== "undefined") {
+    // Only attach uninitialized product-row swipers in the editor (no destroy/recreate).
+    if (kingdomIsWebsiteEditor() && typeof MutationObserver !== "undefined") {
+      var productRowObserverTimer = null;
       var productRowObserver = new MutationObserver(function () {
-        window.KingdomInitProductRowSwiper();
+        if (productRowObserverTimer) {
+          return;
+        }
+        productRowObserverTimer = window.setTimeout(function () {
+          productRowObserverTimer = null;
+          document
+            .querySelectorAll(
+              ".featured-products-section .featured-swiper:not(.swiper-initialized), " +
+                ".bestsale-products-section .bestsale-swiper:not(.swiper-initialized)"
+            )
+            .forEach(function (swiperEl) {
+              var section = swiperEl.closest(
+                ".featured-products-section, .bestsale-products-section"
+              );
+              if (!section) return;
+              var selector = swiperEl.classList.contains("bestsale-swiper")
+                ? ".bestsale-swiper"
+                : ".featured-swiper";
+              initProductRowSwiperInSection(section, selector, productRowOpts);
+            });
+        }, 200);
       });
       var observeRoot = document.getElementById("wrapwrap") || document.body;
       productRowObserver.observe(observeRoot, { childList: true, subtree: true });
     }
 
-    initSwiper(".secondary-hero-swiper", {
-      loop: true,
-      speed: 600,
-      autoplay: { delay: 6500, disableOnInteraction: false },
-      pagination: { el: ".secondary-hero-swiper .swiper-pagination", clickable: true },
-      navigation: false,
-    });
+    (function initSecondaryHero() {
+      var secondary = document.querySelector(".secondary-hero-swiper");
+      if (!secondary) return;
+      var secondarySlides = secondary.querySelectorAll(".swiper-slide").length;
+      initSwiper(".secondary-hero-swiper", {
+        loop: !kingdomIsWebsiteEditor() && kingdomSwiperCanLoop(secondarySlides, 1),
+        speed: 600,
+        autoplay: kingdomIsWebsiteEditor()
+          ? false
+          : { delay: 6500, disableOnInteraction: false },
+        pagination: { el: ".secondary-hero-swiper .swiper-pagination", clickable: true },
+        navigation: false,
+      });
+    })();
 
-    function initManufacturerCarousel() {
-      var section = document.querySelector(".home-manufacturers-section");
-      if (!section || typeof Swiper === "undefined") return;
+    function initBrandCarousel() {
+      var section = document.querySelector(".home-brands-section, .home-manufacturers-section");
+      if (!section || section.classList.contains("d-none") || typeof Swiper === "undefined") return;
+      // Live-snippet owns Swiper after it refreshes; avoid fighting it with loop:true.
+      if (section.getAttribute("data-kingdom-live-snippet") && section.querySelector(".brand-swiper.swiper-initialized, .manufacturer-swiper.swiper-initialized")) {
+        return;
+      }
       var carousel = section.querySelector(".carousel-container");
-      var swiperEl = section.querySelector(".manufacturer-swiper");
-      var prevEl = section.querySelector(".manufacturer-carousel-arrow.swiper-button-prev");
-      var nextEl = section.querySelector(".manufacturer-carousel-arrow.swiper-button-next");
+      var swiperEl = section.querySelector(".brand-swiper, .manufacturer-swiper");
+      var prevEl = section.querySelector(".brand-carousel-arrow.swiper-button-prev, .manufacturer-carousel-arrow.swiper-button-prev");
+      var nextEl = section.querySelector(".brand-carousel-arrow.swiper-button-next, .manufacturer-carousel-arrow.swiper-button-next");
       if (!swiperEl || !carousel || !prevEl || !nextEl) return;
       if (!swiperEl.querySelector(".swiper-slide")) return;
 
-      if (swiperEl.swiper && swiperEl.swiper.destroy) {
-        swiperEl.swiper.destroy(true, true);
+      if (swiperEl.swiper) {
+        try {
+          swiperEl.swiper.update();
+        } catch (e) {}
+        return;
       }
 
+      var slideCount = swiperEl.querySelectorAll(".swiper-slide").length;
+      // Largest breakpoint slidesPerView is 8 — loop only when we have more slides.
       var config = {
-        loop: true,
+        loop: !kingdomIsWebsiteEditor() && kingdomSwiperCanLoop(slideCount, 8),
         speed: 450,
         spaceBetween: 15,
         slidesPerView: 3,
         watchOverflow: true,
-        observer: true,
-        observeParents: true,
+        observer: !kingdomIsWebsiteEditor(),
+        observeParents: !kingdomIsWebsiteEditor(),
         navigation: {
           prevEl: prevEl,
           nextEl: nextEl,
@@ -1299,15 +1380,15 @@
       }
     }
 
-    initManufacturerCarousel();
-    window.addEventListener("load", initManufacturerCarousel);
+    initBrandCarousel();
+    window.addEventListener("load", initBrandCarousel);
     if (typeof MutationObserver !== "undefined") {
       var wrapRoot = document.getElementById("wrap") || document.body;
       if (wrapRoot) {
         new MutationObserver(function () {
-          var swiperEl = document.querySelector(".home-manufacturers-section .manufacturer-swiper");
+          var swiperEl = document.querySelector(".home-brands-section .brand-swiper, .home-manufacturers-section .manufacturer-swiper");
           if (swiperEl && !swiperEl.classList.contains("swiper-initialized")) {
-            initManufacturerCarousel();
+            initBrandCarousel();
           }
         }).observe(wrapRoot, { childList: true, subtree: true });
       }
@@ -1413,14 +1494,8 @@
   }
   window.addEventListener("load", scheduleKingdomFlyoutInit);
 
-  if (typeof MutationObserver !== "undefined") {
-    var flyoutObserver = new MutationObserver(function () {
-      if (!kingdomFlyoutInitialized && kingdomGetFlyout()) {
-        scheduleKingdomFlyoutInit();
-      }
-    });
-    flyoutObserver.observe(document.documentElement, { childList: true, subtree: true });
-  }
+  // Avoid a document-wide MutationObserver — it runs on every DOM change and
+  // makes navigation feel sluggish. Flyout init is covered by DOMContentLoaded/load.
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", runKingdomFrontend);

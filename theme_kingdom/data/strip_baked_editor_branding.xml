@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Idempotent: strip baked data-oe-* from page arches so #wrap stays editable. -->
+    <function model="theme.utils" name="_strip_baked_editor_branding"/>
+</odoo>

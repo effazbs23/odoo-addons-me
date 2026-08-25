@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Patch website copies that still call kingdom_get_header_roots(). -->
+    <function model="theme.utils" name="_fix_header_category_roots_arch"/>
+</odoo>

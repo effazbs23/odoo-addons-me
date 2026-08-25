@@ -2,72 +2,118 @@
 <odoo>
     <template id="kingdom_snippets" inherit_id="website.snippets" name="Kingdom Snippets">
 
-
         <xpath expr="//snippets[@id='snippet_groups']" position="inside">
             <t t-snippet="website.s_snippet_group"
                snippet-group="kingdom_snippet"
-               string="Kingdom Snippets"
-               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+               string="Kingdom"
+               label="Kingdom"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_kingdom_group.svg"/>
         </xpath>
 
-
         <xpath expr="//snippets[@id='snippet_structure']" position="inside">
+            <t t-snippet="theme_kingdom.s_countdown"
+               string="Countdown Timer"
+               label="Countdown"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_countdown.svg">
+                <keywords>countdown, timer, counter, promotion, sale, launch, kingdom</keywords>
+            </t>
+
             <t t-snippet="theme_kingdom.s_hero_slider"
                string="Hero Slider"
-               group="kingdom_snippet"/>
+               label="Hero Slider"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_hero_slider.svg">
+                <keywords>hero, slider, banner, carousel, homepage, kingdom</keywords>
+            </t>
 
             <t t-snippet="theme_kingdom.s_category_slider"
                string="Category Slider"
-               group="kingdom_snippet"/>
+               label="Categories"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_category_slider.svg">
+                <keywords>category, categories, slider, shop, kingdom</keywords>
+            </t>
 
             <t t-snippet="theme_kingdom.s_deal_of_the_day"
                string="Deal of the Day"
-               group="kingdom_snippet"/>
+               label="Deal of the Day"
+               group="kingdom_snippet"
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_deal_of_the_day.svg">
+                <keywords>deal, sale, offer, countdown, discount, kingdom</keywords>
+            </t>
 
             <t t-snippet="theme_kingdom.s_promo_banners"
                string="Promo Banners"
+               label="Promo Banners"
                group="kingdom_snippet"
-               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_promo_banners.svg">
+                <keywords>promo, banners, advertising, campaign, kingdom</keywords>
+            </t>
 
             <t t-snippet="theme_kingdom.s_promo_banner"
                string="Promo Banner"
+               label="Promo Banner"
                group="kingdom_snippet"
-               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_promo_banner.svg">
+                <keywords>promo, banner, advertising, kingdom</keywords>
+            </t>
 
             <t t-snippet="theme_kingdom.s_blog_news"
                string="Blog and News"
+               label="Blog &amp; News"
                group="kingdom_snippet"
-               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_blog_news.svg">
+                <keywords>blog, news, posts, articles, kingdom</keywords>
+            </t>
 
             <t t-snippet="theme_kingdom.s_bestsale_products"
                string="Best Sale"
+               label="Best Sale"
                group="kingdom_snippet"
-               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_bestsale_products.svg">
+                <keywords>best sale, products, discount, carousel, kingdom</keywords>
+            </t>
 
             <t t-snippet="theme_kingdom.s_featured_products"
                string="Featured Products"
+               label="Featured Products"
                group="kingdom_snippet"
-               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_featured_products.svg">
+                <keywords>featured, products, highlight, carousel, kingdom</keywords>
+            </t>
 
             <t t-snippet="theme_kingdom.s_category_dual_carousels"
                string="Category Dual Carousels"
+               label="Dual Carousels"
                group="kingdom_snippet"
-               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_category_dual_carousels.svg">
+                <keywords>category, dual, carousel, product tabs, kingdom</keywords>
+            </t>
 
             <t t-snippet="theme_kingdom.s_product_carousel"
                string="Product Carousel"
+               label="Product Carousel"
                group="kingdom_snippet"
-               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_product_carousel.svg">
+                <keywords>product, carousel, tabs, feature image, kingdom</keywords>
+            </t>
 
-            <t t-snippet="theme_kingdom.s_manufacturers"
-               string="Manufacturers"
+            <t t-snippet="theme_kingdom.s_brands"
+               string="Brands"
+               label="Brands"
                group="kingdom_snippet"
-               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_brands.svg">
+                <keywords>brands, logos, carousel, kingdom</keywords>
+            </t>
 
             <t t-snippet="theme_kingdom.s_service_highlights"
                string="Service Highlights"
+               label="Services"
                group="kingdom_snippet"
-               t-thumbnail="/theme_kingdom/static/src/images/snippets/banner.jpg"/>
+               t-thumbnail="/theme_kingdom/static/src/images/snippets/s_service_highlights.svg">
+                <keywords>services, shipping, support, highlights, kingdom</keywords>
+            </t>
         </xpath>
 
     </template>

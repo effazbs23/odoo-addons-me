@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Combined currency (pricelist) + language dropdown for the Kingdom header. -->
+    <template id="kingdom_unified_switcher" name="Kingdom Unified Switcher">
+        <t t-set="website" t-value="website or env['website'].get_current_website()"/>
+        <t t-set="active_lang"
+           t-value="active_lang or (frontend_languages.get(lang) if frontend_languages else None)"/>
+        <t t-set="pricelist" t-value="request.pricelist"/>
+        <t t-set="website_sale_pricelists"
+           t-value="website.get_pricelist_available(show_visible=True)"/>
+        <t t-set="hasPricelistDropdown"
+           t-value="bool(website_sale_pricelists and len(website_sale_pricelists) &gt; 1)"/>
+        <t t-set="kingdom_display_currency"
+           t-value="(pricelist and pricelist.currency_id) or website.currency_id"/>
+        <t t-set="show_langs" t-value="frontend_languages and len(frontend_languages) &gt; 1"/>
+        <t t-set="show_unified" t-value="show_langs or hasPricelistDropdown or kingdom_display_currency"/>
+
+        <div t-if="show_unified"
+             t-attf-class="k-unified-switcher dropdown #{'js_language_selector' if show_langs else ''}"
+             data-name="Unified Switcher">
+            <button type="button"
+                    class="k-unified-switcher__toggle dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    data-bs-auto-close="outside"
+                    aria-expanded="false"
+                    aria-label="Language and currency">
+                <t t-if="active_lang">
+                    <t t-call="website.lang_flag"
+                       flag_image_url="active_lang.flag_image_url"
+                       _flag_class.f="k-unified-switcher__flag"/>
+                </t>
+                <span class="k-unified-switcher__currency"
+                      t-out="kingdom_display_currency.name"/>
+                <i class="bi bi-chevron-down k-unified-switcher__caret" aria-hidden="true"/>
+            </button>
+
+            <div class="dropdown-menu dropdown-menu-end k-unified-switcher__menu" role="menu">
+                <t t-if="hasPricelistDropdown">
+                    <div class="k-unified-switcher__pricelist"
+                         data-kingdom-pricelist-stepper="true">
+                        <span class="k-unified-switcher__pl-current"
+                              t-att-data-pl-id="pricelist.id if pricelist else None">
+                            <span t-if="kingdom_display_currency.symbol"
+                                  class="k-unified-switcher__pl-symbol"
+                                  t-out="kingdom_display_currency.symbol"/>
+                            <span t-out="kingdom_display_currency.name"/>
+                        </span>
+                        <div class="k-unified-switcher__pl-steps" role="group" aria-label="Change currency">
+                            <button type="button"
+                                    class="k-unified-switcher__pl-btn"
+                                    data-kingdom-pl-dir="prev"
+                                    aria-label="Previous currency">
+                                <i class="bi bi-chevron-up" aria-hidden="true"/>
+                            </button>
+                            <button type="button"
+                                    class="k-unified-switcher__pl-btn"
+                                    data-kingdom-pl-dir="next"
+                                    aria-label="Next currency">
+                                <i class="bi bi-chevron-down" aria-hidden="true"/>
+                            </button>
+                        </div>
+                        <div class="d-none" data-kingdom-pl-links="">
+                            <a t-foreach="website_sale_pricelists"
+                               t-as="pl"
+                               t-att-href="'/shop/change_pricelist/%s' % pl.id"
+                               t-att-data-pl-id="pl.id"
+                               t-att-data-pl-name="pl.currency_id.name"
+                               t-att-data-pl-symbol="pl.currency_id.symbol or ''">
+                                <t t-out="pl.currency_id.name"/>
+                            </a>
+                        </div>
+                    </div>
+                </t>
+                <t t-elif="kingdom_display_currency">
+                    <div class="k-unified-switcher__pricelist k-unified-switcher__pricelist--static">
+                        <span class="k-unified-switcher__pl-current">
+                            <span t-if="kingdom_display_currency.symbol"
+                                  class="k-unified-switcher__pl-symbol"
+                                  t-out="kingdom_display_currency.symbol"/>
+                            <span t-out="kingdom_display_currency.name"/>
+                        </span>
+                    </div>
+                </t>
+
+                <t t-if="show_langs">
+                    <div class="k-unified-switcher__langs" role="group" aria-label="Languages">
+                        <t t-foreach="frontend_languages.values()" t-as="lg">
+                            <a t-att-href="url_localized(lang_code=lg.code, prefetch_langs=True, force_default_lang=True)"
+                               t-attf-class="k-unified-switcher__lang js_change_lang #{'is-active' if active_lang == lg else ''}"
+                               t-att-data-url_code="lg.url_code"
+                               t-att-title="lg.name.split('/').pop()"
+                               role="menuitem">
+                                <t t-call="website.lang_flag"
+                                   flag_image_url="lg.flag_image_url"
+                                   _flag_class.f="k-unified-switcher__flag"/>
+                                <span t-esc="lg.name.split('/').pop()"/>
+                            </a>
+                        </t>
+                    </div>
+                </t>
+
+                <t t-if="env.user.has_group('website.group_website_designer')">
+                    <a href="/odoo/action-base.res_lang_act_window"
+                       class="k-unified-switcher__add-lang"
+                       role="menuitem">
+                        <span class="k-unified-switcher__add-icon" aria-hidden="true">+</span>
+                        Add a language...
+                    </a>
+                </t>
+            </div>
+        </div>
+    </template>
+
+</odoo>

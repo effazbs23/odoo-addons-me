@@ -7,6 +7,7 @@
               priority="1">
         <xpath expr="//body" position="inside">
             <t t-if="website.has_ecommerce_access()">
+                <!-- Empty shell only — cart lines fetched when the flyout opens. -->
                 <t t-set="website_sale_cart" t-value="request.cart"/>
                 <t t-call="theme_kingdom.kingdom_flyout_cart_shell"/>
             </t>
@@ -34,15 +35,17 @@
                            aria-label="Close cart">×</a>
                     </div>
                     <div class="items js_kingdom_flyout_items">
-                        <t t-set="website_sale_order" t-value="website_sale_cart"/>
-                        <t t-call="theme_kingdom.kingdom_flyout_cart_content"/>
+                        <!-- Lines load on first open via /theme_kingdom/cart/flyout (keeps every page light). -->
+                        <div class="p-4 text-center text-muted kingdom-flyout-empty">
+                            Your cart is empty.
+                        </div>
                     </div>
                     <div class="flyoutcart-footer">
                         <div class="totals">
                             Sub-Total:
                             <strong id="miniCartSubTotal"
                                     class="js_kingdom_flyout_subtotal"
-                                    t-out="kingdom_flyout_currency.format(website_sale_cart.amount_total if website_sale_cart else 0.0)"/>
+                                    t-out="kingdom_flyout_currency.format(0.0)"/>
                         </div>
                         <div class="buttons">
                             <button type="button"

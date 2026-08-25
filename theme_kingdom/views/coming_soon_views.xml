@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_coming_soon" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.theme.kingdom.coming.soon</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="website.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='website_info_settings']" position="after">
+                <block title="Coming Soon" id="kingdom_coming_soon_settings" invisible="not website_id">
+                    <setting id="kingdom_coming_soon_enabled_setting"
+                             string="Coming Soon Mode"
+                             help="When enabled, public visitors are redirected to Coming Soon for every website page (shop, blog, etc.). Website designers still browse the live site. Title, subtitle, countdown and background are shared with the Coming Soon snippet.">
+                        <field name="kingdom_coming_soon_enabled"/>
+                        <div class="content-group" invisible="not kingdom_coming_soon_enabled">
+                            <div class="row mt16">
+                                <label class="col-lg-3 o_light_label" for="kingdom_coming_soon_title"/>
+                                <field name="kingdom_coming_soon_title" class="col-lg-6"/>
+                            </div>
+                            <div class="row mt8">
+                                <label class="col-lg-3 o_light_label" for="kingdom_coming_soon_subtitle"/>
+                                <field name="kingdom_coming_soon_subtitle" class="col-lg-6"/>
+                            </div>
+                            <div class="row mt8">
+                                <label class="col-lg-3 o_light_label" for="kingdom_coming_soon_launch_datetime"/>
+                                <field name="kingdom_coming_soon_launch_datetime" class="col-lg-4"/>
+                            </div>
+                            <div class="row mt8">
+                                <label class="col-lg-3 o_light_label" for="kingdom_coming_soon_bg_image"/>
+                                <field name="kingdom_coming_soon_bg_image" widget="image" class="oe_avatar"/>
+                            </div>
+                            <div class="mt8">
+                                <field name="kingdom_coming_soon_show_countdown"/>
+                                <label class="o_light_label" string="Show countdown timer" for="kingdom_coming_soon_show_countdown"/>
+                            </div>
+                            <div class="mt8">
+                                <field name="kingdom_coming_soon_show_admin_login"/>
+                                <label class="o_light_label" string="Show “Login as Admin” on Coming Soon page" for="kingdom_coming_soon_show_admin_login"/>
+                            </div>
+                            <div class="mt8">
+                                <field name="kingdom_coming_soon_login_show_header_footer"/>
+                                <label class="o_light_label" string="Show header &amp; footer on login page" for="kingdom_coming_soon_login_show_header_footer"/>
+                            </div>
+                            <div class="mt16">
+                                <button name="action_preview_coming_soon"
+                                        type="object"
+                                        string="Preview Page"
+                                        class="btn-link"
+                                        icon="fa-external-link"
+                                        noSaveDialog="true"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="kingdom_footer_attributes"
-              inherit_id="website.layout"
-              name="Kingdom Footer Attributes">
-        <xpath expr="//footer[@id='bottom']" position="attributes">
-            <attribute name="t-attf-class" add="footer" separator=" "/>
-        </xpath>
-    </template>
-
+    <!-- Selectable via Website Builder → Footer → Template (not active by default). -->
     <template id="template_footer_kingdom"
               inherit_id="website.layout"
-              name="Kingdom Footer"
-              active="True">
+              name="Kingdom"
+              active="False">
+        <xpath expr="//footer[@id='bottom']" position="attributes">
+            <attribute name="t-attf-class" add="footer o_footer_kingdom" separator=" "/>
+        </xpath>
         <xpath expr="//div[@id='footer']" position="replace">
             <div id="footer"
                  class="oe_structure oe_structure_solo"
@@ -43,33 +39,61 @@
                                 </a>
                             </div>
                             <div class="social">
-                                <div class="title"><strong>Follow us</strong></div>
-                                <ul class="networks list-unstyled mb-0">
-                                    <li class="facebook">
-                                        <a href="/website/social/facebook"
-                                           target="_blank"
-                                           rel="noopener"
-                                           aria-label="Facebook">Facebook</a>
-                                    </li>
-                                    <li class="twitter">
-                                        <a href="/website/social/twitter"
-                                           target="_blank"
-                                           rel="noopener"
-                                           aria-label="Twitter">Twitter</a>
-                                    </li>
-                                    <li class="rss">
-                                        <a href="/blog"
-                                           target="_blank"
-                                           rel="noopener"
-                                           aria-label="RSS">RSS</a>
-                                    </li>
-                                    <li class="youtube">
-                                        <a href="/website/social/youtube"
-                                           target="_blank"
-                                           rel="noopener"
-                                           aria-label="YouTube">YouTube</a>
-                                    </li>
-                                </ul>
+                                <!-- Odoo default Social Media snippet (editable via Website Builder options) -->
+                                <div class="s_social_media text-start o_not_editable"
+                                     data-snippet="s_social_media"
+                                     data-name="Social Media"
+                                     contenteditable="false">
+                                    <h5 class="s_social_media_title d-none" contenteditable="true">Follow us</h5>
+                                    <a href="/website/social/facebook"
+                                       class="s_social_media_facebook"
+                                       target="_blank"
+                                       aria-label="Facebook">
+                                        <i class="fa fa-facebook rounded shadow-sm o_editable_media"/>
+                                    </a>
+                                    <a href="/website/social/twitter"
+                                       class="s_social_media_twitter"
+                                       target="_blank"
+                                       aria-label="X">
+                                        <i class="fa fa-twitter rounded shadow-sm o_editable_media"/>
+                                    </a>
+                                    <a href="/website/social/linkedin"
+                                       class="s_social_media_linkedin"
+                                       target="_blank"
+                                       aria-label="LinkedIn">
+                                        <i class="fa fa-linkedin rounded shadow-sm o_editable_media"/>
+                                    </a>
+                                    <a href="/website/social/youtube"
+                                       class="s_social_media_youtube"
+                                       target="_blank"
+                                       aria-label="YouTube">
+                                        <i class="fa fa-youtube rounded shadow-sm o_editable_media"/>
+                                    </a>
+                                    <a href="/website/social/instagram"
+                                       class="s_social_media_instagram"
+                                       target="_blank"
+                                       aria-label="Instagram">
+                                        <i class="fa fa-instagram rounded shadow-sm o_editable_media"/>
+                                    </a>
+                                    <a href="/website/social/github"
+                                       class="s_social_media_github"
+                                       target="_blank"
+                                       aria-label="GitHub">
+                                        <i class="fa fa-github rounded shadow-sm o_editable_media"/>
+                                    </a>
+                                    <a href="/website/social/tiktok"
+                                       class="s_social_media_tiktok"
+                                       target="_blank"
+                                       aria-label="TikTok">
+                                        <i class="fa fa-tiktok rounded shadow-sm o_editable_media"/>
+                                    </a>
+                                    <a href="/website/social/discord"
+                                       class="s_social_media_discord"
+                                       target="_blank"
+                                       aria-label="Discord">
+                                        <i class="fa fa-discord rounded shadow-sm o_editable_media"/>
+                                    </a>
+                                </div>
                             </div>
                             <div class="newsletter">
                                 <div class="title"><strong>Newsletter</strong></div>
@@ -147,30 +171,35 @@
             </div>
         </xpath>
         <xpath expr="//div[hasclass('o_footer_copyright')]" position="replace">
-            <div t-if="not no_copyright" class="footer-lower o_footer_copyright">
+            <!-- Colors via footer.scss + Builder (kingdom-footer-custom / kingdom-footer-text-color). -->
+            <div t-if="not no_copyright"
+                 class="footer-lower o_footer_copyright">
                 <div class="container footer-lower-contents">
                     <div class="footer-powered-by">
-                        <span>Powered by</span>
+                        Powered by
                         <a href="https://www.odoo.com/"
                            target="_blank"
-                           rel="noopener">Odoo</a>
+                           rel="noopener"
+                           class="footer-powered-brand">Odoo</a>
                     </div>
                     <div class="footer-designed-by">
                         Designed By
                         <a href="https://www.erp-23.com/"
                            target="_blank"
-                           rel="noopener">ERP-23</a>
+                           rel="noopener"
+                           aria-label="ERP-23">
+                            <img src="/theme_kingdom/static/src/images/designed_by_erp23.png"
+                                 alt="ERP-23"
+                                 height="24"
+                                 loading="lazy"/>
+                        </a>
                     </div>
                     <div class="footer-payment">
-                        <span class="pay-badge" aria-label="Visa">
-                            <img src="/theme_kingdom/static/src/images/visa.webp"
-                                 alt="Visa"
-                                 width="30"
-                                 height="30"
-                                 loading="lazy"/>
-                        </span>
-                        <span class="pay-badge" aria-label="Mastercard">MC</span>
-                        <span class="pay-badge" aria-label="PayPal">PayPal</span>
+                        <img src="/theme_kingdom/static/src/images/0002397_footer-cards.webp"
+                             alt="Visa, Mastercard, PayPal"
+                             width="163"
+                             height="30"
+                             loading="lazy"/>
                     </div>
                     <div class="footer-disclaimer">
                         <span class="o_footer_copyright_name">
@@ -178,6 +207,9 @@
                             <t t-esc="website.name"/>.
                             All rights reserved.
                         </span>
+                        <!-- Kingdom footer replaces o_footer_copyright, so re-add the selector here. -->
+                        <t t-call="website.language_selector"
+                           _div_classes="'dropup d-inline-block'"/>
                     </div>
                 </div>
             </div>

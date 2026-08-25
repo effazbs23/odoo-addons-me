@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ZoomPle-style hover magnifier (desktop). Click-to-fullscreen stays on ProductImageViewer. -->
+    <template id="kingdom_product_image_magnifier"
+              inherit_id="website_sale.product"
+              name="Kingdom Product Image Magnifier">
+        <xpath expr="//div[@t-att-data-image-amount]" position="attributes">
+            <attribute name="t-attf-class" add="kingdom-product-images-magnifier" separator=" "/>
+        </xpath>
+    </template>
+
+</odoo>

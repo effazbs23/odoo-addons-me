@@ -136,6 +136,7 @@
         <field name="name">Deals of the Day</field>
         <field name="res_model">kingdom.deals.of.day</field>
         <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create a deal-of-the-day offer for your homepage.

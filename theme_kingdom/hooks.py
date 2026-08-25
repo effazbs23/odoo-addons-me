@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
 
+from lxml import etree
+
+from odoo.addons.base.models.ir_ui_view import MOVABLE_BRANDING
 
 _OE_VIEW_REF_RE = re.compile(
     r'\s*data-oe-model=\\?"ir\.ui\.view\\?"\s*'
@@ -9,6 +12,85 @@ _OE_VIEW_REF_RE = re.compile(
     r'data-oe-xpath=\\?"[^"\\]*\\?"',
     re.IGNORECASE,
 )
+
+# Editor-only attrs that must never persist in saved page/snippet arches.
+_BAKED_EDITOR_ATTRS = tuple(MOVABLE_BRANDING) + (
+    'contenteditable',
+    'data-editor-message',
+    'data-editor-message-default',
+    'data-editor-sub-message',
+)
+_BAKED_EDITOR_CLASSES = ('o_editable', 'o_dirty')
+
+
+def _remove_dynamic_product_tabs_feature(env):
+    """Drop Dynamic Product Tabs snippet + Website → Product Tabs menu (one-shot cleanup)."""
+    ICP = env['ir.config_parameter'].sudo()
+    flag = 'theme_kingdom.dynamic_product_tabs_removed'
+
+    # Always drop stale ir.asset rows pointing at removed files (safe to re-run).
+    Asset = env['ir.asset'].sudo()
+    stale_asset_paths = [
+        'theme_kingdom/static/src/css/dynamic_product_tabs.css',
+        'theme_kingdom/static/src/interactions/kingdom_dynamic_product_tabs.js',
+    ]
+    Asset.search([('path', 'in', stale_asset_paths)]).unlink()
+
+    # Clear compiled bundles that embed css_error_message for the missing file.
+    Attach = env['ir.attachment'].sudo()
+    broken = Attach.search([
+        ('name', 'ilike', 'assets_'),
+        ('url', 'ilike', '/web/assets/'),
+    ])
+    # Only unlink CSS attachments so next request recompiles cleanly.
+    broken.filtered(lambda a: (a.name or '').endswith('.css') or (a.name or '').endswith('.min.css')).unlink()
+
+    if ICP.get_param(flag):
+        return
+
+    View = env['ir.ui.view'].sudo().with_context(active_test=False)
+    keys = [
+        'theme_kingdom.s_dynamic_product_tabs',
+        'theme_kingdom.dynamic_product_tabs_panel',
+        'theme_kingdom.dynamic_product_tabs_item',
+    ]
+    View.search([('key', 'in', keys)]).unlink()
+    if 'theme.ir.ui.view' in env:
+        env['theme.ir.ui.view'].sudo().with_context(active_test=False).search(
+            [('key', 'in', keys)]
+        ).unlink()
+
+    pages = View.search([
+        ('type', '=', 'qweb'),
+        '|',
+        ('arch_db', 'ilike', 's_dynamic_product_tabs'),
+        ('arch_db', 'ilike', 'data-kingdom-live-snippet="s_dynamic_product_tabs"'),
+    ])
+    for view in pages:
+        arch = view.arch_db
+        if not arch:
+            continue
+        try:
+            root = etree.fromstring(arch)
+        except etree.XMLSyntaxError:
+            continue
+        removed = False
+        for xpath_expr in (
+            '//section[contains(concat(" ", normalize-space(@class), " "), " s_dynamic_product_tabs ")]',
+            '//*[@data-kingdom-live-snippet="s_dynamic_product_tabs"]',
+            '//*[contains(@data-snippet, "s_dynamic_product_tabs")]',
+        ):
+            for el in root.xpath(xpath_expr):
+                parent = el.getparent()
+                if parent is not None:
+                    parent.remove(el)
+                    removed = True
+        if removed:
+            view.with_context(no_save_prev=True).write({
+                'arch_db': etree.tostring(root, encoding='unicode'),
+            })
+
+    ICP.set_param(flag, '1')
 
 
 def _cleanup_stale_oe_view_refs(env):
@@ -51,7 +133,9 @@ _KINGDOM_SNIPPET_CLASS_FIXES = (
     ('s_promo_banners oe_structure', 's_promo_banners'),
     ('s_promo_banner oe_structure', 's_promo_banner'),
     ('s_blog_news oe_structure', 's_blog_news'),
-    ('s_manufacturers oe_structure', 's_manufacturers'),
+    ('s_brands oe_structure', 's_brands'),
+    ('s_manufacturers oe_structure', 's_brands'),
+    ('s_manufacturers', 's_brands'),
     ('s_service_highlights oe_structure', 's_service_highlights'),
 )
 
@@ -116,10 +200,328 @@ def _strip_saved_snippet_editor_hints(env):
             view.with_context(no_save_prev=True).write({'arch_db': new_arch})
 
 
+def _strip_baked_editor_branding(env):
+    """Remove baked editor branding from saved QWeb arches.
+
+    When ``data-oe-model`` / ``data-oe-id`` / … are stored inside ``#wrap``
+    (e.g. after copying a rendered Kingdom snippet), Odoo's
+    ``distribute_branding`` moves branding off ``#wrap`` onto those
+    descendants. ``#wrap`` then never becomes ``o_editable``, so the Website
+    Builder disables every Blocks category
+    ("No block of this category can be dropped on this page").
+    """
+    View = env['ir.ui.view'].sudo()
+    views = View.search([
+        ('type', '=', 'qweb'),
+        '|', '|',
+        ('arch_db', 'ilike', 'data-oe-model'),
+        ('arch_db', 'ilike', 'data-oe-xpath'),
+        ('arch_db', 'ilike', 'contenteditable'),
+    ])
+    for view in views:
+        arch = view.arch_db
+        if not arch:
+            continue
+        try:
+            root = etree.fromstring(arch.encode('utf-8') if isinstance(arch, str) else arch)
+        except etree.XMLSyntaxError:
+            continue
+        changed = False
+        for el in root.iter(etree.Element):
+            for attr in _BAKED_EDITOR_ATTRS:
+                if attr in el.attrib:
+                    del el.attrib[attr]
+                    changed = True
+            classes = (el.get('class') or '').split()
+            cleaned = [c for c in classes if c not in _BAKED_EDITOR_CLASSES]
+            if cleaned != classes:
+                if cleaned:
+                    el.set('class', ' '.join(cleaned))
+                elif 'class' in el.attrib:
+                    del el.attrib['class']
+                changed = True
+        if changed:
+            new_arch = etree.tostring(root, encoding='unicode')
+            view.with_context(no_save_prev=True).write({'arch_db': new_arch})
+
+
+def _fix_stale_multi_website_action_contexts(env):
+    """Clear legacy multi-website menu contexts left after reverting to global config."""
+    xmlids = (
+        'theme_kingdom.action_bestsale_products',
+        'theme_kingdom.action_kingdom_brand',
+        'theme_kingdom.action_kingdom_manufacturer',
+        'theme_kingdom.action_kingdom_deals_of_day',
+        'theme_kingdom.action_featured_products',
+        'theme_kingdom.kingdom_product_tab_action',
+        'theme_kingdom.kingdom_dual_carousel_tab_action',
+    )
+    for xmlid in xmlids:
+        action = env.ref(xmlid, raise_if_not_found=False)
+        if not action:
+            continue
+        if 'current_website_id' in str(action.context or ''):
+            action.sudo().write({'context': {}})
+
+
+def _table_exists(cr, name):
+    cr.execute(
+        """
+        SELECT EXISTS (
+            SELECT FROM information_schema.tables
+            WHERE table_name = %s
+        )
+        """,
+        (name,),
+    )
+    return bool(cr.fetchone()[0])
+
+
+def _column_exists(cr, table, column):
+    cr.execute(
+        """
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = %s AND column_name = %s
+        """,
+        (table, column),
+    )
+    return bool(cr.fetchone())
+
+
+def _rename_manufacturer_to_brand(cr):
+    """Rename kingdom.manufacturer → kingdom.brand (table, fields, xmlids)."""
+    if _table_exists(cr, 'kingdom_manufacturer') and not _table_exists(cr, 'kingdom_brand'):
+        cr.execute('ALTER TABLE kingdom_manufacturer RENAME TO kingdom_brand')
+    if _table_exists(cr, 'kingdom_brand'):
+        cr.execute(
+            'ALTER INDEX IF EXISTS kingdom_manufacturer_pkey RENAME TO kingdom_brand_pkey'
+        )
+
+    if _column_exists(cr, 'product_template', 'kingdom_manufacturer_id') and not _column_exists(
+        cr, 'product_template', 'kingdom_brand_id'
+    ):
+        cr.execute(
+            'ALTER TABLE product_template '
+            'RENAME COLUMN kingdom_manufacturer_id TO kingdom_brand_id'
+        )
+        cr.execute(
+            'ALTER INDEX IF EXISTS product_template_kingdom_manufacturer_id_index '
+            'RENAME TO product_template_kingdom_brand_id_index'
+        )
+
+    cr.execute(
+        """
+        UPDATE ir_model
+           SET model = 'kingdom.brand'
+         WHERE model = 'kingdom.manufacturer'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE ir_model_fields
+           SET model = 'kingdom.brand'
+         WHERE model = 'kingdom.manufacturer'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE ir_model_fields
+           SET relation = 'kingdom.brand'
+         WHERE relation = 'kingdom.manufacturer'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE ir_model_fields
+           SET name = 'kingdom_brand_id'
+         WHERE model = 'product.template'
+           AND name = 'kingdom_manufacturer_id'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE ir_model_fields
+           SET relation_field = 'kingdom_brand_id'
+         WHERE relation_field = 'kingdom_manufacturer_id'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE ir_model_data
+           SET name = 'model_kingdom_brand'
+         WHERE module = 'theme_kingdom'
+           AND name = 'model_kingdom_manufacturer'
+           AND model = 'ir.model'
+        """
+    )
+    cr.execute(
+        """
+        UPDATE ir_attachment
+           SET res_model = 'kingdom.brand'
+         WHERE res_model = 'kingdom.manufacturer'
+        """
+    )
+
+    xmlid_renames = [
+        ('view_kingdom_manufacturer_list', 'view_kingdom_brand_list'),
+        ('view_kingdom_manufacturer_form', 'view_kingdom_brand_form'),
+        ('action_kingdom_manufacturer', 'action_kingdom_brand'),
+        ('menu_kingdom_manufacturer', 'menu_kingdom_brand'),
+        ('s_manufacturers', 's_brands'),
+        ('product_template_form_view_manufacturer', 'product_template_form_view_brand'),
+        ('product_template_tree_view_manufacturer', 'product_template_tree_view_brand'),
+        ('access_kingdom_manufacturer', 'access_kingdom_brand'),
+        ('access_kingdom_manufacturer_public', 'access_kingdom_brand_public'),
+        ('access_kingdom_manufacturer_portal', 'access_kingdom_brand_portal'),
+    ]
+    for old, new in xmlid_renames:
+        cr.execute(
+            """
+            SELECT id FROM ir_model_data
+             WHERE module = 'theme_kingdom' AND name = %s
+            """,
+            (new,),
+        )
+        if cr.fetchone():
+            cr.execute(
+                """
+                DELETE FROM ir_model_data
+                 WHERE module = 'theme_kingdom' AND name = %s
+                """,
+                (old,),
+            )
+        else:
+            cr.execute(
+                """
+                UPDATE ir_model_data
+                   SET name = %s
+                 WHERE module = 'theme_kingdom' AND name = %s
+                """,
+                (new, old),
+            )
+
+    # Best-effort QWeb arch rewrite (translated arch_db may be jsonb).
+    try:
+        with cr.savepoint():
+            cr.execute(
+                """
+                UPDATE ir_ui_view
+                   SET arch_db = replace(
+                        replace(
+                            replace(arch_db::text, 'kingdom.manufacturer', 'kingdom.brand'),
+                            's_manufacturers', 's_brands'
+                        ),
+                        'kingdom_manufacturer_id', 'kingdom_brand_id'
+                   )::jsonb
+                 WHERE arch_db::text LIKE '%manufacturer%'
+                """
+            )
+    except Exception:
+        # Non-jsonb DBs / partial installs — theme reload will refresh arches.
+        pass
+
+    if _table_exists(cr, 'theme_ir_ui_view'):
+        try:
+            with cr.savepoint():
+                cr.execute(
+                    """
+                    UPDATE theme_ir_ui_view
+                       SET arch = replace(
+                            replace(
+                                replace(arch::text, 'kingdom.manufacturer', 'kingdom.brand'),
+                                's_manufacturers', 's_brands'
+                            ),
+                            'kingdom_manufacturer_id', 'kingdom_brand_id'
+                       )::jsonb
+                     WHERE arch::text LIKE '%manufacturer%'
+                    """
+                )
+        except Exception:
+            try:
+                with cr.savepoint():
+                    cr.execute(
+                        """
+                        UPDATE theme_ir_ui_view
+                           SET arch = replace(
+                                replace(
+                                    replace(arch, 'kingdom.manufacturer', 'kingdom.brand'),
+                                    's_manufacturers', 's_brands'
+                                ),
+                                'kingdom_manufacturer_id', 'kingdom_brand_id'
+                           )
+                         WHERE arch LIKE '%manufacturer%'
+                        """
+                    )
+            except Exception:
+                pass
+
+
+def _migrate_promo_banners_to_img(env):
+    """Convert twin promo cards from CSS background-image to <img> (Replace in Builder)."""
+    ICP = env['ir.config_parameter'].sudo()
+    flag = 'theme_kingdom.promo_banners_img_migrated_v2'
+    if ICP.get_param(flag):
+        return
+
+    bg_url_re = re.compile(
+        r"""background-image:\s*url\(\s*['"]?([^'")]+)['"]?\s*\)\s*;?""",
+        re.IGNORECASE,
+    )
+    View = env['ir.ui.view'].sudo()
+    views = View.search([
+        ('type', '=', 'qweb'),
+        ('arch_db', 'ilike', 'promo-banner-blocks__card'),
+        ('arch_db', 'ilike', 'background-image'),
+    ])
+    for view in views:
+        arch = view.arch_db
+        if not arch:
+            continue
+        try:
+            root = etree.fromstring(arch)
+        except etree.XMLSyntaxError:
+            continue
+        changed = False
+        for card in root.xpath(
+            '//*[contains(concat(" ", normalize-space(@class), " "), " promo-banner-blocks__card ")]'
+        ):
+            if card.xpath('.//img[contains(@class, "promo-banner-blocks__img")]'):
+                continue
+            style = card.get('style') or ''
+            match = bg_url_re.search(style)
+            if not match:
+                continue
+            src = match.group(1)
+            new_style = bg_url_re.sub('', style).strip().strip(';').strip()
+            if new_style:
+                card.set('style', new_style)
+            elif 'style' in card.attrib:
+                del card.attrib['style']
+            for child in list(card):
+                card.remove(child)
+            img = etree.SubElement(card, 'img')
+            img.set('src', src)
+            img.set('alt', card.get('aria-label') or '')
+            img.set('width', '1320')
+            img.set('height', '423')
+            img.set('loading', 'lazy')
+            img.set('class', 'img img-fluid w-100 promo-banner-blocks__img')
+            img.set('data-name', 'Promo Banner Image')
+            changed = True
+        if changed:
+            view.with_context(no_save_prev=True).write({
+                'arch_db': etree.tostring(root, encoding='unicode'),
+            })
+
+    ICP.set_param(flag, '1')
+
+
 def pre_init_hook(env):
     """Prepare schema and migrate legacy data before module models load."""
+    _rename_manufacturer_to_brand(env.cr)
     _ensure_website_menu_kingdom_tab_column(env)
     _migrate_deals_pricelist_items_to_products(env)
+    _fix_stale_multi_website_action_contexts(env)
 
 
 def _ensure_website_menu_kingdom_tab_column(env):
@@ -172,14 +574,25 @@ def post_init_hook(env):
                     'perm_read': True,
                 })
 
-    for website in env['website'].search([]):
-        env['theme.utils'].with_context(website_id=website.id)._activate_kingdom_footer()
+    # Mark Kingdom theme templates inactive by default (gallery opt-in).
+    # Do not force-disable applied chrome — that raced with theme post_copy.
+    env['theme.utils']._migrate_header_footer_opt_in()
+    env['theme.utils']._ensure_header_respects_no_header()
 
-    _ensure_default_product_tabs(env)
+    env['kingdom.product.tab'].ensure_default_tabs()
+    _ensure_dual_carousel_tabs(env)
+    _migrate_deals_of_day_pricelist_items(env)
     _ensure_homepage_featured_categories(env)
+    env['theme.utils']._ensure_kingdom_shop_layout()
     _migrate_kingdom_snippet_oe_structure(env)
     _strip_saved_snippet_editor_hints(env)
+    _strip_baked_editor_branding(env)
+    _migrate_promo_banners_to_img(env)
+    _remove_dynamic_product_tabs_feature(env)
     _cleanup_stale_oe_view_refs(env)
+
+    # Theme may have been applied during this install; re-enable Kingdom chrome last.
+    env['theme.utils']._sync_kingdom_chrome_on_themed_websites()
 
 
 def _ensure_homepage_featured_categories(env):
@@ -200,32 +613,8 @@ def _ensure_homepage_featured_categories(env):
 
 
 def _ensure_default_product_tabs(env):
-    """Default New Arrivals / Best Sellers tabs and header menus on install or upgrade."""
-    Tab = env['kingdom.product.tab'].sudo()
-    defaults = [
-        {
-            'name': 'New Arrivals',
-            'tab_type': 'new_arrival',
-            'show_in_header_menu': True,
-            'show_in_product_carousel': True,
-            'sequence': 10,
-        },
-        {
-            'name': 'Best Sellers',
-            'tab_type': 'best_seller',
-            'show_in_header_menu': True,
-            'show_in_product_carousel': True,
-            'sequence': 20,
-        },
-    ]
-    for vals in defaults:
-        existing = Tab.search([('tab_type', '=', vals['tab_type'])], limit=1)
-        if not existing:
-            Tab.create(vals)
-        elif not existing.show_in_header_menu:
-            existing.write({'show_in_header_menu': True})
-    Tab.search([])._sync_header_menus()
-
+    """Default tabs + dual-carousel seed (used by legacy callers / migrations)."""
+    env['kingdom.product.tab'].ensure_default_tabs()
     _ensure_dual_carousel_tabs(env)
     _migrate_deals_of_day_pricelist_items(env)
 

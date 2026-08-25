@@ -1,6 +1,7 @@
 import { Interaction } from '@web/public/interaction';
 import { registry } from '@web/core/registry';
 import { rpc } from '@web/core/network/rpc';
+import { ProductComparison } from '@website_sale_comparison/interactions/product_comparison';
 
 const PRODUCT_ROW_SWIPER_OPTS = {
     spaceBetween: 14,
@@ -18,12 +19,18 @@ function padCountdown(n) {
     return String(n).padStart(2, '0');
 }
 
+function kingdomSwiperCanLoop(slideCount, maxSlidesPerView) {
+    const max = Math.max(1, Math.ceil(Number(maxSlidesPerView) || 1));
+    return slideCount > max;
+}
+
 function parseDealEndMs(root) {
     const msAttr = root.getAttribute('data-deal-end-ms');
     if (msAttr) {
         const parsed = parseInt(msAttr, 10);
         if (!Number.isNaN(parsed) && parsed > 0) {
-            return parsed;
+            // BuilderDateTimePicker stores unix seconds; deals use epoch ms.
+            return parsed < 1e12 ? parsed * 1000 : parsed;
         }
     }
     const iso = root.getAttribute('data-deal-countdown') || '';
@@ -42,9 +49,16 @@ export class KingdomLiveSnippet extends Interaction {
         'section.s_featured_products[data-snippet]',
         'section.s_bestsale_products[data-snippet]',
         'section.s_product_carousel[data-snippet]',
+        'section.product-carousel-section[data-snippet]',
+        '.product-carousel-section[data-snippet="s_product_carousel"]',
+        '.product-carousel-section[data-snippet="theme_kingdom.s_product_carousel"]',
         'section.s_category_dual_carousels[data-snippet]',
+        'section.category-dual-section[data-snippet]',
         'section.s_category_slider[data-snippet]',
         'section.dealoftheday-wrapper[data-snippet]',
+        'section.s_brands[data-snippet]',
+        'section.s_manufacturers[data-snippet]',
+        'section.s_coming_soon[data-snippet]',
     ].join(', ');
 
     _dealCountdownInterval = null;
@@ -60,41 +74,106 @@ export class KingdomLiveSnippet extends Interaction {
         return dataSnippet;
     }
 
-    async willStart() {
+    /**
+     * True while Website Builder is editing this page (iframe or parent).
+     * Live RPC must not replace markup in the editor — widgets only.
+     */
+    _isWebsiteEditorContext() {
+        if (typeof document === 'undefined') {
+            return false;
+        }
         if (document.body.classList.contains('editor_enable')) {
+            return true;
+        }
+        if (document.getElementById('oe_snippets')) {
+            return true;
+        }
+        if (this.el.closest('.o_editable, #wrapwrap.o_editable, #wrap.o_editable')) {
+            return true;
+        }
+        try {
+            if (window.parent && window.parent !== window) {
+                const parentDoc = window.parent.document;
+                if (
+                    parentDoc.body.classList.contains('editor_enable')
+                    || parentDoc.body.classList.contains('o_builder_open')
+                    || parentDoc.querySelector('.o_website_preview, #oe_snippets')
+                ) {
+                    return true;
+                }
+            }
+        } catch (_err) {
+            // Cross-origin parent — treat as public.
+        }
+        return false;
+    }
+
+    /**
+     * Prefer `.k-live-body` so section headings stay intact on public refresh;
+     * fall back to `.k-container` for older saved markup.
+     */
+    _getLiveReplaceTarget(sectionEl, preferLiveBody = true) {
+        if (!sectionEl) {
+            return null;
+        }
+        if (preferLiveBody) {
+            const liveBody = sectionEl.querySelector('.k-live-body');
+            if (liveBody) {
+                return liveBody;
+            }
+        }
+        return sectionEl.querySelector('.k-container');
+    }
+
+    /**
+     * Live refresh swaps product cards inside js_sale snippets but keeps the
+     * section-level ProductComparison interaction. Re-bind compare click handlers
+     * on the fresh .o_add_compare buttons (wishlist/cart bind per button).
+     */
+    _rebindProductComparisons() {
+        const service = this.services['public.interactions'];
+        if (!service?.interactions) {
             return;
         }
-        const snippetKey = this._getSnippetKey();
-        if (!snippetKey) {
+        const section = this.el;
+        for (const colibri of service.interactions) {
+            if (colibri.el !== section || colibri.isDestroyed || !colibri.hasStarted) {
+                continue;
+            }
+            if (colibri.interaction?.constructor !== ProductComparison) {
+                continue;
+            }
+            colibri.updateContent();
+        }
+    }
+
+    _stripViewBranding(rootEl) {
+        if (!rootEl) {
             return;
         }
-        const html = await this.waitFor(
-            rpc('/theme_kingdom/snippet/render', { snippet_key: snippetKey })
-        );
-        if (!html) {
+        const attrs = [
+            'data-oe-model',
+            'data-oe-id',
+            'data-oe-field',
+            'data-oe-xpath',
+            'data-oe-source-id',
+        ];
+        for (const el of [rootEl, ...rootEl.querySelectorAll('*')]) {
+            if (el.getAttribute('data-oe-model') !== 'ir.ui.view') {
+                continue;
+            }
+            for (const attr of attrs) {
+                el.removeAttribute(attr);
+            }
+        }
+    }
+
+    async willStart() {
+        if (this._isWebsiteEditorContext()) {
             return;
         }
-        const container = this.el.querySelector('.k-container');
-        if (!container) {
-            return;
-        }
-        const temp = document.createElement('div');
-        temp.innerHTML = html;
-        const freshSection = temp.querySelector('[data-kingdom-live-snippet], section[data-snippet]');
-        const freshContainer = freshSection && freshSection.querySelector('.k-container');
-        if (!freshContainer) {
-            return;
-        }
-        if (freshSection.classList.contains('d-none') && !this.el.classList.contains('d-none')) {
-            this.el.classList.add('d-none');
-        } else if (!freshSection.classList.contains('d-none')) {
-            this.el.classList.remove('d-none');
-        }
-        this.services['public.interactions'].stopInteractions(container);
-        container.replaceWith(freshContainer);
-        await this.waitFor(
-            this.services['public.interactions'].startInteractions(this.el)
-        );
+        // Do not await snippet RPCs before first paint — that made every page with
+        // Kingdom carousels feel sluggish. Refresh after mount instead.
     }
 
     start() {
@@ -102,9 +181,55 @@ export class KingdomLiveSnippet extends Interaction {
         if (!snippetKey) {
             return;
         }
-        window.requestAnimationFrame(() => {
-            this._initSnippetWidgets(snippetKey);
-        });
+        if (this._isWebsiteEditorContext()) {
+            window.requestAnimationFrame(() => {
+                this._initSnippetWidgets(snippetKey);
+                this.el.dispatchEvent(new CustomEvent('kingdom-live-refreshed'));
+            });
+            return;
+        }
+        // Refresh first, then bind Swiper to the final DOM (arrows break if we
+        // init on SSR nodes and then replace the container).
+        this._refreshLiveSnippet(snippetKey);
+    }
+
+    async _refreshLiveSnippet(snippetKey) {
+        let refreshed = false;
+        try {
+            const html = await this.waitFor(
+                rpc('/theme_kingdom/snippet/render', { snippet_key: snippetKey })
+            );
+            if (html && !this._isWebsiteEditorContext()) {
+                const temp = document.createElement('div');
+                temp.innerHTML = html;
+                const freshSection = temp.querySelector('[data-kingdom-live-snippet], section[data-snippet]');
+                const useLiveBody = Boolean(this.el.querySelector('.k-live-body'));
+                const liveTarget = this._getLiveReplaceTarget(this.el, useLiveBody);
+                const freshTarget = this._getLiveReplaceTarget(freshSection, useLiveBody);
+                if (liveTarget && freshTarget) {
+                    this._stripViewBranding(freshTarget);
+                    if (freshSection) {
+                        if (freshSection.classList.contains('d-none') && !this.el.classList.contains('d-none')) {
+                            this.el.classList.add('d-none');
+                        } else if (!freshSection.classList.contains('d-none')) {
+                            this.el.classList.remove('d-none');
+                        }
+                    }
+                    this.services['public.interactions'].stopInteractions(liveTarget);
+                    liveTarget.replaceWith(freshTarget);
+                    await this.waitFor(
+                        this.services['public.interactions'].startInteractions(this.el)
+                    );
+                    this._rebindProductComparisons();
+                    refreshed = true;
+                }
+            }
+        } catch (_error) {
+            // Keep SSR content if refresh fails.
+        }
+        this._initSnippetWidgets(snippetKey);
+        this.el.dispatchEvent(new CustomEvent('kingdom-live-refreshed'));
+        return refreshed;
     }
 
     destroy() {
@@ -130,6 +255,8 @@ export class KingdomLiveSnippet extends Interaction {
             || snippetKey === 's_bestsale_products'
         ) {
             this._initProductSwiper();
+        } else if (snippetKey === 's_brands' || snippetKey === 's_manufacturers') {
+            this._initManufacturerCarousel();
         }
     }
 
@@ -189,19 +316,22 @@ export class KingdomLiveSnippet extends Interaction {
         }
         const slideCount = swiperEl.querySelectorAll('.swiper-slide').length;
         const nav = this.el.querySelector('.deal-swiper-nav');
+        const inEditor = this._isWebsiteEditorContext();
         new Swiper(swiperEl, {
             slidesPerView: 'auto',
-            observer: true,
-            observeParents: true,
+            observer: !inEditor,
+            observeParents: !inEditor,
             lazy: true,
-            loop: slideCount > 1,
+            loop: !inEditor && slideCount > 3,
             centeredSlides: false,
             initialSlide: 0,
-            autoplay: {
-                delay: 5000,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-            },
+            autoplay: inEditor
+                ? false
+                : {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                },
             pagination: {
                 el: swiperEl.querySelector('.swiper-pagination'),
                 clickable: true,
@@ -222,25 +352,29 @@ export class KingdomLiveSnippet extends Interaction {
         const run = () => {
             if (typeof window.KingdomInitProductRowSwiper === 'function') {
                 window.KingdomInitProductRowSwiper(this.el);
-                return;
+                const swiperEl = this.el.querySelector('.featured-swiper, .bestsale-swiper');
+                if (swiperEl && swiperEl.swiper) {
+                    return;
+                }
             }
             if (typeof Swiper === 'undefined') {
                 window.setTimeout(run, 50);
                 return;
             }
             const swiperEl = this.el.querySelector('.featured-swiper, .bestsale-swiper');
-            if (!swiperEl) {
+            if (!swiperEl || !swiperEl.querySelector('.swiper-slide')) {
                 return;
             }
             if (swiperEl.swiper) {
                 swiperEl.swiper.destroy(true, true);
             }
             const nav = this.el.querySelector('.featured-products-nav');
+            const inEditor = this._isWebsiteEditorContext();
             new Swiper(
                 swiperEl,
                 Object.assign({}, PRODUCT_ROW_SWIPER_OPTS, {
-                    observer: true,
-                    observeParents: true,
+                    observer: !inEditor,
+                    observeParents: !inEditor,
                     watchOverflow: true,
                     preventClicks: false,
                     preventClicksPropagation: false,
@@ -258,7 +392,16 @@ export class KingdomLiveSnippet extends Interaction {
         if (typeof window.KingdomInitProductCarousel !== 'function') {
             return;
         }
+        const roots = [];
+        if (this.el.matches('.product-carousel-section')) {
+            roots.push(this.el);
+        }
         this.el.querySelectorAll('.product-carousel-section').forEach((root) => {
+            if (!roots.includes(root)) {
+                roots.push(root);
+            }
+        });
+        roots.forEach((root) => {
             window.KingdomInitProductCarousel(root);
         });
     }
@@ -277,6 +420,51 @@ export class KingdomLiveSnippet extends Interaction {
             return;
         }
         window.KingdomInitCategorySwiper(this.el);
+    }
+
+    _initManufacturerCarousel() {
+        if (typeof Swiper === 'undefined' || this.el.classList.contains('d-none')) {
+            return;
+        }
+        const carousel = this.el.querySelector('.carousel-container');
+        const swiperEl = this.el.querySelector('.brand-swiper, .manufacturer-swiper');
+        const prevEl = this.el.querySelector('.brand-carousel-arrow.swiper-button-prev, .manufacturer-carousel-arrow.swiper-button-prev');
+        const nextEl = this.el.querySelector('.brand-carousel-arrow.swiper-button-next, .manufacturer-carousel-arrow.swiper-button-next');
+        if (!swiperEl || !carousel || !prevEl || !nextEl) {
+            return;
+        }
+        if (!swiperEl.querySelector('.swiper-slide')) {
+            return;
+        }
+        if (swiperEl.swiper) {
+            swiperEl.swiper.destroy(true, true);
+        }
+        const slideCount = swiperEl.querySelectorAll('.swiper-slide').length;
+        const inEditor = this._isWebsiteEditorContext();
+        // Fixed slidesPerView keeps logo tiles grid-sized; only gate loop.
+        const config = {
+            loop: !inEditor && kingdomSwiperCanLoop(slideCount, 8),
+            speed: 450,
+            spaceBetween: 15,
+            slidesPerView: 3,
+            watchOverflow: true,
+            observer: !inEditor,
+            observeParents: !inEditor,
+            navigation: {
+                prevEl,
+                nextEl,
+            },
+            breakpoints: {
+                576: { slidesPerView: 4, spaceBetween: 15 },
+                992: { slidesPerView: 6, spaceBetween: 15 },
+                1600: { slidesPerView: 8, spaceBetween: 15 },
+            },
+        };
+        try {
+            new Swiper(swiperEl, config);
+        } catch {
+            new Swiper(swiperEl, { ...config, loop: false });
+        }
     }
 }
 

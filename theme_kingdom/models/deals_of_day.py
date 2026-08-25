@@ -371,11 +371,14 @@ class KingdomDealsOfDay(models.Model):
     @api.model
     def get_preview_deal(self):
         """Fallback deal for the website editor when no offer is currently active."""
-        return self.sudo().search(
+        deals = self.sudo().search(
             ['|', ('pricelist_id', '!=', False), ('promotion_id', '!=', False)],
             order='sequence asc, id asc',
-            limit=1,
         )
+        for deal in deals:
+            if deal._get_offer_products():
+                return deal
+        return deals[:1]
 
     @api.model
     def get_website_deal(self):

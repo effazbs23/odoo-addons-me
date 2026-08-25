@@ -5,11 +5,11 @@
         <field name="name">kingdom.manufacturer.list</field>
         <field name="model">kingdom.manufacturer</field>
         <field name="arch" type="xml">
-            <list string="Manufacturers">
+            <list string="Brands">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
+                <field name="product_count"/>
                 <field name="show_on_homepage" widget="boolean_toggle"/>
-                <field name="website_url"/>
                 <field name="active" widget="boolean_toggle"/>
             </list>
         </field>
@@ -19,8 +19,16 @@
         <field name="name">kingdom.manufacturer.form</field>
         <field name="model">kingdom.manufacturer</field>
         <field name="arch" type="xml">
-            <form string="Manufacturer">
+            <form string="Brand">
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_products"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-shopping-cart">
+                            <field name="product_count" widget="statinfo" string="Products"/>
+                        </button>
+                    </div>
                     <field name="image" widget="image" class="oe_avatar"/>
                     <group>
                         <group>
@@ -29,9 +37,6 @@
                             <field name="show_on_homepage"/>
                             <field name="active"/>
                         </group>
-                        <group>
-                            <field name="website_url" placeholder="https:// or /shop"/>
-                        </group>
                     </group>
                 </sheet>
             </form>
@@ -39,18 +44,20 @@
     </record>
 
     <record id="action_kingdom_manufacturer" model="ir.actions.act_window">
-        <field name="name">Manufacturers</field>
+        <field name="name">Brands</field>
         <field name="res_model">kingdom.manufacturer</field>
         <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Add brands for the homepage manufacturers carousel.
+                Add brands for the homepage brands carousel.
+                Assign products to a brand on the product form; clicking a brand on the website opens the shop filtered to that brand.
             </p>
         </field>
     </record>
 
     <menuitem id="menu_kingdom_manufacturer"
-              name="Manufacturers"
+              name="Brands"
               parent="website.menu_website_global_configuration"
               action="action_kingdom_manufacturer"
               sequence="54"/>

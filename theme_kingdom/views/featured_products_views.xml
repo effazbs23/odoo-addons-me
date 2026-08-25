@@ -35,6 +35,7 @@
         <field name="name">Featured Products</field>
         <field name="res_model">featured.products</field>
         <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
     </record>
 
     <menuitem id="menu_featured_products"

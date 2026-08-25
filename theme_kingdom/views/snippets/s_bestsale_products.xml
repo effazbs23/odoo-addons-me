@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="s_bestsale_products" name="Kingdom Best Sale Products">
-        <section class="s_bestsale_products oe_website_sale featured-products-section bestsale-products-section"
+        <section class="s_bestsale_products oe_website_sale js_sale featured-products-section bestsale-products-section"
                  data-snippet="theme_kingdom.s_bestsale_products"
                  data-kingdom-live-snippet="s_bestsale_products"
                  data-name="Best Sale"
@@ -15,10 +15,14 @@
                    t-value="bestsale_picked if bestsale_picked else request.env['product.template'].sudo().search([('sale_ok', '=', True), ('is_published', '=', True)], order='website_sequence desc, id desc', limit=12)"/>
                 <t t-set="section_title"
                    t-value="bestsale_record[:1].name if bestsale_record else 'Best Sale'"/>
+                <t t-set="website" t-value="website or env['website'].get_current_website()"/>
+                <t t-set="_pl_sid" t-value="request.session.get('website_sale_current_pl')"/>
+                <t t-set="_pl_session"
+                   t-value="_pl_sid and request.env['product.pricelist'].sudo().browse(int(_pl_sid))"/>
                 <t t-set="current_pricelist"
-                   t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
+                   t-value="(_pl_session and _pl_session.exists() and _pl_session) or (website.get_pricelist_available(show_visible=False)[:1] if website else request.env['product.pricelist'])"/>
                 <t t-set="display_currency"
-                   t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
+                   t-value="(current_pricelist and current_pricelist.currency_id) or (website and website.currency_id) or request.env.company.currency_id"/>
 
                 <div class="featured-products-head">
                     <h2 id="BestsaleProductsHeading" class="o_translate_inline" t-esc="section_title"/>
@@ -28,6 +32,7 @@
                     </div>
                 </div>
 
+                <div class="k-live-body o_not_editable o_prevent_link_editor" contenteditable="false">
                 <div class="swiper bestsale-swiper featured-products-swiper">
                     <div class="swiper-wrapper">
                         <t t-if="bestsale_products">
@@ -50,24 +55,20 @@
                                     <article t-attf-class="featured-product-card #{'featured-product-card--soldout' if not can_add else ''}"
                                              t-att-data-product-template-id="product.id"
                                              t-att-data-product-type="product.type">
-                                        <t t-if="show_sale_badge or product.website_ribbon_id">
-                                            <div class="featured-product-badges">
-                                                <t t-if="product.website_ribbon_id">
-                                                    <span class="badge-new" t-esc="product.website_ribbon_id.name"/>
-                                                </t>
-                                                <t t-if="show_sale_badge">
-                                                    <span class="badge-top">Sale</span>
-                                                </t>
-                                            </div>
-                                        </t>
-                                        <a t-att-href="product.website_url" class="featured-product-picture">
+                                        <t t-call="theme_kingdom.product_card_ribbons"/>
+                                        <a t-att-href="product.website_url"
+                                           class="featured-product-picture"
+                                           contenteditable="false">
                                             <img t-att-src="'/web/image/product.template/%s/image_512' % product.id"
                                                  t-att-alt="product.name"
                                                  loading="lazy"/>
                                         </a>
+                                        <t t-call="theme_kingdom.product_card_action_buttons"/>
                                         <div class="featured-product-body">
                                             <h3>
-                                                <a t-att-href="product.website_url" t-esc="product.name"/>
+                                                <a t-att-href="product.website_url"
+                                                   contenteditable="false"
+                                                   t-esc="product.name"/>
                                             </h3>
                                             <div class="featured-product-stars"
                                                  t-att-aria-label="'%s out of 5 stars' % rating_rounded">
@@ -125,14 +126,10 @@
                                             </t>
                                             <t t-else="">
                                                 <div class="featured-product-price">
-                                                    <t t-if="show_sale_badge">
-                                                        <span class="featured-old-price">
-                                                            <t t-out="compare_price"
-                                                               t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
-                                                        </span>
+                                                    <t t-call="theme_kingdom.product_card_price">
+                                                        <t t-set="pricelist" t-value="current_pricelist"/>
+                                                        <t t-set="display_currency" t-value="display_currency"/>
                                                     </t>
-                                                    <t t-out="contextual_price"
-                                                       t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
                                                 </div>
                                             </t>
                                         </div>
@@ -207,6 +204,7 @@
                             </div>
                         </t>
                     </div>
+                </div>
                 </div>
             </div>
         </section>

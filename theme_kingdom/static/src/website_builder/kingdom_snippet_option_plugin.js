@@ -14,9 +14,10 @@ const KINGDOM_SNIPPET_ACTIONS = {
     "theme_kingdom.s_featured_products": "theme_kingdom.action_featured_products",
     "theme_kingdom.s_bestsale_products": "theme_kingdom.action_bestsale_products",
     "theme_kingdom.s_deal_of_the_day": "theme_kingdom.action_kingdom_deals_of_day",
-    "theme_kingdom.s_manufacturers": "theme_kingdom.action_kingdom_manufacturer",
+    "theme_kingdom.s_brands": "theme_kingdom.action_kingdom_brand",
+    "theme_kingdom.s_manufacturers": "theme_kingdom.action_kingdom_brand",
     "theme_kingdom.s_product_carousel": "theme_kingdom.kingdom_product_tab_action",
-    "theme_kingdom.s_category_dual_carousels": "theme_kingdom.kingdom_product_tab_action",
+    "theme_kingdom.s_category_dual_carousels": "theme_kingdom.kingdom_dual_carousel_tab_action",
 };
 
 function getKingdomSnippetSection(editingElement) {
@@ -72,6 +73,14 @@ export class RemoveKingdomSnippetBlockAction extends BuilderAction {
     }
 }
 
+const VIEW_BRANDING_ATTRS = [
+    "data-oe-model",
+    "data-oe-id",
+    "data-oe-field",
+    "data-oe-xpath",
+    "data-oe-source-id",
+];
+
 class KingdomSnippetOptionPlugin extends Plugin {
     static id = "kingdomSnippetOption";
     static dependencies = ["builderOptions", "remove"];
@@ -88,7 +97,48 @@ class KingdomSnippetOptionPlugin extends Plugin {
             getButtons: (target) => this.getKingdomCarouselOverlayButtons(target),
         }),
         on_removed_handlers: this.onRemovedKingdomSnippet.bind(this),
+        // Keep #wrap editable: never persist ir.ui.view branding inside page arches.
+        clean_for_save_handlers: this.cleanViewBrandingForSave.bind(this),
+        // DB-driven Kingdom snippet links stay fixed (not editable via link popover).
+        // Promo banners / hero CTAs are excluded — they have no data-kingdom-live-snippet.
+        immutable_link_selectors: [
+            ".k-live-body a",
+            ".o_prevent_link_editor a",
+            "[data-kingdom-live-snippet] a",
+            "section.s_blog_news a",
+            "section.s_category_slider a",
+            "section.s_featured_products a",
+            "section.s_bestsale_products a",
+            "section.s_product_carousel a",
+            "section.s_category_dual_carousels a",
+            "section.s_brands a",
+            "section.s_manufacturers a",
+            "section.dealoftheday-wrapper a",
+            "section.s_coming_soon a",
+            ".product-carousel-cell a",
+            ".product-carousel-feature a",
+            ".product-carousel-feature__bg-link",
+            ".product-carousel-feature__title",
+            ".k-cat-card",
+            ".brand-picture",
+            ".brand-name a",
+        ],
     };
+
+    cleanViewBrandingForSave({ root }) {
+        if (!root) {
+            return;
+        }
+        // Keep branding on the savable root (#wrap); strip it from descendants.
+        root.querySelectorAll('[data-oe-model="ir.ui.view"]').forEach((el) => {
+            if (el === root) {
+                return;
+            }
+            for (const attr of VIEW_BRANDING_ATTRS) {
+                el.removeAttribute(attr);
+            }
+        });
+    }
 
     /**
      * Hero/carousel snippets select the active .carousel-item for the floating

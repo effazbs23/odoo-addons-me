@@ -23,25 +23,47 @@
 
     <!-- One column (Smart TV / Mixer Grinder compact layout) -->
     <template id="category_dual_carousel_column" name="Category dual carousel column">
-        <t t-set="ribbon" t-value="tab.get_feature_ribbon()"/>
+        <t t-set="col_key" t-value="'%s' % (tab.id,)"/>
+        <t t-set="title" t-value="tab.get_display_title()"/>
         <t t-set="feature_href" t-value="tab.get_feature_href()"/>
         <t t-set="feature_bg" t-value="tab.get_feature_bg_url()"/>
+        <t t-set="subcats" t-value="tab.get_subcategory_links(4)"/>
         <t t-set="new_products" t-value="tab.get_new_arrival_products()"/>
         <t t-set="best_products" t-value="tab.get_best_seller_products()"/>
-        <t t-set="aria_label" t-value="ribbon"/>
-        <t t-set="Tab"
-           t-value="request.env['kingdom.product.tab'].sudo() if 'kingdom.product.tab' in request.env else False"/>
-        <t t-set="new_arrival_label" t-value="Tab and Tab.get_carousel_subtab_label('new_arrival') or 'New Arrivals'"/>
-        <t t-set="best_seller_label" t-value="Tab and Tab.get_carousel_subtab_label('best_seller') or 'Best Sellers'"/>
+        <t t-set="aria_label" t-value="title"/>
+        <t t-set="new_arrival_label" t-value="tab.get_dual_new_label()"/>
+        <t t-set="best_seller_label" t-value="tab.get_dual_best_label()"/>
+        <t t-set="panel_new" t-value="'%s-new' % col_key"/>
+        <t t-set="panel_best" t-value="'%s-best' % col_key"/>
 
         <div class="product-carousel-section product-carousel-section--compact">
             <div class="product-carousel-shell">
-                <a t-att-href="feature_href"
-                   class="product-carousel-feature product-carousel-feature--category">
-                    <span class="product-carousel-feature__ribbon" aria-hidden="true" t-esc="ribbon"/>
-                    <span class="product-carousel-feature__bg"
-                          t-att-style="'background-image: url(%s);' % feature_bg"/>
-                </a>
+                <div class="product-carousel-feature product-carousel-feature--category">
+                    <a t-att-href="feature_href"
+                       class="product-carousel-feature__bg-link"
+                       contenteditable="false"
+                       t-att-aria-label="title">
+                        <span class="product-carousel-feature__bg"
+                              t-att-style="'background-image: url(%s);' % feature_bg"/>
+                    </a>
+                    <div class="product-carousel-feature__overlay">
+                        <a t-att-href="feature_href"
+                           class="product-carousel-feature__title"
+                           contenteditable="false"
+                           t-esc="title"/>
+                        <t t-if="subcats">
+                            <ul class="product-carousel-feature__subs">
+                                <t t-foreach="subcats" t-as="subcat">
+                                    <li>
+                                        <a t-att-href="tab._get_category_shop_url(subcat)"
+                                           contenteditable="false"
+                                           t-esc="subcat.name"/>
+                                    </li>
+                                </t>
+                            </ul>
+                        </t>
+                    </div>
+                </div>
                 <div class="product-carousel-main">
                     <div class="product-carousel-toolbar">
                         <div class="product-carousel-tabs"
@@ -51,20 +73,20 @@
                                     class="product-carousel-tab is-active"
                                     role="tab"
                                     aria-selected="true"
-                                    data-product-carousel-tab="new">
+                                    t-att-data-product-carousel-tab="panel_new">
                                 <t t-esc="new_arrival_label"/>
                             </button>
                             <button type="button"
                                     class="product-carousel-tab"
                                     role="tab"
                                     aria-selected="false"
-                                    data-product-carousel-tab="best"
+                                    t-att-data-product-carousel-tab="panel_best"
                                     tabindex="-1">
                                 <t t-esc="best_seller_label"/>
                             </button>
                         </div>
                         <div class="product-carousel-toolbar-nav">
-                            <div class="product-carousel-nav-group" data-nav-for="new">
+                            <div class="product-carousel-nav-group" t-att-data-nav-for="panel_new">
                                 <span class="product-carousel-fraction"
                                       data-carousel-fraction=""
                                       aria-live="polite">
@@ -77,7 +99,7 @@
                                 <div class="swiper-button-next product-carousel-arrow"
                                      t-attf-aria-label="Next #{aria_label} products"/>
                             </div>
-                            <div class="product-carousel-nav-group d-none" data-nav-for="best" hidden="hidden">
+                            <div class="product-carousel-nav-group d-none" t-att-data-nav-for="panel_best" hidden="hidden">
                                 <span class="product-carousel-fraction"
                                       data-carousel-fraction=""
                                       aria-live="polite">
@@ -94,9 +116,9 @@
                     </div>
 
                     <div class="product-carousel-panels"
-                         data-product-carousel-panel="new"
+                         t-att-data-product-carousel-panel="panel_new"
                          role="tabpanel">
-                        <div class="swiper product-carousel-swiper product-carousel-swiper--new">
+                        <div t-attf-class="swiper product-carousel-swiper product-carousel-swiper--#{panel_new}">
                             <div class="swiper-wrapper">
                                 <t t-set="products" t-value="new_products"/>
                                 <t t-call="theme_kingdom.category_dual_product_slides"/>
@@ -105,10 +127,10 @@
                     </div>
 
                     <div class="product-carousel-panels d-none"
-                         data-product-carousel-panel="best"
+                         t-att-data-product-carousel-panel="panel_best"
                          role="tabpanel"
                          hidden="hidden">
-                        <div class="swiper product-carousel-swiper product-carousel-swiper--best">
+                        <div t-attf-class="swiper product-carousel-swiper product-carousel-swiper--#{panel_best}">
                             <div class="swiper-wrapper">
                                 <t t-set="products" t-value="best_products"/>
                                 <t t-call="theme_kingdom.category_dual_product_slides"/>
@@ -121,20 +143,25 @@
     </template>
 
     <template id="s_category_dual_carousels" name="Kingdom Category Dual Carousels">
-        <section class="s_category_dual_carousels oe_website_sale category-dual-section"
+        <section class="s_category_dual_carousels oe_website_sale js_sale category-dual-section"
                  data-snippet="theme_kingdom.s_category_dual_carousels"
                  data-kingdom-live-snippet="s_category_dual_carousels"
                  data-name="Category Dual Carousels"
                  aria-labelledby="CategoryDualHeading">
             <h2 id="CategoryDualHeading" class="visually-hidden">Category product highlights</h2>
             <div class="k-container">
+                <t t-set="website" t-value="website or env['website'].get_current_website()"/>
+                <t t-set="_pl_sid" t-value="request.session.get('website_sale_current_pl')"/>
+                <t t-set="_pl_session"
+                   t-value="_pl_sid and request.env['product.pricelist'].sudo().browse(int(_pl_sid))"/>
                 <t t-set="current_pricelist"
-                   t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
+                   t-value="(_pl_session and _pl_session.exists() and _pl_session) or (website.get_pricelist_available(show_visible=False)[:1] if website else request.env['product.pricelist'])"/>
                 <t t-set="display_currency"
-                   t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
+                   t-value="(current_pricelist and current_pricelist.currency_id) or (website and website.currency_id) or request.env.company.currency_id"/>
                 <t t-set="dual_tabs"
-                   t-value="request.env['kingdom.product.tab'].sudo().search([('active', '=', True), ('show_in_homepage', '=', True)], order='sequence asc, id asc', limit=2) if 'kingdom.product.tab' in request.env else False"/>
+                   t-value="request.env['kingdom.product.tab'].sudo().get_website_dual_carousel_tabs(2) if 'kingdom.product.tab' in request.env else False"/>
 
+                <div class="k-live-body o_not_editable o_prevent_link_editor" contenteditable="false">
                 <t t-if="dual_tabs">
                     <div class="category-dual-grid">
                         <t t-foreach="dual_tabs" t-as="tab">
@@ -145,11 +172,14 @@
                 <t t-elif="editable">
                     <div class="css_non_editable_mode_hidden">
                         <div class="alert alert-info mb-0 o_not_editable">
-                            Enable <strong>Product tabs snippet</strong> on up to two Product Tabs
-                            (Website → Configuration → Product Tabs).
+                            No Dual Carousel columns yet. Open
+                            <strong>Website → Configuration → Dual Carousel</strong>
+                            and enable <em>Dual carousel snippet</em> on up to
+                            <strong>2</strong> tabs (set Category + Feature Banner).
                         </div>
                     </div>
                 </t>
+                </div>
             </div>
         </section>
     </template>

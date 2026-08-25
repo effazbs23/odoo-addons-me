@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Header/footer on login controlled by Coming Soon setting. -->
+    <template id="kingdom_login_layout" inherit_id="website.login_layout" name="Kingdom Login Layout">
+        <xpath expr="//t[@t-call='website.layout']" position="before">
+            <t t-set="website" t-value="website or env['website'].get_current_website()"/>
+            <t t-set="no_header" t-value="not website.kingdom_coming_soon_login_show_header_footer"/>
+            <t t-set="no_footer" t-value="not website.kingdom_coming_soon_login_show_header_footer"/>
+        </xpath>
+        <xpath expr="//div[hasclass('oe_website_login_container')]" position="attributes">
+            <attribute name="class" add="k-login-container container py-5" separator=" "/>
+        </xpath>
+    </template>
+
+    <!-- Form starts as d-none until OWL user_switch mounts; if JS fails the page looks empty.
+         Show the form by default — user_switch still toggles when multiple saved users exist. -->
+    <template id="kingdom_login_form_visible" inherit_id="web.login" name="Kingdom Login Form Visible">
+        <xpath expr="//form[contains(@t-attf-class, 'oe_login_form')]" position="attributes">
+            <attribute name="t-attf-class">oe_login_form</attribute>
+        </xpath>
+    </template>
+
+</odoo>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Configurable countdown for promotions, sales, or product launches. -->
+    <template id="s_countdown" name="Countdown Timer">
+        <!-- Do not use class s_countdown — that is Odoo's canvas countdown interaction. -->
+        <section class="s_kingdom_countdown pt48 pb48"
+                 data-snippet="theme_kingdom.s_countdown"
+                 data-name="Countdown Timer"
+                 aria-label="Countdown Timer">
+            <div class="container text-center">
+                <h3 class="k-cd-title o_default_snippet_text">Limited Time Offer</h3>
+                <p class="k-cd-subtitle o_default_snippet_text">
+                    Configurable countdown for promotions, sales, or product launches.
+                </p>
+                <!-- data-deal-end-ms: unix seconds (BuilderDateTimePicker). Change via snippet options. -->
+                <div class="k-countdown carousel-countdown k-cd--circle-outline"
+                     data-deal-end-ms="1798761599"
+                     aria-label="Countdown timer">
+                    <div class="k-cd-unit count">
+                        <span class="cd-num cd-days">00</span>
+                        <span class="cd-label">Days</span>
+                        <span class="cd-suffix" aria-hidden="true">d</span>
+                    </div>
+                    <span class="k-cd-sep" aria-hidden="true">:</span>
+                    <div class="k-cd-unit count">
+                        <span class="cd-num cd-hours">00</span>
+                        <span class="cd-label">Hours</span>
+                        <span class="cd-suffix" aria-hidden="true">h</span>
+                    </div>
+                    <span class="k-cd-sep" aria-hidden="true">:</span>
+                    <div class="k-cd-unit count">
+                        <span class="cd-num cd-mins">00</span>
+                        <span class="cd-label">Mins</span>
+                        <span class="cd-suffix" aria-hidden="true">m</span>
+                    </div>
+                    <span class="k-cd-sep" aria-hidden="true">:</span>
+                    <div class="k-cd-unit count">
+                        <span class="cd-num cd-secs">00</span>
+                        <span class="cd-label">Secs</span>
+                        <span class="cd-suffix" aria-hidden="true">s</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+</odoo>

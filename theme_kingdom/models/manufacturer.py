@@ -5,7 +5,7 @@ from odoo import api, fields, models
 class KingdomManufacturer(models.Model):
     _name = 'kingdom.manufacturer'
     _inherit = ['kingdom.website.cache.mixin']
-    _description = 'Kingdom Manufacturer / Brand'
+    _description = 'Kingdom Brand'
     _order = 'sequence, name, id'
 
     name = fields.Char(
@@ -18,21 +18,56 @@ class KingdomManufacturer(models.Model):
     show_on_homepage = fields.Boolean(
         string='Show on Homepage',
         default=True,
-        help='Include this brand in the homepage manufacturers carousel.',
+        help='Include this brand in the homepage brands carousel.',
     )
     image = fields.Image(
         string='Logo',
         max_width=512,
         max_height=256,
     )
-    website_url = fields.Char(
-        string='Website URL',
-        help='Destination when visitors click the brand on the homepage.',
+    product_ids = fields.One2many(
+        'product.template',
+        'kingdom_manufacturer_id',
+        string='Product Templates',
     )
+    product_count = fields.Integer(
+        string='Products',
+        compute='_compute_product_count',
+    )
+
+    @api.depends('product_ids')
+    def _compute_product_count(self):
+        grouped = self.env['product.template']._read_group(
+            [('kingdom_manufacturer_id', 'in', self.ids)],
+            ['kingdom_manufacturer_id'],
+            ['__count'],
+        )
+        counts = {manufacturer.id: count for manufacturer, count in grouped}
+        for manufacturer in self:
+            manufacturer.product_count = counts.get(manufacturer.id, 0)
+
+    def action_view_products(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Products',
+            'res_model': 'product.template',
+            'view_mode': 'kanban,list,form',
+            'domain': [('kingdom_manufacturer_id', '=', self.id)],
+            'context': {
+                'default_kingdom_manufacturer_id': self.id,
+                'default_sale_ok': True,
+            },
+        }
+
+    def get_shop_url(self):
+        """Shop URL filtered to products of this brand."""
+        self.ensure_one()
+        return f'/shop?manufacturer={self.id}'
 
     @api.model
     def get_website_manufacturer_slides(self, per_slide=2):
-        """Manufacturers grouped in pairs for the homepage carousel."""
+        """Brands grouped in pairs for the homepage carousel."""
         manufacturers = self.sudo().search(
             [('active', '=', True), ('show_on_homepage', '=', True)],
             order='sequence asc, id asc',

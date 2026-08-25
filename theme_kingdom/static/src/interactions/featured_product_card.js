@@ -19,6 +19,9 @@ export class FeaturedProductCard extends Interaction {
     }
 
     onCardClick(ev) {
+        if (ev.target.closest('.kingdom-product-actions, .kingdom-quickview-btn, .o_add_wishlist, .o_add_compare, .s_add_to_cart_btn')) {
+            return;
+        }
         const swatch = ev.target.closest('.featured-product-swatch[data-ptav-id]');
         if (!swatch) {
             return;

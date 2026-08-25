@@ -10,9 +10,11 @@
 
     <template id="kingdom_js_assets" inherit_id="website.layout" name="Kingdom JS Assets" priority="50">
         <xpath expr="//body" position="inside">
+            <!-- Keep Swiper sync (not defer): OWL interactions need window.Swiper for arrows. -->
             <script type="text/javascript" src="/theme_kingdom/static/src/js/swiper-bundle.min.js"/>
             <script type="text/javascript" src="/theme_kingdom/static/src/js/header-scroll.js"/>
             <script type="text/javascript" src="/theme_kingdom/static/src/js/main.js"/>
+            <script type="text/javascript" src="/theme_kingdom/static/src/js/kingdom_unified_switcher.js"/>
         </xpath>
     </template>
 </odoo>
