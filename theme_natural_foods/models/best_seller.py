@@ -3,8 +3,8 @@
 #
 #    brainStation
 #
-#    Copyright (C) 2026-TODAY brainStation(<https://brainstation-23.com/>)
-#    Author: brainStation(<https://brainstation-23.com/>)
+#    Copyright (C) 2026-TODAY brainStation(<https://erp-23.com/>)
+#    Author: brainStation(<https://erp-23.com/>)
 #
 #    You can modify it under the terms of the GNU LESSER
 #    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.

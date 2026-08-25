@@ -19,35 +19,40 @@
                 </div>
 
                 <!-- Recipes Row -->
-                <div class="row g-4">
-                    <t t-foreach="request.env['featured.recipes'].sudo().search([], limit=4)" t-as="recipe">
-                        <div class="col-md-6 col-lg-3">
-                            <div class="recipe-card shadow-hover border-0 h-100">
-                                <div class="recipe-image position-relative overflow-hidden product-image-container">
-                                    <!-- Use recipe image -->
-                                    <img t-att-src="'data:image/png;base64,%s' % recipe.image if recipe.image else '/natural_foods/static/src/img/placeholder.jpg'"
-                                         class="card-img-top"
-                                         style="height: 200px; object-fit: cover"/>
-                                    <div class="recipe-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center opacity-0">
-                                        <a t-att-href="'/blog/%s' % recipe.id" class="btn btn-light rounded-circle">
-                                            <i class="bi bi-play-fill text-organic-600 fs-4"/>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="card-body p-4">
-                                    <h5 class="card-title fw-bold text-dark mb-2">
-                                        <t t-esc="recipe.name"/>
-                                    </h5>
-                                    <p class="card-text text-muted small mb-3">
-                                        <t t-esc="recipe.subtitle or 'No description available.'"/>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </t>
+                <div class="row g-4" id="featured-recipes-row" data-nf-dynamic-container="featured_recipes">
+                    <t t-call="theme_natural_foods.featured_recipes_items"/>
                 </div>
 
             </div>
         </section>
+    </template>
+
+    <!-- Dynamic body: re-rendered server-side on every page load (see nf-dynamic-snippets.js) -->
+    <template id="featured_recipes_items" name="Featured Recipes Items">
+        <t t-foreach="request.env['featured.recipes'].sudo().search([], limit=4)" t-as="recipe">
+            <div class="col-md-6 col-lg-3">
+                <div class="recipe-card shadow-hover border-0 h-100">
+                    <div class="recipe-image position-relative overflow-hidden product-image-container">
+                        <!-- Use recipe image -->
+                        <img t-att-src="'data:image/png;base64,%s' % recipe.image if recipe.image else '/natural_foods/static/src/img/placeholder.jpg'"
+                             class="card-img-top"
+                             style="height: 200px; object-fit: cover"/>
+                        <div class="recipe-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center opacity-0">
+                            <a t-att-href="'/blog/%s' % recipe.id" class="btn btn-light rounded-circle">
+                                <i class="bi bi-play-fill text-organic-600 fs-4"/>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold text-dark mb-2">
+                            <t t-esc="recipe.name"/>
+                        </h5>
+                        <p class="card-text text-muted small mb-3">
+                            <t t-esc="recipe.subtitle or 'No description available.'"/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </t>
     </template>
 </odoo>
