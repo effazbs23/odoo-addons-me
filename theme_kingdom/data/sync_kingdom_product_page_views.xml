@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Enable buy now, ratings, wishlist, compare on websites using Theme Kingdom. -->
+    <function model="theme.utils" name="_sync_kingdom_product_page_views"/>
+</odoo>

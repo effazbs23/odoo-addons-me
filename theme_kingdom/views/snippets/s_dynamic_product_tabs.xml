@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- One product card in the dynamic tabs grid -->
+    <template id="dynamic_product_tabs_item" name="Dynamic Product Tabs Item">
+        <t t-set="can_add" t-value="product._is_add_to_cart_possible()"/>
+        <t t-set="contextual_price"
+           t-value="(current_pricelist and product.with_context(pricelist=current_pricelist.id)._get_contextual_price()) or product._get_contextual_price()"/>
+        <t t-set="compare_price" t-value="product.compare_list_price or 0"/>
+        <t t-set="show_sale" t-value="compare_price and compare_price > contextual_price"/>
+        <t t-set="variant_id" t-value="product._get_first_possible_variant_id()"/>
+        <article t-attf-class="k-dyn-tab-card #{'k-dyn-tab-card--soldout' if not can_add else ''}"
+                 t-att-data-product-template-id="product.id">
+            <div class="k-dyn-tab-card__media">
+                <a t-att-href="product.website_url" class="k-dyn-tab-card__image">
+                    <img t-att-src="'/web/image/product.template/%s/image_512' % product.id"
+                         t-att-alt="product.name"
+                         loading="lazy"
+                         width="280"
+                         height="280"/>
+                </a>
+                <t t-call="theme_kingdom.product_card_action_buttons">
+                    <t t-set="show_quickview" t-value="True"/>
+                </t>
+            </div>
+            <div class="k-dyn-tab-card__body">
+                <h3 class="k-dyn-tab-card__title">
+                    <a t-att-href="product.website_url" t-esc="product.name"/>
+                </h3>
+                <div class="k-dyn-tab-card__price">
+                    <t t-call="theme_kingdom.product_card_price">
+                        <t t-set="pricelist" t-value="current_pricelist"/>
+                        <t t-set="display_currency" t-value="display_currency"/>
+                    </t>
+                </div>
+            </div>
+        </article>
+    </template>
+
+    <!-- AJAX panel HTML for one tab -->
+    <template id="dynamic_product_tabs_panel" name="Dynamic Product Tabs Panel">
+        <t t-set="current_pricelist"
+           t-value="(request.session.get('website_sale_current_pl') and request.env['product.pricelist'].sudo().browse(int(request.session.get('website_sale_current_pl')))) or (website and website._get_and_cache_current_pricelist())"/>
+        <t t-set="display_currency"
+           t-value="(current_pricelist and current_pricelist.currency_id) or request.env.company.currency_id"/>
+        <t t-set="products" t-value="tab.get_products() if tab else request.env['product.template'].browse()"/>
+        <div class="k-dyn-tabs-panel-inner" t-att-data-tab-id="tab.id if tab else None">
+            <t t-if="products">
+                <div class="k-dyn-tabs-grid">
+                    <t t-foreach="products" t-as="product">
+                        <t t-call="theme_kingdom.dynamic_product_tabs_item"/>
+                    </t>
+                </div>
+            </t>
+            <t t-else="">
+                <p class="k-dyn-tabs-empty o_translate_inline">No products in this tab yet.</p>
+            </t>
+        </div>
+    </template>
+
+    <template id="s_dynamic_product_tabs" name="Kingdom Dynamic Product Tabs">
+        <t t-set="dyn_tabs"
+           t-value="'kingdom.product.tab' in request.env and request.env['kingdom.product.tab'].sudo().get_dynamic_tabs() or request.env['kingdom.product.tab'].browse()"/>
+        <t t-set="first_tab" t-value="dyn_tabs[:1]"/>
+        <section class="s_dynamic_product_tabs oe_website_sale js_sale k-dyn-tabs"
+                 data-snippet="theme_kingdom.s_dynamic_product_tabs"
+                 data-kingdom-live-snippet="s_dynamic_product_tabs"
+                 data-name="Dynamic Product Tabs"
+                 aria-labelledby="DynamicProductTabsHeading">
+            <div class="k-container">
+                <div class="k-dyn-tabs__head">
+                    <h2 id="DynamicProductTabsHeading" class="o_translate_inline"><strong>Shop by Tab</strong></h2>
+                </div>
+
+                <t t-if="dyn_tabs">
+                    <div class="k-dyn-tabs__nav" role="tablist" aria-label="Product tabs">
+                        <t t-foreach="dyn_tabs" t-as="tab">
+                            <button type="button"
+                                    t-attf-class="k-dyn-tabs__tab #{'is-active' if tab_index == 0 else ''}"
+                                    role="tab"
+                                    t-att-aria-selected="'true' if tab_index == 0 else 'false'"
+                                    t-att-data-tab-id="tab.id"
+                                    t-att-id="'kDynTab-%s' % tab.id"
+                                    t-att-aria-controls="'kDynPanel-%s' % tab.id"
+                                    t-esc="tab.name"/>
+                        </t>
+                    </div>
+                    <div class="k-dyn-tabs__panels">
+                        <div class="k-dyn-tabs__panel is-active"
+                             role="tabpanel"
+                             t-att-id="'kDynPanel-%s' % first_tab.id"
+                             t-att-aria-labelledby="'kDynTab-%s' % first_tab.id"
+                             t-att-data-tab-id="first_tab.id"
+                             data-loaded="1">
+                            <t t-set="tab" t-value="first_tab"/>
+                            <t t-call="theme_kingdom.dynamic_product_tabs_panel"/>
+                        </div>
+                    </div>
+                </t>
+                <t t-elif="editable">
+                    <div class="css_non_editable_mode_hidden">
+                        <div class="alert alert-info mb-0 o_not_editable">
+                            Configure tabs in <strong>Website → Configuration → Product Tabs</strong>
+                            and enable <em>Dynamic Product Tabs</em> on each tab you want here.
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </section>
+    </template>
+
+</odoo>

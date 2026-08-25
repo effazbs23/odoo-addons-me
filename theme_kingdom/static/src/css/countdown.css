@@ -1,0 +1,236 @@
+/* Kingdom Countdown snippet — 6 styles
+ * Scoped by data-snippet so both s_kingdom_countdown (new) and legacy
+ * s_countdown markup keep the same look.
+ */
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd-title {
+    margin: 0 0 0.35rem;
+    font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd-subtitle {
+    margin: 0 auto 1.75rem;
+    max-width: 36rem;
+    font-size: 0.95rem;
+    color: #6b7280;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-countdown {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem 1rem;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    min-width: 0;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .cd-num {
+    display: block;
+    line-height: 1;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .cd-label {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    color: #6b7280;
+    opacity: 1;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .cd-suffix,
+[data-snippet="theme_kingdom.s_countdown"] .k-cd-sep {
+    display: none;
+}
+
+/* 1 — Outlined circles */
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--circle-outline .k-cd-unit {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    border: 2px solid #c5c9d1;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--circle-outline .cd-num {
+    font-size: 1.35rem;
+    color: #2563eb;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--circle-outline .cd-label {
+    position: absolute;
+    margin-top: 5rem;
+    font-size: 0.72rem;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--circle-outline .k-cd-unit {
+    position: relative;
+    margin-bottom: 1.4rem;
+}
+
+/* 2 — Solid circles */
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--circle-solid .k-cd-unit {
+    position: relative;
+    width: 4.5rem;
+    height: 4.5rem;
+    margin-bottom: 1.4rem;
+    border-radius: 50%;
+    background: #374151;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--circle-solid .cd-num {
+    font-size: 1.35rem;
+    color: #fff;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--circle-solid .cd-label {
+    position: absolute;
+    margin-top: 5rem;
+    font-size: 0.72rem;
+}
+
+/* 3 — Minimal text with colons */
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--minimal {
+    gap: 0.35rem 0.5rem;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--minimal .k-cd-sep {
+    display: inline-block;
+    align-self: flex-start;
+    padding-top: 0.15rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #9ca3af;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--minimal .cd-num {
+    font-size: 1.75rem;
+    color: #111827;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--minimal .cd-label {
+    margin-top: 0.25rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9ca3af;
+}
+
+/* 4 — Compact inline 02d 15h … */
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--compact {
+    gap: 0.65rem;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--compact .k-cd-unit {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.05rem;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--compact .cd-num {
+    font-size: 1.35rem;
+    color: #111827;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--compact .cd-label {
+    display: none;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--compact .cd-suffix {
+    display: inline;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* 5 — Light cards */
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--card {
+    gap: 0.75rem;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--card .k-cd-unit {
+    min-width: 4.75rem;
+    padding: 0.85rem 0.75rem 0.7rem;
+    border: 1px solid #dbe3f0;
+    border-radius: 0.35rem;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--card .cd-num {
+    font-size: 1.65rem;
+    color: #2563eb;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--card .cd-label {
+    margin-top: 0.45rem;
+    font-size: 0.72rem;
+    color: #4b5563;
+}
+
+/* 6 — Dark cards */
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--card-dark {
+    gap: 0.75rem;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--card-dark .k-cd-unit {
+    min-width: 4.75rem;
+    padding: 0.85rem 0.75rem 0.7rem;
+    border-radius: 0.35rem;
+    background: #374151;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--card-dark .cd-num {
+    font-size: 1.65rem;
+    color: #fff;
+}
+
+[data-snippet="theme_kingdom.s_countdown"] .k-cd--card-dark .cd-label {
+    margin-top: 0.45rem;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+@media (max-width: 575.98px) {
+    [data-snippet="theme_kingdom.s_countdown"] .k-cd--circle-outline .k-cd-unit,
+    [data-snippet="theme_kingdom.s_countdown"] .k-cd--circle-solid .k-cd-unit {
+        width: 3.75rem;
+        height: 3.75rem;
+    }
+
+    [data-snippet="theme_kingdom.s_countdown"] .k-cd--circle-outline .cd-num,
+    [data-snippet="theme_kingdom.s_countdown"] .k-cd--circle-solid .cd-num {
+        font-size: 1.15rem;
+    }
+
+    [data-snippet="theme_kingdom.s_countdown"] .k-cd--circle-outline .cd-label,
+    [data-snippet="theme_kingdom.s_countdown"] .k-cd--circle-solid .cd-label {
+        margin-top: 4.25rem;
+    }
+
+    [data-snippet="theme_kingdom.s_countdown"] .k-cd--card .k-cd-unit,
+    [data-snippet="theme_kingdom.s_countdown"] .k-cd--card-dark .k-cd-unit {
+        min-width: 3.85rem;
+        padding: 0.65rem 0.45rem;
+    }
+
+    [data-snippet="theme_kingdom.s_countdown"] .k-cd--card .cd-num,
+    [data-snippet="theme_kingdom.s_countdown"] .k-cd--card-dark .cd-num {
+        font-size: 1.35rem;
+    }
+}

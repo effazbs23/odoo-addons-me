@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_promo_banners" name="Kingdom Promo Banners">
+        <section class="s_promo_banners promo-banner-blocks promo-banner-blocks--pre-featured"
+                 data-snippet="theme_kingdom.s_promo_banners"
+                 data-name="Promo Banners"
+                 aria-labelledby="PreFeaturedPromoHeading">
+            <h2 id="PreFeaturedPromoHeading" class="visually-hidden">Promotional offers</h2>
+            <div class="k-container">
+                <div class="promo-banner-blocks__grid">
+
+                    <a href="/shop"
+                       class="promo-banner-blocks__card promo-banner-blocks__card--light o_translate_inline"
+                       data-name="Left Promo Banner"
+                       aria-label="Washing Machine — Explore more.">
+                        <img src="/theme_kingdom/static/src/images/banner/left.webp"
+                             alt="Washing Machine — Explore more."
+                             width="1320"
+                             height="423"
+                             loading="lazy"
+                             class="img img-fluid w-100 promo-banner-blocks__img"
+                             data-name="Promo Banner Image"/>
+                    </a>
+
+                    <a href="/shop"
+                       class="promo-banner-blocks__card promo-banner-blocks__card--dark o_translate_inline"
+                       data-name="Right Promo Banner"
+                       aria-label="Air Conditioner — up to 25% off. Shop now.">
+                        <img src="/theme_kingdom/static/src/images/banner/right.webp"
+                             alt="Air Conditioner — up to 25% off. Shop now."
+                             width="1320"
+                             height="423"
+                             loading="lazy"
+                             class="img img-fluid w-100 promo-banner-blocks__img"
+                             data-name="Promo Banner Image"/>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

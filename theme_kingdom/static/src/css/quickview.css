@@ -1,0 +1,362 @@
+/* Kingdom product Quick View modal + product card action icons */
+
+.kingdom-quickview-open {
+    overflow: hidden;
+}
+
+.kingdom-quickview-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1060;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.kingdom-quickview-modal[hidden] {
+    display: none !important;
+}
+
+.kingdom-quickview-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(34, 34, 34, 0.55);
+}
+
+.kingdom-quickview-modal__dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 920px;
+    max-height: 90vh;
+    overflow: auto;
+    background: var(--white, #fff);
+    border-radius: 4px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.kingdom-quickview-modal__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 2;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: none;
+    border-radius: 50%;
+    background: var(--primary-color, #28b1e0);
+    color: #fff;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.kingdom-quickview-modal__close:hover {
+    background: var(--secondary-color, #ea3957);
+}
+
+.kingdom-quickview-modal__body {
+    padding: 1.25rem;
+}
+
+.kingdom-quickview-modal__loading {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: var(--black-faded, #444);
+}
+
+.kingdom-quickview__grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .kingdom-quickview__grid {
+        grid-template-columns: 1fr 1.1fr;
+        align-items: start;
+    }
+}
+
+.kingdom-quickview__gallery {
+    background: #f7f7f8;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.kingdom-quickview__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    object-fit: contain;
+}
+
+.kingdom-quickview__title {
+    margin: 0 0 0.75rem;
+    color: var(--primary-color, #28b1e0);
+    font-size: 1.25rem;
+    font-weight: 500;
+    padding-right: 2rem;
+}
+
+.kingdom-quickview__price {
+    margin-bottom: 1rem;
+}
+
+.kingdom-quickview__price .product_price {
+    justify-content: flex-start !important;
+}
+
+.kingdom-quickview__description {
+    margin-bottom: 1rem;
+    color: var(--black-faded, #444);
+    font-size: 0.95rem;
+    max-height: 8rem;
+    overflow: auto;
+}
+
+.kingdom-quickview__variants {
+    margin-bottom: 1rem;
+}
+
+.kingdom-quickview__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.kingdom-quickview__qty {
+    width: auto;
+    max-width: 8.5rem;
+}
+
+.kingdom-quickview__qty .quantity {
+    min-width: 3rem;
+}
+
+.kingdom-quickview__add-to-cart {
+    min-width: 9rem;
+}
+
+/* ---- Product card icon toolbar (Quick View / Wishlist / Compare) ---- */
+
+.kingdom-product-actions {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.featured-product-card,
+.product-item.deal-slide-card,
+.product-carousel-cell,
+.product-carousel-cell__media,
+.deal-slide-card .picture,
+.kingdom-related-card {
+    position: relative;
+}
+
+.kingdom-product-actions .button-2.quick-view-button,
+.kingdom-product-actions .button-2.add-to-wishlist-button,
+.kingdom-product-actions .button-2.add-to-compare-list-button,
+.kingdom-product-actions .button-2.product-box-add-to-cart-button,
+.o_wsale_product_action_row .button-2.quick-view-button {
+    font-size: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--primary-color, #d4af37);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    position: relative;
+    vertical-align: middle;
+}
+
+/* Keep cart icon same gold as compare / wishlist / quick view */
+.kingdom-product-actions .button-2.product-box-add-to-cart-button {
+    background-color: var(--primary-color, #d4af37);
+}
+
+.kingdom-product-actions .button-2.quick-view-button:hover,
+.kingdom-product-actions .button-2.add-to-wishlist-button:hover,
+.kingdom-product-actions .button-2.add-to-compare-list-button:hover,
+.kingdom-product-actions .button-2.product-box-add-to-cart-button:hover,
+.o_wsale_product_action_row .button-2.quick-view-button:hover {
+    background-color: var(--black, #333);
+}
+
+.kingdom-product-actions .button-2.o_in_wishlist,
+.kingdom-product-actions .button-2.o_add_wishlist:disabled,
+.kingdom-product-actions .button-2.o_add_wishlist.disabled {
+    background-color: var(--secondary-color, #ea3957) !important;
+    color: #fff !important;
+    opacity: 1;
+    cursor: default;
+}
+
+.kingdom-product-actions .button-2.o_in_wishlist::before,
+.kingdom-product-actions .button-2.o_add_wishlist:disabled::before,
+.kingdom-product-actions .button-2.o_add_wishlist.disabled::before {
+    color: #fff !important;
+}
+
+.kingdom-product-actions .button-2::before,
+.o_wsale_product_action_row .button-2.quick-view-button::before {
+    font-family: "icomoon" !important;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1;
+    font-size: 16px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: inherit;
+}
+
+.kingdom-product-actions .button-2.product-box-add-to-cart-button::before {
+    content: "\e94f";
+}
+
+.kingdom-product-actions .button-2.quick-view-button::before,
+.o_wsale_product_action_row .button-2.quick-view-button::before {
+    content: "\e94d";
+}
+
+.kingdom-product-actions .button-2.add-to-wishlist-button::before {
+    content: "\e963";
+}
+
+.kingdom-product-actions .button-2.add-to-compare-list-button::before {
+    content: "\e912";
+}
+
+/* Compact carousel / product-tab cells — overlay bottom of the thumbnail */
+.product-carousel-cell__media {
+    z-index: 2;
+}
+
+.product-carousel-cell__text {
+    position: relative;
+    z-index: 1;
+}
+
+.product-carousel-cell__media .kingdom-product-actions {
+    top: auto;
+    left: 50%;
+    right: auto;
+    bottom: 0.15rem;
+    flex-direction: row;
+    gap: 0.2rem;
+    transform: translateX(-50%);
+    opacity: 1;
+    z-index: 3;
+    pointer-events: auto;
+}
+
+.product-carousel-cell__media .kingdom-product-actions .button-2 {
+    width: 24px;
+    height: 24px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+    pointer-events: auto;
+}
+
+.product-carousel-cell__media .kingdom-product-actions .button-2::before {
+    font-size: 12px;
+}
+
+.product-carousel-cell__media .kingdom-product-actions .button-2.product-box-add-to-cart-button {
+    background-color: var(--secondary-color, #ea3957);
+    color: #fff;
+}
+
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-compare-list-button {
+    background-color: var(--primary-color, #28b1e0);
+    color: #fff;
+}
+
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button {
+    background-color: #fff;
+    color: var(--primary-color, #28b1e0);
+}
+
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button::before {
+    color: var(--primary-color, #28b1e0);
+}
+
+/* Active / already in wishlist — must beat the white carousel button styles */
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button.o_in_wishlist,
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button:disabled,
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button.disabled,
+.product-carousel-cell__media .kingdom-product-actions .button-2.o_add_wishlist.o_in_wishlist {
+    background-color: var(--secondary-color, #ea3957) !important;
+    color: #fff !important;
+}
+
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button.o_in_wishlist::before,
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button:disabled::before,
+.product-carousel-cell__media .kingdom-product-actions .button-2.add-to-wishlist-button.disabled::before {
+    color: #fff !important;
+}
+
+.product-carousel-cell__media .kingdom-product-actions .button-2.quick-view-button {
+    background-color: #fff;
+    color: var(--primary-color, #28b1e0);
+}
+
+.product-carousel-cell__media .kingdom-product-actions .button-2.quick-view-button::before {
+    color: var(--primary-color, #28b1e0);
+}
+
+.product-carousel-cell {
+    overflow: visible;
+}
+
+.product-carousel-cell__media {
+    overflow: visible;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .featured-product-card .kingdom-product-actions,
+    .deal-slide-card .kingdom-product-actions {
+        opacity: 0;
+        transform: translateX(6px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .featured-product-card:hover .kingdom-product-actions,
+    .deal-slide-card:hover .kingdom-product-actions {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .product-carousel-cell .kingdom-product-actions {
+        opacity: 0;
+        transform: translateX(-50%) translateY(4px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .product-carousel-cell:hover .kingdom-product-actions {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Shop tile quick view sits with other action buttons */
+.o_wsale_product_action_row .kingdom-quickview-btn {
+    margin-inline-start: 0.35rem;
+}

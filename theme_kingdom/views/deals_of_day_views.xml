@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_kingdom_deals_of_day_list" model="ir.ui.view">
+        <field name="name">kingdom.deals.of.day.list</field>
+        <field name="model">kingdom.deals.of.day</field>
+        <field name="arch" type="xml">
+            <list string="Deals of the Day" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="pricelist_id" optional="hide"/>
+                <field name="promotion_id" optional="show"/>
+                <field name="product_source"/>
+                <field name="item_count" optional="show"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="duration_days"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'scheduled'"
+                       decoration-success="state == 'running'"
+                       decoration-muted="state == 'expired'"/>
+                <field name="product_limit" optional="hide"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_kingdom_deals_of_day_form" model="ir.ui.view">
+        <field name="name">kingdom.deals.of.day.form</field>
+        <field name="model">kingdom.deals.of.day</field>
+        <field name="arch" type="xml">
+            <form string="Deal of the Day">
+                <header>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="scheduled,running,expired"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_promotion"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-gift"
+                                invisible="not promotion_id">
+                            <span class="o_stat_text">Edit Promotion</span>
+                        </button>
+                        <button name="action_bulk_add_pricelist_products"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-plus-square"
+                                invisible="not pricelist_id">
+                            <span class="o_stat_text">Add Products</span>
+                        </button>
+                        <button name="action_open_pricelist"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-tags"
+                                invisible="not pricelist_id">
+                            <span class="o_stat_text">Edit Offer Pricelist</span>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Expired" bg_color="text-bg-danger"
+                            invisible="state != 'expired'"/>
+                    <widget name="web_ribbon" title="Scheduled" bg_color="text-bg-info"
+                            invisible="state != 'scheduled'"/>
+                    <group>
+                        <group string="Offer">
+                            <field name="name"/>
+                            <field name="active"/>
+                            <field name="sequence"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="duration_days" readonly="1"/>
+                            <p colspan="2" class="text-muted mb-0">
+                                The homepage deal block is shown automatically when
+                                <em>Offer Start</em> is reached and hidden after
+                                <em>Offer End</em> (scheduled action runs every minute).
+                            </p>
+                        </group>
+                        <group string="Offer engine">
+                            <field name="promotion_id"/>
+                            <field name="pricelist_id"
+                                   required="product_source in ('pricelist', 'selected')"
+                                   context="{'default_company_id': allowed_company_ids[0]}"/>
+                            <field name="product_source" widget="radio"/>
+                            <field name="product_limit"/>
+                            <field name="item_count" invisible="1"/>
+                            <p colspan="2" class="text-muted mb-0">
+                                Link an Odoo <strong>Promotion</strong> (Website → eCommerce → Promotions)
+                                or a <strong>Pricelist</strong> (Sales → Products → Pricelists).
+                                For homepage products, use a promotion with
+                                <em>Specific Products</em>, or link a pricelist with product rules.
+                                Order-wide codes (e.g. 10% on entire order) fall back to the pricelist.
+                            </p>
+                        </group>
+                        <group string="Sidebar">
+                            <field name="banner_image" widget="image" class="oe_avatar"/>
+                            <field name="show_sidebar_sale"/>
+                            <field name="sale_percent"/>
+                            <field name="sale_subtitle"/>
+                        </group>
+                    </group>
+                    <group string="Selected products"
+                           invisible="product_source != 'selected'">
+                        <field name="allowed_product_tmpl_ids" invisible="1"/>
+                        <field name="product_tmpl_ids"
+                               nolabel="1"
+                               colspan="2"
+                               widget="many2many_tags"
+                               options="{'no_create': True}"/>
+                        <p colspan="2" class="text-muted mb-0">
+                            Type to search and add multiple products.
+                            Only products on the linked pricelist or promotion are listed.
+                            Leave empty when using <em>All products on pricelist</em>
+                            or <em>Products from promotion</em>.
+                        </p>
+                    </group>
+                    <group string="Offer runs on these weekdays">
+                        <p colspan="2" class="text-muted">
+                            Uncheck a day to hide this deal on that weekday (within the start/end dates).
+                            Leave all checked to run every day.
+                        </p>
+                        <field name="weekday_mon"/>
+                        <field name="weekday_tue"/>
+                        <field name="weekday_wed"/>
+                        <field name="weekday_thu"/>
+                        <field name="weekday_fri"/>
+                        <field name="weekday_sat"/>
+                        <field name="weekday_sun"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_kingdom_deals_of_day" model="ir.actions.act_window">
+        <field name="name">Deals of the Day</field>
+        <field name="res_model">kingdom.deals.of.day</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a deal-of-the-day offer for your homepage.
+            </p>
+            <p>
+                <strong>Option A — Promotion:</strong> Website → eCommerce → Promotions → create a program
+                with discounted products, then link it here.<br/>
+                <strong>Option B — Pricelist:</strong> Sales → Products → Pricelists → use
+                <em>Add Multiple Products</em>, then link the pricelist here.<br/>
+                <strong>Option C:</strong> Pick specific products from the linked offer.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_kingdom_deals_of_day"
+              name="Deals of the Day"
+              parent="website.menu_website_global_configuration"
+              action="action_kingdom_deals_of_day"
+              sequence="51"/>
+
+</odoo>

@@ -21,7 +21,8 @@
         ],
     },
     "license": "LGPL-3",
-    "support": "erp23@brainstation-23.com",
+    'support': 'erp23@brainstation-23.com',
     "auto_install": False,
     "installable": True,
+    'company': 'ERP23',
 }

@@ -1,0 +1,260 @@
+/**
+ * Featured Categories — isolated from .category-grid / kingdom.css conflicts
+ * Desktop: .k-cat-desktop (4×2 cards) | Mobile: .k-cat-mobile (Swiper circles)
+ */
+
+.k-featured-categories {
+  background: #fff;
+  font-family: "Lato", system-ui, sans-serif;
+  padding: 2.75rem 0 3rem;
+}
+
+.home-page .k-featured-categories {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.k-featured-categories .k-featured-categories__heading {
+  display: block !important;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.k-featured-categories .k-featured-categories__heading strong {
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-weight: 700;
+  color: #222;
+  line-height: 1.25;
+}
+
+/* —— Desktop grid —— */
+.k-cat-desktop {
+  display: none;
+}
+
+.k-cat-mobile {
+  display: block;
+}
+
+.k-cat-mobile .home-category-swiper.swiper {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* —— Mobile strip (kingdom _category-box mobile) —— */
+@media (max-width: 991.98px) {
+  .k-cat-mobile .swiper-slide .item-box .category-item {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .k-cat-mobile .category-item {
+    position: relative !important;
+    background: none !important;
+    background-image: none !important;
+    padding: 0 7.5px 12px !important;
+    margin: 0 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+
+  .k-cat-mobile .category-item .title {
+    margin: 8px 0 0 !important;
+    width: 100%;
+  }
+
+  .k-cat-mobile .category-item .title a {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #333 !important;
+    text-decoration: none !important;
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .k-cat-mobile .category-item .title a::after,
+  .k-cat-mobile .category-item .title::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  .k-cat-mobile .category-item .picture {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    border: 1px solid #c6ccd0 !important;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .k-cat-mobile .category-item .picture::before {
+    content: "" !important;
+    display: block !important;
+    padding-top: 100% !important;
+  }
+
+  .k-cat-mobile .category-item .picture a {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    height: 58% !important;
+    display: block !important;
+  }
+
+  .k-cat-mobile .category-item .picture a img {
+    height: 100% !important;
+    width: auto !important;
+    max-width: none !important;
+    object-fit: contain;
+  }
+
+  .k-cat-mobile .category-grid .item-box {
+    padding: 0 !important;
+  }
+}
+
+/* —— Desktop 4×2 (reference: odd gold, even purple) —— */
+@media (min-width: 992px) {
+  .k-featured-categories {
+    padding: 3.25rem 0 3.75rem;
+  }
+
+  .k-featured-categories .k-featured-categories__heading {
+    margin-bottom: 2.5rem;
+  }
+
+  .k-featured-categories .k-featured-categories__heading strong {
+    font-size: 24px;
+    line-height: 29px;
+  }
+
+  .k-cat-desktop {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .k-cat-mobile {
+    display: none !important;
+  }
+
+  .k-cat-desktop__cell {
+    padding: 40px 0;
+    overflow: visible;
+  }
+
+  .k-cat-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 130px;
+    padding: 15px 12px 15px 58%;
+    border-radius: 10px;
+    overflow: visible;
+    text-decoration: none;
+    color: #fff;
+    background-color: #7359bb;
+    background-image: url("/theme_kingdom/static/src/images/category-pattern.png");
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-size: cover;
+  }
+
+  .k-cat-desktop__cell:nth-child(odd) .k-cat-card {
+    background-color: #e6b534;
+    background-image: url("/theme_kingdom/static/src/images/category-pattern.png");
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-size: cover;
+  }
+
+  .k-cat-desktop__cell:nth-child(even) .k-cat-card {
+    background-color: #7359bb;
+    background-image: url("/theme_kingdom/static/src/images/category-pattern.png");
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-size: cover;
+  }
+
+  .k-cat-card__media {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    width: calc(55% - 15px);
+    max-width: calc(55% - 15px);
+    z-index: 2;
+    display: block;
+    line-height: 0;
+  }
+
+  .k-cat-card__media img {
+    display: block;
+    max-width: 100%;
+    max-height: 140px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    margin: 0 auto;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+  }
+
+  .k-cat-card:hover .k-cat-card__media img {
+    transform: scale(1.05);
+  }
+
+  .k-cat-card__body {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+  }
+
+  .k-cat-card__name {
+    display: inline;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #fff;
+  }
+
+  .k-cat-card__body::after {
+    content: "";
+    display: block;
+    border-bottom: 2px solid #fff;
+    width: 50px;
+    margin: 10px auto 0;
+  }
+
+  .k-cat-card::after {
+    content: "\e94a";
+    font-family: "icomoon" !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    opacity: 0.65;
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    font-size: 14px;
+    color: #444;
+    font-weight: 700;
+    z-index: 3;
+  }
+}

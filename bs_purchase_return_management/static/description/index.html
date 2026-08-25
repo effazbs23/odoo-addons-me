@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purchase Return Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#F7F9FC;color:#001844;line-height:1.6;">
+
+  <div style="max-width:1200px;margin:0 auto;padding:40px 20px 80px;">
+
+    <!-- support-header -->
+    <div style="margin:30px 0;padding:40px;border:1px solid #DCE1E8;border-radius:16px;background:#ffffff;">
+      <div class="row g-4 align-items-center">
+        <div class="col-12 col-md-3 text-center">
+          <img src="./assets/logo.png" style="height:60px;width:auto;object-fit:contain;" alt="Purchase Return Management module logo">
+        </div>
+        <div class="col-12 col-md-9">
+          <div class="row g-4">
+            <div class="col-12 col-sm-6">
+              <h6 style="margin:0 0 12px;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Supports</h6>
+              <div class="d-flex gap-2 flex-wrap">
+                <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle" style="color:#2ECC71;"></i> Enterprise</span>
+                <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle" style="color:#2ECC71;"></i> Community</span>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6">
+              <h6 style="margin:0 0 12px;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Availability</h6>
+              <div class="d-flex gap-2 flex-wrap">
+                <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle" style="color:#2ECC71;"></i> Odoo.sh</span>
+                <span style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle" style="color:#2ECC71;"></i> Premise</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- banner -->
+    <div style="margin-top:3rem;margin-bottom:3rem;">
+      <img src="./assets/banner.png" class="img-fluid" alt="Purchase Return Management main screenshot" style="border-radius:10px;width:100%;">
+    </div>
+
+    <!-- hero-section -->
+    <section style="background:linear-gradient(135deg,#EAF6FC 0%,#F0F4FF 100%);border:1px solid #DCE1E8;border-radius:16px;padding:60px 48px;margin-bottom:20px;">
+      <span style="display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#EAF6FC;color:#00668E;padding:8px 14px;margin:0 8px 12px 0;">Odoo Module</span>
+      <span style="display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#EAF6FC;color:#00668E;padding:8px 14px;margin:0 8px 12px 0;">Inventory / Purchase</span>
+      <h1 style="font-size:48px;font-weight:700;color:#001844;margin:16px 0 12px;line-height:1.2;">Purchase Return Management</h1>
+      <p style="margin:0;color:#797F8B;font-size:18px;max-width:800px;line-height:1.7;">Manage vendor (purchase) returns end to end — from a return request anchored on a purchase order, through the return-to-vendor shipment, to the matching vendor credit note — with lot/serial precision, location-aware stock checks, and a controlled approval workflow.</p>
+    </section>
+
+    <!-- core-features-section -->
+    <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;">
+      <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Core Features</h2>
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-4">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;background:#ffffff;height:100%;">
+            <span class="d-inline-flex align-items-center justify-content-center bg-light" style="display:inline-flex;width:50px;height:50px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:24px;margin-bottom:16px;">
+              <i class="fa fa-tasks"></i>
+            </span>
+            <h5 style="font-size:18px;color:#001844;margin:12px 0 10px;font-weight:700;">Controlled Approval Workflow</h5>
+            <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Five-stage workflow (Draft → Submitted → Approved → Processing → Done) with manager-only approval and full chatter audit on every request.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;background:#ffffff;height:100%;">
+            <span class="d-inline-flex align-items-center justify-content-center bg-light" style="display:inline-flex;width:50px;height:50px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:24px;margin-bottom:16px;">
+              <i class="fa fa-list-alt"></i>
+            </span>
+            <h5 style="font-size:18px;color:#001844;margin:12px 0 10px;font-weight:700;">Automatic Return-Line Generation</h5>
+            <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Return lines are generated straight from purchase order lines — lot/serial aware and capped by real on-hand stock at the chosen source location.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;background:#ffffff;height:100%;">
+            <span class="d-inline-flex align-items-center justify-content-center bg-light" style="display:inline-flex;width:50px;height:50px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:24px;margin-bottom:16px;">
+              <i class="fa fa-map-marker-alt"></i>
+            </span>
+            <h5 style="font-size:18px;color:#001844;margin:12px 0 10px;font-weight:700;">Location-Aware Returns</h5>
+            <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Ship from wherever the goods actually are — main stock, QC or rejection area — with quantities re-capped automatically when the source changes.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;background:#ffffff;height:100%;">
+            <span class="d-inline-flex align-items-center justify-content-center bg-light" style="display:inline-flex;width:50px;height:50px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:24px;margin-bottom:16px;">
+              <i class="fa fa-truck"></i>
+            </span>
+            <h5 style="font-size:18px;color:#001844;margin:12px 0 10px;font-weight:700;">Return-to-Vendor Shipment</h5>
+            <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">A return delivery picking chained to the original receipt moves for full traceability, correct valuation, and automatic PO quantity adjustment.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;background:#ffffff;height:100%;">
+            <span class="d-inline-flex align-items-center justify-content-center bg-light" style="display:inline-flex;width:50px;height:50px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:24px;margin-bottom:16px;">
+              <i class="fa fa-file-invoice-dollar"></i>
+            </span>
+            <h5 style="font-size:18px;color:#001844;margin:12px 0 10px;font-weight:700;">Vendor Credit Note Engine</h5>
+            <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Automatic partial vendor credit notes that absorb unbilled capacity into future billing and refund only what has already been billed.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;background:#ffffff;height:100%;">
+            <span class="d-inline-flex align-items-center justify-content-center bg-light" style="display:inline-flex;width:50px;height:50px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:24px;margin-bottom:16px;">
+              <i class="fa fa-chart-bar"></i>
+            </span>
+            <h5 style="font-size:18px;color:#001844;margin:12px 0 10px;font-weight:700;">Reporting &amp; Analysis</h5>
+            <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">SQL-backed purchase return analysis with graph, pivot, and list views, plus printable QWeb PDF return request documents.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- module-highlights-section -->
+    <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;">
+      <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Module Highlights</h2>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;background:#F7F9FC;padding:32px;height:100%;">
+            <h4 style="color:#001844;font-size:22px;font-weight:700;margin-bottom:12px;">Manager-Only Approval</h4>
+            <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.7;">Approving a request is restricted to the Return Manager group, so the requester and the approver are always different people — enforcing clear segregation of duties.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;background:#F7F9FC;padding:32px;height:100%;">
+            <h4 style="color:#001844;font-size:22px;font-weight:700;margin-bottom:12px;">Lot / Serial Precision</h4>
+            <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.7;">One return line per lot actually received, serial-tracked products constrained to 0 or 1, and every claim validated against real on-hand stock at the source location.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;background:#F7F9FC;padding:32px;height:100%;">
+            <h4 style="color:#001844;font-size:22px;font-weight:700;margin-bottom:12px;">Concurrency-Safe Refunds</h4>
+            <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.7;">Open requests on the same PO line or lot are netted out so two requests can never over-claim the same goods, and existing refunds are never double-issued.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;background:#F7F9FC;padding:32px;height:100%;">
+            <h4 style="color:#001844;font-size:22px;font-weight:700;margin-bottom:12px;">Security &amp; Multi-Company Isolation</h4>
+            <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.7;">Dedicated Return User and Return Manager groups with record rules for personal vs. managerial access, plus complete multi-company isolation on requests and analytics.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- dependencies-section -->
+    <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;margin-bottom:15px;">
+      <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Dependencies</h2>
+      <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #DCE1E8;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;background:#EAF6FC;font-weight:600;">stock</span>
+      <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #DCE1E8;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;background:#EAF6FC;font-weight:600;">account</span>
+      <span style="display:inline-flex;align-items:center;gap:8px;border:1px solid #DCE1E8;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;background:#EAF6FC;font-weight:600;">purchase</span>
+    </section>
+
+    <!-- screenshots-section -->
+    <section style="margin-top:28px;margin-bottom:40px;">
+      <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Screenshots</h2>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">1. Navigate to Inventory Module</h5>
+        </div>
+        <img src="./assets/navigate-inventory.png" alt="Navigate to Inventory" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Access the Inventory application from the main Odoo app dashboard to prepare tracked products.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">2. Select Products Menu</h5>
+        </div>
+        <img src="./assets/products-menu.png" alt="Select Products Menu" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Click on the Products menu in the navigation top bar to manage catalog items.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">3. Create New Product</h5>
+        </div>
+        <img src="./assets/create-product.png" alt="Create New Product" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Click on the New button to open the product creation form.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">4. Configure Product &amp; Inventory Tracking</h5>
+        </div>
+        <img src="./assets/product-tracking-config.png" alt="Configure Product" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Enter product name, set cost price, and enable inventory tracking to control stock at lot or serial level.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">5. Configure Security Access Rights</h5>
+        </div>
+        <img src="./assets/security-access-rights.png" alt="Configure User Rights" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">In Settings &gt; Users &amp; Companies, assign privileges to the Return User or Return Manager roles.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">6. Access Purchase Module</h5>
+        </div>
+        <img src="./assets/purchase-module.png" alt="Access Purchase Module" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Open the Purchase application to initiate vendor purchase orders.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">7. Manage Vendor Contacts</h5>
+        </div>
+        <img src="./assets/vendor-contacts.png" alt="Manage Vendors" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Navigate to Purchase &gt; Orders &gt; Vendors and click New to add or select a supplier.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">8. Create &amp; Confirm Purchase Order</h5>
+        </div>
+        <img src="./assets/confirm-purchase-order.png" alt="Confirm Purchase Order" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Create a Purchase Order with products and quantities, then click Confirm Order.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">9. Receive Goods on Purchase Order</h5>
+        </div>
+        <img src="./assets/receive-goods.png" alt="Receive Purchase Order" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Click Receive Products to record incoming inventory for the purchase order.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">10. Validate Incoming Receipt</h5>
+        </div>
+        <img src="./assets/validate-receipt.png" alt="Validate Receipt" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Validate the receipt operation to record received stock quantities into the warehouse location.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">11. Open Return Application</h5>
+        </div>
+        <img src="./assets/open-return-app.png" alt="Open Return App" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Click on the Return app icon from the main menu launcher to begin managing vendor returns.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">12. Purchase Return Requests Dashboard</h5>
+        </div>
+        <img src="./assets/return-dashboard.png" alt="Return Dashboard" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">View all existing return requests or click New to create a new return authorization.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">13. Select Vendor &amp; Purchase Order</h5>
+        </div>
+        <img src="./assets/select-vendor-po.png" alt="Select Vendor and PO" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Select the vendor and purchase order to automatically generate location-aware return lines.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">14. Optional Bill &amp; Receipt Linkage</h5>
+        </div>
+        <img src="./assets/bill-receipt-linkage.png" alt="Link Bill or Receipt" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Optionally select specific reference vendor bills or receipts for precise refund calculation.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">15. Specify Return Quantities &amp; Submit</h5>
+        </div>
+        <img src="./assets/return-quantities.png" alt="Submit Return Request" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Enter the requested return quantities — capped automatically by stock on hand — and click Submit.</p>
+        </div>
+      </div>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+        <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">16. Approval Process &amp; Execution Tracking</h5>
+        </div>
+        <img src="./assets/approval-tracking.png" alt="Approval and Execution" style="display:block;width:100%;height:auto;object-fit:contain;">
+        <div style="padding:16px 20px;font-size:14px;color:#797F8B;">
+          <p style="margin:0;">Track full approval progression with chatter updates and access linked stock pickings via smart buttons.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- exclusive-feature-spotlight-1 -->
+    <section style="background:#F7F9FC;border:1px solid #DCE1E8;border-radius:16px;padding:60px 48px;margin-bottom:40px;">
+      <div class="row d-flex align-items-center">
+        <div class="col col-12 col-md-12 col-lg-6">
+          <h4 style="margin:0;font-size:40px;line-height:1.25;color:#001844;font-weight:700;">Lot &amp; Location-Aware Return Lines</h4>
+          <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:600px;">Return lines are generated automatically from the purchase order — one per lot actually received — and capped by real on-hand stock at the chosen source location, so users can only claim goods that are genuinely available to return.</p>
+          <ul style="margin-top:1rem;color:#797F8B;">
+            <li>Returnable quantity capped by on-hand stock per lot at the source location</li>
+            <li>Serial-tracked products constrained to a return quantity of 0 or 1 per line</li>
+            <li>Live visibility of ordered, received, billed, on-hand, and returnable quantities</li>
+            <li>Changing the source location automatically re-generates and re-caps every line</li>
+          </ul>
+        </div>
+        <div class="col col-12 col-md-12 col-lg-6">
+          <img class="img-fluid" src="./assets/select-vendor-po.png" alt="Vendor and purchase order selection" style="width:100%;border-radius:16px;object-fit:cover;">
+        </div>
+      </div>
+    </section>
+
+    <!-- exclusive-feature-spotlight-2 -->
+    <section style="background:#F7F9FC;border:1px solid #DCE1E8;border-radius:16px;padding:60px 48px;margin-bottom:40px;">
+      <div class="row d-flex align-items-center">
+        <div class="col col-12 col-md-12 col-lg-6">
+          <img class="img-fluid" src="./assets/approval-tracking.png" alt="Return shipment and approval tracking" style="width:100%;border-radius:16px;object-fit:cover;">
+        </div>
+        <div class="col col-12 col-md-12 col-lg-6">
+          <h4 style="margin:0;font-size:40px;line-height:1.25;color:#001844;font-weight:700;">Return-to-Vendor Shipment with Full Traceability</h4>
+          <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:600px;">A single return-to-vendor delivery picking moves goods from the source location back to the vendor's supplier location — chained to the original receipt moves so every return is fully traceable and correctly valued.</p>
+          <ul style="margin-top:1rem;color:#797F8B;">
+            <li>Uses the configured return operation type, falling back to an outgoing type</li>
+            <li>Return moves chained to original receipt moves (newest first) for accurate valuation</li>
+            <li>PO received quantity adjusts automatically when the picking is validated</li>
+            <li>Request auto-completes to Done once the whole shipping chain is done</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- exclusive-feature-spotlight-3 -->
+    <section style="background:#F7F9FC;border:1px solid #DCE1E8;border-radius:16px;padding:60px 48px;margin-bottom:40px;">
+      <div class="row d-flex align-items-center">
+        <div class="col col-12 col-md-12 col-lg-6">
+          <h4 style="margin:0;font-size:40px;line-height:1.25;color:#001844;font-weight:700;">Vendor Credit Note &amp; Refund Engine</h4>
+          <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:600px;">The module drafts vendor credit notes automatically — absorbing unbilled capacity into future billing and refunding only the amount that eats into already-billed totals, with a clear per-line breakdown in the chatter.</p>
+          <ul style="margin-top:1rem;color:#797F8B;">
+            <li>Optional reference vendor bill and receipt linkage for precise refunds</li>
+            <li>Refund targets the selected or newest covering bill, accounting for existing refunds</li>
+            <li>Concurrency-safe across multiple open requests on the same PO line or lot</li>
+            <li>Warns when fewer units are shipped back than were requested</li>
+          </ul>
+        </div>
+        <div class="col col-12 col-md-12 col-lg-6">
+          <img class="img-fluid" src="./assets/bill-receipt-linkage.png" alt="Vendor bill and receipt linkage" style="width:100%;border-radius:16px;object-fit:cover;">
+        </div>
+      </div>
+    </section>
+
+    <!-- our-services-section -->
+    <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;">
+      <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Our Services</h2>
+      <div class="row g-3">
+        <div class="col-md-3 col-sm-6">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;">
+              <img src="./assets/gear.svg" alt="Odoo Customization" width="48" height="48" style="display:block;">
+            </span>
+            <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Customization</h6>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;">
+              <img src="./assets/wrench-icon.svg" alt="Odoo Implementation" width="48" height="48" style="display:block;">
+            </span>
+            <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Implementation</h6>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;">
+              <img src="./assets/life-ring-icon.svg" alt="Odoo Support" width="48" height="48" style="display:block;">
+            </span>
+            <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Support</h6>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;">
+              <img src="./assets/arrows-repeat.svg" alt="Odoo Migration" width="48" height="48" style="display:block;">
+            </span>
+            <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Migration</h6>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;">
+              <img src="./assets/puzzle-piece-icon.svg" alt="Odoo Integration" width="48" height="48" style="display:block;">
+            </span>
+            <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Integration</h6>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;">
+              <img src="./assets/odoo-consultancy.svg" alt="Odoo Consultancy" width="48" height="48" style="display:block;">
+            </span>
+            <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Consultancy</h6>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;">
+              <img src="./assets/odoo-licencing.svg" alt="Odoo Licensing" width="48" height="48" style="display:block;">
+            </span>
+            <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Licensing</h6>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;background:#ffffff;padding:32px 24px;text-align:center;height:100%;">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;margin-bottom:16px;">
+              <img src="./assets/hire-odoo.svg" alt="Hire Odoo Developer" width="48" height="48" style="display:block;">
+            </span>
+            <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Hire Odoo Developer</h6>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- why-choose-erp23-section -->
+    <section class="bg-light" style="background:#ECF0F1;border-radius:16px;padding:40px;margin-top:28px;">
+      <h2 style="font-size:32px;color:#001844;margin:0 0 24px;font-weight:700;text-align:center;">Why Choose ERP23</h2>
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <div class="bg-white shadow-sm overflow-hidden" style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+            <div class="bg-light d-flex align-items-center justify-content-center" style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+              <img src="./assets/silver-partner.webp" alt="Odoo Silver Partner" style="max-height:72px;width:auto;">
+            </div>
+            <div style="padding:24px 24px 28px;text-align:center;">
+              <h5 style="margin:0 0 10px;line-height:1.2;">
+                <span style="display:block;font-size:32px;font-weight:800;color:#00A0DB;">Silver</span>
+                <span style="font-size:16px;font-weight:600;color:#001844;">Odoo Partner</span>
+              </h5>
+              <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Official Odoo Silver Partner with certified expertise</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="bg-white shadow-sm overflow-hidden" style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+            <div class="bg-light d-flex align-items-center justify-content-center" style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+              <img src="./assets/countries-served.webp" alt="Countries served" style="max-height:72px;width:auto;">
+            </div>
+            <div style="padding:24px 24px 28px;text-align:center;">
+              <h5 style="margin:0 0 10px;line-height:1.2;">
+                <span style="display:block;font-size:32px;font-weight:800;color:#00A0DB;">30+</span>
+                <span style="font-size:16px;font-weight:600;color:#001844;">Countries Served</span>
+              </h5>
+              <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Global reach with clients across 25+ countries</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="bg-white shadow-sm overflow-hidden" style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+            <div class="bg-light d-flex align-items-center justify-content-center" style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+              <img src="./assets/projects-completed.webp" alt="Projects completed" style="max-height:72px;width:auto;">
+            </div>
+            <div style="padding:24px 24px 28px;text-align:center;">
+              <h5 style="margin:0 0 10px;line-height:1.2;">
+                <span style="display:block;font-size:32px;font-weight:800;color:#00A0DB;">200+</span>
+                <span style="font-size:16px;font-weight:600;color:#001844;">Projects Completed</span>
+              </h5>
+              <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Proven Odoo delivery across diverse business requirements</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="bg-white shadow-sm overflow-hidden" style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+            <div class="bg-light d-flex align-items-center justify-content-center" style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+              <img src="./assets/industries-served.webp" alt="Industries served" style="max-height:72px;width:auto;">
+            </div>
+            <div style="padding:24px 24px 28px;text-align:center;">
+              <h5 style="margin:0 0 10px;line-height:1.2;">
+                <span style="display:block;font-size:32px;font-weight:800;color:#00A0DB;">15+</span>
+                <span style="font-size:16px;font-weight:600;color:#001844;">Industries Served</span>
+              </h5>
+              <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Specialized Odoo expertise across retail, manufacturing, and services</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="bg-white shadow-sm overflow-hidden" style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+            <div class="bg-light d-flex align-items-center justify-content-center" style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+              <img src="./assets/certifications.webp" alt="Certifications" style="max-height:72px;width:auto;">
+            </div>
+            <div style="padding:24px 24px 28px;text-align:center;">
+              <h5 style="margin:0 0 10px;line-height:1.2;">
+                <span style="display:block;font-size:32px;font-weight:800;color:#00A0DB;">7+</span>
+                <span style="font-size:16px;font-weight:600;color:#001844;">Certifications</span>
+              </h5>
+              <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Team certified in 7+ specialized Odoo domains</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="bg-white shadow-sm overflow-hidden" style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+            <div class="bg-light d-flex align-items-center justify-content-center" style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+              <img src="./assets/years-experience.webp" alt="Years of experience" style="max-height:72px;width:auto;">
+            </div>
+            <div style="padding:24px 24px 28px;text-align:center;">
+              <h5 style="margin:0 0 10px;line-height:1.2;">
+                <span style="display:block;font-size:32px;font-weight:800;color:#00A0DB;">10+</span>
+                <span style="font-size:16px;font-weight:600;color:#001844;">Years Experience</span>
+              </h5>
+              <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Nearly a decade of specialized Odoo expertise</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- support-company-section -->
+    <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;text-align:center;">
+      <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Support &amp; Company</h2>
+      <img src="./assets/erp23.png" alt="ERP23 logo" style="max-height:48px;width:auto;margin-bottom:16px;">
+      <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.6;">Developed and maintained by ERP23.</p>
+      <p style="margin:8px 0 0;">Website: <a href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer" style="color:#00A0DB;text-decoration:none;font-weight:600;">https://www.erp-23.com/</a></p>
+      <p style="margin:0;">Email: <a href="mailto:erp23@brainstation-23.com" style="color:#00A0DB;text-decoration:none;font-weight:600;">erp23@brainstation-23.com</a></p>
+    </section>
+
+    <p style="margin-top:20px;text-align:center;color:#797F8B;font-size:14px;">Purchase Return Management — Manage vendor returns against purchase orders with credit notes.</p>
+  </div>
+</body>
+</html>

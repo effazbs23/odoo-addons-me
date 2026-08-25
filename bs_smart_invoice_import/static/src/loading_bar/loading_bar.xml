@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="bs_smart_invoice_import.LoadingBar">
+        <div class="o_quick_paste_loading_bar mt-2 mb-1" t-if="state.active" role="status">
+            <div class="progress" style="height: 6px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" style="width: 100%"/>
+            </div>
+            <small class="text-muted">Working on it, this can take a few seconds…</small>
+        </div>
+    </t>
+
+</templates>

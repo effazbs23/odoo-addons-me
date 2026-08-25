@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_bestsale_products" name="Kingdom Best Sale Products">
+        <section class="s_bestsale_products oe_website_sale js_sale featured-products-section bestsale-products-section"
+                 data-snippet="theme_kingdom.s_bestsale_products"
+                 data-kingdom-live-snippet="s_bestsale_products"
+                 data-name="Best Sale"
+                 aria-labelledby="BestsaleProductsHeading">
+            <div class="k-container">
+                <t t-set="bestsale_record"
+                   t-value="request.env['bestsale.products'].sudo().search([], limit=1) if 'bestsale.products' in request.env else False"/>
+                <t t-set="bestsale_picked"
+                   t-value="bestsale_record and request.env['product.template'].sudo().search([('id', 'in', bestsale_record.product_tmpl_ids.ids), ('sale_ok', '=', True), ('is_published', '=', True)], limit=12)"/>
+                <t t-set="bestsale_products"
+                   t-value="bestsale_picked if bestsale_picked else request.env['product.template'].sudo().search([('sale_ok', '=', True), ('is_published', '=', True)], order='website_sequence desc, id desc', limit=12)"/>
+                <t t-set="section_title"
+                   t-value="bestsale_record[:1].name if bestsale_record else 'Best Sale'"/>
+                <t t-set="website" t-value="website or env['website'].get_current_website()"/>
+                <t t-set="_pl_sid" t-value="request.session.get('website_sale_current_pl')"/>
+                <t t-set="_pl_session"
+                   t-value="_pl_sid and request.env['product.pricelist'].sudo().browse(int(_pl_sid))"/>
+                <t t-set="current_pricelist"
+                   t-value="(_pl_session and _pl_session.exists() and _pl_session) or (website.get_pricelist_available(show_visible=False)[:1] if website else request.env['product.pricelist'])"/>
+                <t t-set="display_currency"
+                   t-value="(current_pricelist and current_pricelist.currency_id) or (website and website.currency_id) or request.env.company.currency_id"/>
+
+                <div class="featured-products-head">
+                    <h2 id="BestsaleProductsHeading" class="o_translate_inline" t-esc="section_title"/>
+                    <div class="featured-products-nav">
+                        <div class="swiper-button-prev" aria-label="Previous best sale products"/>
+                        <div class="swiper-button-next" aria-label="Next best sale products"/>
+                    </div>
+                </div>
+
+                <div class="k-live-body o_not_editable o_prevent_link_editor" contenteditable="false">
+                <div class="swiper bestsale-swiper featured-products-swiper">
+                    <div class="swiper-wrapper">
+                        <t t-if="bestsale_products">
+                            <t t-foreach="bestsale_products" t-as="product">
+                                <t t-set="can_add"
+                                   t-value="product._is_add_to_cart_possible()"/>
+                                <t t-set="contextual_price"
+                                   t-value="(current_pricelist and product.with_context(pricelist=current_pricelist.id)._get_contextual_price()) or product._get_contextual_price()"/>
+                                <t t-set="compare_price"
+                                   t-value="product.compare_list_price or 0"/>
+                                <t t-set="show_sale_badge"
+                                   t-value="compare_price and compare_price > contextual_price"/>
+                                <t t-set="rating_rounded"
+                                   t-value="min(5, max(0, int(round(product.sudo().rating_avg or 0))))"/>
+                                <t t-set="variant_id"
+                                   t-value="product._get_first_possible_variant_id()"/>
+                                <t t-set="single_variant"
+                                   t-value="product.product_variant_count == 1"/>
+                                <div class="swiper-slide">
+                                    <article t-attf-class="featured-product-card #{'featured-product-card--soldout' if not can_add else ''}"
+                                             t-att-data-product-template-id="product.id"
+                                             t-att-data-product-type="product.type">
+                                        <t t-call="theme_kingdom.product_card_ribbons"/>
+                                        <a t-att-href="product.website_url"
+                                           class="featured-product-picture"
+                                           contenteditable="false">
+                                            <img t-att-src="'/web/image/product.template/%s/image_512' % product.id"
+                                                 t-att-alt="product.name"
+                                                 loading="lazy"/>
+                                        </a>
+                                        <t t-call="theme_kingdom.product_card_action_buttons"/>
+                                        <div class="featured-product-body">
+                                            <h3>
+                                                <a t-att-href="product.website_url"
+                                                   contenteditable="false"
+                                                   t-esc="product.name"/>
+                                            </h3>
+                                            <div class="featured-product-stars"
+                                                 t-att-aria-label="'%s out of 5 stars' % rating_rounded">
+                                                <t t-out="'★' * rating_rounded + '☆' * (5 - rating_rounded)"/>
+                                            </div>
+                                            <t t-set="previewed_data"
+                                               t-value="product._get_previewed_attribute_values().get(product.id)"/>
+                                            <t t-if="previewed_data">
+                                                <div class="featured-product-swatches" role="group" t-att-aria-label="'%s variants' % product.name">
+                                                    <t t-foreach="previewed_data['ptavs_data'][:4]" t-as="previewed_ptav">
+                                                        <t t-set="ptav" t-value="previewed_ptav['ptav']"/>
+                                                        <t t-set="matching_variant"
+                                                           t-value="min(ptav.ptav_product_variant_ids, key=lambda p: p.id) if ptav.ptav_product_variant_ids else False"/>
+                                                        <t t-if="matching_variant">
+                                                            <button type="button"
+                                                                    t-attf-class="featured-product-swatch #{'is-light' if ptav.is_custom else ''} #{'is-active' if previewed_ptav_index == 0 else ''}"
+                                                                    t-att-title="ptav.name"
+                                                                    t-att-aria-label="ptav.name"
+                                                                    t-att-aria-pressed="'true' if previewed_ptav_index == 0 else 'false'"
+                                                                    t-att-data-ptav-id="ptav.id"
+                                                                    t-att-data-variant-id="matching_variant.id"
+                                                                    t-att-data-variant-image="previewed_ptav['variant_image_url']"
+                                                                    t-att-data-variant-url="previewed_ptav['variant_url']"
+                                                                    t-att-style="'background: %s' % (ptav.html_color or ptav.name) if ptav.display_type == 'color' and not ptav.is_custom else ('background: url(%s); background-size: cover;' % previewed_ptav['variant_image_url'] if previewed_ptav['variant_image_url'] else '')"/>
+                                                        </t>
+                                                    </t>
+                                                </div>
+                                            </t>
+                                            <t t-else="">
+                                                <t t-set="color_lines"
+                                                   t-value="product.valid_product_template_attribute_line_ids.filtered(lambda l: l.attribute_id.display_type == 'color')"/>
+                                                <t t-if="color_lines">
+                                                    <div class="featured-product-swatches" role="group" t-att-aria-label="'%s color options' % product.name">
+                                                        <t t-foreach="color_lines[0].product_template_value_ids._only_active()[:4]" t-as="ptav">
+                                                            <t t-set="matching_variant"
+                                                               t-value="min(ptav.ptav_product_variant_ids, key=lambda p: p.id) if ptav.ptav_product_variant_ids else False"/>
+                                                            <t t-if="matching_variant">
+                                                                <button type="button"
+                                                                        t-attf-class="featured-product-swatch #{'is-light' if ptav.is_custom else ''} #{'is-active' if ptav_index == 0 else ''}"
+                                                                        t-att-title="ptav.name"
+                                                                        t-att-aria-label="ptav.name"
+                                                                        t-att-aria-pressed="'true' if ptav_index == 0 else 'false'"
+                                                                        t-att-data-ptav-id="ptav.id"
+                                                                        t-att-data-variant-id="matching_variant.id"
+                                                                        t-att-data-variant-image="'/web/image/product.product/%s/image_512' % matching_variant.id"
+                                                                        t-att-data-variant-url="matching_variant.website_url"
+                                                                        t-att-style="'background: %s' % (ptav.html_color or ptav.name)"/>
+                                                            </t>
+                                                        </t>
+                                                    </div>
+                                                </t>
+                                            </t>
+                                            <t t-if="not can_add">
+                                                <p class="featured-product-stock o_translate_inline">Out of stock</p>
+                                            </t>
+                                            <t t-else="">
+                                                <div class="featured-product-price">
+                                                    <t t-call="theme_kingdom.product_card_price">
+                                                        <t t-set="pricelist" t-value="current_pricelist"/>
+                                                        <t t-set="display_currency" t-value="display_currency"/>
+                                                    </t>
+                                                </div>
+                                            </t>
+                                        </div>
+                                        <div class="featured-product-actions">
+                                            <div class="featured-product-qty" role="group" aria-label="Quantity">
+                                                <input type="number"
+                                                       class="featured-qty-input"
+                                                       value="1"
+                                                       min="1"
+                                                       max="99"
+                                                       readonly="readonly"
+                                                       tabindex="-1"
+                                                       t-att-disabled="'disabled' if not can_add else None"/>
+                                                <div>
+                                                    <button type="button"
+                                                            aria-label="Increase quantity"
+                                                            t-att-disabled="'disabled' if not can_add else None">+</button>
+                                                    <button type="button"
+                                                            aria-label="Decrease quantity"
+                                                            t-att-disabled="'disabled' if not can_add else None">−</button>
+                                                </div>
+                                            </div>
+                                            <t t-if="can_add">
+                                                <button type="button"
+                                                        class="featured-buy-btn s_add_to_cart_btn"
+                                                        data-action="add_to_cart"
+                                                        data-show-quantity="false"
+                                                        t-att-data-product-template-id="product.id"
+                                                        t-att-data-product-variant-id="variant_id if single_variant else None"
+                                                        t-att-data-product-type="product.type">
+                                                    Buy Now
+                                                </button>
+                                            </t>
+                                            <t t-else="">
+                                                <button type="button"
+                                                        class="featured-buy-btn"
+                                                        disabled="disabled">
+                                                    Buy Now
+                                                </button>
+                                            </t>
+                                        </div>
+                                    </article>
+                                </div>
+                            </t>
+                        </t>
+                        <t t-elif="editable">
+                            <div class="swiper-slide css_non_editable_mode_hidden">
+                                <article class="featured-product-card">
+                                    <a href="/shop" class="featured-product-picture">
+                                        <img src="/theme_kingdom/static/src/images/categories/cat-5.jpg"
+                                             alt="Sample product"
+                                             loading="lazy"/>
+                                    </a>
+                                    <div class="featured-product-body">
+                                        <h3><a href="/shop">Configure best sale products in Website settings</a></h3>
+                                        <div class="featured-product-stars" aria-label="0 out of 5 stars">☆☆☆☆☆</div>
+                                        <div class="featured-product-price">—</div>
+                                    </div>
+                                    <div class="featured-product-actions">
+                                        <div class="featured-product-qty" role="group" aria-label="Quantity">
+                                            <input type="number" value="1" min="1" readonly="readonly" tabindex="-1"/>
+                                            <div>
+                                                <button type="button" aria-label="Increase quantity">+</button>
+                                                <button type="button" aria-label="Decrease quantity">−</button>
+                                            </div>
+                                        </div>
+                                        <a href="/shop" class="featured-buy-btn text-decoration-none text-center d-flex align-items-center justify-content-center">
+                                            Shop
+                                        </a>
+                                    </div>
+                                </article>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>

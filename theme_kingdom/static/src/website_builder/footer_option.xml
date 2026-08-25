@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="website.FooterTemplateOption" t-inherit-mode="extension">
+        <BuilderSelect position="inside">
+            <BuilderSelectItem
+                title.translate="Kingdom"
+                actionParam="{
+                    view: 'theme_kingdom.template_footer_kingdom',
+                    vars: { 'footer-template': 'kingdom' }
+                }"
+            >
+                <Img
+                    attrs="{ style: 'width: 100%;' }"
+                    src="'/theme_kingdom/static/src/img/snippets_options/footer_template_kingdom.svg'"
+                />
+            </BuilderSelectItem>
+        </BuilderSelect>
+    </t>
+
+</templates>

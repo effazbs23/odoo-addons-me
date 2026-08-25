@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Theme tab → Header: template gallery (includes Kingdom + core templates) -->
+    <t t-name="theme_kingdom.ThemeHeaderTemplateOption">
+        <BuilderRow label.translate="Template">
+            <BuilderSelect action="'reloadComposite'">
+                <BuilderSelectItem
+                    id="'theme_header_default_opt'"
+                    title.translate="Default"
+                    actionParam="[
+                        {
+                            action: 'websiteConfig',
+                            actionParam: {
+                                views: ['website.template_header_default'],
+                                vars: { 'header-template': 'default' },
+                                checkVars: false,
+                            }
+                        }
+                    ]">
+                    <Img attrs="{ style: 'width: calc(100% - 0.5rem);' }"
+                         src="'/website/static/src/img/snippets_options/header_template_default.svg'"/>
+                </BuilderSelectItem>
+                <BuilderSelectItem
+                    id="'theme_header_kingdom_opt'"
+                    title.translate="Kingdom"
+                    actionParam="[
+                        {
+                            action: 'websiteConfig',
+                            actionParam: {
+                                views: ['theme_kingdom.template_header_kingdom'],
+                                vars: { 'header-template': 'kingdom' },
+                                checkVars: false,
+                            }
+                        }
+                    ]">
+                    <Img attrs="{ style: 'width: calc(100% - 0.5rem);' }"
+                         src="'/theme_kingdom/static/src/img/snippets_options/header_template_kingdom.svg'"/>
+                </BuilderSelectItem>
+                <BuilderSelectItem
+                    id="'theme_header_hamburger_opt'"
+                    title.translate="Hamburger Menu"
+                    actionParam="[
+                        {
+                            action: 'websiteConfig',
+                            actionParam: {
+                                views: ['website.template_header_hamburger', 'website.no_autohide_menu'],
+                                vars: { 'header-template': 'hamburger' },
+                                checkVars: false,
+                            }
+                        }
+                    ]">
+                    <Img attrs="{ style: 'width: calc(100% - 0.5rem);' }"
+                         src="'/website/static/src/img/snippets_options/header_template_hamburger.svg'"/>
+                </BuilderSelectItem>
+                <BuilderSelectItem
+                    id="'theme_header_sidebar_opt'"
+                    title.translate="Sidebar"
+                    actionParam="[
+                        {
+                            action: 'websiteConfig',
+                            actionParam: {
+                                views: ['website.template_header_sidebar', 'website.no_autohide_menu'],
+                                vars: { 'header-template': 'sidebar' },
+                                checkVars: false,
+                            }
+                        }
+                    ]">
+                    <Img attrs="{ style: 'width: calc(100% - 0.5rem);' }"
+                         src="'/website/static/src/img/snippets_options/header_template_sidebar.svg'"/>
+                </BuilderSelectItem>
+            </BuilderSelect>
+        </BuilderRow>
+    </t>
+
+    <!-- Theme tab → Footer: same gallery as Style → Footer → Template -->
+    <t t-name="theme_kingdom.ThemeFooterTemplateOption">
+        <BuilderRow label.translate="Template">
+            <BuilderSelect action="'websiteConfigFooter'">
+                <t t-foreach="footerTemplates" t-as="template" t-key="template.key">
+                    <t t-component="template.Component" t-props="template.props"/>
+                </t>
+            </BuilderSelect>
+        </BuilderRow>
+    </t>
+
+    <!-- Style → Header → Template: insert Kingdom right after Default (always visible). -->
+    <t t-inherit="website.HeaderTemplateOption" t-inherit-mode="extension">
+        <xpath expr="//BuilderSelectItem[@id=&quot;'header_default_opt'&quot;]" position="after">
+            <BuilderSelectItem
+                id="'header_kingdom_opt'"
+                title.translate="Kingdom"
+                actionParam="[
+                    {
+                        action: 'websiteConfig',
+                        actionParam: {
+                            views: ['theme_kingdom.template_header_kingdom'],
+                            vars: { 'header-template': 'kingdom' },
+                            checkVars: false,
+                        }
+                    }
+                ]">
+                <Img
+                    attrs="{ style: 'width: calc(100% - 0.5rem);' }"
+                    src="'/theme_kingdom/static/src/img/snippets_options/header_template_kingdom.svg'"
+                />
+            </BuilderSelectItem>
+        </xpath>
+    </t>
+
+</templates>

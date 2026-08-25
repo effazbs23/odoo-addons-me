@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_dashboard_allowlist_list" model="ir.ui.view">
+        <field name="name">ai.dashboard.allowlist.list</field>
+        <field name="model">ai.dashboard.allowlist</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="model_name"/>
+                <field name="date_field_id"/>
+                <field name="default_measure_field_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ai_dashboard_allowlist_search" model="ir.ui.view">
+        <field name="name">ai.dashboard.allowlist.search</field>
+        <field name="model">ai.dashboard.allowlist</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="model_name"/>
+                <filter name="filter_active" string="Enabled"
+                        domain="[('active', '=', True)]"/>
+                <filter name="filter_draft" string="Needs Review (Auto-Discovered)"
+                        domain="[('active', '=', False)]"/>
+                <filter name="filter_pending_fields" string="Has New Fields Pending Review"
+                        domain="[('discovered_field_ids', '!=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Manual trigger for vocabulary auto-discovery — same logic the
+         daily cron and the post-module-install hook run, exposed here for
+         "I just installed a module, show me now" instead of waiting. -->
+    <record id="action_ai_dashboard_discover_new_models" model="ir.actions.server">
+        <field name="name">Discover New Vocabulary</field>
+        <field name="model_id" ref="model_ai_dashboard_allowlist"/>
+        <field name="binding_model_id" ref="model_ai_dashboard_allowlist"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = model._discover_new_models_action()</field>
+    </record>
+
+    <!-- Same, but for fields added to a model this dashboard already
+         knows about (e.g. a module extending sale.order after this entry
+         was set up) — see ai_dashboard_allowlist.py's _discover_new_fields. -->
+    <record id="action_ai_dashboard_discover_new_fields" model="ir.actions.server">
+        <field name="name">Discover New Fields on Existing Models</field>
+        <field name="model_id" ref="model_ai_dashboard_allowlist"/>
+        <field name="binding_model_id" ref="model_ai_dashboard_allowlist"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = model._discover_new_fields_action()</field>
+    </record>
+
+    <record id="view_ai_dashboard_allowlist_form" model="ir.ui.view">
+        <field name="name">ai.dashboard.allowlist.form</field>
+        <field name="model">ai.dashboard.allowlist</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="model_id"/>
+                        <field name="active"/>
+                    </group>
+                    <group string="Queryable fields">
+                        <field name="field_ids" widget="many2many_tags"/>
+                        <field name="measure_field_ids" widget="many2many_tags"/>
+                        <field name="default_measure_field_id"/>
+                        <field name="default_aggregation"/>
+                        <field name="date_field_id"/>
+                    </group>
+                    <group string="Newly Discovered Fields (Pending Review)"
+                           invisible="not discovered_field_ids">
+                        <field name="discovered_field_ids" widget="many2many_tags" readonly="1" nolabel="1" colspan="2"/>
+                        <button name="action_promote_discovered_fields" type="object"
+                                string="Promote to Allow-List" class="btn-primary"
+                                help="Move these fields into Groupable/Filterable or Measurable above, and activate their draft synonym phrases, so prompts can actually use them."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ai_dashboard_allowlist" model="ir.actions.act_window">
+        <field name="name">Allowed Models</field>
+        <field name="res_model">ai.dashboard.allowlist</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_ai_dashboard_allowlist_search"/>
+        <field name="help">Add a model here to make it queryable from the Smart KPI Dashboard.
+            Nothing is queryable unless it's listed here first. Rows under
+            "Needs Review (Auto-Discovered)" were scaffolded automatically
+            when a module was installed — review and enable them, or use
+            Actions ▸ Discover New Vocabulary to scan for more right now.</field>
+    </record>
+</odoo>

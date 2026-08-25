@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Shared price row: sale price, struck-through base, optional % off -->
+    <template id="product_card_price" name="Kingdom Product Card Price">
+        <!-- Builder / render_public_asset has no request.website; use env instead. -->
+        <t t-set="website" t-value="website or env['website'].get_current_website()"/>
+        <t t-set="display_currency"
+           t-value="display_currency or (website and website.currency_id) or request.env.company.currency_id"/>
+        <t t-set="price_info"
+           t-value="price_info or product.kingdom_get_price_display(website=website, pricelist=pricelist if pricelist else None)"/>
+        <div class="kingdom-product-price" aria-label="Price information">
+            <span class="kingdom-product-price__current">
+                <t t-out="price_info['price']"
+                   t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
+            </span>
+            <t t-if="price_info['has_discount']">
+                <span class="kingdom-product-price__base">
+                    <t t-out="price_info['base_price']"
+                       t-options="{'widget': 'monetary', 'display_currency': display_currency}"/>
+                </span>
+                <span t-if="price_info['discount_percent']" class="kingdom-product-price__discount">
+                    (<t t-esc="price_info['discount_percent']"/>% Off)
+                </span>
+            </t>
+        </div>
+    </template>
+
+    <!-- Product page: style core price widget + discount badge -->
+    <template id="kingdom_product_price" inherit_id="website_sale.product_price" name="Kingdom Product Price">
+        <xpath expr="//div[@name='product_price_container']" position="attributes">
+            <attribute name="class" add="kingdom-product-price kingdom-product-price--detail" separator=" "/>
+        </xpath>
+        <xpath expr="//span[hasclass('oe_price')]" position="attributes">
+            <attribute name="class" add="kingdom-product-price__current" separator=" "/>
+        </xpath>
+        <xpath expr="//span[@name='product_list_price']" position="attributes">
+            <attribute name="class" add="kingdom-product-price__base" separator=" "/>
+        </xpath>
+        <xpath expr="//del[hasclass('oe_compare_list_price')]" position="attributes">
+            <attribute name="class" add="kingdom-product-price__base" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@name='product_price_container']" position="inside">
+            <t t-set="kingdom_price_info" t-value="product.kingdom_price_display_from_info(combination_info)"/>
+            <span t-if="kingdom_price_info['discount_percent']"
+                  class="kingdom-product-price__discount">
+                (<t t-esc="kingdom_price_info['discount_percent']"/>% Off)
+            </span>
+        </xpath>
+    </template>
+
+    <!-- Shop grid tiles -->
+    <template id="kingdom_shop_product_price"
+              inherit_id="website_sale.products_item"
+              name="Kingdom Shop Product Price">
+        <xpath expr="//div[hasclass('product_price')]" position="attributes">
+            <attribute name="class" add="kingdom-product-price kingdom-product-price--shop" separator=" "/>
+        </xpath>
+        <xpath expr="//div[hasclass('product_price')]//span[hasclass('fw-bold')]" position="attributes">
+            <attribute name="class" add="kingdom-product-price__current" separator=" "/>
+        </xpath>
+        <xpath expr="//div[hasclass('product_price')]//del" position="attributes">
+            <attribute name="class" add="kingdom-product-price__base" separator=" "/>
+        </xpath>
+        <xpath expr="//div[hasclass('product_price')]" position="inside">
+            <span t-if="'base_price' in template_price_vals and template_price_vals['base_price'] > template_price_vals['price_reduce']"
+                  class="kingdom-product-price__discount">
+                (<t t-esc="int(round((1 - template_price_vals['price_reduce'] / template_price_vals['base_price']) * 100))"/>% Off)
+            </span>
+        </xpath>
+    </template>
+
+</odoo>

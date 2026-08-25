@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_quick_paste_wizard,quick.paste.wizard,model_quick_paste_wizard,base.group_user,1,1,1,1
+access_quick_paste_wizard_line,quick.paste.wizard.line,model_quick_paste_wizard_line,base.group_user,1,1,1,1
+access_quick_paste_llm_prompt_wizard,quick.paste.llm.prompt.wizard,model_quick_paste_llm_prompt_wizard,base.group_system,1,1,1,1

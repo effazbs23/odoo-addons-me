@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report Actions -->
+    <record id="action_report_petty_cash_settlement" model="ir.actions.report">
+        <field name="name">Settlement Report</field>
+        <field name="model">petty.cash.settlement</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">petty_cash.report_petty_cash_settlement_document</field>
+        <field name="report_file">petty_cash.report_petty_cash_settlement_document</field>
+        <field name="binding_model_id" ref="model_petty_cash_settlement"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Settlement Report Template -->
+    <template id="report_petty_cash_settlement_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>Petty Cash Settlement Report</h2>
+                            <h4>
+                                <span t-field="o.name"/>
+                            </h4>
+                        </div>
+
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <strong>Date:</strong>
+                                <span t-field="o.date"/>
+                                <br/>
+                                <strong>Employee:</strong>
+                                <span t-field="o.employee_id.name"/>
+                                <br/>
+                                <strong>Department:</strong>
+                                <span t-field="o.employee_id.department_id.name"/>
+                                <br/>
+                                <strong>Status:</strong>
+                                <span t-field="o.state" class="badge badge-info"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Advance Ref:</strong>
+                                <span t-field="o.advance_id.name"/>
+                                <br/>
+
+                                <strong>Advance Amount:</strong>
+                                <span t-field="o.advance_amount"
+                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                <br/>
+                                <strong>Company:</strong>
+                                <span t-field="o.company_id.name"/>
+                            </div>
+                        </div>
+
+                        <h4 class="mt32 mb16">Expense Details</h4>
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr class="bg-primary">
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Expense Account</th>
+                                    <th class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.advance_line_ids" t-as="line">
+                                    <td>
+                                        <span t-field="o.date"/>
+                                    </td>
+                                    <td>
+<!--                                        <span t-field=""/>-->
+                                    </td>
+                                    <td>
+                                        <span t-field="o.employee_advance_account_id.name"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="line.settled_amount"
+                                              t-options='{"widget": "monetary", "display_currency": line.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="border-black">
+                                    <td colspan="3">
+                                        <strong>Total Expenses</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong>
+                                            <span t-field="o.total_amount"
+                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <div class="row mt32">
+                            <div class="col-12">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td class="text-right" style="width: 70%;">
+                                            <strong>Advance/Issue Amount:</strong>
+                                        </td>
+                                        <td class="text-right" style="width: 30%;">
+                                            <span t-field="o.advance_amount"
+                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">
+                                            <strong>Total Expenses:</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="o.total_amount"
+                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="o.refund_amount > 0" class="bg-success">
+                                        <td class="text-right">
+                                            <strong>Refund to Company:</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <strong>
+                                                <span t-field="o.refund_amount"
+                                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="o.additional_payment > 0" class="bg-warning">
+                                        <td class="text-right">
+                                            <strong>Additional Payment to Employee:</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <strong>
+                                                <span t-field="o.additional_payment"
+                                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt32" t-if="o.notes">
+                            <div class="col-12">
+                                <strong>Notes:</strong>
+                                <p t-field="o.notes"/>
+                            </div>
+                        </div>
+
+                        <div class="row mt64">
+                            <div class="col-4 text-center">
+                                <div class="mt32">
+                                    <strong>_______________________</strong>
+                                    <br/>
+                                    <span>Submitted By (Employee)</span>
+                                    <br/>
+                                    <span class="small text-muted" t-field="o.employee_id.name"/>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div class="mt32">
+                                    <strong>_______________________</strong>
+                                    <br/>
+                                    <span>Verified By (Manager)</span>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div class="mt32">
+                                    <strong>_______________________</strong>
+                                    <br/>
+                                    <span>Approved By (Finance)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

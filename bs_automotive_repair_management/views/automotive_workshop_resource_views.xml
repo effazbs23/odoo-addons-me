@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_automotive_workshop_resource_list" model="ir.ui.view">
+        <field name="name">automotive.workshop.resource.list</field>
+        <field name="model">automotive.workshop.resource</field>
+        <field name="arch" type="xml">
+            <list string="Workshop Bays/Lifts" class="o_automotive_repair_bg">
+                <field name="name"/>
+                <field name="resource_calendar_id"/>
+                <field name="concurrent_capacity"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_automotive_workshop_resource_form" model="ir.ui.view">
+        <field name="name">automotive.workshop.resource.form</field>
+        <field name="model">automotive.workshop.resource</field>
+        <field name="arch" type="xml">
+            <form string="Workshop Bay/Lift" class="o_automotive_repair_bg">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. Bay 1"/></h1>
+                    </div>
+                    <group>
+                        <field name="resource_calendar_id"/>
+                        <field name="concurrent_capacity"/>
+                        <field name="active" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_automotive_workshop_resource" model="ir.actions.act_window">
+        <field name="name">Workshop Bays/Lifts</field>
+        <field name="res_model">automotive.workshop.resource</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

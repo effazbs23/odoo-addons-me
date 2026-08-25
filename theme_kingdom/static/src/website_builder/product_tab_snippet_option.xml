@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="theme_kingdom.ProductTabSnippetOption">
+        <BuilderRow label.translate="Carousel tabs">
+            <BuilderButton type="'secondary'" preview="false" action="'openProductTabs'">
+                Configure
+            </BuilderButton>
+        </BuilderRow>
+        <BuilderRow label.translate="Block">
+            <BuilderButton type="'danger'"
+                           preview="false"
+                           action="'removeKingdomSnippetBlock'"
+                           title.translate="Remove this block from the page"
+                           icon="'fa-trash'">
+                Remove block
+            </BuilderButton>
+        </BuilderRow>
+        <div class="px-2 pb-2 small text-muted">
+            Website → Configuration → Product Carousel or Dual Carousel.
+            Use <em>Show in</em>: 1st Dual or 2nd Dual.
+        </div>
+    </t>
+
+</templates>

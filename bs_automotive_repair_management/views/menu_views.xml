@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_automotive_repair_root"
+              name="Auto Repair"
+              web_icon="bs_automotive_repair_management,static/description/icon.png"
+              sequence="55"/>
+
+    <menuitem id="menu_automotive_repair_orders"
+              name="Repair Orders"
+              parent="menu_automotive_repair_root"
+              action="action_automotive_repair_order"
+              sequence="20"/>
+
+    <menuitem id="menu_automotive_vehicles"
+              name="Vehicles"
+              parent="menu_automotive_repair_root"
+              action="action_automotive_vehicle"
+              sequence="10"/>
+
+    <menuitem id="menu_automotive_warranty_claims"
+              name="Warranty Claims"
+              parent="menu_automotive_repair_root"
+              action="action_automotive_warranty_claim"
+              sequence="40"/>
+
+    <menuitem id="menu_automotive_vehicle_inspections"
+              name="Inspections"
+              parent="menu_automotive_repair_root"
+              action="action_automotive_vehicle_inspection"
+              sequence="30"/>
+
+    <menuitem id="menu_automotive_employee_stats"
+              name="Employee Stats"
+              parent="menu_automotive_repair_root"
+              action="action_automotive_employee_stats"
+              groups="bs_automotive_repair_management.group_shop_manager"
+              sequence="45"/>
+
+    <menuitem id="menu_automotive_deletion_requests"
+              name="Deletion Requests"
+              parent="menu_automotive_repair_root"
+              action="action_automotive_deletion_request"
+              sequence="50"/>
+
+    <menuitem id="menu_automotive_configuration"
+              name="Configuration"
+              parent="menu_automotive_repair_root"
+              sequence="100"/>
+
+    <menuitem id="menu_automotive_service_catalog"
+              name="Service Catalog"
+              parent="menu_automotive_configuration"
+              action="action_automotive_service_catalog"
+              sequence="10"/>
+
+    <menuitem id="menu_automotive_workshop_resource"
+              name="Workshop Bays/Lifts"
+              parent="menu_automotive_configuration"
+              action="action_automotive_workshop_resource"
+              sequence="20"/>
+</odoo>

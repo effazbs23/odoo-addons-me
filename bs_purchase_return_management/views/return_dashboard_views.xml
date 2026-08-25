@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Return Dashboard
+    <record id="view_return_dashboard" model="ir.ui.view">
+        <field name="name">return.dashboard</field>
+        <field name="model">return.request</field>
+        <field name="arch" type="xml">
+            <dashboard>
+                <view type="graph" ref="view_return_request_graph"/>
+                <group string="Return Statistics">
+                    <aggregate name="total_requests" field="id" group_operator="count" string="Total Requests"/>
+                    <aggregate name="total_amount" field="total_return_amount" string="Total Return Amount"/>
+                    <aggregate name="avg_amount" field="total_return_amount" group_operator="avg" string="Average Return Amount"/>
+                </group>
+                <group string="Quick Filters">
+                    <filter name="this_month" string="This Month"/>
+                    <filter name="high_priority" string="High Priority"/>
+                    <filter name="pending_approval" string="Pending Approval"/>
+                </group>
+            </dashboard>
+        </field>
+    </record>
+-->
+    <!-- Return Request Graph View -->
+    <record id="view_return_request_graph" model="ir.ui.view">
+        <field name="name">return.request.graph</field>
+        <field name="model">return.request</field>
+        <field name="arch" type="xml">
+            <graph string="Return Analysis" type="bar">
+                <field name="request_date" type="row" interval="month"/>
+                <field name="total_return_amount" type="measure"/>
+                <field name="state" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Return Request Pivot View -->
+    <record id="view_return_request_pivot" model="ir.ui.view">
+        <field name="name">return.request.pivot</field>
+        <field name="model">return.request</field>
+        <field name="arch" type="xml">
+            <pivot string="Return Analysis">
+                <field name="partner_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="total_return_amount" type="measure"/>
+                <field name="total_return_qty" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Dashboard Action -->
+    <record id="action_return_dashboard" model="ir.actions.act_window">
+        <field name="name">Return Dashboard</field>
+        <field name="res_model">return.request</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="context">{}</field>
+    </record>
+</odoo>

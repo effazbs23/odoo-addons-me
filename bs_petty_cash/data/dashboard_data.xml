@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="petty_cash_dashboard_main" model="petty.cash.dashboard">
+        <field name="name">Petty Cash Dashboard</field>
+    </record>
+</odoo>

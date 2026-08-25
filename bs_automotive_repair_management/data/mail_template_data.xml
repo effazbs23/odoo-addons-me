@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- 1. Repair order approved -->
+        <record id="mail_template_ro_approved" model="mail.template">
+            <field name="name">Repair Shop: Order Approved</field>
+            <field name="model_id" ref="model_automotive_repair_order"/>
+            <field name="subject">Your repair order {{ object.name }} has been approved</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-size: 13px;">
+    <p>Hello <t t-out="object.partner_id.name or ''"/>,</p>
+    <p>
+        Your repair order <b t-out="object.name or ''"/> for
+        <b t-out="object.vehicle_id.display_name or ''"/> has been approved and work will begin shortly.
+    </p>
+    <p><b>Labor</b></p>
+    <ul>
+        <li t-foreach="object.labor_ids" t-as="line">
+            <t t-out="line.description or ''"/>
+            — <t t-out="line.technician_id.name or 'Unassigned'"/>
+            (<t t-out="line.hours"/>h)
+        </li>
+    </ul>
+    <p><b>Parts</b></p>
+    <ul>
+        <li t-foreach="object.part_ids" t-as="part">
+            <t t-out="part.product_id.display_name or ''"/> × <t t-out="part.quantity"/>
+        </li>
+    </ul>
+    <p>
+        <b>Estimated total:</b> <t t-out="format_amount(object.final_price, object.currency_id) or ''"/><br/>
+        <b>Expected pickup:</b>
+        <t t-if="object.expected_pickup_datetime" t-out="format_datetime(object.expected_pickup_datetime, tz=object._get_pickup_timezone(), dt_format='short')"/>
+        <t t-else="">to be confirmed</t>
+    </p>
+    <p>Thank you for your business.</p>
+</div>
+            </field>
+        </record>
+
+        <!-- 2. New parts/labour allocation after approval -->
+        <record id="mail_template_ro_scope_change" model="mail.template">
+            <field name="name">Repair Shop: Order Updated</field>
+            <field name="model_id" ref="model_automotive_repair_order"/>
+            <field name="subject">Update on your repair order {{ object.name }}</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-size: 13px;">
+    <p>Hello <t t-out="object.partner_id.name or ''"/>,</p>
+    <p>
+        We found some additional work needed on <b t-out="object.vehicle_id.display_name or ''"/>
+        (repair order <b t-out="object.name or ''"/>):
+    </p>
+    <t t-if="new_labor_lines">
+        <p><b>Additional labor</b></p>
+        <ul>
+            <li t-foreach="new_labor_lines" t-as="line">
+                <t t-out="line.description or ''"/>
+                — <t t-out="line.technician_id.name or 'Unassigned'"/>
+                (<t t-out="line.hours"/>h)
+            </li>
+        </ul>
+    </t>
+    <t t-if="new_part_lines">
+        <p><b>Additional parts</b></p>
+        <ul>
+            <li t-foreach="new_part_lines" t-as="part">
+                <t t-out="part.product_id.display_name or ''"/> × <t t-out="part.quantity"/>
+            </li>
+        </ul>
+    </t>
+    <p>
+        <b>Updated expected pickup:</b>
+        <t t-if="object.expected_pickup_datetime" t-out="format_datetime(object.expected_pickup_datetime, tz=object._get_pickup_timezone(), dt_format='short')"/>
+        <t t-else="">to be confirmed</t>
+    </p>
+</div>
+            </field>
+        </record>
+
+        <!-- 3. Check-in / check-out inspection recorded -->
+        <record id="mail_template_inspection_recorded" model="mail.template">
+            <field name="name">Repair Shop: Inspection Recorded</field>
+            <field name="model_id" ref="model_automotive_vehicle_inspection"/>
+            <field name="subject">{{ 'Check-in' if object.inspection_type == 'checkin' else 'Check-out' }} recorded for {{ object.repair_order_id.name }}</field>
+            <field name="email_from">{{ (object.repair_order_id.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.repair_order_id.partner_id.id }}</field>
+            <field name="lang">{{ object.repair_order_id.partner_id.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-size: 13px;">
+    <p>Hello <t t-out="object.repair_order_id.partner_id.name or ''"/>,</p>
+    <p>
+        We've recorded a <b t-out="'check-in' if object.inspection_type == 'checkin' else 'check-out'"/>
+        for <b t-out="object.vehicle_id.display_name or ''"/> on
+        <t t-out="format_datetime(object.datetime)"/>.
+    </p>
+    <t t-if="object.item_ids">
+        <p><b>Items on record</b></p>
+        <ul>
+            <li t-foreach="object.item_ids" t-as="item">
+                <t t-out="item.description or ''"/> (qty <t t-out="item.quantity"/>)
+            </li>
+        </ul>
+    </t>
+    <t t-if="object.media_ids">
+        <p>Photos/videos taken at this inspection are attached to this email.</p>
+    </t>
+</div>
+            </field>
+        </record>
+
+        <!-- 4. Ready / Invoiced — send invoice with pickup time -->
+        <record id="mail_template_ro_invoiced" model="mail.template">
+            <field name="name">Repair Shop: Invoice &amp; Pickup</field>
+            <field name="model_id" ref="model_automotive_repair_order"/>
+            <field name="subject">Your vehicle is ready — invoice for {{ object.name }}</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-size: 13px;">
+    <p>Hello <t t-out="object.partner_id.name or ''"/>,</p>
+    <p>
+        Your vehicle <b t-out="object.vehicle_id.display_name or ''"/> is ready.
+        Please find the invoice for repair order <b t-out="object.name or ''"/> attached.
+    </p>
+    <p>
+        <b>Total:</b> <t t-out="format_amount(object.final_price, object.currency_id) or ''"/><br/>
+        <b>Pickup time:</b>
+        <t t-if="object.expected_pickup_datetime" t-out="format_datetime(object.expected_pickup_datetime, tz=object._get_pickup_timezone(), dt_format='short')"/>
+        <t t-else="">please contact us to arrange pickup</t>
+    </p>
+</div>
+            </field>
+        </record>
+
+        <!-- 5. Closed — service summary -->
+        <record id="mail_template_ro_closed" model="mail.template">
+            <field name="name">Repair Shop: Service Summary</field>
+            <field name="model_id" ref="model_automotive_repair_order"/>
+            <field name="subject">Service summary for repair order {{ object.name }}</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-size: 13px;">
+    <p>Hello <t t-out="object.partner_id.name or ''"/>,</p>
+    <p>
+        Repair order <b t-out="object.name or ''"/> for <b t-out="object.vehicle_id.display_name or ''"/>
+        is now closed. Here is a summary of the service performed:
+    </p>
+    <p><b>Labor</b></p>
+    <ul>
+        <li t-foreach="object.labor_ids" t-as="line">
+            <t t-out="line.description or ''"/>
+            — <t t-out="line.technician_id.name or 'Unassigned'"/>
+            (<t t-out="line.hours"/>h)
+        </li>
+    </ul>
+    <p><b>Parts</b></p>
+    <ul>
+        <li t-foreach="object.part_ids" t-as="part">
+            <t t-out="part.product_id.display_name or ''"/> × <t t-out="part.quantity"/>
+            <t t-if="part.warranty_end_date">
+                — warranty until <t t-out="part.warranty_end_date"/>
+            </t>
+        </li>
+    </ul>
+    <p><b>Total paid:</b> <t t-out="format_amount(object.final_price, object.currency_id) or ''"/></p>
+    <p>Thank you for trusting us with your vehicle.</p>
+</div>
+            </field>
+        </record>
+
+        <!-- 6. Warranty claim received -->
+        <record id="mail_template_warranty_claim_received" model="mail.template">
+            <field name="name">Repair Shop: Warranty Claim Received</field>
+            <field name="model_id" ref="model_automotive_warranty_claim"/>
+            <field name="subject">We've received your warranty claim {{ object.name }}</field>
+            <field name="email_from">{{ (object.origin_repair_order_id.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.vehicle_id.partner_id.id }}</field>
+            <field name="lang">{{ object.vehicle_id.partner_id.lang }}</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-size: 13px;">
+    <p>Hello <t t-out="object.vehicle_id.partner_id.name or ''"/>,</p>
+    <p>
+        We've logged your warranty claim <b t-out="object.name or ''"/> for
+        <b t-out="object.vehicle_id.display_name or ''"/> regarding:
+    </p>
+    <p>
+        <b>Product:</b> <t t-out="object.origin_part_line_id.product_id.display_name or ''"/><br/>
+        <b>Serial/Lot number:</b>
+        <t t-out="object.origin_part_line_id.lot_id.name or object.origin_part_line_id.manual_tracking_ref or 'n/a'"/>
+    </p>
+    <p><b>Issue described:</b> <t t-out="object.issue_description or ''"/></p>
+    <p>Our team will review your claim and get back to you shortly.</p>
+</div>
+            </field>
+        </record>
+
+    </data>
+</odoo>

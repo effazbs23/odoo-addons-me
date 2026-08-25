@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_state_config_search" model="ir.ui.view">
+        <field name="name">custom.statusbar.state.config.search</field>
+        <field name="model">custom.statusbar.state.config</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="model_name"/>
+                <field name="state_label"/>
+                <filter name="enabled" string="Enabled" domain="[('enabled', '=', True)]"/>
+                <group>
+                    <filter name="group_by_model" string="Model" context="{'group_by': 'model_name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

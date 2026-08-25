@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_kingdom_brand_list" model="ir.ui.view">
+        <field name="name">kingdom.brand.list</field>
+        <field name="model">kingdom.brand</field>
+        <field name="arch" type="xml">
+            <list string="Brands">
+                <field name="name"/>
+                <field name="product_count"/>
+                <field name="show_on_homepage" widget="boolean_toggle"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_kingdom_brand_form" model="ir.ui.view">
+        <field name="name">kingdom.brand.form</field>
+        <field name="model">kingdom.brand</field>
+        <field name="arch" type="xml">
+            <form string="Brand">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_products"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-shopping-cart">
+                            <field name="product_count" widget="statinfo" string="Products"/>
+                        </button>
+                    </div>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="show_on_homepage"/>
+                            <field name="active"/>
+                            <field name="website_url" widget="url" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_kingdom_brand" model="ir.actions.act_window">
+        <field name="name">Brands</field>
+        <field name="res_model">kingdom.brand</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add brands for the homepage brands carousel.
+                Assign products to a brand on the product form; clicking a brand on the website opens the shop filtered to that brand.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_kingdom_brand"
+              name="Brands"
+              parent="website.menu_website_global_configuration"
+              action="action_kingdom_brand"
+              sequence="54"/>
+
+</odoo>

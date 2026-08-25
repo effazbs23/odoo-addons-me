@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- noupdate="1": these entries are a starting point the admin owns —
+         widening/narrowing field_ids, measures or the date field must
+         survive every module upgrade. Ship new seeds as NEW xml ids. -->
+    <data noupdate="1">
+
+        <!-- Sales -->
+        <record id="allowlist_sale_order" model="ai.dashboard.allowlist">
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="field_ids" eval="[(6, 0, [
+                ref('sale.field_sale_order__state'),
+                ref('sale.field_sale_order__partner_id'),
+                ref('sale.field_sale_order__user_id'),
+                ref('sale.field_sale_order__team_id'),
+            ])]"/>
+            <field name="measure_field_ids" eval="[(6, 0, [
+                ref('sale.field_sale_order__amount_total'),
+                ref('sale.field_sale_order__amount_untaxed'),
+            ])]"/>
+            <field name="default_measure_field_id" ref="sale.field_sale_order__amount_total"/>
+            <field name="default_aggregation">sum</field>
+            <field name="date_field_id" ref="sale.field_sale_order__date_order"/>
+        </record>
+
+        <!-- Invoicing -->
+        <record id="allowlist_account_move" model="ai.dashboard.allowlist">
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="field_ids" eval="[(6, 0, [
+                ref('account.field_account_move__move_type'),
+                ref('account.field_account_move__partner_id'),
+                ref('account.field_account_move__state'),
+                ref('account.field_account_move__payment_state'),
+            ])]"/>
+            <field name="measure_field_ids" eval="[(6, 0, [
+                ref('account.field_account_move__amount_total'),
+                ref('account.field_account_move__amount_untaxed'),
+                ref('account.field_account_move__amount_residual'),
+            ])]"/>
+            <field name="default_measure_field_id" ref="account.field_account_move__amount_total"/>
+            <field name="default_aggregation">sum</field>
+            <field name="date_field_id" ref="account.field_account_move__invoice_date"/>
+        </record>
+
+        <!-- CRM -->
+        <record id="allowlist_crm_lead" model="ai.dashboard.allowlist">
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="field_ids" eval="[(6, 0, [
+                ref('crm.field_crm_lead__stage_id'),
+                ref('crm.field_crm_lead__user_id'),
+                ref('crm.field_crm_lead__team_id'),
+                ref('crm.field_crm_lead__partner_id'),
+            ])]"/>
+            <field name="measure_field_ids" eval="[(6, 0, [
+                ref('crm.field_crm_lead__expected_revenue'),
+            ])]"/>
+            <field name="default_measure_field_id" ref="crm.field_crm_lead__expected_revenue"/>
+            <field name="default_aggregation">sum</field>
+            <field name="date_field_id" ref="crm.field_crm_lead__create_date"/>
+        </record>
+
+        <!-- Inventory -->
+        <record id="allowlist_stock_move" model="ai.dashboard.allowlist">
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="field_ids" eval="[(6, 0, [
+                ref('stock.field_stock_move__product_id'),
+                ref('stock.field_stock_move__state'),
+                ref('stock.field_stock_move__location_id'),
+            ])]"/>
+            <field name="measure_field_ids" eval="[(6, 0, [
+                ref('stock.field_stock_move__product_qty'),
+            ])]"/>
+            <field name="default_measure_field_id" ref="stock.field_stock_move__product_qty"/>
+            <field name="default_aggregation">sum</field>
+            <field name="date_field_id" ref="stock.field_stock_move__date"/>
+        </record>
+
+    </data>
+</odoo>

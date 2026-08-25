@@ -1,0 +1,25 @@
+<odoo>
+    <!-- Portal Home Menu -->
+    <template
+            id="portal_my_home_cash_request"
+            name="Cash Requests"
+            inherit_id="portal.portal_my_home"
+            priority="40"
+    >
+        <xpath expr="//div[hasclass('o_portal_docs', 'row')]" position="before">
+            <div style="margin-bottom: 15px; margin-top: 15px;">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Cash Requests</t>
+                    <t t-set="text">Create and Edit Cash Request</t>
+                    <t t-set="url" t-value="'/my/cash_requests'"/>
+                    <t t-set="placeholder_count" t-value="'cash_request_count'"/>
+                    <t t-set="config_card" t-value="True"/>
+                    <t
+                        t-set="icon"
+                        t-value="'/petty_cash/static/description/logo.png'"
+                    />
+                </t>
+            </div>
+        </xpath>
+    </template>
+</odoo>

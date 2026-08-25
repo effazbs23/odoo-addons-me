@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="kingdom_product_tab_search" model="ir.ui.view">
+        <field name="name">kingdom.product.tab.search</field>
+        <field name="model">kingdom.product.tab</field>
+        <field name="arch" type="xml">
+            <search string="Carousel Tabs">
+                <field name="name"/>
+                <field name="tab_type"/>
+                <field name="category_id"/>
+                <field name="snippet_placement"/>
+                <filter name="filter_product_carousel"
+                        string="Product Carousel"
+                        domain="[('snippet_placement', '=', 'product_carousel')]"/>
+                <filter name="filter_dual_carousel"
+                        string="Dual Carousel"
+                        domain="[('snippet_placement', '=', 'dual_carousel')]"/>
+                <filter name="filter_active"
+                        string="Active"
+                        domain="[('active', '=', True)]"/>
+                <separator/>
+                <filter name="filter_inactive"
+                        string="Archived"
+                        domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- List focused on Product Carousel snippet -->
+    <record id="kingdom_product_tab_list" model="ir.ui.view">
+        <field name="name">kingdom.product.tab.list</field>
+        <field name="model">kingdom.product.tab</field>
+        <field name="arch" type="xml">
+            <list string="Product Carousel">
+                <field name="name"/>
+                <field name="tab_type"/>
+                <field name="product_source"/>
+                <field name="product_count"/>
+                <field name="product_limit" optional="hide"/>
+                <field name="products_per_slide" optional="show"/>
+                <field name="category_id" optional="hide"/>
+                <field name="snippet_placement"/>
+                <field name="use_as_carousel_banner" widget="boolean_toggle" optional="show"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- List focused on Dual Carousel snippet -->
+    <record id="kingdom_dual_carousel_tab_list" model="ir.ui.view">
+        <field name="name">kingdom.product.tab.list.dual</field>
+        <field name="model">kingdom.product.tab</field>
+        <field name="arch" type="xml">
+            <list string="Dual Carousel">
+                <field name="name"/>
+                <field name="tab_type"/>
+                <field name="category_id"/>
+                <field name="product_source"/>
+                <field name="product_count"/>
+                <field name="product_limit" optional="hide"/>
+                <field name="snippet_placement"/>
+                <field name="subtab_new_label" optional="hide"/>
+                <field name="subtab_best_label" optional="hide"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="kingdom_product_tab_form" model="ir.ui.view">
+        <field name="name">kingdom.product.tab.form</field>
+        <field name="model">kingdom.product.tab</field>
+        <field name="arch" type="xml">
+            <form string="Carousel Tab">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_products"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-shopping-cart">
+                            <field name="product_count" widget="statinfo" string="Products"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Tab Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Desks, New Arrivals"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="General">
+                            <field name="active"/>
+                            <field name="tab_type"/>
+                            <field name="product_source"/>
+                            <field name="category_id"
+                                     invisible="snippet_placement != 'dual_carousel' and (product_source != 'auto' or tab_type != 'category')"
+                                     required="snippet_placement == 'dual_carousel' or (product_source == 'auto' and tab_type == 'category')"/>
+                            <field name="product_limit"
+                                     invisible="product_source == 'manual'"/>
+                            <field name="products_per_slide"
+                                     invisible="snippet_placement != 'product_carousel'"/>
+                        </group>
+                        <group string="Where to show">
+                            <field name="snippet_placement" widget="radio"
+                                     invisible="context.get('kingdom_dual_carousel_only') or context.get('kingdom_product_carousel_only')"/>
+                            <field name="dual_placement" widget="radio"
+                                     invisible="not context.get('kingdom_dual_carousel_only')"/>
+                            <field name="product_placement" widget="radio"
+                                     invisible="not context.get('kingdom_product_carousel_only')"/>
+                            <field name="use_as_carousel_banner"
+                                     invisible="snippet_placement != 'product_carousel'"/>
+                            <field name="subtab_new_label"
+                                     invisible="snippet_placement != 'dual_carousel'"/>
+                            <field name="subtab_best_label"
+                                     invisible="snippet_placement != 'dual_carousel'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products" name="products">
+                            <field name="product_ids"
+                                     invisible="product_source != 'manual'"
+                                     mode="list,kanban"
+                                     context="{'default_sale_ok': True, 'default_is_published': True}">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="default_code" optional="show"/>
+                                    <field name="list_price"/>
+                                    <field name="is_published"/>
+                                </list>
+                            </field>
+                            <div invisible="product_source != 'auto'" class="text-muted fst-italic p-2">
+                                Products are loaded automatically from Tab Type
+                                (New Arrivals, Best Sellers, Featured, On Sale, or Category).
+                                Switch Product Source to <strong>Manual selection</strong> to pick products yourself.
+                            </div>
+                        </page>
+                        <page string="Feature Banner" name="banner">
+                            <div class="alert alert-info" role="status">
+                                <strong>Tab Name</strong> is the banner title on Dual Carousel.
+                                For Product Carousel left promo, enable <em>Carousel left banner</em>
+                                and set image / label / URL here.
+                            </div>
+                            <group>
+                                <group>
+                                    <field name="feature_image" widget="image" class="oe_avatar"/>
+                                </group>
+                                <group>
+                                    <field name="feature_label" placeholder="e.g. Cooking pan"/>
+                                    <field name="feature_url" placeholder="/shop or https://..."/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Website → Configuration → Product Carousel -->
+    <record id="kingdom_product_tab_action" model="ir.actions.act_window">
+        <field name="name">Product Carousel</field>
+        <field name="res_model">kingdom.product.tab</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="kingdom_product_tab_search"/>
+        <field name="domain">[('snippet_placement', 'in', ('product_carousel', 'none'))]</field>
+        <field name="context">{'default_snippet_placement': 'product_carousel', 'kingdom_product_carousel_only': True, 'search_default_filter_product_carousel': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create tabs for the Product Carousel snippet.
+            </p>
+            <p>
+                Set <strong>Show in = Show in 1st Dual</strong>, rename Tab Name
+                (updates on the website), set products / Feature Banner, and Sequence order.
+            </p>
+        </field>
+    </record>
+
+    <record id="kingdom_product_tab_action_view_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="kingdom_product_tab_list"/>
+        <field name="act_window_id" ref="kingdom_product_tab_action"/>
+    </record>
+
+    <record id="kingdom_product_tab_action_view_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="kingdom_product_tab_form"/>
+        <field name="act_window_id" ref="kingdom_product_tab_action"/>
+    </record>
+
+    <!-- Website → Configuration → Dual Carousel -->
+    <record id="kingdom_dual_carousel_tab_action" model="ir.actions.act_window">
+        <field name="name">Dual Carousel</field>
+        <field name="res_model">kingdom.product.tab</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="kingdom_product_tab_search"/>
+        <field name="domain">[('snippet_placement', 'in', ('dual_carousel', 'none'))]</field>
+        <field name="context">{'default_snippet_placement': 'dual_carousel', 'default_tab_type': 'category', 'default_product_source': 'auto', 'kingdom_dual_carousel_only': True, 'search_default_filter_dual_carousel': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create up to two Dual Carousel columns (e.g. Desks + Furnitures).
+            </p>
+            <p>
+                Set <strong>Show in = Show in 2nd Dual</strong> on exactly two tabs,
+                set Category + Tab Name (banner title), optional First / Second tab labels.
+            </p>
+        </field>
+    </record>
+
+    <record id="kingdom_dual_carousel_tab_action_view_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="kingdom_dual_carousel_tab_list"/>
+        <field name="act_window_id" ref="kingdom_dual_carousel_tab_action"/>
+    </record>
+
+    <record id="kingdom_dual_carousel_tab_action_view_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="kingdom_product_tab_form"/>
+        <field name="act_window_id" ref="kingdom_dual_carousel_tab_action"/>
+    </record>
+
+    <menuitem id="kingdom_product_tab_menu"
+              name="Product Carousel"
+              parent="website.menu_website_global_configuration"
+              action="kingdom_product_tab_action"
+              sequence="54"/>
+
+    <menuitem id="kingdom_dual_carousel_tab_menu"
+              name="Dual Carousel"
+              parent="website.menu_website_global_configuration"
+              action="kingdom_dual_carousel_tab_action"
+              sequence="55"/>
+
+</odoo>

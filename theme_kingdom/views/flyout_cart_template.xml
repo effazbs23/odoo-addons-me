@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="kingdom_flyout_cart_layout"
+              inherit_id="website.layout"
+              name="Kingdom Flyout Cart"
+              priority="1">
+        <xpath expr="//body" position="inside">
+            <t t-if="website.has_ecommerce_access()">
+                <!-- Empty shell only — cart lines fetched when the flyout opens. -->
+                <t t-set="website_sale_cart" t-value="request.cart"/>
+                <t t-call="theme_kingdom.kingdom_flyout_cart_shell"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="kingdom_flyout_cart_shell" name="Kingdom Flyout Cart Shell">
+        <t t-set="kingdom_flyout_currency"
+           t-value="(website_sale_cart and website_sale_cart.currency_id) or website.currency_id"/>
+        <div id="advance-cart-flyout-cart-wrapper">
+            <div class="flyout-cart js_kingdom_flyout_cart"
+                 id="kingdom-flyout-cart"
+                 aria-hidden="true"
+                 aria-label="Shopping cart">
+                <div class="mini-shopping-cart">
+                    <div class="count">
+                        <a href="/shop/cart" class="js_kingdom_flyout_cart_title_link">
+                            <i class="icon icon-shopping-cart-1" aria-hidden="true"/>
+                            <span class="total-products js_kingdom_flyout_total_products"
+                                  t-out="website_sale_cart.cart_quantity if website_sale_cart else 0"/>
+                            item(s)
+                        </a>
+                        <a href="#"
+                           class="close-flyout-cart js_kingdom_flyout_close"
+                           aria-label="Close cart">×</a>
+                    </div>
+                    <div class="items js_kingdom_flyout_items">
+                        <!-- Lines load on first open via /theme_kingdom/cart/flyout (keeps every page light). -->
+                        <div class="p-4 text-center text-muted kingdom-flyout-empty">
+                            Your cart is empty.
+                        </div>
+                    </div>
+                    <div class="flyoutcart-footer">
+                        <div class="totals">
+                            Sub-Total:
+                            <strong id="miniCartSubTotal"
+                                    class="js_kingdom_flyout_subtotal"
+                                    t-out="kingdom_flyout_currency.format(0.0)"/>
+                        </div>
+                        <div class="buttons">
+                            <button type="button"
+                                    class="button-1 cart-button js_kingdom_flyout_go_cart">
+                                Go to cart
+                            </button>
+                            <button type="button"
+                                    class="button-1 checkout-button js_kingdom_flyout_checkout">
+                                Checkout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="kingdom_flyout_cart_content" name="Kingdom Flyout Cart Content">
+        <t t-set="order" t-value="website_sale_order"/>
+        <t t-if="not order or not order.website_order_line">
+            <div class="p-4 text-center text-muted kingdom-flyout-empty">
+                Your cart is empty.
+            </div>
+        </t>
+        <t t-else="">
+            <t t-set="show_tax" t-value="order.website_id.show_line_subtotals_tax_selection == 'tax_included'"/>
+            <t t-foreach="order.website_order_line" t-as="line">
+                <t t-if="line.product_id">
+                    <t t-set="combination_name" t-value="line._get_combination_name()"/>
+                    <t t-set="unit_price"
+                       t-value="line.price_reduce_taxinc if show_tax else line.price_reduce_taxexcl"/>
+                    <div t-attf-class="item kingdom-flyout-item #{'first' if line_first else ''}"
+                         t-att-id="'shoppingCartItem_%s' % line.id"
+                         t-att-data-line-id="line.id"
+                         t-att-data-product-id="line.product_id.id">
+                        <div class="picture">
+                            <a t-att-href="line.product_id.website_url"
+                               t-att-title="line._get_line_header()">
+                                <img t-att-src="'/web/image/product.product/%s/image_128' % line.product_id.id"
+                                     t-att-alt="line.name_short"
+                                     t-att-title="line._get_line_header()"
+                                     loading="lazy"/>
+                            </a>
+                        </div>
+                        <div class="product">
+                            <div class="name">
+                                <a t-att-href="line.product_id.website_url"
+                                   t-out="line._get_line_header()"/>
+                            </div>
+                            <div class="attributes" t-if="combination_name">
+                                <span t-out="combination_name"/>
+                            </div>
+                            <div class="price-qty-wrapper">
+                                <div class="price">
+                                    <span class="price-text">Unit price: </span>
+                                    <span class="js_kingdom_flyout_unit_price"
+                                          t-out="order.currency_id.format(unit_price)"/>
+                                </div>
+                                <div class="qty-wrapper cart-quantity product-box-input">
+                                    <input type="text"
+                                           class="qty-input js_kingdom_flyout_qty"
+                                           min="1"
+                                           t-att-value="int(line.product_uom_qty)"
+                                           t-att-aria-label="'Quantity for %s' % line.name_short"/>
+                                    <button type="button"
+                                            class="btn-increase qty-button plus js_kingdom_flyout_plus"
+                                            aria-label="Increase quantity">
+                                        <i class="icon icon-plus" aria-hidden="true"/>
+                                    </button>
+                                    <button type="button"
+                                            class="btn-decrease qty-button minus js_kingdom_flyout_minus"
+                                            aria-label="Decrease quantity">
+                                        <i class="icon icon-minus" aria-hidden="true"/>
+                                    </button>
+                                </div>
+                                <div class="f-s-16 mini-cart--p-buttons">
+                                    <div class="d-inline-flex pt-1 pr-3 delete-item">
+                                        <button type="button"
+                                                class="remove-btn js_kingdom_flyout_remove">
+                                            Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="quantity">
+                                Quantity:
+                                <span class="js_kingdom_flyout_line_qty"
+                                      t-out="int(line.product_uom_qty)"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
