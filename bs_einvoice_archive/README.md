@@ -49,9 +49,14 @@ retention period:
 | Capital Asset | `capital_asset` | 7 years |
 | Real Estate | `real_estate` | 15 years |
 
-Credit and debit notes are required to reference the original invoice's
-archive record (`original_archive_id`). This is enforced at the constraint
-level — saving a credit/debit note archive without it raises a `UserError`.
+Credit notes link to the original invoice's archive record
+(`original_archive_id`) when one exists. This is best-effort, not enforced
+at save time: a standalone credit note (no `reversed_entry_id`) or one
+reversing an invoice posted before this module was installed has no
+original archive to link to, and posting must still succeed. The daily
+health-check cron (`_cron_flag_broken_corrections`) flags any credit/debit
+note archive whose `original_archive_id` doesn't resolve, instead of
+blocking the post.
 
 ### Immutability
 
@@ -63,8 +68,10 @@ Drive backup bookkeeping fields (`drive_xml_file_id`, `drive_pdf_file_id`,
 
 ### Automatic snapshot on posting
 
-When `action_post()` is called on an `account.move`, the module
-automatically creates an archive record if one doesn't already exist. It:
+Controlled per company by the **Archive Posted Invoices** toggle under
+Settings > E-Invoice Archive (on by default). When enabled and
+`action_post()` is called on an `account.move`, the module automatically
+creates an archive record if one doesn't already exist. It:
 
 1. Determines the invoice type (credit/debit notes from `move_type`, everything
    else defaults to `standard` — see the `ponytail` heuristic comment in
@@ -78,6 +85,13 @@ automatically creates an archive record if one doesn't already exist. It:
 
 The attachments are owned by `account.move` (not by the archive record), so
 they survive module uninstall.
+
+**Once an invoice has an archive record, its `account.move` can never be
+deleted again** (`bs.einvoice.archive.move_id` is `ondelete='restrict'`),
+even after resetting it to draft — deleting a move that core Odoo would
+otherwise allow now raises instead. This is deliberate: an archive record
+can never be reassigned to a different invoice, so an FK that allowed the
+move to disappear would leave the audit trail dangling.
 
 ## Data model
 
