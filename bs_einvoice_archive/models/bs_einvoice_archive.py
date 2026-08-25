@@ -29,6 +29,12 @@ MUTABLE_AFTER_CREATE = {
     'drive_xml_file_id', 'drive_pdf_file_id', 'drive_backup_status',
 }
 
+# Shared with the export wizard (wizard/archive_export_wizard.py), which
+# names its downloadable ZIP attachments this so they can be garbage
+# collected below.
+EXPORT_ATTACHMENT_NAME = 'einvoice_audit_export.zip'
+EXPORT_ATTACHMENT_RETENTION_DAYS = 7
+
 
 class BsEinvoiceArchive(models.Model):
     _name = 'bs.einvoice.archive'
@@ -192,6 +198,19 @@ class BsEinvoiceArchive(models.Model):
         self._cron_update_disposal_eligibility()
         self._cron_flag_broken_corrections()
         self._cron_flag_drive_backup_issues()
+        self._cron_cleanup_export_attachments()
+
+    @api.model
+    def _cron_cleanup_export_attachments(self):
+        """Export-wizard ZIPs (invoice PDFs/XMLs/TRNs) are downloaded once
+        and otherwise served no purpose sitting in the filestore forever.
+        """
+        cutoff = fields.Datetime.now() - relativedelta(days=EXPORT_ATTACHMENT_RETENTION_DAYS)
+        stale = self.env['ir.attachment'].sudo().search([
+            ('name', '=', EXPORT_ATTACHMENT_NAME), ('create_date', '<', cutoff),
+        ])
+        stale.unlink()
+        return stale
 
     @api.model
     def _cron_flag_drive_backup_issues(self):

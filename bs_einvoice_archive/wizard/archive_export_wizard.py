@@ -8,6 +8,8 @@ from datetime import timedelta
 from odoo import _, fields, models
 from odoo.exceptions import UserError
 
+from ..models.bs_einvoice_archive import EXPORT_ATTACHMENT_NAME
+
 # Only the manifest's column labels change with language -- the archived
 # documents themselves are never translated (see architecture doc 2.4).
 _MANIFEST_LABELS = {
@@ -106,7 +108,7 @@ class BsEinvoiceArchiveExportWizard(models.TransientModel):
         } for archive in archives])
 
         attachment = self.env['ir.attachment'].create({
-            'name': 'einvoice_audit_export.zip',
+            'name': EXPORT_ATTACHMENT_NAME,
             'type': 'binary',
             'datas': base64.b64encode(buffer.getvalue()),
             'mimetype': 'application/zip',
