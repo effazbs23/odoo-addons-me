@@ -21,6 +21,12 @@ _MANIFEST_LABELS = {
     },
 }
 
+# A blank-filter export (no date/partner/TRN, not launched from a list
+# selection) would otherwise match every archive in the database and hold
+# every PDF/XML in memory at once while zipping. Cap it and tell the user to
+# narrow the filter instead of silently ballooning memory on a large DB.
+MAX_EXPORT_ARCHIVES = 2000
+
 
 class BsEinvoiceArchiveExportWizard(models.TransientModel):
     _name = 'bs.einvoice.archive.export.wizard'
@@ -49,7 +55,13 @@ class BsEinvoiceArchiveExportWizard(models.TransientModel):
             domain.append(('partner_trn', '=ilike', self.trn))
         # Active archives are always active_test-scoped by default; disposed
         # records are still legitimately exportable as historical evidence.
-        return self.env['bs.einvoice.archive'].search(domain)
+        archives = self.env['bs.einvoice.archive'].search(domain, limit=MAX_EXPORT_ARCHIVES + 1)
+        if len(archives) > MAX_EXPORT_ARCHIVES:
+            raise UserError(_(
+                "This filter matches more than %s archives. Narrow the date range, partner, "
+                "or TRN filter before exporting."
+            ) % MAX_EXPORT_ARCHIVES)
+        return archives
 
     def action_export(self):
         self.ensure_one()

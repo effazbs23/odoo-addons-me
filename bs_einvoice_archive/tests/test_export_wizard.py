@@ -2,7 +2,9 @@ import base64
 import json
 import zipfile
 from io import BytesIO
+from unittest.mock import patch
 
+from odoo.exceptions import UserError
 from odoo.tests import tagged
 
 from .common import EinvoiceArchiveCommon
@@ -46,3 +48,12 @@ class TestExportWizard(EinvoiceArchiveCommon):
         })
         with self.assertRaises(Exception):
             wizard.action_export()
+
+    def test_export_rejects_filter_matching_too_many_archives(self):
+        for _i in range(2):
+            self.init_invoice('out_invoice', partner=self.partner_a, products=self.product_a, post=True)
+
+        wizard = self.env['bs.einvoice.archive.export.wizard'].create({})
+        with patch('odoo.addons.bs_einvoice_archive.wizard.archive_export_wizard.MAX_EXPORT_ARCHIVES', 1):
+            with self.assertRaises(UserError):
+                wizard.action_export()
