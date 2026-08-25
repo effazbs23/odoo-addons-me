@@ -24,7 +24,7 @@
     ],
     'application': False,
     'uninstall_hook': 'uninstall_hook',
-    'icon': '/bs_einvoice_archive/static/description/icon.png'
+    'icon': '/bs_einvoice_archive/static/description/icon.png',
     'images': [
         'static/description/banner.gif',
     ],
