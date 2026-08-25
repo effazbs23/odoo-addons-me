@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_einvoice_retention_policy_list" model="ir.ui.view">
+        <field name="name">bs.einvoice.retention.policy.list</field>
+        <field name="model">bs.einvoice.retention.policy</field>
+        <field name="arch" type="xml">
+            <list string="Retention Policies" editable="bottom">
+                <field name="invoice_type"/>
+                <field name="retention_years"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_einvoice_retention_policy" model="ir.actions.act_window">
+        <field name="name">Retention Policies</field>
+        <field name="res_model">bs.einvoice.retention.policy</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

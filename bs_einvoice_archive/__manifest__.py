@@ -1,0 +1,31 @@
+{
+    'name': 'E-Invoice Retention & Audit Trail',
+    'version': '19.0.1.0.0',
+    'category': 'Accounting/Localizations',
+    'summary': 'Immutable archiving, retention tracking, and audit trail for e-invoices',
+    'author': 'ERP23',
+    'website': 'https://erp-23.com',
+    'support': 'erp23@brainstation-23.com',
+    'license': 'LGPL-3',
+    'depends': ['account', 'google_account'],
+    'external_dependencies': {'python': ['cryptography', 'requests']},
+    'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/retention_policy_data.xml',
+        'data/ir_cron_data.xml',
+        'wizard/archive_export_wizard_views.xml',
+        'views/bs_einvoice_archive_views.xml',
+        'views/bs_einvoice_audit_log_views.xml',
+        'views/bs_einvoice_retention_policy_views.xml',
+        'views/bs_einvoice_drive_config_views.xml',
+        'views/res_config_settings_views.xml',
+        'views/menus.xml',
+    ],
+    'application': False,
+    'uninstall_hook': 'uninstall_hook',
+    'icon': '/bs_einvoice_archive/static/description/icon.png'
+    'images': [
+        'static/description/banner.gif',
+    ],
+}

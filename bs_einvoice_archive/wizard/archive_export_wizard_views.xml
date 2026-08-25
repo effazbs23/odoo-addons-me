@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_einvoice_archive_export_wizard_form" model="ir.ui.view">
+        <field name="name">bs.einvoice.archive.export.wizard.form</field>
+        <field name="model">bs.einvoice.archive.export.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Export for Audit">
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="language"/>
+                    </group>
+                    <group>
+                        <field name="partner_ids" widget="many2many_tags"/>
+                        <field name="trn"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_export" type="object" string="Export ZIP" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Also appears in the archive list's action menu when records are
+         multi-selected, per the "Export for Audit" bulk action in the spec. -->
+    <record id="action_einvoice_archive_export_wizard" model="ir.actions.act_window">
+        <field name="name">Export for Audit</field>
+        <field name="res_model">bs.einvoice.archive.export.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_bs_einvoice_archive"/>
+        <field name="binding_view_types">list</field>
+    </record>
+</odoo>
