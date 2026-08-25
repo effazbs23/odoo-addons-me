@@ -49,6 +49,15 @@ retention period:
 | Capital Asset | `capital_asset` | 7 years |
 | Real Estate | `real_estate` | 15 years |
 
+Only `standard` and `credit_note` are ever assigned by this module's own
+automatic archiving (see "Automatic snapshot on posting" below) --
+`invoice_type` isn't editable after an archive is created, and there's no
+manual archive-creation UI. `simplified`, `self_billed`, `debit_note`,
+`capital_asset`, and `real_estate` exist so a future ASP/localization
+connector module can set them (see "What it is NOT"); their retention
+policies are configurable now but have no effect until such a connector
+exists.
+
 Credit notes link to the original invoice's archive record
 (`original_archive_id`) when one exists. This is best-effort, not enforced
 at save time: a standalone credit note (no `reversed_entry_id`) or one
