@@ -32,3 +32,15 @@ class TestArchiveImmutability(EinvoiceArchiveCommon):
         archive = self.env['bs.einvoice.archive'].search([('move_id', '=', move.id)])
         with self.assertRaises(UserError):
             archive.unlink()
+
+    def test_standalone_credit_note_posts_without_original_archive(self):
+        # A credit note with no reversed_entry_id (e.g. a standalone refund,
+        # or one reversing an invoice posted before this module existed) has
+        # no original archive to link to. Posting it must still succeed --
+        # _cron_flag_broken_corrections is what surfaces the missing link,
+        # not a hard constraint on create().
+        move = self.init_invoice('out_refund', partner=self.partner_a, products=self.product_a, post=True)
+        archive = self.env['bs.einvoice.archive'].search([('move_id', '=', move.id)])
+        self.assertTrue(archive)
+        self.assertEqual(archive.invoice_type, 'credit_note')
+        self.assertFalse(archive.original_archive_id)

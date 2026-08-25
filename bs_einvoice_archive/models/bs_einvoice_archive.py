@@ -82,14 +82,6 @@ class BsEinvoiceArchive(models.Model):
         for archive in self:
             archive.audit_log_count = len(archive.audit_log_ids)
 
-    @api.constrains('invoice_type', 'original_archive_id')
-    def _check_original_archive_required(self):
-        for archive in self:
-            if archive.invoice_type in ('credit_note', 'debit_note') and not archive.original_archive_id:
-                raise UserError(_(
-                    "A %s archive must reference the original invoice's archive record."
-                ) % archive.invoice_type)
-
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
