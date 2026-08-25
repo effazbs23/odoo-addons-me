@@ -1,6 +1,7 @@
 import logging
 
 from dateutil.relativedelta import relativedelta
+from markupsafe import Markup
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
@@ -286,6 +287,6 @@ class BsEinvoiceArchive(models.Model):
             return
         self.env['mail.mail'].sudo().create({
             'subject': _("E-Invoice Archive health check"),
-            'body_html': f"<p>{message}</p>",
+            'body_html': Markup("<p>%s</p>") % message,
             'email_to': ','.join(recipients),
         })

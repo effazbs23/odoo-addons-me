@@ -44,6 +44,15 @@ class TestHealthCheckCron(EinvoiceArchiveCommon):
         broken = self.env['bs.einvoice.archive']._cron_flag_broken_corrections()
         self.assertIn(refund_archive, broken)
 
+    def test_notify_admins_escapes_message(self):
+        self.env.user.email = 'admin@example.com'
+        mail_before = self.env['mail.mail'].search([])
+        self.env['bs.einvoice.archive']._cron_notify_admins('<script>alert(1)</script>')
+        mail = self.env['mail.mail'].search([]) - mail_before
+        self.assertEqual(len(mail), 1)
+        self.assertNotIn('<script>', mail.body_html)
+        self.assertIn('&lt;script&gt;', mail.body_html)
+
     def test_cron_promotes_expired_records_to_eligible(self):
         move = self.init_invoice('out_invoice', partner=self.partner_a, products=self.product_a, post=True)
         archive = self.env['bs.einvoice.archive'].search([('move_id', '=', move.id)])
