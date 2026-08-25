@@ -85,6 +85,18 @@ class BsEinvoiceDriveConfig(models.Model):
         except InvalidToken:
             _logger.error("bs_einvoice_archive: could not decrypt stored Drive refresh token for company %s.",
                           self.company_id.id)
+            # Most likely ir.config_parameter 'database.secret' was rotated
+            # since the token was encrypted -- surface this as a real error
+            # (picked up by the daily health check) rather than silently
+            # behaving like nothing was ever connected.
+            if self.status != 'error':
+                self.sudo().write({
+                    'status': 'error',
+                    'last_error': _(
+                        "Stored Google Drive refresh token could not be decrypted (the database "
+                        "secret may have been rotated). Reconnect Google Drive to restore backups."
+                    ),
+                })
             return False
 
     def _set_refresh_token(self, token):

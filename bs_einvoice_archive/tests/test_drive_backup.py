@@ -76,6 +76,20 @@ class TestDriveTokenRefresh(DriveBackupCommon):
 
 
 @tagged('post_install', '-at_install')
+class TestDriveTokenUndecryptable(DriveBackupCommon):
+
+    def test_undecryptable_token_flips_config_to_error(self):
+        # Simulate ir.config_parameter 'database.secret' having rotated
+        # since the token was encrypted: the stored ciphertext no longer
+        # decrypts with the current key.
+        self.config.write({'refresh_token_encrypted': 'not-a-valid-fernet-token'})
+        token = self.config._get_refresh_token()
+        self.assertFalse(token)
+        self.assertEqual(self.config.status, 'error')
+        self.assertTrue(self.config.last_error)
+
+
+@tagged('post_install', '-at_install')
 class TestDriveTokenRedaction(DriveBackupCommon):
 
     def test_token_never_appears_in_stored_error_or_audit_log(self):
