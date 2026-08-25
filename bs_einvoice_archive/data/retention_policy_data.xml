@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_einvoice_archive" model="ir.sequence">
+            <field name="name">E-Invoice Archive</field>
+            <field name="code">bs.einvoice.archive</field>
+            <field name="prefix">ARCH/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+
+        <!-- Defaults only, editable per company under E-Invoice Archive >
+             Configuration > Retention Policies. Never hardcode these numbers
+             in business logic; always look them up from this model.
+             company_id is forced empty (global fallback): the field's own
+             default would otherwise silently pin these to whichever company
+             happens to be company #1 at install time. -->
+        <record id="retention_policy_standard" model="bs.einvoice.retention.policy">
+            <field name="invoice_type">standard</field>
+            <field name="retention_years">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="retention_policy_simplified" model="bs.einvoice.retention.policy">
+            <field name="invoice_type">simplified</field>
+            <field name="retention_years">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="retention_policy_self_billed" model="bs.einvoice.retention.policy">
+            <field name="invoice_type">self_billed</field>
+            <field name="retention_years">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="retention_policy_credit_note" model="bs.einvoice.retention.policy">
+            <field name="invoice_type">credit_note</field>
+            <field name="retention_years">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="retention_policy_debit_note" model="bs.einvoice.retention.policy">
+            <field name="invoice_type">debit_note</field>
+            <field name="retention_years">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="retention_policy_capital_asset" model="bs.einvoice.retention.policy">
+            <field name="invoice_type">capital_asset</field>
+            <field name="retention_years">7</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="retention_policy_real_estate" model="bs.einvoice.retention.policy">
+            <field name="invoice_type">real_estate</field>
+            <field name="retention_years">15</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

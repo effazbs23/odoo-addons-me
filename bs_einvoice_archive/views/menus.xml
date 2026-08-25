@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_einvoice_archive_root" name="E-Invoice Archive" sequence="85"
+              groups="bs_einvoice_archive.group_einvoice_archive_auditor"/>
+
+    <menuitem id="menu_einvoice_archive" name="Archives" parent="menu_einvoice_archive_root"
+              action="action_einvoice_archive" sequence="10"/>
+
+    <menuitem id="menu_einvoice_audit_log" name="Audit Log" parent="menu_einvoice_archive_root"
+              action="action_einvoice_audit_log" sequence="20"/>
+
+    <menuitem id="menu_einvoice_archive_export" name="Export for Audit" parent="menu_einvoice_archive_root"
+              action="bs_einvoice_archive.action_einvoice_archive_export_wizard" sequence="30"/>
+
+    <menuitem id="menu_einvoice_archive_config" name="Configuration" parent="menu_einvoice_archive_root"
+              groups="bs_einvoice_archive.group_einvoice_archive_admin" sequence="90"/>
+
+    <menuitem id="menu_einvoice_retention_policy" name="Retention Policies" parent="menu_einvoice_archive_config"
+              action="action_einvoice_retention_policy" sequence="10"/>
+
+    <menuitem id="menu_einvoice_drive_config" name="Google Drive Backup" parent="menu_einvoice_archive_config"
+              action="action_einvoice_drive_config" sequence="20"/>
+</odoo>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_einvoice_drive_config_form" model="ir.ui.view">
+        <field name="name">bs.einvoice.drive.config.form</field>
+        <field name="model">bs.einvoice.drive.config</field>
+        <field name="arch" type="xml">
+            <form string="Google Drive Backup">
+                <header>
+                    <button name="action_connect" type="object" string="Connect Google Drive"
+                            class="btn-primary" invisible="status == 'connected'"/>
+                    <button name="action_disconnect" type="object" string="Disconnect"
+                            confirm="This revokes the app's access to this Google account. Continue?"
+                            invisible="status != 'connected'"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_pending_backups" type="object" class="oe_stat_button" icon="fa-clock-o">
+                            <field name="pending_backup_count" widget="statinfo" string="Pending"/>
+                        </button>
+                        <button name="action_view_failed_backups" type="object" class="oe_stat_button" icon="fa-exclamation-triangle">
+                            <field name="failed_backup_count" widget="statinfo" string="Failed"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="company_id" readonly="1" groups="base.group_multi_company"/>
+                            <field name="status" widget="badge"
+                                   decoration-success="status == 'connected'"
+                                   decoration-danger="status == 'error'"/>
+                            <field name="google_account_email" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="folder_id" readonly="1"/>
+                            <field name="last_error" readonly="1" invisible="status != 'error'"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_einvoice_drive_config_list" model="ir.ui.view">
+        <field name="name">bs.einvoice.drive.config.list</field>
+        <field name="model">bs.einvoice.drive.config</field>
+        <field name="arch" type="xml">
+            <list string="Google Drive Backup">
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="google_account_email"/>
+                <field name="status" widget="badge"
+                       decoration-success="status == 'connected'" decoration-danger="status == 'error'"/>
+                <field name="pending_backup_count"/>
+                <field name="failed_backup_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_einvoice_drive_config" model="ir.actions.act_window">
+        <field name="name">Google Drive Backup</field>
+        <field name="res_model">bs.einvoice.drive.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

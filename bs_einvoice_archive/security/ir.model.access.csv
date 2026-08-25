@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_einvoice_archive_auditor,bs.einvoice.archive.auditor,model_bs_einvoice_archive,group_einvoice_archive_auditor,1,0,0,0
+access_einvoice_archive_admin,bs.einvoice.archive.admin,model_bs_einvoice_archive,group_einvoice_archive_admin,1,1,1,0
+access_einvoice_audit_log_auditor,bs.einvoice.audit.log.auditor,model_bs_einvoice_audit_log,group_einvoice_archive_auditor,1,0,0,0
+access_einvoice_audit_log_admin,bs.einvoice.audit.log.admin,model_bs_einvoice_audit_log,group_einvoice_archive_admin,1,0,0,0
+access_einvoice_retention_policy_auditor,bs.einvoice.retention.policy.auditor,model_bs_einvoice_retention_policy,group_einvoice_archive_auditor,1,0,0,0
+access_einvoice_retention_policy_admin,bs.einvoice.retention.policy.admin,model_bs_einvoice_retention_policy,group_einvoice_archive_admin,1,1,1,1
+access_einvoice_archive_export_wizard_auditor,bs.einvoice.archive.export.wizard.auditor,model_bs_einvoice_archive_export_wizard,group_einvoice_archive_auditor,1,1,1,1
+access_einvoice_archive_export_wizard_admin,bs.einvoice.archive.export.wizard.admin,model_bs_einvoice_archive_export_wizard,group_einvoice_archive_admin,1,1,1,1
+access_einvoice_drive_config_admin,bs.einvoice.drive.config.admin,model_bs_einvoice_drive_config,group_einvoice_archive_admin,1,1,1,1
+access_einvoice_drive_upload_queue_admin,bs.einvoice.drive.upload.queue.admin,model_bs_einvoice_drive_upload_queue,group_einvoice_archive_admin,1,0,0,0

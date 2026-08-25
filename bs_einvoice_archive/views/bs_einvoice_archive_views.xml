@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_einvoice_archive_list" model="ir.ui.view">
+        <field name="name">bs.einvoice.archive.list</field>
+        <field name="model">bs.einvoice.archive</field>
+        <field name="arch" type="xml">
+            <list string="E-Invoice Archives" decoration-warning="state=='eligible_for_disposal'" decoration-muted="state=='disposed'">
+                <field name="name"/>
+                <field name="move_name"/>
+                <field name="partner_id"/>
+                <field name="partner_trn"/>
+                <field name="invoice_type"/>
+                <field name="archived_on"/>
+                <field name="retention_expiry_date"/>
+                <field name="asp_status"/>
+                <field name="state"/>
+                <field name="drive_backup_status" widget="badge"
+                       decoration-success="drive_backup_status == 'backed_up'"
+                       decoration-danger="drive_backup_status == 'failed'"
+                       decoration-info="drive_backup_status == 'pending'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_einvoice_archive_form" model="ir.ui.view">
+        <field name="name">bs.einvoice.archive.form</field>
+        <field name="model">bs.einvoice.archive</field>
+        <field name="arch" type="xml">
+            <form string="E-Invoice Archive">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_mark_disposed" type="object" string="Mark Disposed"
+                            invisible="state != 'eligible_for_disposal'"
+                            groups="bs_einvoice_archive.group_einvoice_archive_admin"
+                            confirm="This permanently marks the archive as disposed. Continue?"/>
+                    <button name="action_retry_drive_backup" type="object" string="Retry Backup"
+                            invisible="drive_backup_status != 'failed'"
+                            groups="bs_einvoice_archive.group_einvoice_archive_admin"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_audit_log" type="object" class="oe_stat_button" icon="fa-history">
+                            <field name="audit_log_count" widget="statinfo" string="Audit Log"/>
+                        </button>
+                        <button name="action_view_original" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                                invisible="not original_archive_id">
+                            <span>Original Invoice</span>
+                        </button>
+                        <button name="action_view_corrections" type="object" class="oe_stat_button" icon="fa-exchange"
+                                invisible="not correction_ids">
+                            <field name="correction_ids" widget="statinfo" string="Related Corrections"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="move_id" readonly="1"/>
+                            <field name="move_name" readonly="1"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="partner_trn" readonly="1"/>
+                            <field name="company_id" readonly="1" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="invoice_type" readonly="1"/>
+                            <field name="original_archive_id" readonly="1"
+                                   invisible="invoice_type not in ('credit_note', 'debit_note')"/>
+                            <field name="archived_on" readonly="1"/>
+                            <field name="retention_years" readonly="1"/>
+                            <field name="retention_expiry_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="ASP Transmission">
+                        <field name="asp_status"/>
+                        <field name="asp_status_payload"/>
+                    </group>
+                    <group string="Attachments &amp; Integrity">
+                        <field name="xml_attachment_id" readonly="1"/>
+                        <field name="pdf_attachment_id" readonly="1"/>
+                        <field name="checksum" readonly="1"/>
+                    </group>
+                    <group string="Google Drive Backup" invisible="drive_backup_status == 'not_applicable'">
+                        <field name="drive_backup_status" widget="badge"
+                               decoration-success="drive_backup_status == 'backed_up'"
+                               decoration-danger="drive_backup_status == 'failed'"
+                               decoration-info="drive_backup_status == 'pending'"/>
+                        <field name="drive_xml_file_id" readonly="1"/>
+                        <field name="drive_pdf_file_id" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_einvoice_archive" model="ir.actions.act_window">
+        <field name="name">E-Invoice Archives</field>
+        <field name="res_model">bs.einvoice.archive</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

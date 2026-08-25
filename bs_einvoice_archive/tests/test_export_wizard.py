@@ -1,0 +1,75 @@
+import base64
+import json
+import zipfile
+from datetime import timedelta
+from io import BytesIO
+from unittest.mock import patch
+
+from odoo import fields
+from odoo.exceptions import UserError
+from odoo.tests import tagged
+
+from .common import EinvoiceArchiveCommon
+
+
+@tagged('post_install', '-at_install')
+class TestExportWizard(EinvoiceArchiveCommon):
+
+    def test_export_zip_has_expected_manifest_for_date_range(self):
+        move = self.init_invoice('out_invoice', partner=self.partner_a, products=self.product_a, post=True)
+        archive = self.env['bs.einvoice.archive'].search([('move_id', '=', move.id)])
+        archived_date = archive.archived_on.date()
+
+        wizard = self.env['bs.einvoice.archive.export.wizard'].create({
+            'date_from': archived_date,
+            'date_to': archived_date,
+        })
+        result = wizard.action_export()
+
+        attachment_id = int(result['url'].split('/web/content/')[1].split('?')[0])
+        attachment = self.env['ir.attachment'].browse(attachment_id)
+        with zipfile.ZipFile(BytesIO(base64.b64decode(attachment.datas))) as zf:
+            self.assertIn('manifest.json', zf.namelist())
+            self.assertIn('audit_log.csv', zf.namelist())
+            manifest = json.loads(zf.read('manifest.json'))
+
+        self.assertEqual(len(manifest), 1)
+        self.assertEqual(manifest[0]['Invoice Number'], move.name)
+        self.assertEqual(manifest[0]['Checksum'], archive.checksum)
+
+        exported_logs = archive.audit_log_ids.filtered(lambda log: log.action == 'exported')
+        self.assertTrue(exported_logs)
+
+    def test_export_excludes_records_outside_date_range(self):
+        move = self.init_invoice('out_invoice', partner=self.partner_a, products=self.product_a, post=True)
+        self.env['bs.einvoice.archive'].search([('move_id', '=', move.id)])
+
+        wizard = self.env['bs.einvoice.archive.export.wizard'].create({
+            'date_from': '2000-01-01',
+            'date_to': '2000-01-02',
+        })
+        with self.assertRaises(Exception):
+            wizard.action_export()
+
+    def test_export_rejects_filter_matching_too_many_archives(self):
+        for _i in range(2):
+            self.init_invoice('out_invoice', partner=self.partner_a, products=self.product_a, post=True)
+
+        wizard = self.env['bs.einvoice.archive.export.wizard'].create({})
+        with patch('odoo.addons.bs_einvoice_archive.wizard.archive_export_wizard.MAX_EXPORT_ARCHIVES', 1):
+            with self.assertRaises(UserError):
+                wizard.action_export()
+
+    def test_cleanup_cron_removes_stale_export_attachments_only(self):
+        move = self.init_invoice('out_invoice', partner=self.partner_a, products=self.product_a, post=True)
+        wizard = self.env['bs.einvoice.archive.export.wizard'].create({'date_from': move.invoice_date, 'date_to': move.invoice_date})
+        result = wizard.action_export()
+        attachment_id = int(result['url'].split('/web/content/')[1].split('?')[0])
+        attachment = self.env['ir.attachment'].browse(attachment_id)
+        stale_date = fields.Datetime.now() - timedelta(days=8)
+        self.env.cr.execute("UPDATE ir_attachment SET create_date = %s WHERE id = %s", (stale_date, attachment.id))
+        attachment.invalidate_recordset()
+
+        self.env['bs.einvoice.archive']._cron_cleanup_export_attachments()
+
+        self.assertFalse(attachment.exists())
