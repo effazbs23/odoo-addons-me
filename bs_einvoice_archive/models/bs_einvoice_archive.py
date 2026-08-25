@@ -215,6 +215,7 @@ class BsEinvoiceArchive(models.Model):
             ('state', '=', 'posted'),
             ('move_type', 'in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund')),
             ('einvoice_archive_ids', '=', False),
+            ('company_id.einvoice_archive_enabled', '=', True),
         ])
         for move in moves:
             _logger.warning("bs_einvoice_archive: posted invoice %s has no archive record.", move.name)

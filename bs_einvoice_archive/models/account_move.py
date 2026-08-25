@@ -37,6 +37,8 @@ class AccountMove(models.Model):
         for move in self:
             if move.move_type not in _ARCHIVABLE_MOVE_TYPES:
                 continue
+            if not move.company_id.einvoice_archive_enabled:
+                continue
             if Archive.search_count([('move_id', '=', move.id)]):
                 continue  # already archived (e.g. re-entering action_post is a no-op here)
 

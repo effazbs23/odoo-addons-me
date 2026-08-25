@@ -13,6 +13,19 @@
             <xpath expr="//form" position="inside">
                 <div class="app_settings_block" data-string="E-Invoice Archive" string="E-Invoice Archive"
                      data-key="bs_einvoice_archive" groups="bs_einvoice_archive.group_einvoice_archive_admin">
+                    <h2>E-Invoice Archive</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <field name="einvoice_archive_enabled"/>
+                                <label for="einvoice_archive_enabled" string="Archive Posted Invoices"/>
+                                <div class="text-muted">
+                                    Automatically snapshot and retain every posted invoice/refund for
+                                    this company. Disable if this company doesn't need e-invoice retention.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <h2>Google Drive Backup</h2>
                     <div class="row mt16 o_settings_container">
                         <div class="col-12 col-lg-6 o_setting_box">

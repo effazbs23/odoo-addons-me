@@ -33,6 +33,12 @@ class TestArchiveImmutability(EinvoiceArchiveCommon):
         with self.assertRaises(UserError):
             archive.unlink()
 
+    def test_archiving_disabled_skips_archive_creation(self):
+        self.env.company.einvoice_archive_enabled = False
+        move = self.init_invoice('out_invoice', partner=self.partner_a, products=self.product_a, post=True)
+        archive = self.env['bs.einvoice.archive'].search([('move_id', '=', move.id)])
+        self.assertFalse(archive)
+
     def test_standalone_credit_note_posts_without_original_archive(self):
         # A credit note with no reversed_entry_id (e.g. a standalone refund,
         # or one reversing an invoice posted before this module existed) has
