@@ -22,7 +22,7 @@
         'views/res_config_settings_views.xml',
         'views/menus.xml',
     ],
-    'application': False,
+    'application': True,
     'uninstall_hook': 'uninstall_hook',
     'icon': '/bs_einvoice_archive/static/description/icon.png',
     'images': [
