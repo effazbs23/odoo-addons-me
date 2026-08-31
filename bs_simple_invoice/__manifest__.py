@@ -26,7 +26,9 @@ changes to tax calculation, chart of accounts, or journal structure.
     'depends': ['account'],
     'data': [
         'security/security.xml',
+        'security/ir.model.access.csv',
         'views/res_config_settings_views.xml',
         'views/account_move_views.xml',
+        'views/bs_simple_invoice_dashboard_views.xml',
     ],
 }
