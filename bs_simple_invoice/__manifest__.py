@@ -28,6 +28,5 @@ changes to tax calculation, chart of accounts, or journal structure.
         'security/security.xml',
         'views/res_config_settings_views.xml',
         'views/account_move_views.xml',
-        'views/account_move_menus.xml',
     ],
 }
