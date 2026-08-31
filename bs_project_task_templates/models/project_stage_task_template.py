@@ -19,6 +19,10 @@ class ProjectStageTaskTemplate(models.Model):
         help="Supports placeholder tokens, e.g. Kickoff call with {{partner_name}}.")
     sequence = fields.Integer(default=10)
     active = fields.Boolean(default=True)
+    company_id = fields.Many2one(
+        'res.company', string='Company', default=lambda self: self.env.company,
+        help="Leave empty to make this template apply across every company. "
+             "Set it to scope firing to one company's projects/tasks only.")
 
     trigger_level = fields.Selection([
         ('project', 'Project Stage'),
@@ -29,8 +33,8 @@ class ProjectStageTaskTemplate(models.Model):
     # Odoo keeps separate stage models for projects (project.project.stage)
     # and tasks (project.task.type) -- only one of the two is used, matching
     # trigger_level.
-    task_stage_id = fields.Many2one('project.task.type', string='Task Stage')
-    project_stage_id = fields.Many2one('project.project.stage', string='Project Stage')
+    task_stage_id = fields.Many2one('project.task.type', string='Task Stage', index=True)
+    project_stage_id = fields.Many2one('project.project.stage', string='Project Stage', index=True)
 
     description = fields.Text(help="Copied to the created task's description.")
 
@@ -76,6 +80,12 @@ class ProjectStageTaskTemplate(models.Model):
             if template.assignee_rule == 'fixed_user' and not template.fixed_user_id:
                 raise ValidationError(_("Pick a Fixed Assignee when the assignee rule is 'Fixed User'."))
 
+    @api.constrains('deadline_offset_days')
+    def _check_deadline_offset_not_negative(self):
+        for template in self:
+            if template.deadline_offset_days < 0:
+                raise ValidationError(_("Deadline Offset (days) can't be negative."))
+
     @api.onchange('trigger_level')
     def _onchange_trigger_level(self):
         self.task_stage_id = False
@@ -98,38 +108,68 @@ class ProjectStageTaskTemplate(models.Model):
         templates = self.search([('trigger_level', '=', trigger_level), (stage_field, '=', new_stage.id)])
         if not templates:
             return
-        for record in changed:
-            project = record if record._name == 'project.project' else record.project_id
-            if not project:
-                continue
-            for template in templates:
-                template._fire_for_record(record, project)
+        for template in templates:
+            template._fire_for_records(changed)
 
-    def _fire_for_record(self, record, project):
+    def _fire_for_records(self, records):
+        """Batched: fires this one template across every changed record at
+        once (a bulk stage-change edit can be hundreds of records) -- one
+        create() call for the resulting tasks and one for their log rows,
+        instead of one create() per record.
+
+        Runs the log/task creation sudo(): whoever triggered the stage
+        write (a plain project.group_project_user dragging a kanban card,
+        typically) is never meant to have direct create rights on the log
+        table (it's system-only, never hand-created by a user), so this is
+        automation running as the system, not user data entry -- the
+        record/project itself the user already had access to."""
         self.ensure_one()
-        Log = self.env['project.stage.task.template.log']
-        ref = '%s,%s' % (record._name, record.id)
+        Log = self.env['project.stage.task.template.log'].sudo()
+
+        pairs = []
+        for record in records:
+            project = record if record._name == 'project.project' else record.project_id
+            if project:
+                pairs.append((record, project))
+        if not pairs:
+            return
 
         if self.refire_policy == 'first_time_only':
-            if Log.search_count([('template_id', '=', self.id), ('source_record_ref', '=', ref)], limit=1):
+            refs = ['%s,%s' % (record._name, record.id) for record, _project in pairs]
+            already_fired = {
+                '%s,%s' % (log.source_record_ref._name, log.source_record_ref.id)
+                for log in Log.search([('template_id', '=', self.id), ('source_record_ref', 'in', refs)])
+                if log.source_record_ref
+            }
+            pairs = [pair for pair in pairs if ('%s,%s' % (pair[0]._name, pair[0].id)) not in already_fired]
+            if not pairs:
                 return
 
         if self.refire_policy == 'confirm':
-            Log.create({'template_id': self.id, 'source_record_ref': ref, 'state': 'pending'})
-            record.message_post(body=_(
-                "Template task \"%(name)s\" is pending confirmation (stage template set to "
-                "'Confirm Before Creating'). Review it under Project ▸ Configuration ▸ "
-                "Pending Template Confirmations.", name=self.name))
+            Log.create([{
+                'template_id': self.id,
+                'source_record_ref': '%s,%s' % (record._name, record.id),
+                'state': 'pending',
+                'company_id': project.company_id.id,
+            } for record, project in pairs])
+            for record, _project in pairs:
+                record.message_post(body=_(
+                    "Template task \"%(name)s\" is pending confirmation (stage template set to "
+                    "'Confirm Before Creating'). Review it under Project ▸ Tasks ▸ "
+                    "Pending Template Confirmations.", name=self.name))
             return
 
-        task = self.env['project.task'].create(self._build_task_vals(record, project))
-        Log.create({
+        tasks = self.env['project.task'].sudo().create(
+            [self._build_task_vals(record, project) for record, project in pairs])
+        Log.create([{
             'template_id': self.id,
-            'source_record_ref': ref,
+            'source_record_ref': '%s,%s' % (record._name, record.id),
             'created_task_id': task.id,
             'state': 'created',
-        })
-        task.message_post(body=_('Auto-generated from stage template "%(name)s".', name=self.name))
+            'company_id': project.company_id.id,
+        } for (record, project), task in zip(pairs, tasks)])
+        for task in tasks:
+            task.message_post(body=_('Auto-generated from stage template "%(name)s".', name=self.name))
 
     def _build_task_vals(self, record, project):
         self.ensure_one()

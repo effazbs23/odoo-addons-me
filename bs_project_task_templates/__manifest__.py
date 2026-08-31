@@ -29,6 +29,7 @@ back to its template and triggering record.
     'depends': ['project'],
     'data': [
         'security/ir.model.access.csv',
+        'security/project_stage_task_template_security.xml',
         'views/project_stage_task_template_views.xml',
         'views/project_task_type_views.xml',
         'views/project_project_views.xml',

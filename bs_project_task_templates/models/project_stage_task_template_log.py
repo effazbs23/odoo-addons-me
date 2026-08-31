@@ -8,11 +8,18 @@ class ProjectStageTaskTemplateLog(models.Model):
 
     template_id = fields.Many2one(
         'project.stage.task.template', string='Template', required=True,
-        ondelete='cascade', index=True)
+        ondelete='restrict', index=True,
+        help="Restricted (not cascade): deleting a template must not silently "
+             "erase the audit trail of what it already created. Archive the "
+             "template instead of deleting it if it has firing history.")
     source_record_ref = fields.Reference(
         selection=[('project.project', 'Project'), ('project.task', 'Task')],
-        string='Trigger Record', required=True)
+        string='Trigger Record', required=True, index=True)
     created_task_id = fields.Many2one('project.task', string='Created Task', ondelete='set null')
+    company_id = fields.Many2one(
+        'res.company', string='Company', index=True,
+        help="Company of the project/task that triggered this row -- "
+             "used for multi-company record-rule scoping, not the template's own company.")
     state = fields.Selection([
         ('pending', 'Pending Confirmation'),
         ('created', 'Created'),
