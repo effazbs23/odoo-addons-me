@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bs_simple_invoice_dashboard_form" model="ir.ui.view">
+        <field name="name">bs.simple.invoice.dashboard.form</field>
+        <field name="model">bs.simple.invoice.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Simple Invoicing Dashboard" create="false" edit="false" delete="false">
+                <sheet>
+                    <div class="o_horizontal_separator">Overview</div>
+                    <group>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="awaiting_payment_count" string="Invoices Awaiting Payment"/>
+                        <field name="amount_overdue" string="Overdue" widget="monetary"/>
+                        <field name="amount_collected_this_month" string="Collected This Month" widget="monetary"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bs_simple_invoice_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard</field>
+        <field name="res_model">bs.simple.invoice.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="view_id" ref="view_bs_simple_invoice_dashboard_form"/>
+    </record>
+
+    <menuitem id="menu_bs_simple_invoice_dashboard"
+              name="Dashboard"
+              parent="account.menu_finance"
+              action="action_bs_simple_invoice_dashboard"
+              groups="bs_simple_invoice.simple_invoicing_group"
+              sequence="0"/>
+</odoo>
