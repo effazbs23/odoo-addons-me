@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="project.view_task_form2"/>
         <field name="arch" type="xml">
             <xpath expr="//h1[field[@name='name']]" position="after">
-                <span class="badge text-bg-info align-self-center ms-2" invisible="not generated_from_template_id">
+                <span class="badge text-bg-info align-self-center ms-2 flex-shrink-0" invisible="not generated_from_template_id">
                     <i class="fa fa-magic pe-1"/>Auto-generated
                 </span>
             </xpath>

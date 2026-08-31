@@ -8,6 +8,7 @@
                 <p>Entering the stage will create the following tasks. Uncheck any you don't want.</p>
                 <field name="line_ids">
                     <list editable="bottom">
+                        <field name="log_id" column_invisible="1"/>
                         <field name="selected" widget="boolean_toggle"/>
                         <field name="task_name"/>
                         <field name="source_record_name"/>
