@@ -22,6 +22,10 @@ back to its template and triggering record.
     'price': 0.00,
     'currency': 'USD',
     'application': False,
+    'icon': '/bs_project_task_templates/static/description/icon.png',
+    'images': [
+        'static/description/banner.gif',
+    ],
     'depends': ['project'],
     'data': [
         'security/ir.model.access.csv',
