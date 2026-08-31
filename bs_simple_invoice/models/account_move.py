@@ -12,12 +12,20 @@ class AccountMove(models.Model):
              "the current user, never stored.",
     )
 
+    # edge case (spec 9): a user in both Simple Invoicing and the
+    # Accounting Administrator group must always get the full view --
+    # tested in tests/test_simple_invoicing.py::test_accountant_wins_precedence
     @api.depends_context('uid')
     def _compute_is_simple_invoicing_view(self):
         simple = self.env.user.has_group('bs_simple_invoice.simple_invoicing_group') \
             and not self.env.user.has_group('account.group_account_manager')
         for move in self:
             move.is_simple_invoicing_view = simple
+
+    # edge case (spec 9): credit notes (move_type == 'out_refund') get no
+    # special-casing anywhere in this module -- they flow through the same
+    # simplified form/list/status/buttons as invoices, per spec's own
+    # recommendation to show them, not hide the concept.
 
     simple_status = fields.Selection(
         selection=[
@@ -46,8 +54,8 @@ class AccountMove(models.Model):
             elif status in ('paid', 'in_payment', 'reversed'):
                 move.simple_status = 'paid'
             elif move.invoice_date_due and move.invoice_date_due < today:
-                # edge case: partial/blocked/sent-but-unpaid past the due
-                # date must show Overdue, never collapse into Paid or Sent
+                # edge case (spec 9): partial/blocked/sent-but-unpaid past
+                # the due date must show Overdue, never collapse into Paid
                 move.simple_status = 'overdue'
             else:
                 move.simple_status = 'sent'

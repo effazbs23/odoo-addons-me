@@ -68,6 +68,12 @@
                  shown-only-if-multi-currency-company for everyone, and
                  additionally hidden for simple-mode on top of that
                  (spec 9 multi-currency edge case is satisfied for free). -->
+            <!-- edge case (spec 9): only invisible= is added here, no
+                 default/onchange is touched, so an invoice that already
+                 has a non-standard journal keeps it untouched on save;
+                 new invoices still get account.move's own native default
+                 journal since that default logic runs regardless of
+                 whether the field is shown. -->
             <xpath expr="//label[@for='journal_id']" position="attributes">
                 <attribute name="invisible">not show_journal or is_simple_invoicing_view</attribute>
             </xpath>
