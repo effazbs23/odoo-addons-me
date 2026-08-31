@@ -9,6 +9,11 @@ class BsSimpleInvoiceDashboard(models.TransientModel):
     _name = 'bs.simple.invoice.dashboard'
     _description = "Simple Invoicing Dashboard"
 
+    # Gives the ORM's default display_name/breadcrumb something readable
+    # instead of falling back to "bs.simple.invoice.dashboard,NewId_xxx"
+    # for this never-saved record -- caught by opening the Dashboard menu
+    # in a real browser.
+    name = fields.Char(default="Simple Invoicing Dashboard")
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
     awaiting_payment_count = fields.Integer(string="Invoices Awaiting Payment")
     amount_overdue = fields.Monetary(string="Overdue")
