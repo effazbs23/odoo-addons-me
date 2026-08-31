@@ -176,7 +176,7 @@ class TestStageTaskTemplates(TransactionCase):
     def test_assignee_resolution_exception_does_not_block_stage_write(self):
         self._make_template(assignee_rule='same_as_source')
         with patch(
-            'odoo.addons.project_stage_task_templates.models.project_stage_task_template'
+            'odoo.addons.bs_project_task_templates.models.project_stage_task_template'
             '.ProjectStageTaskTemplate._resolve_assignee_raw',
             side_effect=Exception('boom'),
         ):
