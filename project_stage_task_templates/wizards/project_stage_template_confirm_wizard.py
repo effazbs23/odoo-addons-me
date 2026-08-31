@@ -18,7 +18,6 @@ class ProjectStageTemplateConfirmWizard(models.TransientModel):
 
     def action_confirm(self):
         self.ensure_one()
-        Template = self.env['project.stage.task.template']
         for line in self.line_ids.filtered('selected'):
             log = line.log_id
             record = log.source_record_ref
