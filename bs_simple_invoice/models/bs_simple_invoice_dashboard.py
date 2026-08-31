@@ -30,14 +30,19 @@ class BsSimpleInvoiceDashboard(models.TransientModel):
         today = fields.Date.context_today(self)
         month_start = today.replace(day=1)
 
+        # 'blocked' (a payment_state for invoices with a blocked partial
+        # reconciliation) counts as still-awaiting-payment here, matching
+        # simple_status on account.move which falls through to the same
+        # due-date-based Sent/Overdue classification for it.
+        unpaid_states = ('not_paid', 'partial', 'blocked')
         if 'awaiting_payment_count' in fields_list:
             vals['awaiting_payment_count'] = Move.search_count(
-                base_domain + [('payment_state', 'in', ('not_paid', 'partial'))]
+                base_domain + [('payment_state', 'in', unpaid_states)]
             )
         if 'amount_overdue' in fields_list:
             groups = Move._read_group(
                 base_domain + [
-                    ('payment_state', 'in', ('not_paid', 'partial')),
+                    ('payment_state', 'in', unpaid_states),
                     ('invoice_date_due', '<', today),
                 ],
                 aggregates=['amount_residual:sum'],

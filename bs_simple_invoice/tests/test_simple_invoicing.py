@@ -26,6 +26,12 @@ class TestSimpleInvoicing(TransactionCase):
             'email': 'plain_billing_test_user@example.com',
             'group_ids': [(6, 0, [cls.env.ref('account.group_account_invoice').id])],
         })
+        # The company's default is Simple Invoicing on, so a fresh internal
+        # user is enrolled by res.users._sync_simple_invoicing_group() on
+        # create -- represent an admin who hand-opted this specific Billing
+        # user out afterward (spec: "individual users can still be added to
+        # or removed from the group by hand").
+        cls.simple_group.sudo().write({'user_ids': [(3, cls.plain_user.id)]})
         cls.dual_user = cls.env['res.users'].create({
             'name': 'Dual User',
             'login': 'dual_test_user_it',
@@ -197,6 +203,7 @@ class TestSimpleInvoicing(TransactionCase):
 
     def test_company_toggle_syncs_group_membership(self):
         company = self.env.company
+        company.simple_invoicing_mode = False
         user = self.env['res.users'].create({
             'name': 'Company Toggle User',
             'login': 'company_toggle_test_user',
@@ -209,6 +216,58 @@ class TestSimpleInvoicing(TransactionCase):
         self.assertIn(user, self.simple_group.user_ids)
         company.write({'simple_invoicing_mode': False})
         self.assertNotIn(user, self.simple_group.user_ids)
+
+    # -- security: portal/public users must never be enrolled, even though
+    # they can have the same default company_id as internal staff --
+
+    def test_portal_user_not_enrolled_by_company_toggle(self):
+        company = self.env.company
+        portal_user = self.env['res.users'].create({
+            'name': 'Portal Customer',
+            'login': 'portal_test_user',
+            'email': 'portal_test_user@example.com',
+            'company_id': company.id,
+            'company_ids': [(4, company.id)],
+            'group_ids': [(6, 0, [self.env.ref('base.group_portal').id])],
+        })
+        self.assertTrue(portal_user.share)
+        company.write({'simple_invoicing_mode': False})
+        company.write({'simple_invoicing_mode': True})
+        self.assertNotIn(portal_user, self.simple_group.user_ids)
+        self.assertFalse(portal_user.has_group('account.group_account_invoice'))
+
+    # -- new users created in (or moved into) a simple-mode company must be
+    # enrolled automatically, not only at the moment of the company toggle --
+
+    def test_new_user_in_simple_mode_company_is_enrolled(self):
+        company = self.env.company
+        company.simple_invoicing_mode = True
+        user = self.env['res.users'].create({
+            'name': 'New Hire',
+            'login': 'new_hire_test_user',
+            'email': 'new_hire_test_user@example.com',
+            'company_id': company.id,
+            'company_ids': [(4, company.id)],
+            'group_ids': [(6, 0, [self.env.ref('account.group_account_invoice').id])],
+        })
+        self.assertIn(user, self.simple_group.user_ids)
+
+    def test_user_moved_into_simple_mode_company_gets_enrolled(self):
+        self.env.company.simple_invoicing_mode = False
+        other_company = self.env['res.company'].create({
+            'name': 'Simple Co', 'simple_invoicing_mode': True,
+        })
+        user = self.env['res.users'].create({
+            'name': 'Mover',
+            'login': 'mover_test_user',
+            'email': 'mover_test_user@example.com',
+            'company_id': self.env.company.id,
+            'company_ids': [(4, self.env.company.id), (4, other_company.id)],
+            'group_ids': [(6, 0, [self.env.ref('account.group_account_invoice').id])],
+        })
+        self.assertNotIn(user, self.simple_group.user_ids)
+        user.write({'company_id': other_company.id})
+        self.assertIn(user, self.simple_group.user_ids)
 
     # -- spec 7.6: dashboard aggregation --
 

@@ -17,11 +17,11 @@ class ResCompany(models.Model):
     def write(self, vals):
         res = super().write(vals)
         if 'simple_invoicing_mode' in vals:
-            group = self.env.ref('bs_simple_invoice.simple_invoicing_group')
             for company in self:
                 users = self.env['res.users'].sudo().search([('company_id', '=', company.id)])
-                if company.simple_invoicing_mode:
-                    group.sudo().write({'user_ids': [(4, user.id) for user in users]})
-                else:
-                    group.sudo().write({'user_ids': [(3, user.id) for user in users]})
+                # _sync_simple_invoicing_group is the single source of truth
+                # for eligibility (it excludes share/portal users) -- this
+                # loop must never write group membership directly, or a
+                # future caller could re-introduce the share-user leak.
+                users._sync_simple_invoicing_group()
         return res
