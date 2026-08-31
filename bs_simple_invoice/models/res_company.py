@@ -6,6 +6,7 @@ class ResCompany(models.Model):
 
     simple_invoicing_mode = fields.Boolean(
         string="Enable Simple Invoice",
+        default=True,
         help="Default the simplified invoicing menu, form and status funnel "
              "for this company's users. Individual users can still be added "
              "to or removed from the 'Simple Invoicing User' group by hand "

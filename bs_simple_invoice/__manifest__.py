@@ -24,6 +24,7 @@ changes to tax calculation, chart of accounts, or journal structure.
     'currency': 'USD',
     'application': False,
     'depends': ['account'],
+    'post_init_hook': '_post_init_enable_simple_invoicing',
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',

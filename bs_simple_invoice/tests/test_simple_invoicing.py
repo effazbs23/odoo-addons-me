@@ -186,6 +186,13 @@ class TestSimpleInvoicing(TransactionCase):
         self.assertEqual(action['context']['active_model'], 'account.move.line')
         self.assertTrue(set(action['context']['active_ids']).issubset(set(move.line_ids.ids)))
 
+    # -- simple mode is on by default, both for new companies and (via the
+    # post_init_hook) for the company that already existed at install time --
+
+    def test_simple_invoicing_mode_defaults_to_true_for_new_company(self):
+        company = self.env['res.company'].create({'name': 'Fresh Co'})
+        self.assertTrue(company.simple_invoicing_mode)
+
     # -- spec 4.1: company toggle syncs group membership --
 
     def test_company_toggle_syncs_group_membership(self):
