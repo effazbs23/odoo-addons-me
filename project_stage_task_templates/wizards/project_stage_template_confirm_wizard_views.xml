@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_project_stage_template_confirm_wizard_form" model="ir.ui.view">
+        <field name="name">project.stage.template.confirm.wizard.form</field>
+        <field name="model">project.stage.template.confirm.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Template Tasks">
+                <p>Entering the stage will create the following tasks. Uncheck any you don't want.</p>
+                <field name="line_ids">
+                    <list editable="bottom">
+                        <field name="selected" widget="boolean_toggle"/>
+                        <field name="task_name"/>
+                        <field name="source_record_name"/>
+                        <field name="deadline_offset_days"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

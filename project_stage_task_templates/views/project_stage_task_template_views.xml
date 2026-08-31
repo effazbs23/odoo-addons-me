@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_project_stage_task_template_list" model="ir.ui.view">
+        <field name="name">project.stage.task.template.list</field>
+        <field name="model">project.stage.task.template</field>
+        <field name="arch" type="xml">
+            <list string="Stage Task Templates" sample="1">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="trigger_level"/>
+                <field name="task_stage_id"/>
+                <field name="project_stage_id"/>
+                <field name="assignee_rule"/>
+                <field name="deadline_offset_days"/>
+                <field name="priority" widget="priority"/>
+                <field name="refire_policy"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_project_stage_task_template_form" model="ir.ui.view">
+        <field name="name">project.stage.task.template.form</field>
+        <field name="model">project.stage.task.template</field>
+        <field name="arch" type="xml">
+            <form string="Stage Task Template">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Kickoff call with {{partner_name}}"/></h1>
+                    </div>
+                    <group>
+                        <group string="Trigger">
+                            <field name="trigger_level" widget="radio"/>
+                            <field name="task_stage_id" invisible="trigger_level != 'task'"
+                                   required="trigger_level == 'task'"/>
+                            <field name="project_stage_id" invisible="trigger_level != 'project'"
+                                   required="trigger_level == 'project'"/>
+                            <field name="refire_policy"/>
+                        </group>
+                        <group string="Task Content">
+                            <field name="assignee_rule"/>
+                            <field name="fixed_user_id" invisible="assignee_rule != 'fixed_user'"
+                                   required="assignee_rule == 'fixed_user'"/>
+                            <field name="deadline_offset_days"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="tag_ids" widget="many2many_tags"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1" placeholder="Copied to the created task's description..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_project_stage_task_template" model="ir.actions.act_window">
+        <field name="name">Stage Task Templates</field>
+        <field name="res_model">project.stage.task.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smart_action">Define a checklist of tasks to auto-create whenever a project or task enters a stage.</p>
+        </field>
+    </record>
+
+    <!-- Pending confirmations queue (refire_policy = 'confirm') -->
+    <record id="view_project_stage_task_template_log_pending_list" model="ir.ui.view">
+        <field name="name">project.stage.task.template.log.pending.list</field>
+        <field name="model">project.stage.task.template.log</field>
+        <field name="arch" type="xml">
+            <list string="Pending Template Confirmations">
+                <field name="template_id"/>
+                <field name="source_record_ref"/>
+                <field name="create_date" string="Queued On"/>
+                <button name="action_confirm_selected" type="object" string="Review &amp; Confirm" class="btn-link"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_project_stage_task_template_log_pending" model="ir.actions.act_window">
+        <field name="name">Pending Template Confirmations</field>
+        <field name="res_model">project.stage.task.template.log</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_project_stage_task_template_log_pending_list"/>
+        <field name="domain">[('state', '=', 'pending')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smart_action">Nothing pending -- stages with "Confirm Before Creating" templates will queue proposed tasks here.</p>
+        </field>
+    </record>
+</odoo>
