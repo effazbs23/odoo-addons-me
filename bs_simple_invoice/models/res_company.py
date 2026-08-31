@@ -20,7 +20,7 @@ class ResCompany(models.Model):
             for company in self:
                 users = self.env['res.users'].sudo().search([('company_id', '=', company.id)])
                 if company.simple_invoicing_mode:
-                    group.sudo().write({'users': [(4, user.id) for user in users]})
+                    group.sudo().write({'user_ids': [(4, user.id) for user in users]})
                 else:
-                    group.sudo().write({'users': [(3, user.id) for user in users]})
+                    group.sudo().write({'user_ids': [(3, user.id) for user in users]})
         return res
