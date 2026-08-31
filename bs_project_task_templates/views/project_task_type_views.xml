@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="task_type_edit_inherit_stage_task_template" model="ir.ui.view">
+        <field name="name">project.task.type.form.inherit.stage.task.template</field>
+        <field name="model">project.task.type</field>
+        <field name="inherit_id" ref="project.task_type_edit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group[1]" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_stage_task_templates" type="object" class="oe_stat_button" icon="fa-list-alt">
+                        <field name="stage_task_template_count" widget="statinfo" string="Task Templates"/>
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

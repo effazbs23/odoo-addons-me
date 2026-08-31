@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        name="Stage Task Templates"
+        id="menu_project_stage_task_template"
+        parent="project.menu_project_config"
+        action="action_project_stage_task_template"
+        groups="project.group_project_manager"
+        sequence="11"
+    />
+    <!-- Under "Tasks", not "Configuration": Configuration is manager-only
+         in core Odoo, but any project user whose kanban drag queued a
+         confirm-mode proposal needs to be able to reach and review it,
+         not just managers. The access rights on the log model already
+         allow this; only the menu placement was blocking it. -->
+    <menuitem
+        name="Pending Template Confirmations"
+        id="menu_project_stage_task_template_log_pending"
+        parent="project.menu_project_management"
+        action="action_project_stage_task_template_log_pending"
+        sequence="15"
+    />
+</odoo>

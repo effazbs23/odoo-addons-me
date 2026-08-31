@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_stage_task_template_manager,project.stage.task.template manager,model_project_stage_task_template,project.group_project_manager,1,1,1,1
+access_project_stage_task_template_user,project.stage.task.template user,model_project_stage_task_template,project.group_project_user,1,0,0,0
+access_project_stage_task_template_log_manager,project.stage.task.template.log manager,model_project_stage_task_template_log,project.group_project_manager,1,1,1,1
+access_project_stage_task_template_log_user,project.stage.task.template.log user,model_project_stage_task_template_log,project.group_project_user,1,1,0,1
+access_project_stage_template_confirm_wizard,project.stage.template.confirm.wizard,model_project_stage_template_confirm_wizard,project.group_project_user,1,1,1,1
+access_project_stage_template_confirm_wizard_line,project.stage.template.confirm.wizard.line,model_project_stage_template_confirm_wizard_line,project.group_project_user,1,1,1,1
