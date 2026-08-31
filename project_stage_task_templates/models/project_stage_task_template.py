@@ -150,16 +150,21 @@ class ProjectStageTaskTemplate(models.Model):
         a template glitch must never block the underlying stage write."""
         self.ensure_one()
         try:
-            if self.assignee_rule == 'fixed_user':
-                return self.fixed_user_id
-            if self.assignee_rule == 'project_manager':
-                project = record if record._name == 'project.project' else record.project_id
-                return project.user_id
-            if self.assignee_rule == 'same_as_source' and record._name == 'project.task':
-                return record.user_ids
+            return self._resolve_assignee_raw(record)
         except Exception:
             _logger.warning("Assignee resolution failed for template %s on %s,%s, using unassigned.",
                              self.id, record._name, record.id, exc_info=True)
+        return self.env['res.users']
+
+    def _resolve_assignee_raw(self, record):
+        self.ensure_one()
+        if self.assignee_rule == 'fixed_user':
+            return self.fixed_user_id
+        if self.assignee_rule == 'project_manager':
+            project = record if record._name == 'project.project' else record.project_id
+            return project.user_id
+        if self.assignee_rule == 'same_as_source' and record._name == 'project.task':
+            return record.user_ids
         return self.env['res.users']
 
     def _compute_deadline(self):

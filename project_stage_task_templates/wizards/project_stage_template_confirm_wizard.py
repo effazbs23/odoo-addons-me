@@ -5,7 +5,6 @@ class ProjectStageTemplateConfirmWizard(models.TransientModel):
     _name = 'project.stage.template.confirm.wizard'
     _description = 'Confirm Pending Stage Template Tasks'
 
-    log_ids = fields.Many2many('project.stage.task.template.log', string='Pending Items')
     line_ids = fields.One2many(
         'project.stage.template.confirm.wizard.line', 'wizard_id', string='Proposed Tasks')
 
@@ -14,7 +13,6 @@ class ProjectStageTemplateConfirmWizard(models.TransientModel):
         res = super().default_get(fields_list)
         log_ids = self.env.context.get('default_log_ids') or []
         logs = self.env['project.stage.task.template.log'].browse(log_ids).filtered(lambda l: l.state == 'pending')
-        res['log_ids'] = [(6, 0, logs.ids)]
         res['line_ids'] = [(0, 0, {'log_id': log.id, 'selected': True}) for log in logs]
         return res
 

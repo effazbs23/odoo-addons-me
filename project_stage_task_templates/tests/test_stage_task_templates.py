@@ -14,13 +14,13 @@ class TestStageTaskTemplates(TransactionCase):
             'name': 'PM Manager',
             'login': 'pm_manager_stage_template',
             'email': 'pm_manager_stage_template@example.com',
-            'groups_id': [(6, 0, [cls.env.ref('project.group_project_manager').id])],
+            'group_ids': [(6, 0, [cls.env.ref('project.group_project_manager').id])],
         })
         cls.assignee = cls.env['res.users'].create({
             'name': 'Task Assignee',
             'login': 'task_assignee_stage_template',
             'email': 'task_assignee_stage_template@example.com',
-            'groups_id': [(6, 0, [cls.env.ref('project.group_project_user').id])],
+            'group_ids': [(6, 0, [cls.env.ref('project.group_project_user').id])],
         })
         cls.partner = cls.env['res.partner'].create({'name': 'Acme Corp'})
         cls.project = cls.env['project.project'].create({
@@ -177,7 +177,7 @@ class TestStageTaskTemplates(TransactionCase):
         self._make_template(assignee_rule='same_as_source')
         with patch(
             'odoo.addons.project_stage_task_templates.models.project_stage_task_template'
-            '.ProjectStageTaskTemplate._resolve_assignee',
+            '.ProjectStageTaskTemplate._resolve_assignee_raw',
             side_effect=Exception('boom'),
         ):
             self.source_task.write({'stage_id': self.task_stage_qa.id})
