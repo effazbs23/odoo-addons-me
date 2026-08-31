@@ -2,9 +2,13 @@
 
 ## Status
 Done. Models, wizard, views, security, and tests all written, committed,
-and verified against a real Odoo 19.0 install (module installs cleanly +
-all 17 backend tests pass). Technical name and price both confirmed by
-the user — nothing outstanding.
+and verified two ways: (1) all 17 backend tests pass against a real
+Odoo 19.0 install, (2) the full workflow was walked live in Chrome
+(template setup, auto-creation + badge + chatter, confirm-mode queue +
+wizard, bulk stage change, refire-policy idempotency, smart button,
+per-project toggle) — found and fixed 2 UI bugs invisible to the unit
+tests (see decisions log). Technical name and price both confirmed by
+the user. 5 demo GIFs + a user manual produced from that session.
 
 ## Technical name
 bs_project_task_templates (confirmed by user 2026-08-31, picked over
@@ -34,6 +38,8 @@ bs_stage_task_templates / bs_project_stage_checklist)
 - Smart button (spec section 6) added only to `project.task.type` per spec text, not duplicated onto `project.project.stage` — discoverability for project-level templates is via the main config list view instead, to avoid unrequested extra UI.
 - Confirm-mode wizard is a persistent queue (`project.stage.task.template.log` rows with `state='pending'`), reviewed on demand from a "Pending Template Confirmations" list — not a modal popped straight out of `write()`. Odoo's kanban drag-and-drop stage change goes through a plain `write()` RPC whose return value the client doesn't use to open dialogs, so a synchronous popup isn't reliable there.
 - res.users field is `group_ids` in Odoo 19, not `groups_id` — caught by running tests against real 19.0 source, not guessed.
+- Two UI bugs only visible when actually rendering the views (unit tests don't catch these — they call the ORM directly): (1) the "Auto-generated" badge on the task form truncated to "Auto-ge…" because it shared a flex row with the (intentionally text-truncate'd) title without its own `flex-shrink:0` — fixed by adding `flex-shrink-0`. (2) the confirm wizard's line list never rendered `log_id`, so the web client silently dropped it from the save payload and "Confirm" failed with a required-field error — fixed by adding `log_id` as `column_invisible="1"` so it's part of the fields spec sent on save.
+- A leftover empty `static/description/index.html` (from an unrelated App-Store-listing pipeline that had generated icon.png/banner.gif/main_screenshot.png but not yet the description page) crashed the whole module registry on install (`lxml.etree.ParserError: Document is empty` — Odoo treats a present-but-unparseable index.html as the module's long description and errors on `_check()`). Deleted the empty file; the three image assets are left in place for the index-generator step.
 
 ## Deviations from the spec (if any, and why)
 - Data model section 6 said one `stage_id` field on the template. Split into `task_stage_id` / `project_stage_id` as above — required because Odoo 19 doesn't have a single shared stage model between project and task. Documented here per guardrail (checked real 19.0 source before deviating, didn't guess).
@@ -42,6 +48,10 @@ bs_stage_task_templates / bs_project_stage_checklist)
 - None. User confirmed 2026-08-31: keep `price: 0.00` (free/internal for now, no pricing-advisor tool was available in this environment to re-derive the spec's $35 estimate).
 
 ## Next step
-None outstanding. Optional/not spec-required if picked up later: static
-analysis (pylint-odoo/flake8) hasn't been run — only py_compile + a live
-install/test pass against real Odoo 19 so far.
+None outstanding for the module itself. Optional/not spec-required if
+picked up later: static analysis (pylint-odoo/flake8) hasn't been run —
+only py_compile + a live install/test pass + a full manual UI walkthrough
+against real Odoo 19 so far. Separately, the module's App Store
+`static/description/index.html` listing page still needs to be generated
+(assets are in place: icon.png, banner.gif, main_screenshot.png) via the
+`odoo-module-index-generator` skill — handed off to a separate agent.
