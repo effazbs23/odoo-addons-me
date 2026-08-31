@@ -208,3 +208,45 @@ class TestStageTaskTemplates(TransactionCase):
         self.project.write({'stage_id': self.project_stage_kickoff.id})
         created = self.env['project.task'].search([('generated_from_template_id', '!=', False)])
         self.assertFalse(created)
+
+    # -- Regression: a plain (non-manager) project user must be able to
+    # trigger a template without an AccessError blocking their stage change --
+    # this is the exact bug the production audit found: the log model's
+    # create() ran as the triggering user, who never has create rights on
+    # it, so the whole write() rolled back.
+
+    def test_non_manager_user_can_trigger_template(self):
+        self._make_template(refire_policy='always')
+        self.source_task.with_user(self.assignee).write({'stage_id': self.task_stage_qa.id})
+        self.assertEqual(self.source_task.stage_id, self.task_stage_qa)
+        created = self.env['project.task'].search([('generated_from_template_id', '!=', False)])
+        self.assertEqual(len(created), 1)
+
+    def test_non_manager_user_can_trigger_confirm_policy_template(self):
+        self._make_template(refire_policy='confirm')
+        self.source_task.with_user(self.assignee).write({'stage_id': self.task_stage_qa.id})
+        self.assertEqual(self.source_task.stage_id, self.task_stage_qa)
+        log = self.env['project.stage.task.template.log'].search([('source_record_ref', '=', 'project.task,%s' % self.source_task.id)])
+        self.assertEqual(log.state, 'pending')
+
+    # -- Deadline offset validation --
+
+    def test_negative_deadline_offset_is_rejected(self):
+        from odoo.exceptions import ValidationError
+        with self.assertRaises(ValidationError):
+            self._make_template(deadline_offset_days=-1)
+
+    # -- Audit trail survives template deletion attempts --
+
+    def test_template_with_firing_history_cannot_be_deleted(self):
+        # ondelete='restrict' is a DB-level FK constraint: called from the web
+        # controller it surfaces as a friendly ValidationError, but called
+        # directly (as here) it's the raw driver exception -- either way,
+        # the point under test is that the row is NOT deletable while log
+        # rows reference it.
+        import psycopg2
+        from odoo.tools import mute_logger
+        template = self._make_template(refire_policy='always')
+        self.source_task.write({'stage_id': self.task_stage_qa.id})
+        with mute_logger('odoo.sql_db'), self.assertRaises(psycopg2.IntegrityError):
+            template.unlink()

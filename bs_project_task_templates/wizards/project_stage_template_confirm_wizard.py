@@ -20,6 +20,10 @@ class ProjectStageTemplateConfirmWizard(models.TransientModel):
         self.ensure_one()
         for line in self.line_ids.filtered('selected'):
             log = line.log_id
+            if log.state != 'pending':
+                # Already handled by someone else confirming the same item
+                # concurrently -- don't create a second task for it.
+                continue
             record = log.source_record_ref
             if not record.exists():
                 log.unlink()
