@@ -1,10 +1,10 @@
 # Context: bs_project_task_templates
 
 ## Status
-Functionally complete and named. Models, wizard, views, security, and tests
-all written, committed, and verified against a real Odoo 19.0 install
-(module installs cleanly + all 17 backend tests pass). Remaining: final
-price confirmation before shipping (spec's $35 is a placeholder, not final).
+Done. Models, wizard, views, security, and tests all written, committed,
+and verified against a real Odoo 19.0 install (module installs cleanly +
+all 17 backend tests pass). Technical name and price both confirmed by
+the user — nothing outstanding.
 
 ## Technical name
 bs_project_task_templates (confirmed by user 2026-08-31, picked over
@@ -39,9 +39,9 @@ bs_stage_task_templates / bs_project_stage_checklist)
 - Data model section 6 said one `stage_id` field on the template. Split into `task_stage_id` / `project_stage_id` as above — required because Odoo 19 doesn't have a single shared stage model between project and task. Documented here per guardrail (checked real 19.0 source before deviating, didn't guess).
 
 ## Open questions / blockers
-- Final price still open — spec's $35 is explicitly a non-final estimate; manifest currently ships `price: 0.00` as a placeholder until that's confirmed.
+- None. User confirmed 2026-08-31: keep `price: 0.00` (free/internal for now, no pricing-advisor tool was available in this environment to re-derive the spec's $35 estimate).
 
 ## Next step
-Confirm final price with the user, set it in `__manifest__.py`, done.
-Optional/not spec-required: static analysis (pylint-odoo/flake8) hasn't been
-run — only py_compile + a live install/test pass against real Odoo 19 so far.
+None outstanding. Optional/not spec-required if picked up later: static
+analysis (pylint-odoo/flake8) hasn't been run — only py_compile + a live
+install/test pass against real Odoo 19 so far.
