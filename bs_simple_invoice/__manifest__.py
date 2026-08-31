@@ -32,4 +32,10 @@ changes to tax calculation, chart of accounts, or journal structure.
         'views/account_move_views.xml',
         'views/bs_simple_invoice_dashboard_views.xml',
     ],
+    'icon': '/bs_simple_invoice/static/description/icon.png',
+    'images': [
+        'static/description/banner.gif',
+    ],
+    'installable': True,
+    'auto_install': False,
 }
