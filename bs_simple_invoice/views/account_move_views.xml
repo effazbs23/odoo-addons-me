@@ -108,14 +108,28 @@
                  does. A first version used column_invisible here and it
                  crashed the Invoices list for every user with "Name
                  'is_simple_invoicing_view' is not defined", caught by
-                 actually opening the page in a browser. Column-level
-                 gating is done with groups= instead (server-side ACL,
-                 mirrors core's own company_id column in this same view),
-                 expressible directly here since there's no pre-existing
-                 groups= on this field to compose with. -->
-            <field name="status_in_payment" position="attributes">
-                <attribute name="invisible">payment_state == 'invoicing_legacy' or move_type == 'entry' or is_simple_invoicing_view</attribute>
-            </field>
+                 actually opening the page in a browser. simple_status'
+                 column gating is done with groups= instead (server-side
+                 ACL), directly expressible since there's only one positive
+                 term (see set_expression.py: a lone positive ANDed with
+                 the negative gives exactly "simple AND NOT accountant").
+
+                 status_in_payment itself is intentionally left completely
+                 untouched here (no invisible= added) rather than trying to
+                 hide it from simple-mode users too: the complementary
+                 condition ("NOT simple OR accountant") needs an OR of an
+                 independent negative-only branch with a positive branch,
+                 which groups= cannot express (negatives there always AND
+                 onto every positive branch, never stand alone in a union).
+                 An actual browser test caught the alternative: hiding it
+                 via invisible="...is_simple_invoicing_view" left an empty
+                 second "Status" column header for simple-mode users
+                 (per-row invisible hides cell content, not the column).
+                 Showing both columns to simple-mode users is a minor,
+                 harmless redundancy; a hidden-but-still-headered empty
+                 column looks broken. Zero behavior change for everyone
+                 else either way, which is the requirement that actually
+                 matters (spec 10 regression test). -->
             <field name="status_in_payment" position="after">
                 <field name="simple_status"
                        string="Status"
