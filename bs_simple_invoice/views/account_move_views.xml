@@ -100,11 +100,23 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_invoice_tree"/>
         <field name="arch" type="xml">
+            <!-- column_invisible is evaluated against the list's own
+                 evalContext (see evalColumnInvisible in
+                 web/static/src/views/list/list_renderer.js), which has no
+                 access to per-record fields like is_simple_invoicing_view;
+                 only invisible= (per-row, record.evalContextWithVirtualIds)
+                 does. A first version used column_invisible here and it
+                 crashed the Invoices list for every user with "Name
+                 'is_simple_invoicing_view' is not defined", caught by
+                 actually opening the page in a browser. Column-level
+                 gating is done with groups= instead (server-side ACL,
+                 mirrors core's own company_id column in this same view),
+                 expressible directly here since there's no pre-existing
+                 groups= on this field to compose with. -->
             <field name="status_in_payment" position="attributes">
                 <attribute name="invisible">payment_state == 'invoicing_legacy' or move_type == 'entry' or is_simple_invoicing_view</attribute>
             </field>
             <field name="status_in_payment" position="after">
-                <field name="is_simple_invoicing_view" column_invisible="1"/>
                 <field name="simple_status"
                        string="Status"
                        widget="badge"
@@ -112,7 +124,7 @@
                        decoration-info="simple_status == 'sent'"
                        decoration-warning="simple_status == 'overdue'"
                        decoration-success="simple_status == 'paid'"
-                       column_invisible="not is_simple_invoicing_view"
+                       groups="bs_simple_invoice.simple_invoicing_group,!account.group_account_manager"
                        optional="show"/>
             </field>
         </field>
