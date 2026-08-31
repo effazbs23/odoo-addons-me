@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_simple_invoicing" model="ir.ui.view">
+        <field name="name">account.move.form.simple.invoicing</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <!-- Field name= inheritance shorthand matches by name only, first
+                 occurrence in document order (see locate_node in
+                 template_inheritance.py); several target fields here
+                 (journal_id, fiscal_position_id, analytic_distribution)
+                 appear more than once in this view, so every field-level
+                 patch below uses an explicit xpath instead of the shorthand
+                 to avoid silently patching the wrong occurrence. -->
+
+            <!-- Helper field so invisible= expressions elsewhere in this
+                 view can reference is_simple_invoicing_view. -->
+            <xpath expr="//field[@name='journal_id'][@invisible='1']" position="after">
+                <field name="is_simple_invoicing_view" invisible="1"/>
+            </xpath>
+
+            <!-- `string=` cannot be used as an inheritance selector in Odoo
+                 19 (translated attribute, rejected with "View inheritance
+                 may not use attribute 'string' as a selector."), so the two
+                 action_post buttons (Post / Confirm) are distinguished by
+                 position instead: Post is first, Confirm is second in
+                 core's account.view_move_form header. -->
+
+            <!-- One-click shortcuts (spec 7.5): thin wrappers over the native
+                 flows, shown only to simple-mode users. -->
+            <xpath expr="(//button[@name='action_post'])[1]" position="before">
+                <button name="action_simple_mark_as_sent" string="Mark as Sent"
+                        type="object" class="oe_highlight" data-hotkey="q"
+                        groups="account.group_account_invoice"
+                        invisible="not is_simple_invoicing_view or is_move_sent or state == 'cancel'"/>
+                <button name="action_simple_register_payment" string="Record Payment"
+                        type="object" class="oe_highlight" data-hotkey="g"
+                        groups="account.group_account_invoice"
+                        invisible="not is_simple_invoicing_view or state != 'posted' or payment_state in ('paid', 'in_payment', 'reversed')"/>
+            </xpath>
+
+            <!-- Hide the native multi-step buttons the two shortcuts above
+                 replace for simple-mode users, so there's exactly one
+                 obvious action instead of six (spec 4.5). -->
+            <xpath expr="(//button[@name='action_post'])[1]" position="attributes">
+                <attribute name="invisible">hide_post_button or move_type != 'entry' or is_simple_invoicing_view</attribute>
+            </xpath>
+            <xpath expr="(//button[@name='action_post'])[2]" position="attributes">
+                <attribute name="invisible">hide_post_button or move_type == 'entry' or display_inactive_currency_warning or is_simple_invoicing_view</attribute>
+            </xpath>
+            <button name="action_invoice_sent" invisible="not display_send_button or not highlight_send_button" position="attributes">
+                <attribute name="invisible">not display_send_button or not highlight_send_button or is_simple_invoicing_view</attribute>
+            </button>
+            <button name="action_invoice_sent" invisible="not display_send_button or highlight_send_button" position="attributes">
+                <attribute name="invisible">not display_send_button or highlight_send_button or is_simple_invoicing_view</attribute>
+            </button>
+            <button id="account_invoice_payment_btn" position="attributes">
+                <attribute name="invisible">state != 'posted' or payment_state not in ('not_paid', 'partial', 'in_payment') or move_type not in ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt') or invoice_has_outstanding or is_simple_invoicing_view</attribute>
+            </button>
+            <button id="account_invoice_payment_secondary_btn" position="attributes">
+                <attribute name="invisible">state != 'posted' or payment_state not in ('not_paid', 'partial', 'in_payment') or move_type not in ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt') or not invoice_has_outstanding or is_simple_invoicing_view</attribute>
+            </button>
+
+            <!-- Simplified form (spec 7): hide journal selector, analytic
+                 widget, fiscal position and secondary currency for
+                 simple-mode users. invisible= composes as AND with each
+                 field's existing native groups=, so e.g. currency stays
+                 shown-only-if-multi-currency-company for everyone, and
+                 additionally hidden for simple-mode on top of that
+                 (spec 9 multi-currency edge case is satisfied for free). -->
+            <xpath expr="//label[@for='journal_id']" position="attributes">
+                <attribute name="invisible">not show_journal or is_simple_invoicing_view</attribute>
+            </xpath>
+            <xpath expr="//div[@name='journal_div']/field[@name='journal_id']" position="attributes">
+                <attribute name="invisible">not show_journal or is_simple_invoicing_view</attribute>
+            </xpath>
+            <xpath expr="//div[@name='currency_div']" position="attributes">
+                <attribute name="invisible">move_type == 'entry' or is_simple_invoicing_view</attribute>
+            </xpath>
+            <xpath expr="//div[@name='in_and_refresh_button_div']" position="attributes">
+                <attribute name="invisible">move_type == 'entry' or not show_journal or is_simple_invoicing_view</attribute>
+            </xpath>
+            <xpath expr="//group[@name='accounting_info_group']/field[@name='fiscal_position_id']" position="attributes">
+                <attribute name="invisible">is_simple_invoicing_view</attribute>
+            </xpath>
+            <xpath expr="//list[@name='journal_items']/field[@name='analytic_distribution']" position="attributes">
+                <attribute name="column_invisible">parent.is_simple_invoicing_view</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_invoice_tree_simple_invoicing" model="ir.ui.view">
+        <field name="name">account.move.list.simple.invoicing</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <field name="status_in_payment" position="attributes">
+                <attribute name="invisible">payment_state == 'invoicing_legacy' or move_type == 'entry' or is_simple_invoicing_view</attribute>
+            </field>
+            <field name="status_in_payment" position="after">
+                <field name="is_simple_invoicing_view" column_invisible="1"/>
+                <field name="simple_status"
+                       string="Status"
+                       widget="badge"
+                       decoration-muted="simple_status in ('draft', 'cancelled')"
+                       decoration-info="simple_status == 'sent'"
+                       decoration-warning="simple_status == 'overdue'"
+                       decoration-success="simple_status == 'paid'"
+                       column_invisible="not is_simple_invoicing_view"
+                       optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>

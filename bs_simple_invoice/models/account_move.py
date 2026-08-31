@@ -4,6 +4,21 @@ from odoo import api, fields, models
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
+    is_simple_invoicing_view = fields.Boolean(
+        compute='_compute_is_simple_invoicing_view',
+        help="True when the current user should see the simplified invoice "
+             "form: member of Simple Invoicing User and not of Accounting "
+             "Administrator (accountant-wins precedence). Depends only on "
+             "the current user, never stored.",
+    )
+
+    @api.depends_context('uid')
+    def _compute_is_simple_invoicing_view(self):
+        simple = self.env.user.has_group('bs_simple_invoice.simple_invoicing_group') \
+            and not self.env.user.has_group('account.group_account_manager')
+        for move in self:
+            move.is_simple_invoicing_view = simple
+
     simple_status = fields.Selection(
         selection=[
             ('draft', "Draft"),
