@@ -20,7 +20,7 @@ class BsEasySmtpWizard(models.TransientModel):
     provider = fields.Selection(PROVIDER_SELECTION, required=True, default='gmail')
     smtp_host = fields.Char(string="SMTP Server")
     smtp_port = fields.Integer(string="SMTP Port", default=587)
-    smtp_encryption = fields.Selection(ENCRYPTION_SELECTION, default='starttls')
+    smtp_encryption = fields.Selection(ENCRYPTION_SELECTION, string="Encryption", default='starttls')
     credential_note = fields.Text(readonly=True)
     credential_help_url = fields.Char(readonly=True)
 
@@ -44,6 +44,10 @@ class BsEasySmtpWizard(models.TransientModel):
         existing = self.env['ir.mail_server'].search([], order='sequence, id', limit=1)
         if existing:
             res.update({
+                # 'custom' so the automatic on-load onchange for 'provider' (Odoo always
+                # fires it once for a field that has a default) doesn't clobber the
+                # restored host/port/encryption below with a preset's values
+                'provider': 'custom',
                 'existing_mail_server_id': existing.id,
                 'smtp_host': existing.smtp_host,
                 'smtp_port': existing.smtp_port,
@@ -54,6 +58,10 @@ class BsEasySmtpWizard(models.TransientModel):
 
     @api.onchange('provider')
     def _onchange_provider(self):
+        # Custom must leave every field fully editable with no forced preset assumptions
+        # (spec section 9) -- also what keeps default_get's existing-server restore intact.
+        if not self.provider or self.provider == 'custom':
+            return
         preset = self.env['bs.easy.smtp.preset'].search([('provider', '=', self.provider)], limit=1)
         self.smtp_host = preset.default_host
         self.smtp_port = preset.default_port
@@ -65,6 +73,7 @@ class BsEasySmtpWizard(models.TransientModel):
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
+            'name': _("Easy SMTP Setup"),
             'res_model': self._name,
             'res_id': self.id,
             'view_mode': 'form',
@@ -88,16 +97,19 @@ class BsEasySmtpWizard(models.TransientModel):
         self.ensure_one()
         if not self.test_email_to:
             raise UserError(_("Enter an email address to send the test to."))
-        mail_server = self.env['ir.mail_server']
         email_from = self.smtp_user or self.env.user.email
-        message = mail_server._build_email__(
-            email_from=email_from,
-            email_to=[self.test_email_to],
-            subject=_("Easy SMTP Setup: test email"),
-            body=_("This is a test email sent from the Easy SMTP Setup wizard. "
-                   "If you received this, your outgoing mail settings are working."),
-        )
+        if not email_from:
+            raise UserError(_("Enter a username, or set an email address on your user, before sending a test."))
+
+        mail_server = self.env['ir.mail_server']
         try:
+            message = mail_server._build_email__(
+                email_from=email_from,
+                email_to=[self.test_email_to],
+                subject=_("Easy SMTP Setup: test email"),
+                body=_("This is a test email sent from the Easy SMTP Setup wizard. "
+                       "If you received this, your outgoing mail settings are working."),
+            )
             mail_server.send_email(
                 message,
                 smtp_server=self.smtp_host,

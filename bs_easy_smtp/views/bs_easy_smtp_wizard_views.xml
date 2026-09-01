@@ -49,9 +49,13 @@
         <field name="target">new</field>
     </record>
 
+    <!-- base.menu_email (Technical > Email) sits under base.menu_custom ("Technical"),
+         which requires base.group_no_one (developer mode) to even show up, which would
+         hide this wizard from exactly the non-technical admins it's for. Attach directly
+         under the Settings root instead, alongside "General Settings". -->
     <menuitem id="menu_bs_easy_smtp_wizard"
               name="Easy SMTP Setup"
-              parent="base.menu_email"
+              parent="base.menu_administration"
               action="action_bs_easy_smtp_wizard"
               groups="base.group_system"
               sequence="4"/>
