@@ -22,10 +22,10 @@ class BsNotifyEventTemplate(models.Model):
     message_template = fields.Text(required=True)
     company_id = fields.Many2one('res.company', help="Leave empty to apply to every company without its own override.")
 
-    _sql_constraints = [
-        ('event_company_uniq', 'unique(event_type, company_id)',
-         'Only one template is allowed per event per company (use a company-specific row to override the global default).'),
-    ]
+    _event_company_uniq = models.Constraint(
+        'unique(event_type, company_id)',
+        "Only one template is allowed per event per company (use a company-specific row to override the global default).",
+    )
 
     def _get_active(self, event_type, company):
         # company-specific row (if any) wins over the global (company_id

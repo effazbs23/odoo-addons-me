@@ -22,7 +22,11 @@ rolls back the underlying business transaction.
     'price': 0.00,
     'currency': 'USD',
     'application': False,
-    'depends': ['sale', 'account', 'stock'],
+    # sale_stock (not plain 'stock') is required: it's the bridge module
+    # that actually creates a stock.picking on SO confirmation and adds
+    # sale.order.picking_ids -- without it, delivery_shipped could never
+    # fire. It transitively pulls in sale, stock and account already.
+    'depends': ['sale_stock', 'account'],
     'data': [
         'security/ir.model.access.csv',
         'data/bs_notify_event_template_data.xml',

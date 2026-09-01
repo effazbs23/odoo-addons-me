@@ -57,7 +57,10 @@ class BsNotifyLog(models.Model):
             return  # event disabled / not configured -- a deliberate no-op, not a failure
 
         partner = self._get_partner(record)
-        phone = (partner.mobile or '').strip() if partner else ''
+        # Odoo 19 merged res.partner.mobile into a single 'phone' field --
+        # there is no separate mobile field to read (spec section 6 assumed
+        # the old two-field model; deviation logged in context.md).
+        phone = (partner.phone or '').strip() if partner else ''
         if not is_valid_e164(phone):
             self.sudo().create({
                 'event_type': event_type,
@@ -146,7 +149,18 @@ class BsNotifyLog(models.Model):
         record = self.source_record_ref
         if not record or not record.exists():
             raise UserError(_("The source record for this notification no longer exists."))
-        # force=True: a resend must always attempt again and log a new
-        # entry, never get blocked by the duplicate/fire-once guard that
-        # protects automatic triggers.
-        self._send_notification(self.event_type, record, force=True)
+        if self.status == 'skipped_no_phone':
+            # Nothing was ever sent -- retry the whole event from scratch
+            # (force=True bypasses the duplicate guard), across every
+            # channel the template specifies, since the phone may have
+            # been fixed since.
+            self._send_notification(self.event_type, record, force=True)
+            return
+        # status == 'failed': retry only the channel this log entry
+        # represents. Re-running the full event would re-fire the sibling
+        # channel too (e.g. re-send SMS when only WhatsApp had failed),
+        # which is its own kind of duplicate the spec says to avoid.
+        company = self.company_id or self.env.company
+        partner = self.partner_id
+        phone = (partner.phone or '').strip() if partner else self.phone_number
+        self._send_via_channel(self.event_type, self.channel, record, partner, phone, self.message_body, company)

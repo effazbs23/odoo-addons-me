@@ -10,7 +10,7 @@ class ResPartner(models.Model):
         string="Has Valid Notification Number", compute='_compute_has_valid_notify_number',
     )
 
-    @api.depends('mobile')
+    @api.depends('phone')
     def _compute_has_valid_notify_number(self):
         for partner in self:
-            partner.has_valid_notify_number = is_valid_e164(partner.mobile)
+            partner.has_valid_notify_number = is_valid_e164(partner.phone)

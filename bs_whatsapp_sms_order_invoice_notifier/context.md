@@ -1,7 +1,7 @@
 # Context: whatsapp_sms_order_invoice_notifier
 
 ## Status
-Scaffolding started. Models not yet written.
+All code written and committed (models, dispatch, adapters, 5 hooks, views, tests). Static/description assets (icon, banner, main_screenshot, shared ERP23 branding assets) copied in. Waiting on first install+test run against a real Odoo 19 DB (notify_test_db) -- running in background, not yet confirmed green. Next: confirm tests pass, then do the Claude-in-Chrome walkthrough + screenshots + index.html per user's follow-up instructions, then the naming/pricing steps.
 
 ## Technical name
 bs_whatsapp_sms_order_invoice_notifier (placeholder — final name pending odoo-addon-namer step)
@@ -10,17 +10,20 @@ bs_whatsapp_sms_order_invoice_notifier (placeholder — final name pending odoo-
 19.0 — branch: addon_bs_whatsapp_sms_order_invoice_notifier_19.0 (branched from origin/19.0)
 
 ## File inventory (what exists, one line each)
-- models/bs_notify_gateway_config.py — not started
-- models/bs_notify_event_template.py — not started
-- models/bs_notify_log.py (incl. central _send_notification dispatch) — not started
-- models/gateway_adapters/ (one file per provider) — not started
-- models/sale_order.py (inherit, so_confirmed hook) — not started
-- models/stock_picking.py (inherit, delivery_shipped hook) — not started
-- models/account_move.py (inherit, invoice_posted + payment_received hooks) — not started
-- data/ir_cron_overdue_check.xml — not started
-- views/... — not started
-- security/ir.model.access.csv — not started
-- tests/... — not started
+- models/bs_notify_gateway_config.py — done (1 active gateway per channel/company, provider-channel constraint)
+- models/bs_notify_event_template.py — done (global + per-company override)
+- models/bs_notify_log.py (incl. central _send_notification dispatch) — done
+- models/bs_notify_utils.py — done (E.164 regex + token renderer, shared with res_partner.py)
+- models/gateway_adapters/ (meta_cloud_api, twilio, generic_rest) — done
+- models/res_partner.py (has_valid_notify_number) — done
+- models/sale_order.py (inherit, so_confirmed hook) — done
+- models/stock_picking.py (inherit, delivery_shipped hook, outgoing only) — done
+- models/account_move.py (invoice_posted + payment_received + overdue cron) — done
+- data/ir_cron_overdue_check.xml, data/bs_notify_event_template_data.xml — done
+- views/ (gateway config, event template, log, 3x smart-button inherits, menus) — done
+- security/ir.model.access.csv — done (group_system for config, group_user read-only for log)
+- tests/ (unit: phone/template/never-raises; integration: 5 triggers, guards, resend, no-phone, non-blocking regression) — done, not yet run to green
+- static/description/ — icon.png, banner.gif, assets/main_screenshot.png copied from user-supplied files; shared ERP23 branding assets (logo, svc-*, check-*, stat webp, erp23.png) copied from index-skill/assets. index.html NOT yet built -- pending browser walkthrough screenshots.
 
 ## Key decisions made (not already in the spec)
 - Odoo 19 lifecycle hook points confirmed by reading actual source at /home/bs-00776/odoo19/addons:
@@ -32,7 +35,10 @@ bs_whatsapp_sms_order_invoice_notifier (placeholder — final name pending odoo-
 - Existing repo module `bs_whatsapp_communication` (unmerged branch `addon_bs_whatsapp_communication_19.0`) is unrelated: it's a manual "click to open WhatsApp Web" wizard per-record, no gateway API, no SMS, no automated triggers, no delivery log. Confirmed no functional/technical overlap — different mechanism entirely. Worth flagging in the naming step so the two aren't confused on the app store.
 
 ## Deviations from the spec (if any, and why)
-- none yet
+- Spec section 6 says "Uses the customer's mobile number from res.partner" and assumes a separate `mobile` field. Confirmed by an actual failed install (ValueError: Invalid field 'mobile' in 'res.partner') that Odoo 19 merged `mobile` into a single `phone` field on res.partner (checked odoo19/odoo/addons/base/models/res_partner.py -- only `phone = fields.Char()` remains, no `mobile` anywhere in base/sale/account/stock/contacts). All phone reads/validates use `partner.phone` instead. User-facing copy still says "mobile number" since that's still what the field represents functionally.
+- `_sql_constraints` is deprecated in Odoo 19 (registry warning: "no longer supported, please define models.Constraint on the model"). bs.notify.event.template's unique constraint uses the new `models.Constraint(...)` class-attribute form instead.
+- Manifest depends on `sale_stock` (not plain `stock`): plain `sale`+`stock` never actually wires delivery creation on SO confirm (no sale.order.picking_ids, no procurement) -- confirmed by a real AttributeError during testing. sale_stock is the bridge module and transitively pulls in sale/stock/account anyway.
+- res.users.groups_id was renamed to group_ids in this Odoo 19 build (AttributeError caught while writing tests/common.py's group setup for the test user).
 
 ## Open questions / blockers
 - none currently

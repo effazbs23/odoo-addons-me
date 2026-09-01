@@ -1,14 +1,20 @@
-from odoo.tests.common import TransactionCase
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
-class NotifyTestCommon(TransactionCase):
+class NotifyTestCommon(AccountTestInvoicingCommon):
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        # AccountTestInvoicingCommon's test user has accounting rights but
+        # not sales/stock ones -- needed here since these tests drive a
+        # full sale -> delivery -> invoice -> payment flow.
+        cls.env.user.group_ids |= (
+            cls.env.ref('sales_team.group_sale_manager') + cls.env.ref('stock.group_stock_manager')
+        )
         cls.partner = cls.env['res.partner'].create({
             'name': 'Notify Test Customer',
-            'mobile': '+15550001111',
+            'phone': '+15550001111',
             'email': 'notify.customer@example.com',
         })
         cls.partner_no_phone = cls.env['res.partner'].create({
