@@ -23,7 +23,10 @@ class BsNotifyLog(models.Model):
     channel = fields.Selection(CHANNEL_SELECTION, required=True)
     partner_id = fields.Many2one('res.partner')
     phone_number = fields.Char()
-    source_record_ref = fields.Reference(SOURCE_MODELS, string="Source Record", required=True)
+    # Indexed: looked up on every trigger (duplicate guard) and every
+    # smart-button render on sale.order/stock.picking/account.move -- an
+    # unindexed scan here gets slow as the log table grows in production.
+    source_record_ref = fields.Reference(SOURCE_MODELS, string="Source Record", required=True, index=True)
     status = fields.Selection(STATUS_SELECTION, required=True)
     provider_response = fields.Text(string="Gateway Response")
     message_body = fields.Text()
@@ -52,7 +55,13 @@ class BsNotifyLog(models.Model):
         if not force and self._is_duplicate(event_type, record):
             return
 
-        template = self.env['bs.notify.event.template']._get_active(event_type, company)
+        # sudo(): dispatch is internal system bookkeeping, not a user-facing
+        # action -- it must not depend on whether the confirming/posting
+        # user happens to have read access to notification config models
+        # (gateway_config is deliberately admin-only since it holds API
+        # secrets; a plain sales/accounting user triggering action_confirm
+        # must still be able to look it up here).
+        template = self.env['bs.notify.event.template'].sudo()._get_active(event_type, company)
         if not template:
             return  # event disabled / not configured -- a deliberate no-op, not a failure
 
@@ -80,7 +89,10 @@ class BsNotifyLog(models.Model):
             self._send_via_channel(event_type, channel, record, partner, phone, message, company)
 
     def _send_via_channel(self, event_type, channel, record, partner, phone, message, company):
-        gateway = self.env['bs.notify.gateway.config']._get_active(channel, company)
+        # sudo(): same reasoning as the template lookup above -- gateway
+        # credentials are admin-only by design, but any user's action can
+        # trigger a send.
+        gateway = self.env['bs.notify.gateway.config'].sudo()._get_active(channel, company)
         vals = {
             'event_type': event_type,
             'channel': channel,
