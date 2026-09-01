@@ -26,7 +26,6 @@ Setup/validation layer only: zero changes to how Odoo actually sends mail.
         'security/ir.model.access.csv',
         'data/bs_easy_smtp_preset_data.xml',
         'views/bs_easy_smtp_wizard_views.xml',
-        'views/ir_mail_server_views.xml',
     ],
     'installable': True,
     'auto_install': False,

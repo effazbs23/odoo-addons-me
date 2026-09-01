@@ -1,8 +1,9 @@
 # Context: bs_easy_smtp
 
 ## Status
-Backend done (preset, wizard, error-decode override) + wizard views/menu written and XML/py
-validated. Next: tests, then static analysis + manual install check.
+v1 build complete: module installs cleanly on Odoo 19 and all 6 tests pass (verified via
+odoo-bin against a throwaway local DB, since dropped). Static analysis (ruff, appstore
+validator) clean. Price left as placeholder per spec -- not yet confirmed with user.
 
 ## Technical name
 bs_easy_smtp (final — no naming step needed)
@@ -23,7 +24,10 @@ bs_easy_smtp (final — no naming step needed)
   non-technical admins, not just devs)
 - views/ir_mail_server_views.xml — intentionally NOT created, see deviation below
 - security/ir.model.access.csv — done (preset: read-only group_system; wizard: full CRUD group_system)
-- tests/... — not started (next step)
+- tests/test_bs_easy_smtp.py — done, 6 tests: preset autofill (all providers), error
+  decoder categories (auth/timeout/ssl/relay/fallback), test-send persists nothing,
+  save requires successful test, save creates when no server exists, re-run updates
+  existing server without duplicating + leaves an unrelated server untouched
 
 ## Key decisions made (not already in the spec)
 - Repo's own two-step wizard convention confirmed via bs_smart_invoice_import/wizard/quick_paste_wizard.py:
@@ -62,8 +66,11 @@ bs_easy_smtp (final — no naming step needed)
   core already has one. Will instead hook its error path into the shared decoder. See above.
 
 ## Open questions / blockers
-- Waiting on research into repo's existing wizard state-field pattern (in-progress).
+- Final price ($19 estimate in spec) not confirmed -- placeholder 0.00 left in manifest
+  per build guardrail (stop and ask before confirming final price).
 
 ## Next step
-Read back the wizard-convention research, then implement models/bs_easy_smtp_preset.py +
-data file first (per build step 5).
+Nothing pending for v1 functionality. If asked to continue: confirm price with user,
+then optionally add appstore listing assets (icon/screenshots/index.html) as a separate
+follow-up commit, matching how bs_simple_invoice did it (functionality first, listing
+assets later) -- not part of this build's 15 steps.

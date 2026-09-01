@@ -5,18 +5,18 @@ from odoo.exceptions import UserError
 # exception message (spec section 7.4)
 _ERROR_PATTERNS = [
     (('auth', 'username and password not accepted', 'invalid credentials', 'login'),
-     "Your username or password (or app password) is incorrect. If your provider requires "
-     "an app password instead of your normal account password, use that instead."),
+     ("Your username or password (or app password) is incorrect. If your provider requires "
+      "an app password instead of your normal account password, use that instead.")),
     (('timed out', 'timeout', 'connection refused', 'name or service not known',
       'temporary failure in name resolution', 'network is unreachable'),
-     "We couldn't reach that server. Check the host and port, and make sure your network "
-     "or firewall allows outgoing SMTP connections."),
+     ("We couldn't reach that server. Check the host and port, and make sure your network "
+      "or firewall allows outgoing SMTP connections.")),
     (('ssl', 'tls', 'wrong version number', 'certificate'),
-     "The encryption setting doesn't match what this server expects. Try switching between "
-     "SSL and STARTTLS."),
+     ("The encryption setting doesn't match what this server expects. Try switching between "
+      "SSL and STARTTLS.")),
     (('relay', 'access denied', 'not allowed to relay', 'sender address rejected'),
-     "The server rejected sending as this address. Double check the username matches the "
-     "account you're authenticating with."),
+     ("The server rejected sending as this address. Double check the username matches the "
+      "account you're authenticating with.")),
 ]
 
 
