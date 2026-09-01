@@ -4,7 +4,7 @@
 Functionally complete. All code written, tested against a real Odoo 19 DB (17/17 automated tests green), and walked through live in the browser end-to-end (SO confirm -> delivery -> invoice -> payment -> resend), including real outbound HTTP calls to Twilio/Meta-shaped and generic REST endpoints (401s against fake creds proved the non-blocking guarantee for real; httpbin.org proved a real send + resend succeeding). index.html app-store listing finished with 12 real screenshots. Remaining: naming (3 candidates, human picks per guardrail), pricing/tier confirmation (deferred to pricing advisor per spec section 12), then squash-and-PR per bs23-commit-guidelines.
 
 ## Technical name
-bs_whatsapp_sms_order_invoice_notifier (placeholder — final name pending odoo-addon-namer step)
+bs_whatsapp_sms_order_invoice_notifier — CONFIRMED by user after odoo-addon-namer research (3 candidates presented; user picked "Whatsapp/SMS Order and Invoice Notifier", which matches the existing manifest name/directory as-is, no rename needed).
 
 ## Odoo version / branch
 19.0 — branch: addon_bs_whatsapp_sms_order_invoice_notifier_19.0 (branched from origin/19.0)
@@ -44,4 +44,4 @@ bs_whatsapp_sms_order_invoice_notifier (placeholder — final name pending odoo-
 - none currently
 
 ## Next step
-Ask the user to pick a final name from 3 odoo-addon-namer candidates (guardrail: don't auto-select), then run the pricing step for the Paid vs Premium Paid call, then squash/PR per bs23-commit-guidelines. Test env note: notify_test_db (local) now has an l10n_bd chart of accounts installed manually via `odoo-bin shell` (core had no journal for the company otherwise) -- this was a one-off local test-DB fix, not a module change.
+Naming and pricing are both confirmed (see above): name unchanged, price set to $9.00 / Paid tier. Module is functionally, visually, and commercially complete. Remaining: static analysis / final test pass per step 17, then squash-and-PR per bs23-commit-guidelines (this branch has many small commits by design; squash before opening the PR to development). Test env note: notify_test_db (local) now has an l10n_bd chart of accounts installed manually via `odoo-bin shell` (core had no journal for the company otherwise) -- this was a one-off local test-DB fix, not a module change.

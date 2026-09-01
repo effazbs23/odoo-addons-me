@@ -19,7 +19,7 @@ rolls back the underlying business transaction.
     'website': 'https://erp-23.com',
     'support': 'erp23@brainstation-23.com',
     'license': 'OPL-1',
-    'price': 0.00,
+    'price': 9.00,
     'currency': 'USD',
     'application': False,
     # sale_stock (not plain 'stock') is required: it's the bridge module
