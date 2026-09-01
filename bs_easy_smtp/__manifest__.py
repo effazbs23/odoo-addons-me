@@ -27,6 +27,7 @@ Setup/validation layer only: zero changes to how Odoo actually sends mail.
         'data/bs_easy_smtp_preset_data.xml',
         'views/bs_easy_smtp_wizard_views.xml',
     ],
+    'icon': '/bs_easy_smtp/static/description/icon.png',
     'installable': True,
     'auto_install': False,
 }
