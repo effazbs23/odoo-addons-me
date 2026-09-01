@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="preset_gmail" model="bs.easy.smtp.preset">
+        <field name="provider">gmail</field>
+        <field name="default_host">smtp.gmail.com</field>
+        <field name="default_port">587</field>
+        <field name="default_encryption">starttls</field>
+        <field name="credential_note">Use a Google App Password, not your normal Gmail password. App
+Passwords require 2-Step Verification to be enabled on the account.</field>
+        <field name="credential_help_url">https://support.google.com/accounts/answer/185833</field>
+    </record>
+
+    <record id="preset_google_workspace" model="bs.easy.smtp.preset">
+        <field name="provider">google_workspace</field>
+        <field name="default_host">smtp.gmail.com</field>
+        <field name="default_port">587</field>
+        <field name="default_encryption">starttls</field>
+        <field name="credential_note">Use a Google App Password generated for this user, not their normal
+Workspace login password. App Passwords require 2-Step Verification.</field>
+        <field name="credential_help_url">https://support.google.com/a/answer/176600</field>
+    </record>
+
+    <record id="preset_office365" model="bs.easy.smtp.preset">
+        <field name="provider">office365</field>
+        <field name="default_host">smtp.office365.com</field>
+        <field name="default_port">587</field>
+        <field name="default_encryption">starttls</field>
+        <field name="credential_note">If this account has multi-factor authentication enabled, generate an
+app password in Microsoft account security settings instead of using the normal password.</field>
+        <field name="credential_help_url">https://support.microsoft.com/en-us/account-billing/manage-app-passwords-for-two-step-verification-d6dc8c6d-4bf7-4851-ad95-6d07799387e9</field>
+    </record>
+
+    <record id="preset_zoho" model="bs.easy.smtp.preset">
+        <field name="provider">zoho</field>
+        <field name="default_host">smtp.zoho.com</field>
+        <field name="default_port">587</field>
+        <field name="default_encryption">starttls</field>
+        <field name="credential_note">If two-factor authentication is enabled, generate an app-specific
+password in Zoho Mail instead of using the account password.</field>
+        <field name="credential_help_url">https://www.zoho.com/mail/help/adminconsole/two-factor-authentication.html</field>
+    </record>
+
+    <record id="preset_ses" model="bs.easy.smtp.preset">
+        <field name="provider">ses</field>
+        <field name="default_host">email-smtp.us-east-1.amazonaws.com</field>
+        <field name="default_port">587</field>
+        <field name="default_encryption">starttls</field>
+        <field name="credential_note">Use SMTP credentials generated in the SES console (Simple Email
+Service &gt; SMTP Settings), not your AWS account password.</field>
+        <field name="credential_help_url">https://docs.aws.amazon.com/ses/latest/dg/smtp-credentials.html</field>
+    </record>
+
+    <record id="preset_sendgrid" model="bs.easy.smtp.preset">
+        <field name="provider">sendgrid</field>
+        <field name="default_host">smtp.sendgrid.net</field>
+        <field name="default_port">587</field>
+        <field name="default_encryption">starttls</field>
+        <field name="credential_note">Username is literally the word "apikey"; the password is an API key
+generated in SendGrid under Settings &gt; API Keys.</field>
+        <field name="credential_help_url">https://docs.sendgrid.com/for-developers/sending-email/getting-started-smtp</field>
+    </record>
+
+    <record id="preset_mailgun" model="bs.easy.smtp.preset">
+        <field name="provider">mailgun</field>
+        <field name="default_host">smtp.mailgun.org</field>
+        <field name="default_port">587</field>
+        <field name="default_encryption">starttls</field>
+        <field name="credential_note">Use the SMTP credentials shown on this domain's Mailgun settings
+page, not your Mailgun account login.</field>
+        <field name="credential_help_url">https://documentation.mailgun.com/en/latest/user_manual.html#smtp-relay</field>
+    </record>
+
+    <record id="preset_custom" model="bs.easy.smtp.preset">
+        <field name="provider">custom</field>
+        <field name="default_host"></field>
+        <field name="default_port">587</field>
+        <field name="default_encryption">none</field>
+        <field name="credential_note"></field>
+        <field name="credential_help_url"></field>
+    </record>
+
+</odoo>
