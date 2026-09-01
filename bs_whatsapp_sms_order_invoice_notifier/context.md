@@ -1,7 +1,7 @@
 # Context: whatsapp_sms_order_invoice_notifier
 
 ## Status
-All code written and committed (models, dispatch, adapters, 5 hooks, views, tests). Static/description assets (icon, banner, main_screenshot, shared ERP23 branding assets) copied in. Waiting on first install+test run against a real Odoo 19 DB (notify_test_db) -- running in background, not yet confirmed green. Next: confirm tests pass, then do the Claude-in-Chrome walkthrough + screenshots + index.html per user's follow-up instructions, then the naming/pricing steps.
+Functionally complete. All code written, tested against a real Odoo 19 DB (17/17 automated tests green), and walked through live in the browser end-to-end (SO confirm -> delivery -> invoice -> payment -> resend), including real outbound HTTP calls to Twilio/Meta-shaped and generic REST endpoints (401s against fake creds proved the non-blocking guarantee for real; httpbin.org proved a real send + resend succeeding). index.html app-store listing finished with 12 real screenshots. Remaining: naming (3 candidates, human picks per guardrail), pricing/tier confirmation (deferred to pricing advisor per spec section 12), then squash-and-PR per bs23-commit-guidelines.
 
 ## Technical name
 bs_whatsapp_sms_order_invoice_notifier (placeholder — final name pending odoo-addon-namer step)
@@ -22,8 +22,8 @@ bs_whatsapp_sms_order_invoice_notifier (placeholder — final name pending odoo-
 - data/ir_cron_overdue_check.xml, data/bs_notify_event_template_data.xml — done
 - views/ (gateway config, event template, log, 3x smart-button inherits, menus) — done
 - security/ir.model.access.csv — done (group_system for config, group_user read-only for log)
-- tests/ (unit: phone/template/never-raises; integration: 5 triggers, guards, resend, no-phone, non-blocking regression) — done, not yet run to green
-- static/description/ — icon.png, banner.gif, assets/main_screenshot.png copied from user-supplied files; shared ERP23 branding assets (logo, svc-*, check-*, stat webp, erp23.png) copied from index-skill/assets. index.html NOT yet built -- pending browser walkthrough screenshots.
+- tests/ (unit: phone/template/never-raises; integration: 5 triggers, guards, resend, no-phone, non-blocking regression) — done, 17/17 green against a real Odoo 19 DB
+- static/description/ — icon.png, banner.gif, index.html (odoo-module-index-generator template, sanitizer-checked) + 12 real walkthrough screenshots, all committed.
 
 ## Key decisions made (not already in the spec)
 - Odoo 19 lifecycle hook points confirmed by reading actual source at /home/bs-00776/odoo19/addons:
@@ -44,4 +44,4 @@ bs_whatsapp_sms_order_invoice_notifier (placeholder — final name pending odoo-
 - none currently
 
 ## Next step
-Write __manifest__.py, security groups, and the three core models (gateway_config, event_template, log) per spec section 6.
+Ask the user to pick a final name from 3 odoo-addon-namer candidates (guardrail: don't auto-select), then run the pricing step for the Paid vs Premium Paid call, then squash/PR per bs23-commit-guidelines. Test env note: notify_test_db (local) now has an l10n_bd chart of accounts installed manually via `odoo-bin shell` (core had no journal for the company otherwise) -- this was a one-off local test-DB fix, not a module change.
