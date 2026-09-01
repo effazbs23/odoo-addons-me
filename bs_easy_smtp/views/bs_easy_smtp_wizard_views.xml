@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_bs_easy_smtp_wizard_form" model="ir.ui.view">
+        <field name="name">bs.easy.smtp.wizard.form</field>
+        <field name="model">bs.easy.smtp.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Easy SMTP Setup">
+                <field name="state" invisible="1"/>
+                <field name="existing_mail_server_id" invisible="1"/>
+
+                <group invisible="state != 'provider'">
+                    <field name="provider"/>
+                    <field name="smtp_host"/>
+                    <field name="smtp_port"/>
+                    <field name="smtp_encryption"/>
+                </group>
+
+                <group invisible="state != 'credentials'">
+                    <field name="credential_note" invisible="not credential_note" readonly="1"/>
+                    <field name="credential_help_url" widget="url" invisible="not credential_help_url" readonly="1"/>
+                    <field name="smtp_user"/>
+                    <field name="smtp_pass" password="True"/>
+                    <field name="test_email_to"/>
+                    <field name="test_result_status" invisible="1"/>
+                    <field name="test_result_message" invisible="test_result_status == 'untested'" readonly="1"/>
+                </group>
+
+                <footer invisible="state != 'provider'">
+                    <button name="action_next" type="object" string="Continue" class="btn-primary"/>
+                    <button special="cancel" string="Discard"/>
+                </footer>
+                <footer invisible="state != 'credentials'">
+                    <button name="action_back" type="object" string="Back"/>
+                    <button name="action_test_send" type="object" string="Send Test Email" class="btn-primary"/>
+                    <button name="action_save" type="object" string="Save as Active Mail Server"
+                            class="btn-primary" invisible="test_result_status != 'success'"/>
+                    <button special="cancel" string="Discard"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bs_easy_smtp_wizard" model="ir.actions.act_window">
+        <field name="name">Easy SMTP Setup</field>
+        <field name="res_model">bs.easy.smtp.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_bs_easy_smtp_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <!-- base.menu_email (Technical > Email) sits under base.menu_custom ("Technical"),
+         which requires base.group_no_one (developer mode) to even show up, which would
+         hide this wizard from exactly the non-technical admins it's for. Attach directly
+         under the Settings root instead, alongside "General Settings". -->
+    <menuitem id="menu_bs_easy_smtp_wizard"
+              name="Easy SMTP Setup"
+              parent="base.menu_administration"
+              action="action_bs_easy_smtp_wizard"
+              groups="base.group_system"
+              sequence="4"/>
+
+</odoo>
