@@ -21,8 +21,13 @@ class BsNotifyGatewayConfig(models.Model):
     channel = fields.Selection([('whatsapp', 'WhatsApp'), ('sms', 'SMS')], required=True)
     provider = fields.Selection(PROVIDER_SELECTION, required=True)
     api_endpoint = fields.Char(string="API Endpoint", help="Required for Generic REST; optional override for known providers.")
-    api_key = fields.Char(string="API Key")
-    api_secret = fields.Char(string="API Secret", help="Provider-dependent, e.g. Twilio Auth Token.")
+    # Defense-in-depth (audit finding): the model ACL already restricts this
+    # whole model to base.group_system, but core does the same belt-and-
+    # suspenders field-level restriction on credential fields (e.g.
+    # ir.mail_server.smtp_pass) so a later ACL change can't silently expose
+    # these too.
+    api_key = fields.Char(string="API Key", groups="base.group_system")
+    api_secret = fields.Char(string="API Secret", help="Provider-dependent, e.g. Twilio Auth Token.", groups="base.group_system")
     sender_id = fields.Char(string="Sender ID", help="Sender phone number/ID, provider-dependent.")
     active = fields.Boolean(default=True)
     company_id = fields.Many2one('res.company', required=True, default=lambda self: self.env.company)

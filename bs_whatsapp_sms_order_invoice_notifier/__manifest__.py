@@ -29,6 +29,7 @@ rolls back the underlying business transaction.
     'depends': ['sale_stock', 'account'],
     'data': [
         'security/ir.model.access.csv',
+        'security/security.xml',
         'data/bs_notify_event_template_data.xml',
         'data/ir_cron_overdue_check.xml',
         'views/bs_notify_gateway_config_views.xml',

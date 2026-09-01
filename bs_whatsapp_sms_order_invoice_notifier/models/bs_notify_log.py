@@ -1,7 +1,7 @@
 import logging
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import AccessError, UserError
 
 from . import gateway_adapters
 from .bs_notify_event_template import EVENT_TYPE_SELECTION
@@ -158,6 +158,13 @@ class BsNotifyLog(models.Model):
 
     def action_resend(self):
         self.ensure_one()
+        # Audit finding: the button's groups="base.group_system" only hides it
+        # in the UI -- the method itself must also refuse a direct RPC call,
+        # or any user who can read this log (any employee, company-scoped by
+        # the ir.rule) could still trigger a real outbound resend by calling
+        # the method directly.
+        if not self.env.user.has_group('base.group_system'):
+            raise AccessError(_("Only a system administrator can resend a notification."))
         record = self.source_record_ref
         if not record or not record.exists():
             raise UserError(_("The source record for this notification no longer exists."))

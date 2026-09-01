@@ -1,6 +1,7 @@
 from datetime import timedelta
 from unittest.mock import patch
 
+from odoo.exceptions import AccessError
 from odoo.fields import Date
 from odoo.tests.common import tagged
 
@@ -215,3 +216,50 @@ class TestNonAdminUserDispatch(NotifyTestCommon):
         ])
         self.assertEqual(len(logs), 2)
         self.assertTrue(all(entry.status == 'sent' for entry in logs))
+
+
+@tagged('post_install', '-at_install')
+class TestNotifyLogAccessControl(NotifyTestCommon):
+    """Regression (found by production-readiness audit, 60.audit.md): bs.notify.log
+    had no record rule at all, so any internal employee -- in ANY company, with
+    no relation whatsoever to the order -- could read every other company's
+    notification log (customer names, phone numbers, order/invoice amounts,
+    message bodies), and action_resend carried no authorization check, so
+    they could also trigger a real outbound resend on it. Verified live via
+    odoo-bin shell before this fix existed.
+    """
+
+    def test_unrelated_company_user_cannot_see_the_log(self):
+        other_company = self.env['res.company'].create({'name': 'Unrelated Company'})
+        outsider = self.env['res.users'].create({
+            'name': 'Totally Unrelated Employee', 'login': 'outsider_test',
+            'company_id': other_company.id, 'company_ids': [(6, 0, [other_company.id])],
+            'group_ids': [(6, 0, [self.env.ref('base.group_user').id])],
+        })
+        order = self._create_sale_order()
+        with patch(SEND_PATH, return_value='ok'):
+            order.action_confirm()
+        log = self.env['bs.notify.log'].search([('source_record_ref', '=', 'sale.order,%s' % order.id)])
+        self.assertTrue(log)
+
+        visible_to_outsider = self.env['bs.notify.log'].with_user(outsider).search([])
+        self.assertFalse(
+            visible_to_outsider & log,
+            "an employee of a completely unrelated company must not see this company's notification log",
+        )
+
+    def test_plain_employee_cannot_resend(self):
+        plain_employee = self.env['res.users'].create({
+            'name': 'Plain Employee, No Sales Rights', 'login': 'plain_employee_test',
+            'company_id': self.env.company.id, 'company_ids': [(6, 0, [self.env.company.id])],
+            'group_ids': [(6, 0, [self.env.ref('base.group_user').id])],
+        })
+        order = self._create_sale_order()
+        with patch(SEND_PATH, side_effect=ConnectionError("down")):
+            order.action_confirm()
+        log = self.env['bs.notify.log'].search([
+            ('source_record_ref', '=', 'sale.order,%s' % order.id),
+        ], limit=1)
+
+        with self.assertRaises(AccessError):
+            log.with_user(plain_employee).action_resend()

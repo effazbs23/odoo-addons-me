@@ -24,7 +24,7 @@
             <form string="Notification Log" create="false" edit="false">
                 <header>
                     <button name="action_resend" type="object" string="Resend" class="btn-primary"
-                            invisible="status == 'sent'"/>
+                            invisible="status == 'sent'" groups="base.group_system"/>
                 </header>
                 <sheet>
                     <group>
