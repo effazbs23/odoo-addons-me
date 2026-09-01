@@ -181,3 +181,37 @@ class TestNonBlockingRegression(NotifyTestCommon):
 
             self._register_full_payment(invoice)
             self.assertEqual(invoice.payment_state, 'paid')
+
+
+@tagged('post_install', '-at_install')
+class TestNonAdminUserDispatch(NotifyTestCommon):
+    """Regression (found by production-readiness audit): bs.notify.gateway.config
+    is deliberately restricted to base.group_system (it holds API secrets), but
+    the dispatch method must still be able to look it up regardless of which
+    user's action triggered it -- a plain sales user confirming an order has
+    no reason to have System access, and previously got a silently-swallowed
+    AccessError with zero log entry written, instead of a working send.
+    """
+
+    def test_plain_sales_user_triggers_a_real_send(self):
+        sales_user = self.env['res.users'].create({
+            'name': 'Plain Sales User', 'login': 'plain_sales_user_test',
+            'group_ids': [(6, 0, [self.env.ref('sales_team.group_sale_salesman').id])],
+        })
+        # sales_team.group_sale_salesman is "Own Documents Only" -- the
+        # order must actually belong to this user, not just be confirmed
+        # by them, or write access is denied for an unrelated reason.
+        order = self.env['sale.order'].with_user(sales_user).create({
+            'partner_id': self.partner.id,
+            'order_line': [(0, 0, {
+                'product_id': self.product.id, 'product_uom_qty': 1, 'price_unit': 100.0,
+            })],
+        })
+        with patch(SEND_PATH, return_value='ok'):
+            order.with_user(sales_user).action_confirm()
+        self.assertEqual(order.state, 'sale')
+        logs = self.env['bs.notify.log'].search([
+            ('event_type', '=', 'so_confirmed'), ('source_record_ref', '=', 'sale.order,%s' % order.id),
+        ])
+        self.assertEqual(len(logs), 2)
+        self.assertTrue(all(entry.status == 'sent' for entry in logs))
