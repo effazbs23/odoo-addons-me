@@ -1,7 +1,8 @@
 # Context: bs_easy_smtp
 
 ## Status
-Branch + scaffold done. Researching Odoo 19 wizard state-field conventions before writing models.
+Backend done (preset, wizard, error-decode override) + wizard views/menu written and XML/py
+validated. Next: tests, then static analysis + manual install check.
 
 ## Technical name
 bs_easy_smtp (final — no naming step needed)
@@ -10,15 +11,36 @@ bs_easy_smtp (final — no naming step needed)
 19.0 — branch: addon_bs_easy_smtp_19.0
 
 ## File inventory (what exists, one line each)
-- models/bs_easy_smtp_wizard.py — not started
-- data/bs_easy_smtp_preset_data.xml — not started
-- models/ir_mail_server.py (inherit, error-decode hook) — not started
-- views/bs_easy_smtp_wizard_views.xml — not started
-- views/ir_mail_server_views.xml (inherit) — not started
-- security/ir.model.access.csv — not started
-- tests/... — not started
+- models/bs_easy_smtp_preset.py — done (provider/host/port/encryption/credential_note/url)
+- data/bs_easy_smtp_preset_data.xml — done, all 8 providers incl. custom (blank host)
+- models/bs_easy_smtp_wizard.py — done: state field (provider/credentials), onchange
+  autofill, action_test_send (via ir.mail_server._build_email__/send_email in-memory,
+  nothing persisted), action_save (create-or-write existing_mail_server_id)
+- models/ir_mail_server.py (inherit) — done: _bs_easy_smtp_decode_error() shared decoder
+  + test_smtp_connection() override that re-decodes the native button's UserError
+- views/bs_easy_smtp_wizard_views.xml — done: form (state-gated groups/footers), act_window,
+  menuitem under base.menu_email (group base.group_system, not group_no_one -- meant for
+  non-technical admins, not just devs)
+- views/ir_mail_server_views.xml — intentionally NOT created, see deviation below
+- security/ir.model.access.csv — done (preset: read-only group_system; wizard: full CRUD group_system)
+- tests/... — not started (next step)
 
 ## Key decisions made (not already in the spec)
+- Repo's own two-step wizard convention confirmed via bs_smart_invoice_import/wizard/quick_paste_wizard.py:
+  `state` Selection field, transition methods do `self.write({...})` then return a
+  `_reopen_action()` dict (act_window, target=new, res_id=self.id) -- plain truthy return
+  would close the target=new dialog. Odoo 19 view syntax uses `invisible="python expr"`
+  directly, no `attrs=` dict. Mirrored exactly in bs_easy_smtp_wizard.py / its views.
+- Test-send reuses `ir.mail_server._build_email__()` + `.send_email(message, smtp_server=...,
+  smtp_port=..., smtp_user=..., smtp_password=..., smtp_encryption=...)` with no
+  `mail_server_id` -- confirmed by reading core (base/models/ir_mail_server.py) that this
+  path never touches a persisted record; it builds a real message and really sends it,
+  which is what spec 4.3 wants (a real test email), unlike core's own `test_smtp_connection`
+  which deliberately stops before DATA and never sends anything.
+- No separate "advanced/manual edit" toggle field for autofilled host/port/encryption (UX
+  flow 8.2 mentions one in prose) -- data model in spec section 6 has no such field, and
+  spec 7.2 just says fields "remain editable afterward". Implemented as always-editable,
+  simpler, matches the authoritative field table.
 - Checked Odoo 19 core (/home/bs-00776/odoo19/odoo/addons/base/models/ir_mail_server.py):
   Odoo 19 core ALREADY ships a native "Test Connection" button (`test_smtp_connection()`)
   on the ir.mail_server form (base/views/ir_mail_server_views.xml:9). This makes spec
