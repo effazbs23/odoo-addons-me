@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bs_notify_event_template_list" model="ir.ui.view">
+        <field name="name">bs.notify.event.template.list</field>
+        <field name="model">bs.notify.event.template</field>
+        <field name="arch" type="xml">
+            <list string="Event Templates">
+                <field name="event_type"/>
+                <field name="channel"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bs_notify_event_template_form" model="ir.ui.view">
+        <field name="name">bs.notify.event.template.form</field>
+        <field name="model">bs.notify.event.template</field>
+        <field name="arch" type="xml">
+            <form string="Event Template">
+                <sheet>
+                    <group>
+                        <field name="event_type"/>
+                        <field name="channel"/>
+                        <field name="active"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <group string="Message">
+                        <field name="message_template" nolabel="1"/>
+                    </group>
+                    <div class="text-muted">
+                        Available placeholders: <code>{{partner_name}}</code>, <code>{{order_reference}}</code>,
+                        <code>{{amount_total}}</code>, <code>{{due_date}}</code>, <code>{{invoice_number}}</code>,
+                        <code>{{payment_link}}</code>. A placeholder that doesn't apply to this event's record
+                        type is simply left blank.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bs_notify_event_template" model="ir.actions.act_window">
+        <field name="name">Event Templates</field>
+        <field name="res_model">bs.notify.event.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

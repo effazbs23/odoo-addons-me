@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bs_notify_gateway_config_system,bs.notify.gateway.config.system,model_bs_notify_gateway_config,base.group_system,1,1,1,1
+access_bs_notify_event_template_system,bs.notify.event.template.system,model_bs_notify_event_template,base.group_system,1,1,1,1
+access_bs_notify_event_template_user,bs.notify.event.template.user,model_bs_notify_event_template,base.group_user,1,0,0,0
+access_bs_notify_log_system,bs.notify.log.system,model_bs_notify_log,base.group_system,1,1,1,1
+access_bs_notify_log_user,bs.notify.log.user,model_bs_notify_log,base.group_user,1,0,0,0
