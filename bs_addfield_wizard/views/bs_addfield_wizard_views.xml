@@ -16,25 +16,44 @@
                     <field name="target_model_id" placeholder="Search a model..."/>
                 </group>
 
+                <!-- Kept as separate sibling groups, not nested inside one another: a
+                     <group> nested inside another <group> makes Odoo's view compiler stop
+                     auto-generating labels for the OUTER group's own plain field children
+                     (confirmed by testing in a real browser, not just a styling glitch). -->
                 <group invisible="state != 'field'" class="bs_af_group">
                     <field name="target_model_id" readonly="1"/>
                     <field name="field_type"/>
                     <field name="field_label" placeholder="e.g. VIP Tier"/>
                     <field name="field_name" placeholder="x_studio_..."/>
+                </group>
+                <group invisible="state != 'field'" col="1" class="bs_af_subgroup">
                     <field name="field_required"/>
+                    <span class="text-muted bs_af_hint">
+                        If checked, users must fill this in before saving a record.
+                    </span>
+                </group>
+                <group invisible="state != 'field'" col="1" class="bs_af_subgroup">
                     <field name="field_enabled"/>
-                    <field name="notebook_page"/>
+                    <span class="text-muted bs_af_hint">
+                        If unchecked, the field is created but hidden from the form until you
+                        turn it back on later from Custom Fields (no data is lost either way).
+                    </span>
+                </group>
+                <group invisible="state != 'field'" class="bs_af_group">
+                    <field name="notebook_page" placeholder="e.g. sales_purchases -- leave blank for end of form"/>
+                    <field name="available_tabs_hint" readonly="1" class="text-muted"/>
                     <field name="selection_options" placeholder="One option per line"
                            invisible="field_type != 'selection'"/>
                     <field name="relation_model_id" invisible="field_type != 'many2one'"/>
                     <field name="label_warning" invisible="not label_warning"
                            class="text-warning"/>
                     <field name="add_automation"/>
-                    <group invisible="not add_automation" string="Notification" class="bs_af_subgroup">
-                        <field name="automation_trigger_value"/>
-                        <field name="automation_notify_user_id"/>
-                        <field name="automation_message"/>
-                    </group>
+                </group>
+                <group invisible="state != 'field' or not add_automation" string="Notification"
+                       class="bs_af_subgroup">
+                    <field name="automation_trigger_value"/>
+                    <field name="automation_notify_user_id"/>
+                    <field name="automation_message"/>
                 </group>
 
                 <group invisible="state != 'preview'" class="bs_af_group">
@@ -43,6 +62,7 @@
                     <field name="field_name" readonly="1"/>
                     <field name="field_type" readonly="1"/>
                     <field name="field_enabled" readonly="1"/>
+                    <field name="notebook_page" readonly="1" invisible="not notebook_page"/>
                     <field name="placement_note" readonly="1"/>
                     <field name="add_automation" readonly="1"/>
                 </group>
