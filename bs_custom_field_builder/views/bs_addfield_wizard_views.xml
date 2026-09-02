@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_bs_addfield_wizard_form" model="ir.ui.view">
+        <field name="name">bs.addfield.wizard.form</field>
+        <field name="model">bs.addfield.wizard</field>
+        <field name="arch" type="xml">
+            <form class="bs_af_wizard">
+                <field name="state" invisible="1"/>
+                <div class="bs_af_header">
+                    <field name="step_label" nolabel="1" readonly="1" class="bs_af_step_label"/>
+                </div>
+
+                <group invisible="state != 'model'" class="bs_af_group">
+                    <p class="bs_af_hint">Choose the model you want to add a field to.</p>
+                    <field name="target_model_id" placeholder="Search a model..."/>
+                </group>
+
+                <!-- Kept as separate sibling groups, not nested inside one another: a
+                     <group> nested inside another <group> makes Odoo's view compiler stop
+                     auto-generating labels for the OUTER group's own plain field children
+                     (confirmed by testing in a real browser, not just a styling glitch). -->
+                <group invisible="state != 'field'" class="bs_af_group">
+                    <field name="target_model_id" readonly="1"/>
+                    <field name="field_type"/>
+                    <field name="field_label" placeholder="e.g. VIP Tier"/>
+                    <field name="field_name" placeholder="x_studio_..."/>
+                </group>
+                <group invisible="state != 'field'" col="1" class="bs_af_subgroup">
+                    <field name="field_required"/>
+                    <span class="text-muted bs_af_hint">
+                        If checked, users must fill this in before saving a record.
+                    </span>
+                </group>
+                <group invisible="state != 'field'" col="1" class="bs_af_subgroup">
+                    <field name="field_enabled"/>
+                    <span class="text-muted bs_af_hint">
+                        If unchecked, the field is created but hidden from the form until you
+                        turn it back on later from Custom Fields (no data is lost either way).
+                    </span>
+                </group>
+                <group invisible="state != 'field'" class="bs_af_group">
+                    <field name="notebook_page_id" options="{'no_create': True, 'no_open': True}"
+                           placeholder="End of form"/>
+                    <field name="selection_options" placeholder="One option per line"
+                           invisible="field_type != 'selection'"/>
+                    <field name="relation_model_id" invisible="field_type != 'many2one'"/>
+                    <field name="label_warning" invisible="not label_warning"
+                           class="text-warning"/>
+                    <field name="add_automation"/>
+                </group>
+                <group invisible="state != 'field' or not add_automation" string="Notification"
+                       class="bs_af_subgroup">
+                    <field name="automation_trigger_value"/>
+                    <field name="automation_notify_user_id"/>
+                    <field name="automation_message"/>
+                </group>
+
+                <group invisible="state != 'preview'" class="bs_af_group">
+                    <field name="target_model_id" readonly="1"/>
+                    <field name="field_label" readonly="1"/>
+                    <field name="field_name" readonly="1"/>
+                    <field name="field_type" readonly="1"/>
+                    <field name="field_enabled" readonly="1"/>
+                    <field name="notebook_page_id" readonly="1" invisible="not notebook_page_id"/>
+                    <field name="placement_note" readonly="1"/>
+                    <field name="add_automation" readonly="1"/>
+                </group>
+
+                <group invisible="state != 'done'" class="bs_af_group">
+                    <p class="bs_af_success">Field created successfully. It's live now, no restart needed.</p>
+                </group>
+
+                <footer class="bs_af_footer">
+                    <button name="action_next_to_field" type="object" string="Next"
+                            class="btn-primary bs_af_btn" invisible="state != 'model'"/>
+                    <button name="action_back_to_model" type="object" string="Back"
+                            class="bs_af_btn_secondary" invisible="state != 'field'"/>
+                    <button name="action_next_to_preview" type="object" string="Next"
+                            class="btn-primary bs_af_btn" invisible="state != 'field'"/>
+                    <button name="action_back_to_field" type="object" string="Back"
+                            class="bs_af_btn_secondary" invisible="state != 'preview'"/>
+                    <button name="action_confirm" type="object" string="Confirm &amp; Create"
+                            class="btn-primary bs_af_btn" invisible="state != 'preview'"/>
+                    <button name="action_view_target_model" type="object" string="View Records"
+                            class="btn-primary bs_af_btn" invisible="state != 'done'"/>
+                    <button string="Close" special="cancel" class="bs_af_btn_secondary" invisible="state != 'done'"/>
+                    <button string="Cancel" special="cancel" class="bs_af_btn_secondary" invisible="state == 'done'"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bs_addfield_remove_wizard_form" model="ir.ui.view">
+        <field name="name">bs.addfield.remove.wizard.form</field>
+        <field name="model">bs.addfield.remove.wizard</field>
+        <field name="arch" type="xml">
+            <form class="bs_af_wizard">
+                <group class="bs_af_group">
+                    <field name="model_label" readonly="1"/>
+                    <field name="field_label" readonly="1"/>
+                </group>
+                <p class="text-danger" invisible="not has_data">
+                    This field currently has data on existing records. Removing it will
+                    permanently delete that data.
+                </p>
+                <field name="confirm_data_loss" invisible="not has_data"/>
+                <p class="text-warning" invisible="not has_other_references">
+                    This field's technical name also appears in another view, saved filter,
+                    or export template. Those won't be updated automatically and may break.
+                </p>
+                <p invisible="not has_automation">
+                    This field has a notification automation attached.
+                </p>
+                <field name="remove_automation" invisible="not has_automation"/>
+                <footer class="bs_af_footer">
+                    <button name="action_confirm" type="object" string="Remove Field"
+                            class="btn-danger bs_af_btn"/>
+                    <button string="Cancel" special="cancel" class="bs_af_btn_secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <menuitem id="menu_bs_addfield_wizard_root"
+              name="Add a Field"
+              parent="base.menu_administration"
+              action="action_bs_addfield_registry"
+              groups="base.group_system"
+              sequence="5"/>
+
+</odoo>

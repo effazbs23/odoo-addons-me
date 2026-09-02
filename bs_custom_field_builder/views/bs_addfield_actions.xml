@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Actions declared here, ahead of the view files, because the registry list's
+         "New Field" button references the wizard action and the wizard's menu
+         references the registry action: each file would need the other loaded first. -->
+
+    <record id="action_bs_addfield_wizard" model="ir.actions.act_window">
+        <field name="name">Add a Field</field>
+        <field name="res_model">bs.addfield.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_bs_addfield_registry" model="ir.actions.act_window">
+        <field name="name">Custom Fields</field>
+        <field name="res_model">bs.addfield.registry</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="context">{'search_default_not_deleted': 1}</field>
+    </record>
+</odoo>

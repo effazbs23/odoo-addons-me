@@ -1,0 +1,184 @@
+/* Modern look for the Add-a-Field wizard + registry, layered on top of the standard
+   Odoo widgets (no custom OWL components) -- see context.md for the scope call. */
+
+:root {
+    --bs-af-accent: #6d5ef7;
+    --bs-af-accent-dark: #5945e0;
+    --bs-af-ink: #1f2130;
+    --bs-af-muted: #6b7086;
+    --bs-af-bg: #f6f5fb;
+    --bs-af-border: #e6e4f3;
+}
+
+/* ---- Wizard form ---- */
+.bs_af_wizard .modal-content {
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.bs_af_wizard .bs_af_header {
+    background: linear-gradient(135deg, var(--bs-af-accent) 0%, var(--bs-af-accent-dark) 100%);
+    padding: 18px 24px;
+    margin: -1px -1px 16px -1px;
+}
+
+.bs_af_wizard .bs_af_step_label,
+.bs_af_wizard .bs_af_step_label .o_field_widget,
+.bs_af_wizard .bs_af_step_label span {
+    color: #fff !important;
+    font-weight: 600;
+    font-size: 1.05em;
+    letter-spacing: .01em;
+}
+
+.bs_af_wizard .bs_af_group {
+    padding: 4px 24px 8px;
+}
+
+.bs_af_wizard .bs_af_group .o_form_label {
+    color: var(--bs-af-muted);
+    font-weight: 500;
+    font-size: .92em;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+}
+
+.bs_af_wizard .bs_af_subgroup {
+    background: var(--bs-af-bg);
+    border: 1px solid var(--bs-af-border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-top: 8px;
+}
+
+.bs_af_wizard .bs_af_hint {
+    color: var(--bs-af-muted);
+    margin-bottom: 12px;
+}
+
+.bs_af_wizard .bs_af_success {
+    color: #1e8e5a;
+    font-weight: 600;
+}
+
+.bs_af_wizard .bs_af_footer {
+    background: var(--bs-af-bg);
+    padding: 14px 24px;
+    border-top: 1px solid var(--bs-af-border);
+}
+
+.bs_af_btn {
+    background-color: var(--bs-af-accent) !important;
+    border-color: var(--bs-af-accent) !important;
+    border-radius: 10px !important;
+    padding: 6px 18px !important;
+    font-weight: 600 !important;
+}
+
+.bs_af_btn:hover {
+    background-color: var(--bs-af-accent-dark) !important;
+    border-color: var(--bs-af-accent-dark) !important;
+}
+
+.bs_af_btn_secondary {
+    background-color: transparent !important;
+    border: 1px solid var(--bs-af-border) !important;
+    color: var(--bs-af-ink) !important;
+    border-radius: 10px !important;
+    padding: 6px 18px !important;
+}
+
+.bs_af_btn_danger {
+    background-color: transparent !important;
+    border: 1px solid #e35b6f !important;
+    color: #c8324a !important;
+    border-radius: 10px !important;
+}
+
+.bs_af_form_actions {
+    display: flex;
+    gap: 8px;
+    padding: 8px 0 0;
+}
+
+/* ---- Registry badges (list, kanban, form) ---- */
+.bs_af_badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: .78em;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.bs_af_badge_active { background: #e4f7ec; color: #1e8e5a; }
+.bs_af_badge_disabled { background: #eef0f5; color: var(--bs-af-muted); }
+.bs_af_badge_deleted { background: #fbe7ea; color: #c8324a; }
+
+/* ---- Registry list ---- */
+.bs_af_list .bs_af_new_btn {
+    background-color: var(--bs-af-accent) !important;
+    border-color: var(--bs-af-accent) !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+}
+
+/* ---- Registry kanban ---- */
+.bs_af_kanban .o_kanban_record {
+    padding: 0;
+}
+
+.bs_af_card {
+    background: #fff;
+    border: 1px solid var(--bs-af-border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: 0 1px 2px rgba(31, 33, 48, .04);
+    transition: box-shadow .15s ease, transform .15s ease;
+    width: 100%;
+}
+
+.bs_af_card:hover {
+    box-shadow: 0 6px 18px rgba(31, 33, 48, .10);
+    transform: translateY(-1px);
+}
+
+.bs_af_card_top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.bs_af_type_tag {
+    font-size: .76em;
+    color: var(--bs-af-muted);
+    background: var(--bs-af-bg);
+    border-radius: 999px;
+    padding: 2px 9px;
+}
+
+.bs_af_card_title {
+    font-weight: 700;
+    font-size: 1.05em;
+    color: var(--bs-af-ink);
+}
+
+.bs_af_card_sub {
+    color: var(--bs-af-muted);
+    font-size: .88em;
+    margin-top: 2px;
+}
+
+.bs_af_card_meta {
+    color: var(--bs-af-muted);
+    font-size: .82em;
+    margin-top: 6px;
+}
+
+.bs_af_card_actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
