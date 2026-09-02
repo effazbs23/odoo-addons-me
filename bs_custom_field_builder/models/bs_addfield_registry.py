@@ -61,6 +61,14 @@ class BsAddfieldRegistry(models.Model):
             if record.field_id:
                 record.field_id.required = record.field_required
 
+    def unlink(self):
+        for record in self:
+            if record.field_label:
+                raise UserError(_(
+                    'This is a permanent audit log entry and cannot be deleted directly. '
+                    'Use the "Remove Field" action instead.'))
+        return super().unlink()
+
     @api.model_create_multi
     def create(self, vals_list):
         records = super().create(vals_list)
@@ -106,8 +114,31 @@ class BsAddfieldRegistry(models.Model):
                 'default_model_label': self.model_label,
                 'default_has_data': self.has_data,
                 'default_has_automation': bool(self.automation_id),
+                'default_has_other_references': self._has_other_references(),
             },
         }
+
+    def _has_other_references(self):
+        """Whether the field's technical name shows up somewhere this tool didn't put it
+        itself (a manually-built view, a saved filter, an export template) -- removal
+        wouldn't fix those up, so the remove wizard just warns instead of blocking."""
+        self.ensure_one()
+        if not self.field_name:
+            return False
+        other_view = self.env['ir.ui.view'].sudo().search_count([
+            ('id', '!=', self.view_id.id), ('model', '=', self.model_name),
+            ('arch_db', 'like', self.field_name),
+        ], limit=1)
+        if other_view:
+            return True
+        other_filter = self.env['ir.filters'].sudo().search_count([
+            ('model_id', '=', self.model_name), ('domain', 'like', self.field_name),
+        ], limit=1)
+        if other_filter:
+            return True
+        return bool(self.env['ir.exports.line'].sudo().search_count([
+            ('name', '=', self.field_name),
+        ], limit=1))
 
     def action_disable_field(self):
         """No-warning path: only reachable from a button invisible when has_data is True."""

@@ -19,6 +19,10 @@ class BsAddfieldRemoveWizard(models.TransientModel):
     model_label = fields.Char(readonly=True)
     has_data = fields.Boolean(readonly=True)
     has_automation = fields.Boolean(readonly=True)
+    # Non-blocking heads-up (spec: warn, don't block) -- a manually-built view, saved
+    # filter, or export template referencing this field's technical name won't be
+    # fixed up by removal and will break; the user decides whether that's acceptable.
+    has_other_references = fields.Boolean(readonly=True)
     # Edge case (spec 9): removing a field with populated data requires an explicit
     # second confirmation -- never silently drop data.
     confirm_data_loss = fields.Boolean(

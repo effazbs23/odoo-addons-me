@@ -377,6 +377,46 @@ class TestBsAddfieldWizard(TransactionCase):
         with self.assertRaises(UserError):
             registry.action_enable_field()
 
+    # -- Audit-log integrity: registry rows can't be unlinked directly -------
+    def test_registry_row_cannot_be_unlinked_directly(self):
+        wizard = self._run_full_flow(field_type='char', field_label='Protected Field')
+        registry = wizard.result_registry_id
+        with self.assertRaises(UserError):
+            registry.unlink()
+        self.assertTrue(registry.exists())
+
+    def test_blank_placeholder_registry_row_can_still_be_unlinked(self):
+        placeholder = self.env['bs.addfield.registry'].create({})
+        placeholder.unlink()
+        self.assertFalse(placeholder.exists())
+
+    # -- Automation notification message is HTML-escaped ---------------------
+    def test_automation_message_html_is_escaped_in_template(self):
+        wizard = self._run_full_flow(
+            field_type='boolean', field_label='Escaped Message Field',
+            add_automation=True, automation_trigger_value='true',
+            automation_notify_user_id=self.admin.id,
+            automation_message='<script>alert(1)</script>')
+        template = wizard.result_registry_id.automation_id.action_server_ids.template_id
+        self.assertNotIn('<script>', template.body_html)
+        self.assertIn('&lt;script&gt;', template.body_html)
+
+    # -- Remove wizard warns (doesn't block) when the field is referenced elsewhere --
+    def test_remove_wizard_warns_on_other_view_reference(self):
+        wizard = self._run_full_flow(field_type='char', field_label='Referenced Field')
+        registry = wizard.result_registry_id
+        other_view = self.env['ir.ui.view'].create({
+            'name': 'other.view.referencing.field',
+            'model': 'res.partner',
+            'inherit_id': self.env.ref('base.view_partner_form').id,
+            'mode': 'extension',
+            'arch': f'<xpath expr="//sheet" position="inside">'
+                    f'<field name="{registry.field_name}" invisible="1"/></xpath>',
+        })
+        self.addCleanup(other_view.unlink)
+        action = registry.action_open_remove_wizard()
+        self.assertTrue(action['context']['default_has_other_references'])
+
     # -- Partial failure never leaves orphaned metadata -----------------------
     def test_partial_failure_rolls_back_everything(self):
         wizard = self._make_wizard(field_type='char', field_label='Rollback Field')

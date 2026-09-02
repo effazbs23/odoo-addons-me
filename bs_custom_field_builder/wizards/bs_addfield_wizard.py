@@ -2,6 +2,8 @@ import re
 import unicodedata
 
 from lxml import etree
+from markupsafe import Markup
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -439,7 +441,9 @@ class BsAddfieldWizard(models.TransientModel):
             'name': _('Add-a-Field Notify: %s', self.field_label),
             'model_id': self.target_model_id.id,
             'subject': _('%s was updated', self.field_label),
-            'body_html': f'<p>{self.automation_message or ""}</p>',
+            # Markup(...) % arg auto-escapes arg (markupsafe), unlike an f-string --
+            # automation_message is free-text typed by whoever runs the wizard.
+            'body_html': Markup('<p>%s</p>') % (self.automation_message or ''),
             'partner_to': str(self.automation_notify_user_id.partner_id.id),
             'auto_delete': True,
         })

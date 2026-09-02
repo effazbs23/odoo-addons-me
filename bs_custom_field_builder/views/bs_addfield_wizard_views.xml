@@ -105,6 +105,10 @@
                     permanently delete that data.
                 </p>
                 <field name="confirm_data_loss" invisible="not has_data"/>
+                <p class="text-warning" invisible="not has_other_references">
+                    This field's technical name also appears in another view, saved filter,
+                    or export template. Those won't be updated automatically and may break.
+                </p>
                 <p invisible="not has_automation">
                     This field has a notification automation attached.
                 </p>
