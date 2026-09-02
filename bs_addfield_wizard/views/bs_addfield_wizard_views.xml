@@ -5,77 +5,79 @@
         <field name="name">bs.addfield.wizard.form</field>
         <field name="model">bs.addfield.wizard</field>
         <field name="arch" type="xml">
-            <form>
+            <form class="bs_af_wizard">
                 <field name="state" invisible="1"/>
-                <group invisible="state != 'model'">
-                    <p>Choose the model you want to add a field to.</p>
+                <div class="bs_af_header">
+                    <field name="step_label" nolabel="1" readonly="1" class="bs_af_step_label"/>
+                </div>
+
+                <group invisible="state != 'model'" class="bs_af_group">
+                    <p class="bs_af_hint">Choose the model you want to add a field to.</p>
                     <field name="target_model_id" placeholder="Search a model..."/>
                 </group>
 
-                <group invisible="state != 'field'">
+                <group invisible="state != 'field'" class="bs_af_group">
                     <field name="target_model_id" readonly="1"/>
                     <field name="field_type"/>
                     <field name="field_label" placeholder="e.g. VIP Tier"/>
+                    <field name="field_name" placeholder="x_studio_..."/>
                     <field name="field_required"/>
+                    <field name="field_enabled"/>
+                    <field name="notebook_page"/>
                     <field name="selection_options" placeholder="One option per line"
                            invisible="field_type != 'selection'"/>
                     <field name="relation_model_id" invisible="field_type != 'many2one'"/>
                     <field name="label_warning" invisible="not label_warning"
                            class="text-warning"/>
                     <field name="add_automation"/>
-                    <group invisible="not add_automation" string="Notification">
+                    <group invisible="not add_automation" string="Notification" class="bs_af_subgroup">
                         <field name="automation_trigger_value"/>
                         <field name="automation_notify_user_id"/>
                         <field name="automation_message"/>
                     </group>
                 </group>
 
-                <group invisible="state != 'preview'">
+                <group invisible="state != 'preview'" class="bs_af_group">
                     <field name="target_model_id" readonly="1"/>
                     <field name="field_label" readonly="1"/>
+                    <field name="field_name" readonly="1"/>
                     <field name="field_type" readonly="1"/>
+                    <field name="field_enabled" readonly="1"/>
                     <field name="placement_note" readonly="1"/>
                     <field name="add_automation" readonly="1"/>
                 </group>
 
-                <group invisible="state != 'done'">
-                    <p>Field created successfully. It's live now, no restart needed.</p>
+                <group invisible="state != 'done'" class="bs_af_group">
+                    <p class="bs_af_success">Field created successfully. It's live now, no restart needed.</p>
                 </group>
 
-                <footer>
+                <footer class="bs_af_footer">
                     <button name="action_next_to_field" type="object" string="Next"
-                            class="btn-primary" invisible="state != 'model'"/>
+                            class="btn-primary bs_af_btn" invisible="state != 'model'"/>
                     <button name="action_back_to_model" type="object" string="Back"
-                            invisible="state != 'field'"/>
+                            class="bs_af_btn_secondary" invisible="state != 'field'"/>
                     <button name="action_next_to_preview" type="object" string="Next"
-                            class="btn-primary" invisible="state != 'field'"/>
+                            class="btn-primary bs_af_btn" invisible="state != 'field'"/>
                     <button name="action_back_to_field" type="object" string="Back"
-                            invisible="state != 'preview'"/>
+                            class="bs_af_btn_secondary" invisible="state != 'preview'"/>
                     <button name="action_confirm" type="object" string="Confirm &amp; Create"
-                            class="btn-primary" invisible="state != 'preview'"/>
+                            class="btn-primary bs_af_btn" invisible="state != 'preview'"/>
                     <button name="action_view_target_model" type="object" string="View Records"
-                            class="btn-primary" invisible="state != 'done'"/>
-                    <button string="Close" special="cancel" invisible="state != 'done'"/>
-                    <button string="Cancel" special="cancel" invisible="state == 'done'"/>
+                            class="btn-primary bs_af_btn" invisible="state != 'done'"/>
+                    <button string="Close" special="cancel" class="bs_af_btn_secondary" invisible="state != 'done'"/>
+                    <button string="Cancel" special="cancel" class="bs_af_btn_secondary" invisible="state == 'done'"/>
                 </footer>
             </form>
         </field>
-    </record>
-
-    <record id="action_bs_addfield_wizard" model="ir.actions.act_window">
-        <field name="name">Add a Field</field>
-        <field name="res_model">bs.addfield.wizard</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
     </record>
 
     <record id="view_bs_addfield_remove_wizard_form" model="ir.ui.view">
         <field name="name">bs.addfield.remove.wizard.form</field>
         <field name="model">bs.addfield.remove.wizard</field>
         <field name="arch" type="xml">
-            <form>
-                <group>
-                    <field name="model_name" readonly="1"/>
+            <form class="bs_af_wizard">
+                <group class="bs_af_group">
+                    <field name="model_label" readonly="1"/>
                     <field name="field_label" readonly="1"/>
                 </group>
                 <p class="text-danger" invisible="not has_data">
@@ -87,10 +89,10 @@
                     This field has a notification automation attached.
                 </p>
                 <field name="remove_automation" invisible="not has_automation"/>
-                <footer>
+                <footer class="bs_af_footer">
                     <button name="action_confirm" type="object" string="Remove Field"
-                            class="btn-danger"/>
-                    <button string="Cancel" special="cancel"/>
+                            class="btn-danger bs_af_btn"/>
+                    <button string="Cancel" special="cancel" class="bs_af_btn_secondary"/>
                 </footer>
             </form>
         </field>
@@ -99,7 +101,7 @@
     <menuitem id="menu_bs_addfield_wizard_root"
               name="Add a Field"
               parent="base.menu_administration"
-              action="action_bs_addfield_wizard"
+              action="action_bs_addfield_registry"
               groups="base.group_system"
               sequence="5"/>
 

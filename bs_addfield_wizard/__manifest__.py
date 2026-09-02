@@ -10,11 +10,17 @@
     'depends': ['base', 'web', 'base_automation', 'mail'],
     'data': [
         'security/ir.model.access.csv',
-        'views/bs_addfield_wizard_views.xml',
+        'views/bs_addfield_actions.xml',
         'views/bs_addfield_registry_views.xml',
+        'views/bs_addfield_wizard_views.xml',
     ],
     'application': False,
     'installable': True,
     'currency': 'USD',
     'price': 0.00,
+    'assets': {
+        'web.assets_backend': [
+            'bs_addfield_wizard/static/src/css/bs_addfield.css',
+        ],
+    },
 }
