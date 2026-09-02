@@ -6,7 +6,7 @@
     'author': 'ERP23',
     'website': 'https://erp23.com',
     'support': 'erp23@brainstation-23.com',
-    'license': 'LGPL-3',
+    'license': 'OPL-1',
     'depends': ['base', 'web', 'base_automation', 'mail'],
     'data': [
         'security/ir.model.access.csv',
