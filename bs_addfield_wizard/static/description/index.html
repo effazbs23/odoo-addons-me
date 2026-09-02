@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>No-Code Field Wizard</title>
+<style>
+  :root {
+    --accent: #6d5ef7;
+    --accent-dark: #5945e0;
+    --ink: #1f2130;
+    --muted: #6b7086;
+    --bg: #f6f5fb;
+    --border: #e6e4f3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: #fff;
+    line-height: 1.55;
+  }
+  .hero {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: #fff;
+    padding: 56px 24px;
+    text-align: center;
+  }
+  .hero h1 { margin: 0 0 10px; font-size: 2.1em; }
+  .hero p { margin: 0 auto; max-width: 640px; opacity: .92; font-size: 1.05em; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+  h2 { font-size: 1.4em; margin: 0 0 6px; }
+  .lead { color: var(--muted); margin: 0 0 28px; }
+  .grid3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin: 0 0 48px;
+  }
+  .card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .card h3 { margin: 0 0 6px; font-size: 1.02em; }
+  .card p { margin: 0; color: var(--muted); font-size: .93em; }
+  .step {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 28px;
+    align-items: center;
+    margin-bottom: 56px;
+  }
+  .step:nth-child(even) .shot { order: 2; }
+  .step img {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 6px 20px rgba(31,33,48,.08);
+  }
+  .step .num {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: .8em;
+    padding: 3px 11px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .step h3 { margin: 0 0 8px; font-size: 1.2em; }
+  .step p { margin: 0; color: var(--muted); }
+  .badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 0; }
+  .pill {
+    background: #eef0f5;
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: .8em;
+    font-weight: 600;
+  }
+  .cta {
+    background: var(--bg);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .cta code {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+  .footnote { color: var(--muted); font-size: .85em; text-align: center; margin-top: 40px; }
+  @media (max-width: 720px) {
+    .grid3 { grid-template-columns: 1fr; }
+    .step, .step:nth-child(even) .shot { grid-template-columns: 1fr; order: initial; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1>No-Code Field Wizard</h1>
+    <p>Add a real custom field to any model, through a guided wizard, straight from the
+       browser. No code, no manifest, no module install — a free/Community-Edition
+       alternative to the field-adding half of Odoo Studio.</p>
+  </div>
+
+  <div class="wrap">
+
+    <h2>Why this module</h2>
+    <p class="lead">
+      Community Edition has no built-in way to add "just one field" without writing a
+      module. This wizard fills that gap using Odoo's own native metadata APIs — the
+      field it creates is indistinguishable from one added by a developer.
+    </p>
+    <div class="grid3">
+      <div class="card">
+        <h3>Genuinely native</h3>
+        <p>Creates a real <code>ir.model.fields</code> record and a minimal view
+           inheritance — searchable, exportable, filterable, and visible in Studio
+           itself if you later upgrade.</p>
+      </div>
+      <div class="card">
+        <h3>Full audit trail</h3>
+        <p>Every field added, updated, enabled, disabled, or removed is logged to
+           chatter on a permanent registry entry — nothing disappears silently.</p>
+      </div>
+      <div class="card">
+        <h3>Safe by default</h3>
+        <p>Removing a populated field, or disabling one with data, always requires an
+           explicit second confirmation. Data is never dropped silently.</p>
+      </div>
+    </div>
+
+    <h2>How it works</h2>
+    <p class="lead">Six screenshots, straight from a real run of the wizard.</p>
+
+    <div class="step">
+      <div class="shot"><img src="assets/01_custom_fields_kanban.jpg" alt="Custom Fields list"/></div>
+      <div>
+        <span class="num">Entry point</span>
+        <h3>Settings → Add a Field</h3>
+        <p>Opens a browsable list of every field created through the wizard — model,
+           app, field name, type, tab, and status — before you create anything new.</p>
+        <div class="badge-row"><span class="pill">List + Kanban</span><span class="pill">Inline Enable/Disable/Remove</span></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="shot"><img src="assets/02_step1_choose_model.jpg" alt="Step 1: choose a model"/></div>
+      <div>
+        <span class="num">Step 1 of 4</span>
+        <h3>Choose a model</h3>
+        <p>Search any installed, non-internal model. A small blocklist keeps you away
+           from metadata models like <code>ir.model.fields</code> or
+           <code>ir.ui.view</code> that would cause self-modification chaos.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="shot"><img src="assets/03_step2_define_field.jpg" alt="Step 2: define the field"/></div>
+      <div>
+        <span class="num">Step 2 of 4</span>
+        <h3>Define the field</h3>
+        <p>Type, label, and a technical name suggested from the label (fully editable).
+           "Required" and "Visible on Form" are explained in plain language right under
+           each toggle — no guessing what a checkbox does.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="shot"><img src="assets/04_step3_preview.jpg" alt="Step 3: preview placement"/></div>
+      <div>
+        <span class="num">Step 3 of 4</span>
+        <h3>Pick a tab, preview the placement</h3>
+        <p>Type the tab you want the field added to (with the real available tabs
+           listed for reference) — it never silently lands in whichever tab happens
+           to come first. The preview shows exactly which group it will join.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="shot"><img src="assets/05_step4_done.jpg" alt="Step 4: done"/></div>
+      <div>
+        <span class="num">Step 4 of 4</span>
+        <h3>Live immediately</h3>
+        <p>No restart, no upgrade. The field is usable the moment you confirm.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="shot"><img src="assets/06_field_live_on_form.jpg" alt="Field live on the real form"/></div>
+      <div>
+        <span class="num">Result</span>
+        <h3>Exactly where you put it</h3>
+        <p>"VIP Tier" shows up right in the Sales & Purchase tab's Sales group —
+           because that's where it was actually placed.</p>
+      </div>
+    </div>
+
+    <h2>Optional: notify someone when it changes</h2>
+    <p class="lead">
+      Attach one simple <code>base.automation</code> rule — "notify a user by email
+      when this field is set to X" — reusing Odoo's own automation infrastructure, not
+      a parallel rules engine.
+    </p>
+
+    <h2>Undo path</h2>
+    <p class="lead">
+      Every field lives on in its registry entry even after removal — marked
+      "Deleted," chatter history intact — so there's always a record of what was added
+      and when, not just while the field exists.
+    </p>
+
+    <div class="cta">
+      <h3 style="margin-top:0">Find it in Settings</h3>
+      <p style="color:var(--muted)">Settings → <code>Add a Field</code> (top menu bar, next to General Settings)</p>
+    </div>
+
+    <p class="footnote">No-Code Field Wizard · Technical/Customization · ERP23</p>
+
+  </div>
+
+</body>
+</html>
