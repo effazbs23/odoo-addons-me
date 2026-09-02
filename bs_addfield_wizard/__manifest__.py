@@ -1,5 +1,5 @@
 {
-    'name': 'Add-a-Field No-Code Wizard',
+    'name': 'No-Code Field Wizard',
     'version': '19.0.1.0.0',
     'category': 'Technical/Customization',
     'summary': 'Add a real custom field to any model through a guided wizard, no code required',
