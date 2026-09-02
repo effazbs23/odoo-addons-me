@@ -1,5 +1,5 @@
 {
-    'name': 'No-Code Field Wizard',
+    'name': 'No Code Custom Field Builder (CE)',
     'version': '19.0.1.0.0',
     'category': 'Technical/Customization',
     'summary': 'Add a real custom field to any model through a guided wizard, no code required',
@@ -20,7 +20,7 @@
     'price': 0.00,
     'assets': {
         'web.assets_backend': [
-            'bs_addfield_wizard/static/src/css/bs_addfield.css',
+            'bs_custom_field_builder/static/src/css/bs_addfield.css',
         ],
     },
 }
