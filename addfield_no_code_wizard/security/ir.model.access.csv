@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bs_addfield_registry,bs.addfield.registry,model_bs_addfield_registry,base.group_system,1,1,1,1
+access_bs_addfield_wizard,bs.addfield.wizard,model_bs_addfield_wizard,base.group_system,1,1,1,1
+access_bs_addfield_remove_wizard,bs.addfield.remove.wizard,model_bs_addfield_remove_wizard,base.group_system,1,1,1,1

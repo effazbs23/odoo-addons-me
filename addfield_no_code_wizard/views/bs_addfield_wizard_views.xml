@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_bs_addfield_wizard_form" model="ir.ui.view">
+        <field name="name">bs.addfield.wizard.form</field>
+        <field name="model">bs.addfield.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="state" invisible="1"/>
+                <group invisible="state != 'model'">
+                    <p>Choose the model you want to add a field to.</p>
+                    <field name="target_model_id" placeholder="Search a model..."/>
+                </group>
+
+                <group invisible="state != 'field'">
+                    <field name="target_model_id" readonly="1"/>
+                    <field name="field_type"/>
+                    <field name="field_label" placeholder="e.g. VIP Tier"/>
+                    <field name="field_required"/>
+                    <field name="selection_options" placeholder="One option per line"
+                           invisible="field_type != 'selection'"/>
+                    <field name="relation_model_id" invisible="field_type != 'many2one'"/>
+                    <field name="label_warning" invisible="not label_warning"
+                           class="text-warning"/>
+                    <field name="add_automation"/>
+                    <group invisible="not add_automation" string="Notification">
+                        <field name="automation_trigger_value"/>
+                        <field name="automation_notify_user_id"/>
+                        <field name="automation_message"/>
+                    </group>
+                </group>
+
+                <group invisible="state != 'preview'">
+                    <field name="target_model_id" readonly="1"/>
+                    <field name="field_label" readonly="1"/>
+                    <field name="field_type" readonly="1"/>
+                    <field name="placement_note" readonly="1"/>
+                    <field name="add_automation" readonly="1"/>
+                </group>
+
+                <group invisible="state != 'done'">
+                    <p>Field created successfully. It's live now, no restart needed.</p>
+                </group>
+
+                <footer>
+                    <button name="action_next_to_field" type="object" string="Next"
+                            class="btn-primary" invisible="state != 'model'"/>
+                    <button name="action_back_to_model" type="object" string="Back"
+                            invisible="state != 'field'"/>
+                    <button name="action_next_to_preview" type="object" string="Next"
+                            class="btn-primary" invisible="state != 'field'"/>
+                    <button name="action_back_to_field" type="object" string="Back"
+                            invisible="state != 'preview'"/>
+                    <button name="action_confirm" type="object" string="Confirm &amp; Create"
+                            class="btn-primary" invisible="state != 'preview'"/>
+                    <button name="action_view_target_model" type="object" string="View Records"
+                            class="btn-primary" invisible="state != 'done'"/>
+                    <button string="Close" special="cancel" invisible="state != 'done'"/>
+                    <button string="Cancel" special="cancel" invisible="state == 'done'"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bs_addfield_wizard" model="ir.actions.act_window">
+        <field name="name">Add a Field</field>
+        <field name="res_model">bs.addfield.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_bs_addfield_remove_wizard_form" model="ir.ui.view">
+        <field name="name">bs.addfield.remove.wizard.form</field>
+        <field name="model">bs.addfield.remove.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="model_name" readonly="1"/>
+                    <field name="field_label" readonly="1"/>
+                </group>
+                <p class="text-danger" invisible="not has_data">
+                    This field currently has data on existing records. Removing it will
+                    permanently delete that data.
+                </p>
+                <field name="confirm_data_loss" invisible="not has_data"/>
+                <p invisible="not has_automation">
+                    This field has a notification automation attached.
+                </p>
+                <field name="remove_automation" invisible="not has_automation"/>
+                <footer>
+                    <button name="action_confirm" type="object" string="Remove Field"
+                            class="btn-danger"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <menuitem id="menu_bs_addfield_wizard_root"
+              name="Add a Field"
+              parent="base.menu_administration"
+              action="action_bs_addfield_wizard"
+              groups="base.group_system"
+              sequence="5"/>
+
+</odoo>
