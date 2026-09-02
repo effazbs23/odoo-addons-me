@@ -1,4 +1,4 @@
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 
@@ -6,11 +6,19 @@ class BsAddfieldRemoveWizard(models.TransientModel):
     _name = 'bs.addfield.remove.wizard'
     _description = 'Remove Custom Field'
 
+    # Plain fields snapshotted via context defaults (see action_open_remove_wizard on the
+    # registry model) rather than related=/compute=: Odoo's web client excludes readonly
+    # fields from the onchange request it sends when opening a new record, so a related
+    # or computed field that's also marked readonly never gets a value client-side even
+    # though it resolves correctly at the Python/RPC level -- confirmed by testing in a
+    # real browser (the widget mounted but stayed empty; direct onchange() calls in a
+    # shell returned the correct value every time). default_get-sourced values don't have
+    # this problem, which is exactly how registry_id itself already worked reliably.
     registry_id = fields.Many2one('bs.addfield.registry', required=True, readonly=True)
-    field_label = fields.Char(related='registry_id.field_label', readonly=True)
-    model_label = fields.Char(related='registry_id.model_label', readonly=True)
-    has_data = fields.Boolean(related='registry_id.has_data', readonly=True)
-    has_automation = fields.Boolean(compute='_compute_has_automation')
+    field_label = fields.Char(readonly=True)
+    model_label = fields.Char(readonly=True)
+    has_data = fields.Boolean(readonly=True)
+    has_automation = fields.Boolean(readonly=True)
     # Edge case (spec 9): removing a field with populated data requires an explicit
     # second confirmation -- never silently drop data.
     confirm_data_loss = fields.Boolean(
@@ -19,11 +27,6 @@ class BsAddfieldRemoveWizard(models.TransientModel):
     # automation first rather than blocking outright.
     remove_automation = fields.Boolean(
         string='Also remove the linked notification automation', default=True)
-
-    @api.depends('registry_id.automation_id')
-    def _compute_has_automation(self):
-        for wizard in self:
-            wizard.has_automation = bool(wizard.registry_id.automation_id)
 
     def action_confirm(self):
         self.ensure_one()

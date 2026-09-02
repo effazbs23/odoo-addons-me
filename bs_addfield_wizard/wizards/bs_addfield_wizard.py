@@ -17,7 +17,6 @@ MODEL_BLOCKLIST = [
 ]
 
 FIELD_TYPES_AUTOMATABLE = ('char', 'integer', 'float', 'date', 'datetime', 'boolean', 'selection')
-NO_SPECIFIC_TAB = ''
 FIELD_NAME_RE = re.compile(r'x_[a-zA-Z0-9_]{1,61}')
 
 
@@ -51,10 +50,13 @@ class BsAddfieldWizard(models.TransientModel):
     ], default='char')
     field_label = fields.Char(string='Field Label')
     field_name = fields.Char(string='Field Name', help='Technical name. Suggested from the label; editable.')
-    field_required = fields.Boolean(string='Required')
+    field_required = fields.Boolean(
+        string='Required',
+        help="If checked, a value must be entered before a record can be saved.")
     field_enabled = fields.Boolean(
-        string='Enabled', default=True,
-        help="Off = created but hidden from the form immediately (can be enabled later).")
+        string='Visible on Form', default=True,
+        help="If unchecked, the field is created but hidden from the form until you "
+             "turn it back on later from Custom Fields.")
     selection_options = fields.Text(
         string='Selection Options', help='One option per line.')
     relation_model_id = fields.Many2one(
@@ -65,7 +67,16 @@ class BsAddfieldWizard(models.TransientModel):
 
     # Placement: which notebook tab to add the field to (requirement: let the user pick,
     # don't always silently land it in whatever tab the auto-detection finds first).
-    notebook_page = fields.Selection(selection='_selection_notebook_pages', string='Add to Tab')
+    # Plain Char, not a dynamic Selection: Odoo's web client caches a view's field
+    # metadata (including a Selection field's dynamic options) from the first time that
+    # view loads, and this wizard reuses ONE view across all 4 steps -- by the time
+    # target_model_id is set in step 1, the 'field' step's fields aren't mounted yet, so
+    # the client never re-fetches notebook_page's options for the chosen model. Confirmed
+    # by testing in a real browser: the dropdown stayed stuck on the placeholder-only
+    # option. available_tabs_hint (below) is computed fresh server-side instead, and the
+    # typed value is validated against the real tab list at confirm time.
+    notebook_page = fields.Char(string='Add to Tab (technical name, optional)')
+    available_tabs_hint = fields.Char(string='Available Tabs', readonly=True)
 
     # Optional automation
     add_automation = fields.Boolean(string='Notify someone when this changes')
@@ -97,18 +108,15 @@ class BsAddfieldWizard(models.TransientModel):
         if self.field_label and not self.field_name:
             self.field_name = ('x_studio_' + self._slugify(self.field_label))[:54]
 
-    def _selection_notebook_pages(self):
-        options = [(NO_SPECIFIC_TAB, _('End of form (no specific tab)'))]
-        if self.target_model_id:
-            arch = self.env[self.target_model_id.model].get_view(view_type='form')['arch']
-            options += self._list_notebook_pages_from_arch(arch)
-        return options
-
     @api.model
     def _list_notebook_pages_from_arch(self, arch):
         tree = etree.fromstring(arch.encode('utf-8') if isinstance(arch, str) else arch)
         return [(page.get('name'), page.get('string') or page.get('name'))
                 for page in tree.xpath('//notebook/page[@name]')]
+
+    def _get_notebook_pages(self, target_model):
+        arch = self.env[target_model].get_view(view_type='form')['arch']
+        return self._list_notebook_pages_from_arch(arch)
 
     # ---------------------------------------------------------------------
     # Navigation
@@ -128,6 +136,10 @@ class BsAddfieldWizard(models.TransientModel):
         self.ensure_one()
         if not self.target_model_id:
             raise UserError(_('Choose a model first.'))
+        pages = self._get_notebook_pages(self.target_model_id.model)
+        self.available_tabs_hint = (
+            ', '.join(f'{name} ({label})' for name, label in pages) if pages
+            else _('No tabs detected on this form -- leave blank.'))
         self.state = 'field'
         return self._reopen_action()
 
@@ -144,14 +156,15 @@ class BsAddfieldWizard(models.TransientModel):
         self._validate_field_definition()
         target_model = self.target_model_id.model
         group_name, _expr, _position, is_fallback = self._detect_placement(target_model)
+        tab_label = dict(self._get_notebook_pages(target_model)).get(self.notebook_page) if self.notebook_page else None
         if self.notebook_page and is_fallback:
             self.placement_note = _(
                 'No named group was found in the "%s" tab -- the field will be appended '
-                'to the end of that tab.', dict(self._selection_notebook_pages()).get(self.notebook_page))
+                'to the end of that tab.', tab_label)
         elif self.notebook_page:
             self.placement_note = _(
                 'Will be added to the "%(group)s" group in the "%(tab)s" tab.',
-                group=group_name, tab=dict(self._selection_notebook_pages()).get(self.notebook_page))
+                group=group_name, tab=tab_label)
         elif is_fallback:
             self.placement_note = _(
                 'No named group was detected on this model\'s form -- the field will be '
@@ -187,7 +200,9 @@ class BsAddfieldWizard(models.TransientModel):
                 'field_name': field_name,
                 'field_label': self.field_label.strip(),
                 'field_type': dict(self._fields['field_type'].selection).get(self.field_type),
-                'notebook_page': dict(self._selection_notebook_pages()).get(self.notebook_page) or '',
+                'notebook_page': (
+                    dict(self._get_notebook_pages(target_model)).get(self.notebook_page, self.notebook_page)
+                    if self.notebook_page else ''),
                 'state': 'active' if self.field_enabled else 'disabled',
             })
         self.result_registry_id = registry.id
@@ -214,6 +229,12 @@ class BsAddfieldWizard(models.TransientModel):
             raise UserError(_('Enter a field label.'))
         target_model = self.target_model_id.model
         self._validate_field_name(target_model)
+        if self.notebook_page:
+            valid_names = [name for name, _label in self._get_notebook_pages(target_model)]
+            if self.notebook_page not in valid_names:
+                raise UserError(_(
+                    '"%(tab)s" is not a tab on this model\'s form. Valid tabs: %(valid)s',
+                    tab=self.notebook_page, valid=', '.join(valid_names) or _('none detected')))
         # Edge case: label collides with an existing field's label (warn, don't block).
         self._check_label_collision(target_model)
         # Edge case: duplicate selection options.
@@ -373,7 +394,13 @@ class BsAddfieldWizard(models.TransientModel):
             pages = tree.xpath(f"//notebook/page[@name='{page_name}']")
             if pages:
                 scope, scope_expr = pages[0], f"//page[@name='{page_name}']"
-        groups = scope.xpath('.//group[@name]') if scope_expr else scope.xpath('//group[@name]')
+        # [field] requires a direct <field> child: many real form views wrap several
+        # content groups in an outer layout-only <group> (e.g. res.partner's
+        # "container_row_2", whose only children are other <group> elements, used purely
+        # to lay them out side by side). Inserting a field directly into that kind of
+        # wrapper doesn't render at all -- confirmed by testing in a real browser, the
+        # field was created but invisible. Only match groups that already hold fields.
+        groups = scope.xpath('.//group[@name][field]') if scope_expr else scope.xpath('//group[@name][field]')
         if groups:
             name = groups[0].get('name')
             expr = f"{scope_expr}//group[@name='{name}']" if scope_expr else f"//group[@name='{name}']"
