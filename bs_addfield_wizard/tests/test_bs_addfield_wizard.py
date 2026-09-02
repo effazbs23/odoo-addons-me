@@ -1,7 +1,12 @@
+import re
 from unittest.mock import patch
 
 from odoo.exceptions import UserError
 from odoo.tests import TransactionCase, tagged
+
+
+def _slug(label):
+    return 'x_studio_' + re.sub(r'[^a-z0-9]+', '_', label.lower()).strip('_')
 
 
 @tagged('post_install', '-at_install')
@@ -18,6 +23,7 @@ class TestBsAddfieldWizard(TransactionCase):
         vals.setdefault('target_model_id', self.partner_model.id)
         vals.setdefault('field_type', 'char')
         vals.setdefault('field_label', 'Test Field')
+        vals.setdefault('field_name', _slug(vals['field_label']))
         return self.env['bs.addfield.wizard'].create(vals)
 
     def _run_full_flow(self, **vals):
@@ -60,6 +66,29 @@ class TestBsAddfieldWizard(TransactionCase):
         with self.assertRaises(UserError):
             wizard._parse_selection_options()
 
+    # -- Unit: field name validation (explicit, user-editable now) -----------
+    def test_field_name_must_have_x_prefix(self):
+        wizard = self._make_wizard(field_name='studio_bad')
+        with self.assertRaises(UserError):
+            wizard._validate_field_name('res.partner')
+
+    def test_field_name_collision_rejected(self):
+        wizard = self._make_wizard(field_name='x_name')  # 'name' isn't a real collision by
+        # itself (technical names are model-scoped); force a genuine collision instead:
+        existing = self.env['ir.model.fields'].create({
+            'name': 'x_studio_taken', 'model_id': self.partner_model.id,
+            'field_description': 'Taken', 'ttype': 'char',
+        })
+        self.addCleanup(existing.unlink)
+        wizard.field_name = 'x_studio_taken'
+        with self.assertRaises(UserError):
+            wizard._validate_field_name('res.partner')
+
+    def test_field_name_onchange_suggests_from_label(self):
+        wizard = self.env['bs.addfield.wizard'].new({'field_label': 'VIP Tier'})
+        wizard._onchange_field_label_suggest_name()
+        self.assertEqual(wizard.field_name, 'x_studio_vip_tier')
+
     # -- Unit: placement detection + fallback (spec 10 bullet 2) -------------
     def test_placement_detects_named_group(self):
         arch = '<form><sheet><group name="main"><field name="x"/></group></sheet></form>'
@@ -81,6 +110,44 @@ class TestBsAddfieldWizard(TransactionCase):
         self.assertFalse(name)
         self.assertEqual(expr, '//form')
         self.assertTrue(is_fallback)
+
+    # -- Unit: notebook-tab placement (requirement 6) -------------------------
+    def test_placement_scoped_to_chosen_notebook_page(self):
+        arch = (
+            '<form><sheet><notebook>'
+            '<page name="sales" string="Sales"><group name="g1"><field name="a"/></group></page>'
+            '<page name="other" string="Other Info"><group name="g2"><field name="b"/></group></page>'
+            '</notebook></sheet></form>'
+        )
+        name, expr, _position, is_fallback = self.Wizard._detect_placement_from_arch(arch, page_name='sales')
+        self.assertEqual(name, 'g1')
+        self.assertEqual(expr, "//page[@name='sales']//group[@name='g1']")
+        self.assertFalse(is_fallback)
+        # Choosing the OTHER tab must not silently land on the first-found group
+        # elsewhere in the form -- this is exactly the "not other info always" requirement.
+        name2, expr2, _position2, _is_fallback2 = self.Wizard._detect_placement_from_arch(arch, page_name='other')
+        self.assertEqual(name2, 'g2')
+        self.assertNotEqual(expr2, expr)
+
+    def test_placement_falls_back_within_chosen_page_when_no_group(self):
+        arch = (
+            '<form><sheet><notebook>'
+            '<page name="empty" string="Empty"><field name="a"/></page>'
+            '</notebook></sheet></form>'
+        )
+        name, expr, _position, is_fallback = self.Wizard._detect_placement_from_arch(arch, page_name='empty')
+        self.assertFalse(name)
+        self.assertEqual(expr, "//page[@name='empty']")
+        self.assertTrue(is_fallback)
+
+    def test_list_notebook_pages_from_arch(self):
+        arch = (
+            '<form><sheet><notebook>'
+            '<page name="sales" string="Sales"/><page name="other" string="Other Info"/>'
+            '</notebook></sheet></form>'
+        )
+        pages = self.Wizard._list_notebook_pages_from_arch(arch)
+        self.assertEqual(pages, [('sales', 'Sales'), ('other', 'Other Info')])
 
     # -- Unit: automation trigger value validation (spec 10 bullet 3) --------
     def test_automation_trigger_boolean_accepts_and_rejects(self):
@@ -146,6 +213,12 @@ class TestBsAddfieldWizard(TransactionCase):
         self.assertTrue(template)
         self.assertEqual(template.partner_to, str(self.admin.partner_id.id))
 
+    def test_disabled_at_creation_hides_from_view(self):
+        wizard = self._run_full_flow(field_type='char', field_label='Off At Creation', field_enabled=False)
+        registry = wizard.result_registry_id
+        self.assertEqual(registry.state, 'disabled')
+        self.assertFalse(registry.view_id.active)
+
     # -- Regression: metadata indistinguishable from a native field ----------
     def test_created_field_matches_native_shape(self):
         wizard = self._run_full_flow(field_type='char', field_label='Native Shape Field')
@@ -156,7 +229,44 @@ class TestBsAddfieldWizard(TransactionCase):
         self.assertEqual(model_field.type, 'char')
         self.assertEqual(model_field.string, 'Native Shape Field')
 
-    # -- Integration: removal reverses field + view + automation -------------
+    # -- Chatter history (requirement 4): add / update / enable-disable / delete ---
+    def test_chatter_logs_field_added(self):
+        wizard = self._run_full_flow(field_type='char', field_label='Chatter Add Field')
+        registry = wizard.result_registry_id
+        self.assertTrue(registry.message_ids)
+        self.assertIn('added', registry.message_ids[-1].body.lower())
+
+    def test_chatter_logs_enable_disable_and_required_toggle(self):
+        wizard = self._run_full_flow(field_type='char', field_label='Chatter Toggle Field')
+        registry = wizard.result_registry_id
+        before = len(registry.message_ids)
+        registry.action_disable_field()
+        self.assertEqual(registry.state, 'disabled')
+        self.assertFalse(registry.view_id.active)
+        registry.action_enable_field()
+        self.assertEqual(registry.state, 'active')
+        self.assertTrue(registry.view_id.active)
+        registry.field_required = True
+        self.assertTrue(registry.field_id.required)
+        # tracking=True on state/field_required means mail.thread logged each change --
+        # tracking messages are deferred to precommit, so flush it before checking.
+        self.env.cr.precommit.run()
+        self.assertGreater(len(registry.message_ids), before)
+
+    def test_disable_blocked_with_data_uses_confirm_dialog_not_a_hard_block(self):
+        # The plain (no-confirm) disable action is only reachable via a button that's
+        # invisible when has_data is True in the view; the *confirmed* action must still
+        # work programmatically once the warning is accepted -- i.e. it's a UI gate, not
+        # a server-side UserError, since disabling never destroys data.
+        wizard = self._run_full_flow(field_type='char', field_label='Data Toggle Field')
+        registry = wizard.result_registry_id
+        field_name = registry.field_id.name
+        self.env['res.partner'].create({'name': 'Has Data For Toggle', field_name: 'x'})
+        self.assertTrue(registry.has_data)
+        registry.action_disable_field_confirmed()
+        self.assertEqual(registry.state, 'disabled')
+
+    # -- Integration: removal keeps an audit-log row + reverses field/view/automation --
     def test_remove_field_reverses_field_view_and_automation(self):
         wizard = self._run_full_flow(
             field_type='char', field_label='Removable Field',
@@ -164,6 +274,7 @@ class TestBsAddfieldWizard(TransactionCase):
             automation_notify_user_id=self.admin.id)
         registry = wizard.result_registry_id
         field_id, view_id, automation_id = registry.field_id.id, registry.view_id.id, registry.automation_id.id
+        messages_before = len(registry.message_ids)
 
         remove_wizard = self.env['bs.addfield.remove.wizard'].create({'registry_id': registry.id})
         # Blocked until the dependent automation is explicitly opted into removal too.
@@ -177,7 +288,17 @@ class TestBsAddfieldWizard(TransactionCase):
         self.assertFalse(self.env['ir.model.fields'].browse(field_id).exists())
         self.assertFalse(self.env['ir.ui.view'].browse(view_id).exists())
         self.assertFalse(self.env['base.automation'].browse(automation_id).exists())
-        self.assertFalse(registry.exists())
+        # The registry row is kept as a permanent audit-log entry (chatter history),
+        # not hard-deleted -- only its live links are cleared.
+        self.assertTrue(registry.exists())
+        self.assertEqual(registry.state, 'deleted')
+        self.assertFalse(registry.field_id)
+        self.assertFalse(registry.view_id)
+        self.assertFalse(registry.automation_id)
+        # tracking=True on `state` means the Active -> Deleted transition was chattered
+        # (deferred to precommit, so flush it before checking).
+        self.env.cr.precommit.run()
+        self.assertGreater(len(registry.message_ids), messages_before)
 
     def test_remove_field_blocks_populated_data_without_confirmation(self):
         wizard = self._run_full_flow(field_type='char', field_label='Data Field')
@@ -193,7 +314,17 @@ class TestBsAddfieldWizard(TransactionCase):
 
         remove_wizard.confirm_data_loss = True
         remove_wizard.action_confirm()
-        self.assertFalse(registry.exists())
+        self.assertEqual(registry.state, 'deleted')
+
+    def test_deleted_registry_cannot_be_removed_again_or_reenabled(self):
+        wizard = self._run_full_flow(field_type='char', field_label='Double Delete Field')
+        registry = wizard.result_registry_id
+        remove_wizard = self.env['bs.addfield.remove.wizard'].create({'registry_id': registry.id})
+        remove_wizard.action_confirm()
+        with self.assertRaises(UserError):
+            registry.action_open_remove_wizard()
+        with self.assertRaises(UserError):
+            registry.action_enable_field()
 
     # -- Partial failure never leaves orphaned metadata -----------------------
     def test_partial_failure_rolls_back_everything(self):
