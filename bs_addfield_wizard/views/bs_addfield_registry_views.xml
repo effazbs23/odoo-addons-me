@@ -5,9 +5,7 @@
         <field name="name">bs.addfield.registry.list</field>
         <field name="model">bs.addfield.registry</field>
         <field name="arch" type="xml">
-            <list class="bs_af_list" create="0" delete="0">
-                <button name="%(action_bs_addfield_wizard)d" type="action" string="New Field"
-                        class="btn-primary bs_af_new_btn"/>
+            <list class="bs_af_list" delete="0">
                 <field name="model_label" string="Model"/>
                 <field name="model_module" string="App"/>
                 <field name="field_label" string="Field Name"/>
@@ -36,7 +34,7 @@
         <field name="name">bs.addfield.registry.kanban</field>
         <field name="model">bs.addfield.registry</field>
         <field name="arch" type="xml">
-            <kanban class="bs_af_kanban" create="0">
+            <kanban class="bs_af_kanban">
                 <field name="state"/>
                 <field name="has_data"/>
                 <field name="field_type"/>
@@ -45,7 +43,7 @@
                 <field name="model_module"/>
                 <field name="notebook_page"/>
                 <templates>
-                    <t t-name="kanban-box">
+                    <t t-name="card">
                         <div class="bs_af_card oe_kanban_global_click">
                             <div class="bs_af_card_top">
                                 <span t-attf-class="bs_af_badge bs_af_badge_#{record.state.raw_value}">
@@ -83,35 +81,49 @@
         <field name="name">bs.addfield.registry.form</field>
         <field name="model">bs.addfield.registry</field>
         <field name="arch" type="xml">
-            <form class="bs_af_wizard" create="0">
+            <form class="bs_af_wizard">
                 <sheet>
-                    <div class="bs_af_header">
-                        <field name="state" nolabel="1" readonly="1" widget="badge"
-                               decoration-success="state == 'active'"
-                               decoration-muted="state == 'disabled'"
-                               decoration-danger="state == 'deleted'"/>
+                    <!-- New (unsaved) record: no id yet, redirect straight into the wizard
+                         instead of exposing a raw, mostly-readonly registry form. This is how
+                         "New" on this list/kanban opens the guided wizard: there is no
+                         declarative way to swap what the native New button does, so the New
+                         button is left enabled and its blank form immediately offers the
+                         wizard launcher instead of empty fields to fill in. -->
+                    <div class="bs_af_new_prompt" invisible="id">
+                        <p>Use the guided wizard to add a new field.</p>
+                        <button name="action_launch_wizard" type="object" string="Launch Wizard"
+                                class="btn-primary bs_af_btn"/>
+                        <button string="Cancel" special="cancel" class="bs_af_btn_secondary"/>
                     </div>
-                    <group class="bs_af_group">
-                        <field name="model_label"/>
-                        <field name="model_module"/>
-                        <field name="field_label"/>
-                        <field name="field_name"/>
-                        <field name="field_type"/>
-                        <field name="notebook_page"/>
-                        <field name="field_required"/>
-                        <field name="has_data"/>
-                        <field name="automation_id"/>
-                    </group>
-                    <div class="bs_af_form_actions">
-                        <button name="action_enable_field" type="object" string="Enable"
-                                class="btn-primary bs_af_btn" invisible="state != 'disabled'"/>
-                        <button name="action_disable_field" type="object" string="Disable"
-                                class="bs_af_btn_secondary" invisible="state != 'active' or has_data"/>
-                        <button name="action_disable_field_confirmed" type="object" string="Disable"
-                                class="bs_af_btn_secondary" invisible="state != 'active' or not has_data"
-                                confirm="This field has data on existing records. Disabling it hides it from the form (data is preserved, and it can be re-enabled anytime). Continue?"/>
-                        <button name="action_open_remove_wizard" type="object" string="Remove Field"
-                                class="btn-danger bs_af_btn" invisible="state == 'deleted'"/>
+                    <div invisible="not id">
+                        <div class="bs_af_header">
+                            <field name="state" nolabel="1" readonly="1" widget="badge"
+                                   decoration-success="state == 'active'"
+                                   decoration-muted="state == 'disabled'"
+                                   decoration-danger="state == 'deleted'"/>
+                        </div>
+                        <group class="bs_af_group">
+                            <field name="model_label"/>
+                            <field name="model_module"/>
+                            <field name="field_label"/>
+                            <field name="field_name"/>
+                            <field name="field_type"/>
+                            <field name="notebook_page"/>
+                            <field name="field_required"/>
+                            <field name="has_data"/>
+                            <field name="automation_id"/>
+                        </group>
+                        <div class="bs_af_form_actions">
+                            <button name="action_enable_field" type="object" string="Enable"
+                                    class="btn-primary bs_af_btn" invisible="state != 'disabled'"/>
+                            <button name="action_disable_field" type="object" string="Disable"
+                                    class="bs_af_btn_secondary" invisible="state != 'active' or has_data"/>
+                            <button name="action_disable_field_confirmed" type="object" string="Disable"
+                                    class="bs_af_btn_secondary" invisible="state != 'active' or not has_data"
+                                    confirm="This field has data on existing records. Disabling it hides it from the form (data is preserved, and it can be re-enabled anytime). Continue?"/>
+                            <button name="action_open_remove_wizard" type="object" string="Remove Field"
+                                    class="btn-danger bs_af_btn" invisible="state == 'deleted'"/>
+                        </div>
                     </div>
                 </sheet>
                 <chatter/>

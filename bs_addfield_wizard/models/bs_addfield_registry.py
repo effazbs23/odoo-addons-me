@@ -65,10 +65,30 @@ class BsAddfieldRegistry(models.Model):
     def create(self, vals_list):
         records = super().create(vals_list)
         for record in records:
-            record.message_post(body=_(
-                'Field "%(label)s" (%(name)s) added on %(model)s.',
-                label=record.field_label, name=record.field_name, model=record.model_label))
+            # A blank record with no field_label is the throwaway placeholder that
+            # Odoo auto-saves when "Launch Wizard" is clicked on a brand-new record
+            # (any server-calling button forces a save first) -- action_launch_wizard
+            # unlinks it immediately after, so it never needs a chatter entry.
+            if record.field_label:
+                record.message_post(body=_(
+                    'Field "%(label)s" (%(name)s) added on %(model)s.',
+                    label=record.field_label, name=record.field_name, model=record.model_label))
         return records
+
+    def action_launch_wizard(self):
+        """Bound to the "New" record's placeholder form (see the view): clicking it
+        auto-saves this blank record first (standard Odoo behavior for any
+        server-calling button on an unsaved record), so the first thing this does is
+        discard that placeholder before handing off to the real wizard."""
+        self.ensure_one()
+        self.unlink()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Add a Field'),
+            'res_model': 'bs.addfield.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+        }
 
     def action_open_remove_wizard(self):
         self.ensure_one()
@@ -80,7 +100,13 @@ class BsAddfieldRegistry(models.Model):
             'res_model': 'bs.addfield.remove.wizard',
             'view_mode': 'form',
             'target': 'new',
-            'context': {'default_registry_id': self.id},
+            'context': {
+                'default_registry_id': self.id,
+                'default_field_label': self.field_label,
+                'default_model_label': self.model_label,
+                'default_has_data': self.has_data,
+                'default_has_automation': bool(self.automation_id),
+            },
         }
 
     def action_disable_field(self):
