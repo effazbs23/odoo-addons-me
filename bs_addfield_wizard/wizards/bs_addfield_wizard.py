@@ -17,6 +17,8 @@ MODEL_BLOCKLIST = [
 ]
 
 FIELD_TYPES_AUTOMATABLE = ('char', 'integer', 'float', 'date', 'datetime', 'boolean', 'selection')
+NO_SPECIFIC_TAB = ''
+FIELD_NAME_RE = re.compile(r'x_[a-zA-Z0-9_]{1,61}')
 
 
 class BsAddfieldWizard(models.TransientModel):
@@ -48,7 +50,11 @@ class BsAddfieldWizard(models.TransientModel):
         ('many2one', 'Many2one'),
     ], default='char')
     field_label = fields.Char(string='Field Label')
+    field_name = fields.Char(string='Field Name', help='Technical name. Suggested from the label; editable.')
     field_required = fields.Boolean(string='Required')
+    field_enabled = fields.Boolean(
+        string='Enabled', default=True,
+        help="Off = created but hidden from the form immediately (can be enabled later).")
     selection_options = fields.Text(
         string='Selection Options', help='One option per line.')
     relation_model_id = fields.Many2one(
@@ -57,6 +63,10 @@ class BsAddfieldWizard(models.TransientModel):
                 ('model', 'not in', MODEL_BLOCKLIST)])
     label_warning = fields.Char(readonly=True)
 
+    # Placement: which notebook tab to add the field to (requirement: let the user pick,
+    # don't always silently land it in whatever tab the auto-detection finds first).
+    notebook_page = fields.Selection(selection='_selection_notebook_pages', string='Add to Tab')
+
     # Optional automation
     add_automation = fields.Boolean(string='Notify someone when this changes')
     automation_trigger_value = fields.Char(string='When the field is set to')
@@ -64,11 +74,41 @@ class BsAddfieldWizard(models.TransientModel):
     automation_message = fields.Text(string='Message')
 
     # Preview (computed on transition to 'preview')
-    placement_group = fields.Char(readonly=True)
     placement_note = fields.Char(readonly=True)
 
     # Result
     result_registry_id = fields.Many2one('bs.addfield.registry', readonly=True)
+
+    step_label = fields.Char(compute='_compute_step_label')
+
+    @api.depends('state')
+    def _compute_step_label(self):
+        labels = {
+            'model': _('Step 1 of 4 — Choose a Model'),
+            'field': _('Step 2 of 4 — Define the Field'),
+            'preview': _('Step 3 of 4 — Preview Placement'),
+            'done': _('Step 4 of 4 — Done'),
+        }
+        for wizard in self:
+            wizard.step_label = labels.get(wizard.state, '')
+
+    @api.onchange('field_label')
+    def _onchange_field_label_suggest_name(self):
+        if self.field_label and not self.field_name:
+            self.field_name = ('x_studio_' + self._slugify(self.field_label))[:54]
+
+    def _selection_notebook_pages(self):
+        options = [(NO_SPECIFIC_TAB, _('End of form (no specific tab)'))]
+        if self.target_model_id:
+            arch = self.env[self.target_model_id.model].get_view(view_type='form')['arch']
+            options += self._list_notebook_pages_from_arch(arch)
+        return options
+
+    @api.model
+    def _list_notebook_pages_from_arch(self, arch):
+        tree = etree.fromstring(arch.encode('utf-8') if isinstance(arch, str) else arch)
+        return [(page.get('name'), page.get('string') or page.get('name'))
+                for page in tree.xpath('//notebook/page[@name]')]
 
     # ---------------------------------------------------------------------
     # Navigation
@@ -104,33 +144,51 @@ class BsAddfieldWizard(models.TransientModel):
         self._validate_field_definition()
         target_model = self.target_model_id.model
         group_name, _expr, _position, is_fallback = self._detect_placement(target_model)
-        self.placement_group = group_name or ''
-        self.placement_note = (
-            _('No named group was detected on this model\'s form -- the field will be '
-              'appended to the end of the form.')
-            if is_fallback else
-            _('Will be added to the "%s" group.', group_name)
-        )
+        if self.notebook_page and is_fallback:
+            self.placement_note = _(
+                'No named group was found in the "%s" tab -- the field will be appended '
+                'to the end of that tab.', dict(self._selection_notebook_pages()).get(self.notebook_page))
+        elif self.notebook_page:
+            self.placement_note = _(
+                'Will be added to the "%(group)s" group in the "%(tab)s" tab.',
+                group=group_name, tab=dict(self._selection_notebook_pages()).get(self.notebook_page))
+        elif is_fallback:
+            self.placement_note = _(
+                'No named group was detected on this model\'s form -- the field will be '
+                'appended to the end of the form.')
+        else:
+            self.placement_note = _('Will be added to the "%s" group.', group_name)
         self.state = 'preview'
         return self._reopen_action()
 
     def action_confirm(self):
         self.ensure_one()
         self._validate_field_definition()
-        target_model = self.target_model_id.model
+        target_model_rec = self.target_model_id
+        target_model = target_model_rec.model
         with self.env.cr.savepoint():
-            field_name = self._generate_field_name(target_model)
+            field_name = self.field_name.strip()
             field = self._create_field(target_model, field_name)
             _group_name, expr, position, _is_fallback = self._detect_placement(target_model)
             view = self._create_view(target_model, field_name, expr, position)
             automation = self.env['base.automation']
             if self.add_automation:
                 automation = self._create_automation(target_model, field_name)
+            if not self.field_enabled:
+                view.active = False
             registry = self.env['bs.addfield.registry'].create({
-                'target_model_id': self.target_model_id.id,
+                'target_model_id': target_model_rec.id,
                 'field_id': field.id,
                 'view_id': view.id,
                 'automation_id': automation.id if automation else False,
+                'model_name': target_model,
+                'model_label': target_model_rec.name,
+                'model_module': target_model_rec.modules,
+                'field_name': field_name,
+                'field_label': self.field_label.strip(),
+                'field_type': dict(self._fields['field_type'].selection).get(self.field_type),
+                'notebook_page': dict(self._selection_notebook_pages()).get(self.notebook_page) or '',
+                'state': 'active' if self.field_enabled else 'disabled',
             })
         self.result_registry_id = registry.id
         self.state = 'done'
@@ -155,6 +213,7 @@ class BsAddfieldWizard(models.TransientModel):
         if not self.field_label or not self.field_label.strip():
             raise UserError(_('Enter a field label.'))
         target_model = self.target_model_id.model
+        self._validate_field_name(target_model)
         # Edge case: label collides with an existing field's label (warn, don't block).
         self._check_label_collision(target_model)
         # Edge case: duplicate selection options.
@@ -170,6 +229,20 @@ class BsAddfieldWizard(models.TransientModel):
                 raise UserError(_('Choose who should be notified.'))
             # Edge case: automation trigger value type mismatch.
             self._validate_automation_trigger_value()
+
+    def _validate_field_name(self, target_model):
+        name = (self.field_name or '').strip()
+        if not name:
+            raise UserError(_('Enter a technical field name.'))
+        if not FIELD_NAME_RE.fullmatch(name):
+            raise UserError(_(
+                'The technical field name must start with "x_" and contain only letters, '
+                'digits and underscores (up to 63 characters).'))
+        existing = self.env['ir.model.fields'].search_count([
+            ('model', '=', target_model), ('name', '=', name),
+        ], limit=1)
+        if existing:
+            raise UserError(_('A field named "%s" already exists on this model. Choose a different name.', name))
 
     def _check_label_collision(self, target_model):
         existing = self.env['ir.model.fields'].search([
@@ -251,16 +324,6 @@ class BsAddfieldWizard(models.TransientModel):
         text = re.sub(r'[^a-zA-Z0-9]+', '_', text).strip('_').lower()
         return text or 'field'
 
-    def _generate_field_name(self, target_model):
-        base = ('x_studio_' + self._slugify(self.field_label))[:54]
-        name = base
-        IrModelFields = self.env['ir.model.fields']
-        i = 1
-        while IrModelFields.search_count([('model', '=', target_model), ('name', '=', name)], limit=1):
-            i += 1
-            name = f'{base}_{i}'
-        return name
-
     def _build_selection_slugs(self, options):
         """Deterministic label -> unique value-key pairs, in given order."""
         seen = set()
@@ -297,18 +360,26 @@ class BsAddfieldWizard(models.TransientModel):
     def _detect_placement(self, target_model):
         """Return (group_name_or_False, xpath_expr, position, is_fallback)."""
         arch = self.env[target_model].get_view(view_type='form')['arch']
-        return self._detect_placement_from_arch(arch)
+        return self._detect_placement_from_arch(arch, page_name=self.notebook_page or None)
 
     @api.model
-    def _detect_placement_from_arch(self, arch):
+    def _detect_placement_from_arch(self, arch, page_name=None):
         """Pure arch-parsing half of placement detection, kept separate so it can be
         unit-tested without a live model/view. Returns
         (group_name_or_False, xpath_expr, position, is_fallback)."""
         tree = etree.fromstring(arch.encode('utf-8') if isinstance(arch, str) else arch)
-        groups = tree.xpath('//group[@name]')
+        scope, scope_expr = tree, ''
+        if page_name:
+            pages = tree.xpath(f"//notebook/page[@name='{page_name}']")
+            if pages:
+                scope, scope_expr = pages[0], f"//page[@name='{page_name}']"
+        groups = scope.xpath('.//group[@name]') if scope_expr else scope.xpath('//group[@name]')
         if groups:
             name = groups[0].get('name')
-            return name, f"//group[@name='{name}']", 'inside', False
+            expr = f"{scope_expr}//group[@name='{name}']" if scope_expr else f"//group[@name='{name}']"
+            return name, expr, 'inside', False
+        if scope_expr:
+            return False, scope_expr, 'inside', True
         if tree.xpath('//sheet'):
             return False, '//sheet', 'inside', True
         return False, '//form', 'inside', True

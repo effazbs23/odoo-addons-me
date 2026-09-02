@@ -7,8 +7,8 @@ class BsAddfieldRemoveWizard(models.TransientModel):
     _description = 'Remove Custom Field'
 
     registry_id = fields.Many2one('bs.addfield.registry', required=True, readonly=True)
-    field_label = fields.Char(related='registry_id.field_id.field_description', readonly=True)
-    model_name = fields.Char(related='registry_id.target_model_id.name', readonly=True)
+    field_label = fields.Char(related='registry_id.field_label', readonly=True)
+    model_label = fields.Char(related='registry_id.model_label', readonly=True)
     has_data = fields.Boolean(related='registry_id.has_data', readonly=True)
     has_automation = fields.Boolean(compute='_compute_has_automation')
     # Edge case (spec 9): removing a field with populated data requires an explicit
@@ -37,14 +37,14 @@ class BsAddfieldRemoveWizard(models.TransientModel):
             raise UserError(_(
                 'This field currently has data on existing records. Confirm data loss to '
                 'proceed with removal.'))
-        # Capture the linked records before deleting anything: field_id/view_id cascade
-        # to the registry row itself (see models/bs_addfield_registry.py), so `registry`
-        # may no longer exist in DB partway through -- never dereference it again below.
         automation = registry.automation_id
         view = registry.view_id
         field = registry.field_id
         # Dependency-ordered removal (spec 7.6): automation -> view -> field, all wrapped
-        # in one transaction so a partial failure never leaves orphaned metadata.
+        # in one transaction so a partial failure never leaves orphaned metadata. The
+        # registry row itself is kept (state='deleted') as a permanent audit-log entry --
+        # field_id/view_id/automation_id null out automatically (ondelete='set null') as
+        # their targets are unlinked.
         with self.env.cr.savepoint():
             if automation:
                 templates = automation.action_server_ids.mapped('template_id')
@@ -52,6 +52,5 @@ class BsAddfieldRemoveWizard(models.TransientModel):
                 templates.unlink()
             view.unlink()
             field.unlink()
-            if registry.exists():
-                registry.unlink()
+            registry.state = 'deleted'
         return {'type': 'ir.actions.act_window_close'}
