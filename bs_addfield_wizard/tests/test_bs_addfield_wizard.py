@@ -104,6 +104,22 @@ class TestBsAddfieldWizard(TransactionCase):
         self.assertEqual(expr, '//sheet')
         self.assertTrue(is_fallback)
 
+    def test_placement_skips_layout_only_wrapper_groups(self):
+        # A <group> whose only children are other <group> elements (used purely to lay
+        # them out side by side, e.g. res.partner's "container_row_2") is not a valid
+        # field-insertion target -- a field placed directly in it doesn't render.
+        # Confirmed by testing in a real browser: the field was created but invisible.
+        arch = (
+            '<form><sheet><group name="wrapper">'
+            '<group name="left" string="Left"><field name="a"/></group>'
+            '<group name="right" string="Right"><field name="b"/></group>'
+            '</group></sheet></form>'
+        )
+        name, expr, _position, is_fallback = self.Wizard._detect_placement_from_arch(arch)
+        self.assertEqual(name, 'left')
+        self.assertEqual(expr, "//group[@name='left']")
+        self.assertFalse(is_fallback)
+
     def test_placement_falls_back_to_form_root(self):
         arch = '<form><field name="x"/></form>'
         name, expr, _position, is_fallback = self.Wizard._detect_placement_from_arch(arch)
@@ -148,6 +164,16 @@ class TestBsAddfieldWizard(TransactionCase):
         )
         pages = self.Wizard._list_notebook_pages_from_arch(arch)
         self.assertEqual(pages, [('sales', 'Sales'), ('other', 'Other Info')])
+
+    def test_notebook_page_typed_value_validated_against_real_tabs(self):
+        # notebook_page is a plain Char (not a dynamic Selection -- see the field's
+        # docstring in the model for why), so an invalid typed tab name must be rejected
+        # with a clear error rather than silently accepted.
+        wizard = self._make_wizard(notebook_page='not_a_real_tab')
+        with self.assertRaises(UserError):
+            wizard._validate_field_definition()
+        wizard.notebook_page = 'sales_purchases'  # a real res.partner tab
+        wizard._validate_field_definition()  # does not raise
 
     # -- Unit: automation trigger value validation (spec 10 bullet 3) --------
     def test_automation_trigger_boolean_accepts_and_rejects(self):
@@ -212,6 +238,18 @@ class TestBsAddfieldWizard(TransactionCase):
         template = registry.automation_id.action_server_ids.template_id
         self.assertTrue(template)
         self.assertEqual(template.partner_to, str(self.admin.partner_id.id))
+
+    def test_full_flow_places_field_in_chosen_tab(self):
+        wizard = self._run_full_flow(
+            field_type='char', field_label='Tabbed Field', notebook_page='sales_purchases')
+        registry = wizard.result_registry_id
+        self.assertEqual(registry.notebook_page, 'Sales & Purchase')
+        arch = registry.view_id.arch
+        self.assertIn("page[@name='sales_purchases']", arch)
+        # Must land in a real content group (e.g. "sale"), never the page's outer
+        # layout-only wrapper group ("container_row_2") -- see
+        # test_placement_skips_layout_only_wrapper_groups for the isolated unit test.
+        self.assertNotIn('container_row_2', arch)
 
     def test_disabled_at_creation_hides_from_view(self):
         wizard = self._run_full_flow(field_type='char', field_label='Off At Creation', field_enabled=False)
