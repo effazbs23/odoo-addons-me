@@ -40,8 +40,8 @@
                     </span>
                 </group>
                 <group invisible="state != 'field'" class="bs_af_group">
-                    <field name="notebook_page" placeholder="e.g. sales_purchases -- leave blank for end of form"/>
-                    <field name="available_tabs_hint" readonly="1" class="text-muted"/>
+                    <field name="notebook_page_id" options="{'no_create': True, 'no_open': True}"
+                           placeholder="End of form"/>
                     <field name="selection_options" placeholder="One option per line"
                            invisible="field_type != 'selection'"/>
                     <field name="relation_model_id" invisible="field_type != 'many2one'"/>
@@ -62,7 +62,7 @@
                     <field name="field_name" readonly="1"/>
                     <field name="field_type" readonly="1"/>
                     <field name="field_enabled" readonly="1"/>
-                    <field name="notebook_page" readonly="1" invisible="not notebook_page"/>
+                    <field name="notebook_page_id" readonly="1" invisible="not notebook_page_id"/>
                     <field name="placement_note" readonly="1"/>
                     <field name="add_automation" readonly="1"/>
                 </group>

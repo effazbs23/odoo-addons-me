@@ -67,16 +67,18 @@ class BsAddfieldWizard(models.TransientModel):
 
     # Placement: which notebook tab to add the field to (requirement: let the user pick,
     # don't always silently land it in whatever tab the auto-detection finds first).
-    # Plain Char, not a dynamic Selection: Odoo's web client caches a view's field
-    # metadata (including a Selection field's dynamic options) from the first time that
-    # view loads, and this wizard reuses ONE view across all 4 steps -- by the time
-    # target_model_id is set in step 1, the 'field' step's fields aren't mounted yet, so
-    # the client never re-fetches notebook_page's options for the chosen model. Confirmed
-    # by testing in a real browser: the dropdown stayed stuck on the placeholder-only
-    # option. available_tabs_hint (below) is computed fresh server-side instead, and the
-    # typed value is validated against the real tab list at confirm time.
-    notebook_page = fields.Char(string='Add to Tab (technical name, optional)')
-    available_tabs_hint = fields.Char(string='Available Tabs', readonly=True)
+    # Many2one to a small transient helper model, NOT a dynamic Selection field: Odoo
+    # always evaluates a Selection field's `selection=callable` against an EMPTY
+    # recordset for the model (see odoo/orm/fields_selection.py's _description_selection:
+    # `determine(selection, env[self.model_name])`), so it can never depend on a sibling
+    # field like target_model_id -- confirmed by testing in a real browser (the dropdown
+    # stayed stuck on the placeholder-only option no matter what model was chosen) and by
+    # reading the ORM source. A Many2one's options ARE fetched live via RPC each time the
+    # dropdown opens, so bs.addfield.notebook.page rows are (re)created fresh in
+    # action_next_to_field to hold the real tabs for whichever model was just picked.
+    notebook_page_id = fields.Many2one(
+        'bs.addfield.notebook.page', string='Add to Tab', ondelete='set null',
+        domain="[('wizard_id', '=', id)]")
 
     # Optional automation
     add_automation = fields.Boolean(string='Notify someone when this changes')
@@ -136,10 +138,14 @@ class BsAddfieldWizard(models.TransientModel):
         self.ensure_one()
         if not self.target_model_id:
             raise UserError(_('Choose a model first.'))
+        Page = self.env['bs.addfield.notebook.page']
+        Page.search([('wizard_id', '=', self.id)]).unlink()
         pages = self._get_notebook_pages(self.target_model_id.model)
-        self.available_tabs_hint = (
-            ', '.join(f'{name} ({label})' for name, label in pages) if pages
-            else _('No tabs detected on this form -- leave blank.'))
+        Page.create(
+            [{'wizard_id': self.id, 'name': False, 'display_label': _('End of form (no specific tab)')}]
+            + [{'wizard_id': self.id, 'name': name, 'display_label': label} for name, label in pages]
+        )
+        self.notebook_page_id = False
         self.state = 'field'
         return self._reopen_action()
 
@@ -155,13 +161,14 @@ class BsAddfieldWizard(models.TransientModel):
         self.ensure_one()
         self._validate_field_definition()
         target_model = self.target_model_id.model
+        page_name = self.notebook_page_id.name if self.notebook_page_id else None
         group_name, _expr, _position, is_fallback = self._detect_placement(target_model)
-        tab_label = dict(self._get_notebook_pages(target_model)).get(self.notebook_page) if self.notebook_page else None
-        if self.notebook_page and is_fallback:
+        tab_label = self.notebook_page_id.display_label if page_name else None
+        if page_name and is_fallback:
             self.placement_note = _(
                 'No named group was found in the "%s" tab -- the field will be appended '
                 'to the end of that tab.', tab_label)
-        elif self.notebook_page:
+        elif page_name:
             self.placement_note = _(
                 'Will be added to the "%(group)s" group in the "%(tab)s" tab.',
                 group=group_name, tab=tab_label)
@@ -200,9 +207,7 @@ class BsAddfieldWizard(models.TransientModel):
                 'field_name': field_name,
                 'field_label': self.field_label.strip(),
                 'field_type': dict(self._fields['field_type'].selection).get(self.field_type),
-                'notebook_page': (
-                    dict(self._get_notebook_pages(target_model)).get(self.notebook_page, self.notebook_page)
-                    if self.notebook_page else ''),
+                'notebook_page': self.notebook_page_id.display_label if self.notebook_page_id.name else '',
                 'state': 'active' if self.field_enabled else 'disabled',
             })
         self.result_registry_id = registry.id
@@ -229,12 +234,6 @@ class BsAddfieldWizard(models.TransientModel):
             raise UserError(_('Enter a field label.'))
         target_model = self.target_model_id.model
         self._validate_field_name(target_model)
-        if self.notebook_page:
-            valid_names = [name for name, _label in self._get_notebook_pages(target_model)]
-            if self.notebook_page not in valid_names:
-                raise UserError(_(
-                    '"%(tab)s" is not a tab on this model\'s form. Valid tabs: %(valid)s',
-                    tab=self.notebook_page, valid=', '.join(valid_names) or _('none detected')))
         # Edge case: label collides with an existing field's label (warn, don't block).
         self._check_label_collision(target_model)
         # Edge case: duplicate selection options.
@@ -381,7 +380,7 @@ class BsAddfieldWizard(models.TransientModel):
     def _detect_placement(self, target_model):
         """Return (group_name_or_False, xpath_expr, position, is_fallback)."""
         arch = self.env[target_model].get_view(view_type='form')['arch']
-        return self._detect_placement_from_arch(arch, page_name=self.notebook_page or None)
+        return self._detect_placement_from_arch(arch, page_name=self.notebook_page_id.name or None)
 
     @api.model
     def _detect_placement_from_arch(self, arch, page_name=None):
