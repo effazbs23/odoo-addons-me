@@ -26,9 +26,14 @@ class TestBsAddfieldWizard(TransactionCase):
         vals.setdefault('field_name', _slug(vals['field_label']))
         return self.env['bs.addfield.wizard'].create(vals)
 
-    def _run_full_flow(self, **vals):
+    def _run_full_flow(self, notebook_page_name=None, **vals):
         wizard = self._make_wizard(**vals)
         wizard.action_next_to_field()
+        if notebook_page_name is not None:
+            page = self.env['bs.addfield.notebook.page'].search([
+                ('wizard_id', '=', wizard.id), ('name', '=', notebook_page_name),
+            ], limit=1)
+            wizard.notebook_page_id = page.id
         wizard.action_next_to_preview()
         wizard.action_confirm()
         return wizard
@@ -165,15 +170,23 @@ class TestBsAddfieldWizard(TransactionCase):
         pages = self.Wizard._list_notebook_pages_from_arch(arch)
         self.assertEqual(pages, [('sales', 'Sales'), ('other', 'Other Info')])
 
-    def test_notebook_page_typed_value_validated_against_real_tabs(self):
-        # notebook_page is a plain Char (not a dynamic Selection -- see the field's
-        # docstring in the model for why), so an invalid typed tab name must be rejected
-        # with a clear error rather than silently accepted.
-        wizard = self._make_wizard(notebook_page='not_a_real_tab')
-        with self.assertRaises(UserError):
-            wizard._validate_field_definition()
-        wizard.notebook_page = 'sales_purchases'  # a real res.partner tab
-        wizard._validate_field_definition()  # does not raise
+    def test_next_to_field_populates_and_refreshes_tab_choices(self):
+        # notebook_page_id is a Many2one to a small transient helper model, not a
+        # dynamic Selection field (see the field's docstring in the model for why:
+        # Odoo always evaluates a Selection field's selection=callable against an empty
+        # recordset, so it can't depend on a sibling field like target_model_id).
+        Page = self.env['bs.addfield.notebook.page']
+        wizard = self._make_wizard()
+        wizard.action_next_to_field()
+        pages = Page.search([('wizard_id', '=', wizard.id)])
+        self.assertIn('sales_purchases', pages.mapped('name'))
+        self.assertIn(False, pages.mapped('name'))  # "End of form" placeholder
+
+        # Re-entering the step for a different model clears the stale choices.
+        wizard.target_model_id = self.env.ref('base.model_res_users').id
+        wizard.action_next_to_field()
+        pages_after = Page.search([('wizard_id', '=', wizard.id)])
+        self.assertNotIn('sales_purchases', pages_after.mapped('name'))
 
     # -- Unit: automation trigger value validation (spec 10 bullet 3) --------
     def test_automation_trigger_boolean_accepts_and_rejects(self):
@@ -241,7 +254,7 @@ class TestBsAddfieldWizard(TransactionCase):
 
     def test_full_flow_places_field_in_chosen_tab(self):
         wizard = self._run_full_flow(
-            field_type='char', field_label='Tabbed Field', notebook_page='sales_purchases')
+            field_type='char', field_label='Tabbed Field', notebook_page_name='sales_purchases')
         registry = wizard.result_registry_id
         self.assertEqual(registry.notebook_page, 'Sales & Purchase')
         arch = registry.view_id.arch
