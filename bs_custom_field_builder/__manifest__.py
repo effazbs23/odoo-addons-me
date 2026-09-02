@@ -19,7 +19,7 @@
     'application': False,
     'installable': True,
     'currency': 'USD',
-    'price': 0.00,
+    'price': 29,
     'assets': {
         'web.assets_backend': [
             'bs_custom_field_builder/static/src/css/bs_addfield.css',
