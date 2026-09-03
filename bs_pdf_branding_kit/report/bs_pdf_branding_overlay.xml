@@ -17,52 +17,79 @@
              zero impact on users who don't opt in. -->
         <t t-if="_bs_branding.get('print_logo') or _bs_has_watermark or _bs_branding.get('qrcode_data_uri')">
             <style>
+                /*
+                    Everything here is position: absolute, never fixed. wkhtmltopdf's
+                    print engine does not reliably resolve `position: fixed` to each
+                    physical page (it either drifts to wherever the un-paginated HTML
+                    flow happens to put it, or reserves layout space it shouldn't) --
+                    confirmed by rendering a real PDF and inspecting the result.
+                    .bs_pdf_branding_page below gives every child an unambiguous,
+                    physically-sized (mm, not %) containing box to position against,
+                    instead of relying on wkhtmltopdf's own notion of the "initial
+                    containing block", which is what caused the drift.
+                */
+                .bs_pdf_branding_page {
+                    position: absolute; top: 0; left: 0;
+                    width: <t t-esc="_bs_branding.get('page_width_mm', 210)"/>mm;
+                    height: <t t-esc="_bs_branding.get('page_height_mm', 297)"/>mm;
+                }
                 .bs_pdf_branding_logo_override {
-                    position: fixed; top: 8px; left: 8px;
-                    max-height: 45px; max-width: 130px; z-index: 1000;
+                    position: absolute; transform: translate(-50%, -50%);
+                    max-height: 14mm; max-width: 40mm;
                 }
                 .bs_pdf_branding_watermark {
-                    position: fixed; z-index: -1; max-width: 500px;
+                    position: absolute; max-width: 160mm;
                     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-                    font-size: 60px; font-weight: bold; color: #888888; text-align: center;
+                    font-size: 18mm; font-weight: bold; color: #888888; text-align: center;
                 }
-                .bs_pdf_branding_watermark img { max-width: 300px; max-height: 300px; }
-                .bs_pdf_branding_watermark_center { top: 45%; left: 50%; transform: translate(-50%, -50%); }
-                .bs_pdf_branding_watermark_diagonal { top: 45%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); }
-                .bs_pdf_branding_watermark_top_right { top: 8px; right: 8px; left: auto; transform: none; font-size: 24px; max-width: 220px; }
-                .bs_pdf_branding_qrcode { position: fixed; bottom: 8px; right: 8px; z-index: 1000; }
+                .bs_pdf_branding_watermark img { max-width: 90mm; max-height: 90mm; }
+                .bs_pdf_branding_qrcode { position: absolute; bottom: 8mm; right: 8mm; width: 28mm; height: 28mm; }
             </style>
 
-            <!-- Edge case (spec 9): no print logo uploaded -> skip silently, leaving
-                 the native header logo web.external_layout already rendered untouched. -->
-            <t t-if="_bs_branding.get('print_logo')">
-                <style>.o_company_logo, .o_company_logo_big, .o_company_logo_small { display: none !important; }</style>
-                <img t-att-src="image_data_uri(_bs_branding['print_logo'])" class="bs_pdf_branding_logo_override" alt="Logo"/>
-            </t>
+            <div class="bs_pdf_branding_page">
+                <!-- Edge case (spec 9): no print logo uploaded -> skip silently, leaving
+                     the native header logo web.external_layout already rendered
+                     untouched. Position (logo_position_x/y, a % of the printable area,
+                     center of the image) is dragged into place on a demo invoice in the
+                     settings panel (see static/src/fields/pdf_branding_position_picker)
+                     rather than picked from fixed corner presets: web.external_layout
+                     has several header variants (standard/boxed/background/clean) that
+                     don't all leave the same corner free, so a single hardcoded position
+                     collided with the address block on at least one of them. (CSS
+                     `content: url(...)`, which would let the replacement inherit the
+                     native logo's own box/position exactly instead of positioning it
+                     independently, is not honored by wkhtmltopdf's engine here: tried
+                     first, confirmed not to render at all.) -->
+                <t t-if="_bs_branding.get('print_logo')">
+                    <style>.o_company_logo, .o_company_logo_big, .o_company_logo_small { display: none !important; }</style>
+                    <img t-att-src="image_data_uri(_bs_branding['print_logo'])" class="bs_pdf_branding_logo_override"
+                         t-attf-style="left: #{_bs_branding.get('logo_position_x', 78)}%; top: #{_bs_branding.get('logo_position_y', 2)}%;"
+                         alt="Logo"/>
+                </t>
 
-            <t t-if="_bs_has_watermark">
-                <t t-set="_bs_pos" t-value="_bs_branding.get('watermark_position') or 'diagonal'"/>
-                <!-- Edge case (spec 9): opacity 0/100 boundary values -> plain CSS
-                     opacity renders them predictably (invisible / fully opaque), no
-                     clamping needed here since res.company._get_pdf_branding already
-                     clamps to [0, 100]. -->
-                <div t-attf-class="bs_pdf_branding_watermark bs_pdf_branding_watermark_#{_bs_pos}"
-                     t-attf-style="opacity: #{(_bs_branding.get('watermark_opacity') or 0) / 100.0};">
-                    <!-- Edge case (spec 9): watermark text too long for its box -> CSS
-                         ellipsis truncates instead of overflowing the page. -->
-                    <span t-if="_bs_branding.get('watermark_type') == 'text'" t-esc="_bs_branding.get('watermark_text')"/>
-                    <img t-if="_bs_branding.get('watermark_type') == 'image' and _bs_branding.get('watermark_image')"
-                         t-att-src="image_data_uri(_bs_branding['watermark_image'])" alt="Watermark"/>
-                </div>
-            </t>
+                <t t-if="_bs_has_watermark">
+                    <!-- Edge case (spec 9): opacity 0/100 boundary values -> plain CSS
+                         opacity renders them predictably (invisible / fully opaque), no
+                         clamping needed here since res.company._get_pdf_branding already
+                         clamps to [0, 100]. -->
+                    <div class="bs_pdf_branding_watermark"
+                         t-attf-style="left: #{_bs_branding.get('watermark_position_x', 50)}%; top: #{_bs_branding.get('watermark_position_y', 50)}%; opacity: #{(_bs_branding.get('watermark_opacity') or 0) / 100.0}; transform: translate(-50%, -50%)#{' rotate(-30deg)' if _bs_branding.get('watermark_diagonal') else ''};">
+                        <!-- Edge case (spec 9): watermark text too long for its box -> CSS
+                             ellipsis truncates instead of overflowing the page. -->
+                        <span t-if="_bs_branding.get('watermark_type') == 'text'" t-esc="_bs_branding.get('watermark_text')"/>
+                        <img t-if="_bs_branding.get('watermark_type') == 'image' and _bs_branding.get('watermark_image')"
+                             t-att-src="image_data_uri(_bs_branding['watermark_image'])" alt="Watermark"/>
+                    </div>
+                </t>
 
-            <!-- Edge case (spec 9): QR source mismatched to document type (payment
-                 portal link requested on a non-invoice report) is resolved upstream in
-                 res.company._get_pdf_branding / the settings-panel preview action:
-                 qrcode_data_uri is simply False there, so nothing renders here. -->
-            <t t-if="_bs_branding.get('qrcode_data_uri')">
-                <img t-att-src="_bs_branding['qrcode_data_uri']" class="bs_pdf_branding_qrcode" alt="QR Code"/>
-            </t>
+                <!-- Edge case (spec 9): QR source mismatched to document type (payment
+                     portal link requested on a non-invoice report) is resolved upstream in
+                     res.company._get_pdf_branding / the settings-panel preview action:
+                     qrcode_data_uri is simply False there, so nothing renders here. -->
+                <t t-if="_bs_branding.get('qrcode_data_uri')">
+                    <img t-att-src="_bs_branding['qrcode_data_uri']" class="bs_pdf_branding_qrcode" alt="QR Code"/>
+                </t>
+            </div>
         </t>
     </template>
 </odoo>

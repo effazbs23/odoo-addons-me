@@ -33,6 +33,28 @@ def qrcode_data_uri(env, value, size=120):
     return 'data:image/png;base64,%s' % base64.b64encode(png).decode()
 
 
+def pdf_page_size_mm(company):
+    """(width_mm, height_mm) of the company's PRINTABLE content area -- the
+    page size minus wkhtmltopdf's own margins, since that margin band is
+    where `position: absolute; top: 0; left: 0` (no positioned ancestor)
+    resolves to in wkhtmltopdf: confirmed empirically by rendering a real PDF
+    and measuring where a 50%-centered element actually landed. Using the
+    full physical page size here (rather than the printable area) computed
+    "center" using a taller box than what's actually visible, pushing
+    watermarks noticeably below true center.
+
+    print_page_width/print_page_height resolve the paperformat's named size
+    (A4, Letter, ...) or custom page_width/page_height, honoring orientation
+    -- see report.paperformat._compute_print_page_size.
+    """
+    paperformat = company.paperformat_id
+    if paperformat and paperformat.print_page_width and paperformat.print_page_height:
+        width = paperformat.print_page_width - paperformat.margin_left - paperformat.margin_right
+        height = paperformat.print_page_height - paperformat.margin_top - paperformat.margin_bottom
+        return width, height
+    return 196.0, 225.0
+
+
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
@@ -51,10 +73,16 @@ class ResCompany(models.Model):
     pdf_watermark_text = fields.Char(string='Watermark Text')
     pdf_watermark_image = fields.Binary(string='Watermark Image')
     pdf_watermark_opacity = fields.Float(string='Watermark Opacity (%)', default=15.0)
-    pdf_watermark_position = fields.Selection(
-        [('center', 'Center'), ('diagonal', 'Diagonal'), ('top_right', 'Top Right')],
-        string='Watermark Position', default='diagonal', required=True,
-    )
+    pdf_watermark_diagonal = fields.Boolean(string='Watermark Diagonal', default=True)
+    # Position of the logo/watermark on the page, as a percentage of the
+    # printable content area (0,0 = top-left, 100,100 = bottom-right) --
+    # dragged into place on the demo invoice in the settings panel, rather
+    # than picked from a handful of fixed presets, so what's dragged is
+    # exactly what's used to render the real reports.
+    pdf_logo_position_x = fields.Float(string='Logo Position X (%)', default=78.0)
+    pdf_logo_position_y = fields.Float(string='Logo Position Y (%)', default=2.0)
+    pdf_watermark_position_x = fields.Float(string='Watermark Position X (%)', default=50.0)
+    pdf_watermark_position_y = fields.Float(string='Watermark Position Y (%)', default=50.0)
     pdf_qrcode_enabled = fields.Boolean(string='Enable QR Code')
     pdf_qrcode_source = fields.Selection(
         [('payment_portal_link', 'Payment Portal Link'), ('custom_url', 'Custom URL')],
@@ -73,6 +101,7 @@ class ResCompany(models.Model):
         self.ensure_one()
         watermark = self.env['bs.pdf.branding.override']._get_effective_watermark(self, report_type, record)
         opacity = max(0.0, min(100.0, self.pdf_watermark_opacity))
+        page_width_mm, page_height_mm = pdf_page_size_mm(self)
 
         qrcode_value = False
         if self.pdf_qrcode_enabled:
@@ -85,10 +114,16 @@ class ResCompany(models.Model):
         return {
             'logo': self.pdf_print_logo or self.logo,
             'print_logo': self.pdf_print_logo,
+            'logo_position_x': self.pdf_logo_position_x,
+            'logo_position_y': self.pdf_logo_position_y,
             'watermark_type': watermark['type'],
             'watermark_text': watermark['text'],
             'watermark_image': watermark['image'],
             'watermark_opacity': opacity,
-            'watermark_position': self.pdf_watermark_position,
+            'watermark_diagonal': self.pdf_watermark_diagonal,
+            'watermark_position_x': self.pdf_watermark_position_x,
+            'watermark_position_y': self.pdf_watermark_position_y,
             'qrcode_data_uri': qrcode_data_uri(self.env, qrcode_value) if qrcode_value else False,
+            'page_width_mm': page_width_mm,
+            'page_height_mm': page_height_mm,
         }

@@ -21,7 +21,7 @@
                                  help="Applied to Quotation, Invoice, Delivery Slip and Purchase Order PDFs, unless overridden per report type below.">
                             <field name="pdf_watermark_type" widget="radio" options="{'horizontal': true}"/>
                             <div class="content-group" invisible="pdf_watermark_type == 'none'">
-                                <div class="row mt16" invisible="pdf_watermark_type != 'text'">
+                                <div class="row mt8" invisible="pdf_watermark_type != 'text'">
                                     <label for="pdf_watermark_text" class="col-lg-3 o_light_label"/>
                                     <field name="pdf_watermark_text" class="col-lg-6"/>
                                 </div>
@@ -30,14 +30,19 @@
                                     <field name="pdf_watermark_image" widget="image" class="col-lg-6"/>
                                 </div>
                                 <div class="row mt8">
-                                    <label for="pdf_watermark_position" class="col-lg-3 o_light_label"/>
-                                    <field name="pdf_watermark_position" class="col-lg-6"/>
-                                </div>
-                                <div class="row mt8">
                                     <label for="pdf_watermark_opacity" class="col-lg-3 o_light_label"/>
-                                    <field name="pdf_watermark_opacity" class="col-lg-6"/> %
+                                    <field name="pdf_watermark_opacity" class="col-lg-3"/> %
+                                    <label for="pdf_watermark_diagonal" class="col-lg-2 o_light_label" style="margin-left: 24px;"/>
+                                    <field name="pdf_watermark_diagonal" class="col-lg-1"/>
                                 </div>
                             </div>
+                        </setting>
+                    </block>
+                    <block title="Position" id="bs_pdf_branding_position">
+                        <setting id="bs_pdf_branding_position_setting"
+                                 help="Drag the logo and watermark onto the demo invoice below to set exactly where they print.">
+                            <field name="pdf_logo_position_x" widget="bs_pdf_branding_position_picker"
+                                   nolabel="1"/>
                         </setting>
                     </block>
                     <block title="QR Code" id="bs_pdf_branding_qrcode">

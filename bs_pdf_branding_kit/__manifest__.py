@@ -8,7 +8,7 @@
     'support': 'erp23@brainstation-23.com',
     'license': 'OPL-1',
     'icon': '/bs_pdf_branding_kit/static/description/icon.png',
-    'images': ['static/description/banner.png'],
+    'images': ['static/description/banner.gif'],
     'depends': ['base', 'sale', 'account', 'stock', 'purchase'],
     'data': [
         'security/ir.model.access.csv',
@@ -25,4 +25,9 @@
     'installable': True,
     'currency': 'USD',
     'price': 9.99,
+    'assets': {
+        'web.assets_backend': [
+            'bs_pdf_branding_kit/static/src/fields/**/*',
+        ],
+    },
 }

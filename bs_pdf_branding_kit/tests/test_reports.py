@@ -52,7 +52,7 @@ class TestReportsIntegration(BrandingTestCommon):
             'pdf_watermark_type': 'text',
             'pdf_watermark_text': 'DRAFT',
             'pdf_watermark_opacity': 20,
-            'pdf_watermark_position': 'diagonal',
+            'pdf_watermark_diagonal': True,
         })
         rendered = self._render_all(self._records())
         for report_type, content in rendered.items():
@@ -94,8 +94,15 @@ class TestReportsIntegration(BrandingTestCommon):
             self.assertNotIn(b'bs_pdf_branding_qrcode', again[report_type])
 
     def test_live_preview_writes_nothing_to_the_database(self):
-        """Spec 10: live preview renders using unsaved settings-panel values without
-        writing anything to the database until the admin explicitly saves."""
+        """Spec 10: live preview renders using unsaved settings-panel values, and
+        the throwaway record it renders against does not survive the request.
+
+        report_action()'s active_ids are built from recordset.ids, which is
+        always [] for an in-memory .new() record (only real DB ids count) --
+        so a .new()-based dummy can never work with Odoo's normal report/
+        download flow. The wizard creates a real record, renders synchronously,
+        then deletes it; this test checks that record is gone afterwards.
+        """
         # .new(), not .create(): this simulates the settings form's client-side
         # unsaved (onchange-only) state -- a real .create()/.write() call on a
         # related field DOES write through to company_id immediately, which is
@@ -107,8 +114,8 @@ class TestReportsIntegration(BrandingTestCommon):
         })
         sale_count_before = self.env['sale.order'].search_count([])
         invoice_count_before = self.env['account.move'].search_count([])
-        action = settings.action_preview_quotation()
-        self.assertEqual(action['type'], 'ir.actions.report')
+        action = settings.with_context(force_report_rendering=True).action_preview_quotation()
+        self.assertEqual(action['type'], 'ir.actions.act_url')
         self.assertEqual(self.env['sale.order'].search_count([]), sale_count_before)
         self.assertEqual(self.env['account.move'].search_count([]), invoice_count_before)
         # And the company itself must be untouched (settings not applied via execute()).
