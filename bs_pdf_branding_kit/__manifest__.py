@@ -1,5 +1,5 @@
 {
-    'name': 'PDF Report Branding Kit',
+    'name': 'PDF Branding Kit',
     'version': '19.0.1.0.0',
     'category': 'Technical/Reporting',
     'summary': 'Logo, watermark and QR-code branding applied automatically across Quotation, Invoice, Delivery Slip and Purchase Order PDFs',
@@ -8,7 +8,7 @@
     'support': 'erp23@brainstation-23.com',
     'license': 'OPL-1',
     'icon': '/bs_pdf_branding_kit/static/description/icon.png',
-    'images': ['static/description/banner.gif'],
+    'images': ['static/description/banner.png'],
     'depends': ['base', 'sale', 'account', 'stock', 'purchase'],
     'data': [
         'security/ir.model.access.csv',
@@ -24,5 +24,5 @@
     'application': False,
     'installable': True,
     'currency': 'USD',
-    'price': 0.00,
+    'price': 9.99,
 }
