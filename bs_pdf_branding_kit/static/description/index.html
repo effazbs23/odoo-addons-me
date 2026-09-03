@@ -1,221 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>PDF Branding Kit</title>
-<style>
-  .bs-pbk * { box-sizing: border-box; }
-  .bs-pbk {
-    --paper: #FAF6EC;
-    --paper-edge: #EEE6D2;
-    --ink: #1E2A42;
-    --ink-soft: #5B6478;
-    --stamp: #9C3B2E;
-    --stamp-tint: rgba(156,59,46,0.09);
-    --line: #DDD4BE;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--paper);
-    color: var(--ink);
-    line-height: 1.55;
-    margin: 0;
-  }
-  .bs-pbk h1, .bs-pbk h2, .bs-pbk h3 {
-    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
-    font-weight: 700;
-    margin: 0;
-    color: var(--ink);
-  }
-  .bs-pbk .wrap { max-width: 1000px; margin: 0 auto; padding: 56px 28px 72px; }
-  .bs-pbk .hero { display: flex; gap: 56px; align-items: center; }
-  .bs-pbk .hero-copy { flex: 1 1 380px; min-width: 280px; }
-  .bs-pbk .hero-doc { flex: 0 0 320px; }
-  .bs-pbk h1 { font-size: 38px; line-height: 1.18; letter-spacing: -0.01em; }
-  .bs-pbk .lede { font-size: 17px; color: var(--ink-soft); margin: 18px 0 0; max-width: 46ch; }
-  .bs-pbk .price-line { margin: 26px 0 0; font-size: 14px; color: var(--ink-soft); }
-  .bs-pbk .price-line b { color: var(--ink); }
-
-  /* -- letterhead mockup -- */
-  .bs-pbk .doc {
-    background: #fff;
-    border: 1px solid var(--paper-edge);
-    box-shadow: 0 18px 40px -20px rgba(30,42,66,0.35), 0 2px 8px rgba(30,42,66,0.06);
-    transform: rotate(-2deg);
-    padding: 22px 20px 26px;
-    position: relative;
-    overflow: hidden;
-  }
-  .bs-pbk .doc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-  .bs-pbk .doc-mark { width: 30px; height: 30px; }
-  .bs-pbk .doc-title { font-family: Georgia, serif; font-size: 12px; letter-spacing: 0.02em; color: var(--ink-soft); }
-  .bs-pbk .doc-lines div { height: 7px; border-radius: 2px; background: #E7E2D4; margin-bottom: 9px; }
-  .bs-pbk .doc-lines div:nth-child(1) { width: 72%; }
-  .bs-pbk .doc-lines div:nth-child(2) { width: 88%; }
-  .bs-pbk .doc-lines div:nth-child(3) { width: 60%; }
-  .bs-pbk .doc-lines div:nth-child(4) { width: 80%; }
-  .bs-pbk .doc-watermark {
-    position: absolute; left: 50%; top: 52%;
-    transform: translate(-50%, -50%) rotate(-26deg);
-    font-family: Georgia, serif;
-    font-size: 44px; font-weight: 700;
-    color: var(--stamp);
-    opacity: 0.16;
-    white-space: nowrap;
-    pointer-events: none;
-  }
-  .bs-pbk .doc-qr { position: absolute; right: 18px; bottom: 16px; width: 46px; height: 46px; }
-
-  /* -- section rhythm -- */
-  .bs-pbk section { margin-top: 76px; }
-  .bs-pbk .rule { border: 0; border-top: 1px solid var(--line); margin: 76px 0 0; }
-
-  .bs-pbk .doctypes { display: flex; gap: 34px; flex-wrap: wrap; margin-top: 22px; }
-  .bs-pbk .doctype { display: flex; align-items: center; gap: 10px; }
-  .bs-pbk .doctype svg { flex: none; }
-  .bs-pbk .doctype span { font-size: 15px; color: var(--ink); }
-  .bs-pbk h2.section-title { font-size: 15px; color: var(--ink-soft); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; font-weight: 600; margin-bottom: 4px; }
-
-  .bs-pbk .feature-big { display: flex; gap: 48px; align-items: flex-start; }
-  .bs-pbk .feature-big .txt { flex: 1 1 360px; }
-  .bs-pbk .feature-big .txt h3 { font-size: 26px; margin-bottom: 12px; }
-  .bs-pbk .feature-big .txt p { color: var(--ink-soft); font-size: 16px; max-width: 48ch; }
-  .bs-pbk .stamp-demo {
-    flex: 0 0 220px;
-    border: 1px solid var(--paper-edge);
-    background: #fff;
-    padding: 20px;
-    box-shadow: 0 10px 24px -16px rgba(30,42,66,0.3);
-  }
-  .bs-pbk .stamp-demo .row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--ink-soft); margin-bottom: 10px; }
-  .bs-pbk .stamp-demo .tag {
-    display: inline-block; transform: rotate(-6deg);
-    border: 1.5px solid var(--stamp); color: var(--stamp);
-    font-family: Georgia, serif; font-weight: 700; font-size: 13px;
-    padding: 3px 10px; border-radius: 3px;
-  }
-  .bs-pbk .stamp-demo .cond { font-size: 13px; color: var(--ink-soft); margin-top: 14px; border-top: 1px dashed var(--line); padding-top: 12px; }
-
-  .bs-pbk .trio { display: flex; gap: 40px; flex-wrap: wrap; }
-  .bs-pbk .trio > div { flex: 1 1 260px; border-top: 2px solid var(--ink); padding-top: 14px; }
-  .bs-pbk .trio h3 { font-size: 18px; margin-bottom: 8px; }
-  .bs-pbk .trio p { font-size: 15px; color: var(--ink-soft); margin: 0; }
-
-  .bs-pbk .closing { max-width: 62ch; }
-  .bs-pbk .closing h2 { font-size: 24px; margin-bottom: 14px; }
-  .bs-pbk .closing p { font-size: 16px; color: var(--ink-soft); }
-  .bs-pbk .closing p + p { margin-top: 12px; }
-
-  @media (max-width: 760px) {
-    .bs-pbk .hero { flex-direction: column; }
-    .bs-pbk .hero-doc { flex-basis: auto; width: 100%; max-width: 320px; }
-    .bs-pbk .feature-big { flex-direction: column; }
-    .bs-pbk .stamp-demo { flex-basis: auto; width: 100%; max-width: 260px; }
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>PDF Branding Kit</title>
 </head>
-<body>
-<div class="bs-pbk">
-<div class="wrap">
+<body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#F7F9FC;color:#001844;line-height:1.6;">
+<div style="max-width:1200px;margin:0 auto;padding:40px 20px 80px;">
 
-  <section class="hero" style="margin-top:0;">
-    <div class="hero-copy">
-      <h1>Your logo and watermark, on every PDF you send.</h1>
-      <p class="lede">Set the branding once in Settings. Quotations, invoices, delivery slips and purchase orders all pick it up automatically &mdash; no template editing, no developer.</p>
-      <p class="price-line">Built for Odoo <b>19.0</b>, on top of Sales, Invoicing, Inventory and Purchase.</p>
+  <!-- 1. Compatibility / support header -->
+  <div style="border:1px solid #DCE1E8;border-radius:16px;padding:20px 16px;margin-bottom:20px;box-sizing:border-box;text-align:center;">
+    <div style="display:inline-block;width:100%;max-width:180px;vertical-align:middle;padding:8px;box-sizing:border-box;">
+      <img src="./assets/logo.png" alt="PDF Branding Kit" style="max-height:48px;max-width:100%;width:auto;height:auto;">
     </div>
-    <div class="hero-doc">
-      <div class="doc">
-        <div class="doc-head">
-          <svg class="doc-mark" viewBox="0 0 32 32" fill="none">
-            <path d="M6 3h14l6 6v20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" fill="#1E2A42"/>
-            <path d="M20 3v6h6" fill="#FAF6EC"/>
-            <path d="M9 17h11M9 21h11M9 25h7" stroke="#FAF6EC" stroke-width="1.4"/>
-          </svg>
-          <span class="doc-title">Northwind Fixtures Co.</span>
+    <div style="display:inline-block;width:100%;max-width:320px;vertical-align:middle;text-align:left;padding:8px;box-sizing:border-box;">
+      <p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#00A0DB;">Supports</p>
+      <span style="display:inline-block;margin:0 6px 6px 0;padding:7px 12px;color:#001844;border:1.5px solid #00A0DB;border-radius:8px;font-size:12px;font-weight:600;"><img src="./assets/check-circle.svg" alt="Supported" style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px;">Enterprise</span>
+      <span style="display:inline-block;margin:0 6px 6px 0;padding:7px 12px;color:#001844;border:1.5px solid #00A0DB;border-radius:8px;font-size:12px;font-weight:600;"><img src="./assets/check-circle.svg" alt="Supported" style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px;">Community</span>
+    </div>
+  </div>
+
+  <!-- 2. Banner -->
+  <div style="margin-top:3rem;margin-bottom:3rem;">
+    <img src="./assets/main_screenshot.png" alt="PDF Branding Kit main screenshot" style="display:block;width:100%;height:auto;border-radius:10px;">
+  </div>
+
+  <!-- 3. Hero -->
+  <section style="border:1px solid #DCE1E8;border-radius:16px;padding:60px 48px;margin-bottom:20px;">
+    <span style="display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1.5px solid #00A0DB;color:#00668E;padding:8px 14px;margin:0 8px 12px 0;">Odoo Module</span>
+    <span style="display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1.5px solid #00A0DB;color:#00668E;padding:8px 14px;margin:0 8px 12px 0;">Reporting</span>
+    <h1 style="font-size:48px;font-weight:700;color:#001844;margin:16px 0 12px;line-height:1.2;">PDF Branding Kit</h1>
+    <p style="margin:0;color:#797F8B;font-size:18px;max-width:800px;line-height:1.7;">Apply your logo, watermark and QR code across every Quotation, Invoice, Delivery Slip and Purchase Order &mdash; configured once in Settings, with a drag-and-resize picker to place branding exactly where you want it.</p>
+  </section>
+
+  <!-- 4. Video Walkthrough -->
+  <section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;margin-bottom:20px;text-align:center;">
+    <span style="display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1.5px solid #00A0DB;color:#00668E;padding:8px 14px;margin-bottom:12px;">Video Walkthrough</span>
+    <h2 style="font-size:32px;color:#001844;margin:0 0 10px;font-weight:700;">See It in Action</h2>
+    <p style="margin:0 0 24px;color:#797F8B;font-size:16px;line-height:1.7;max-width:720px;margin-left:auto;margin-right:auto;">A quick walkthrough of configuring branding and dragging the logo and watermark into place.</p>
+    <div style="max-width:960px;margin:0 auto;border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;">
+      <div class="media_iframe_video">
+        <iframe src="https://www.youtube.com/embed/PLACEHOLDER_VIDEO_ID" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Feature overview -->
+  <section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 8px;font-weight:700;">Feature overview</h2>
+    <p style="margin:0 0 28px;color:#797F8B;font-size:16px;line-height:1.7;">Everything below is configured once in Settings &gt; PDF Branding and applies automatically to every outgoing report.</p>
+    <div>
+      <div style="display:inline-block;vertical-align:top;width:29%;min-width:250px;margin:0 1.5% 20px 0;">
+        <h3 style="font-size:20px;color:#001844;margin:0 0 14px;font-weight:700;">Branding</h3>
+        <ul style="margin:0;padding:0 0 0 18px;color:#797F8B;font-size:15px;line-height:1.9;">
+          <li>Print-specific logo, falls back to the company logo</li>
+          <li>Text or image watermark with adjustable opacity</li>
+          <li>Straight or diagonal watermark orientation</li>
+          <li>Drag the logo and watermark into position on a demo invoice</li>
+          <li>Drag a corner handle to resize the logo or watermark</li>
+        </ul>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:29%;min-width:250px;margin:0 1.5% 20px 1.5%;">
+        <h3 style="font-size:20px;color:#001844;margin:0 0 14px;font-weight:700;">QR &amp; Documents</h3>
+        <ul style="margin:0;padding:0 0 0 18px;color:#797F8B;font-size:15px;line-height:1.9;">
+          <li>QR code linking to the payment portal or a custom URL</li>
+          <li>Applies to Quotation, Invoice, Delivery Slip and Purchase Order</li>
+          <li>Per-document overrides &mdash; e.g. auto &ldquo;OVERDUE&rdquo; watermark on late invoices</li>
+          <li>Generated with Odoo&rsquo;s own QR engine, nothing extra to install</li>
+        </ul>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:29%;min-width:250px;margin:0 0 20px 1.5%;">
+        <h3 style="font-size:20px;color:#001844;margin:0 0 14px;font-weight:700;">Safety &amp; Control</h3>
+        <ul style="margin:0;padding:0 0 0 18px;color:#797F8B;font-size:15px;line-height:1.9;">
+          <li>Live preview renders unsaved settings before you save</li>
+          <li>Each company keeps its own independent branding</li>
+          <li>Nothing configured means reports render exactly as native Odoo does today</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 style="font-size:32px;color:#001844;margin:36px 0 20px;font-weight:700;">What&rsquo;s included</h2>
+    <div style="border:1px solid #DCE1E8;border-radius:16px;padding:28px 32px;">
+      <div style="display:inline-block;vertical-align:top;width:47%;min-width:280px;margin:0 1.5% 0 0;">
+        <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Central logo, watermark &amp; QR settings panel</p>
+        <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Drag-to-position picker for logo and watermark</p>
+        <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Drag-to-resize handles for logo and watermark</p>
+        <p style="margin:0;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Text or image watermark with adjustable opacity</p>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:47%;min-width:280px;margin:0 0 0 1.5%;">
+        <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">QR code: payment portal link or custom URL</p>
+        <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Per-document watermark overrides</p>
+        <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">One-click live preview for all 4 report types</p>
+        <p style="margin:0;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Multi-company safe branding</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Dependencies -->
+  <section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;margin-bottom:15px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Dependencies</h2>
+    <span style="display:inline-block;border:1.5px solid #00A0DB;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;font-weight:600;">Sales</span>
+    <span style="display:inline-block;border:1.5px solid #00A0DB;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;font-weight:600;">Invoicing (account)</span>
+    <span style="display:inline-block;border:1.5px solid #00A0DB;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;font-weight:600;">Inventory (stock)</span>
+    <span style="display:inline-block;border:1.5px solid #00A0DB;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;font-weight:600;">Purchase</span>
+  </section>
+
+  <!-- 7. Screenshots -->
+  <section style="margin-top:28px;margin-bottom:40px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Screenshots</h2>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Logo &amp; Watermark Settings</h5>
+      </div>
+      <img src="./assets/01-logo-and-watermark-settings.jpg" alt="Logo and watermark settings panel" style="display:block;width:100%;height:auto;object-fit:contain;">
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Drag the Logo Into Position</h5>
+      </div>
+      <img src="./assets/02-drag-to-position-the-logo.jpg" alt="Dragging the logo into position on the demo invoice" style="display:block;width:100%;height:auto;object-fit:contain;">
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Resize the Logo On the Fly</h5>
+      </div>
+      <img src="./assets/03-drag-to-resize-the-logo.jpg" alt="Dragging the corner handle to resize the logo" style="display:block;width:100%;height:auto;object-fit:contain;">
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">QR Code &amp; Live Preview</h5>
+      </div>
+      <img src="./assets/04-qr-code-and-live-preview.jpg" alt="QR code settings and live preview buttons" style="display:block;width:100%;height:auto;object-fit:contain;">
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Custom Watermark Text Applied</h5>
+      </div>
+      <img src="./assets/05-custom-watermark-text-applied.jpg" alt="Custom watermark text shown on the demo invoice" style="display:block;width:100%;height:auto;object-fit:contain;">
+    </div>
+  </section>
+
+  <!-- 8. Our Services -->
+  <section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Our Services</h2>
+    <div style="font-size:0;">
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-gear.svg" alt="Odoo Customization" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Customization</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-wrench.svg" alt="Odoo Implementation" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Implementation</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-life-ring.svg" alt="Odoo Support" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Support</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-arrows-repeat.svg" alt="Odoo Migration" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Migration</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-puzzle.svg" alt="Odoo Integration" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Integration</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-consultancy.svg" alt="Odoo Consultancy" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Consultancy</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-licencing.svg" alt="Odoo Licensing" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Licensing</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-hire-odoo.svg" alt="Hire Odoo Developer" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Hire Odoo Developer</h6>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Why Choose ERP23 -->
+  <div style="border:1px solid #DCE1E8;border-radius:16px;padding:24px 12px;margin-top:28px;margin-bottom:20px;box-sizing:border-box;">
+    <h2 style="font-size:24px;color:#001844;margin:0 0 6px;font-weight:700;text-align:center;line-height:1.3;">Why Choose ERP23</h2>
+    <div style="text-align:center;font-size:0;">
+      <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+          <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+            <img src="./assets/silver-partner.webp" alt="Odoo Silver Partner" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+          </div>
+          <div style="padding:18px 18px 22px;">
+            <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">Silver Partner</span></h5>
+            <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Official Odoo Silver Partner with certified expertise.</p>
+          </div>
         </div>
-        <div class="doc-lines">
-          <div></div><div></div><div></div><div></div>
+      </div>
+      <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+          <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+            <img src="./assets/countries-served.webp" alt="Countries Served" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+          </div>
+          <div style="padding:18px 18px 22px;">
+            <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">30+</span> Countries Served</h5>
+            <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Global reach with clients across 30+ countries worldwide.</p>
+          </div>
         </div>
-        <div class="doc-watermark">SAMPLE</div>
-        <svg class="doc-qr" viewBox="0 0 29 29" fill="#1E2A42">
-          <rect width="29" height="29" fill="#fff"/>
-          <rect x="0" y="0" width="9" height="9" fill="none" stroke="#1E2A42" stroke-width="1.6"/>
-          <rect x="2.5" y="2.5" width="4" height="4"/>
-          <rect x="20" y="0" width="9" height="9" fill="none" stroke="#1E2A42" stroke-width="1.6"/>
-          <rect x="22.5" y="2.5" width="4" height="4"/>
-          <rect x="0" y="20" width="9" height="9" fill="none" stroke="#1E2A42" stroke-width="1.6"/>
-          <rect x="2.5" y="22.5" width="4" height="4"/>
-          <rect x="12" y="1" width="2" height="2"/><rect x="16" y="1" width="2" height="2"/>
-          <rect x="12" y="5" width="2" height="2"/><rect x="16" y="9" width="2" height="2"/>
-          <rect x="1" y="12" width="2" height="2"/><rect x="5" y="14" width="2" height="2"/>
-          <rect x="12" y="12" width="2" height="2"/><rect x="15" y="12" width="2" height="2"/>
-          <rect x="18" y="14" width="2" height="2"/><rect x="12" y="16" width="2" height="2"/>
-          <rect x="21" y="12" width="2" height="2"/><rect x="24" y="12" width="2" height="2"/>
-          <rect x="21" y="16" width="2" height="2"/><rect x="12" y="20" width="2" height="2"/>
-          <rect x="16" y="21" width="2" height="2"/><rect x="20" y="21" width="2" height="2"/>
-          <rect x="24" y="24" width="2" height="2"/><rect x="16" y="25" width="2" height="2"/>
-        </svg>
+      </div>
+      <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+          <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+            <img src="./assets/projects-completed.webp" alt="Projects Completed" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+          </div>
+          <div style="padding:18px 18px 22px;">
+            <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">50+</span> Projects Completed</h5>
+            <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Proven Odoo delivery across diverse business requirements.</p>
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+          <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+            <img src="./assets/industries-served.webp" alt="Industries Served" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+          </div>
+          <div style="padding:18px 18px 22px;">
+            <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">15+</span> Industries Served</h5>
+            <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Specialized Odoo expertise across retail, services, and trading.</p>
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+          <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+            <img src="./assets/certifications.webp" alt="Certifications" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+          </div>
+          <div style="padding:18px 18px 22px;">
+            <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">7+</span> Certifications</h5>
+            <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Team certified across specialized Odoo framework domains.</p>
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+          <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+            <img src="./assets/years-experience.webp" alt="Years Experience" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+          </div>
+          <div style="padding:18px 18px 22px;">
+            <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">10+</span> Years Experience</h5>
+            <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Over a decade of enterprise ERP engineering and support.</p>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+
+  <!-- 10. Support & Company -->
+  <section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;text-align:center;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Support &amp; Company</h2>
+    <img src="./assets/erp23.png" alt="ERP23 logo" style="max-height:48px;width:auto;margin-bottom:16px;">
+    <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.6;">Developed and maintained by ERP23.</p>
+    <p style="margin:8px 0 0;">Website: <a href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer" style="color:#00A0DB;text-decoration:none;font-weight:600;">https://www.erp-23.com/</a></p>
+    <p style="margin:0;">Email: <a href="mailto:erp23@brainstation-23.com" style="color:#00A0DB;text-decoration:none;font-weight:600;">erp23@brainstation-23.com</a></p>
   </section>
 
-  <hr class="rule">
-  <section>
-    <h2 class="section-title">Applies to</h2>
-    <div class="doctypes">
-      <div class="doctype">
-        <svg width="20" height="24" viewBox="0 0 20 24" fill="none"><path d="M1 1h14l4 4v18H1V1z" stroke="#1E2A42" stroke-width="1.4"/><path d="M5 9h10M5 13h10M5 17h6" stroke="#1E2A42" stroke-width="1.2"/></svg>
-        <span>Quotation</span>
-      </div>
-      <div class="doctype">
-        <svg width="20" height="24" viewBox="0 0 20 24" fill="none"><path d="M1 1h14l4 4v18H1V1z" stroke="#1E2A42" stroke-width="1.4"/><path d="M5 9h10M5 13h10M5 17h6" stroke="#1E2A42" stroke-width="1.2"/></svg>
-        <span>Invoice</span>
-      </div>
-      <div class="doctype">
-        <svg width="20" height="24" viewBox="0 0 20 24" fill="none"><path d="M1 1h14l4 4v18H1V1z" stroke="#1E2A42" stroke-width="1.4"/><path d="M5 9h10M5 13h10M5 17h6" stroke="#1E2A42" stroke-width="1.2"/></svg>
-        <span>Delivery Slip</span>
-      </div>
-      <div class="doctype">
-        <svg width="20" height="24" viewBox="0 0 20 24" fill="none"><path d="M1 1h14l4 4v18H1V1z" stroke="#1E2A42" stroke-width="1.4"/><path d="M5 9h10M5 13h10M5 17h6" stroke="#1E2A42" stroke-width="1.2"/></svg>
-        <span>Purchase Order</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="feature-big">
-    <div class="txt">
-      <h3>A watermark that means something.</h3>
-      <p>Text or an image, faint in the middle of the page, diagonal across it, or tucked in the corner &mdash; you choose the opacity and the position. It's the same one watermark for every document type, unless you tell one document type to do something different.</p>
-    </div>
-    <div class="stamp-demo">
-      <div class="row"><span>Invoice</span><span class="tag">OVERDUE</span></div>
-      <div class="row" style="margin-bottom:0;"><span>Quotation</span><span style="color:#B9AF95;">&mdash;</span></div>
-      <p class="cond">The one built-in rule: stamp "OVERDUE" on an invoice past its due date. Every other document keeps the plain default.</p>
-    </div>
-  </section>
-
-  <section class="trio">
-    <div>
-      <h3>Logo, your way</h3>
-      <p>Reuse the company logo as-is, or upload a print-specific version sized for a PDF header. Nothing uploaded, nothing changes &mdash; the native logo still shows.</p>
-    </div>
-    <div>
-      <h3>QR code</h3>
-      <p>Point it at a payment link on invoices or any URL you choose on the others. Generated with Odoo's own QR engine, so there's nothing extra to install.</p>
-    </div>
-    <div>
-      <h3>Preview before you save</h3>
-      <p>One click renders a sample of each document with whatever is currently on screen &mdash; saved or not &mdash; so you see it before a customer does.</p>
-    </div>
-  </section>
-
-  <hr class="rule">
-  <section class="closing">
-    <h2>Nothing changes until you turn it on.</h2>
-    <p>Every field starts empty. Leave the branding unconfigured and your quotations, invoices, delivery slips and purchase orders print exactly as native Odoo renders them today.</p>
-    <p>Each company keeps its own logo, watermark and QR settings, so a multi-company database never mixes one company's branding into another's paperwork.</p>
-  </section>
-
-</div>
 </div>
 </body>
 </html>
