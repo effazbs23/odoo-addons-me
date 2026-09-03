@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bs_pdf_branding_override_list" model="ir.ui.view">
+        <field name="name">bs.pdf.branding.override.list</field>
+        <field name="model">bs.pdf.branding.override</field>
+        <field name="arch" type="xml">
+            <list string="Branding Overrides">
+                <field name="report_type"/>
+                <field name="watermark_override_type"/>
+                <field name="watermark_override_text"/>
+                <field name="watermark_override_condition"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bs_pdf_branding_override_form" model="ir.ui.view">
+        <field name="name">bs.pdf.branding.override.form</field>
+        <field name="model">bs.pdf.branding.override</field>
+        <field name="arch" type="xml">
+            <form string="Branding Override">
+                <sheet>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="report_type"/>
+                        <field name="watermark_override_type"/>
+                        <field name="watermark_override_text" invisible="watermark_override_type != 'text'"/>
+                        <field name="watermark_override_image" widget="image"
+                               invisible="watermark_override_type != 'image'"/>
+                        <field name="watermark_override_condition"
+                               invisible="report_type != 'invoice'"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bs_pdf_branding_override" model="ir.actions.act_window">
+        <field name="name">Branding Overrides</field>
+        <field name="res_model">bs.pdf.branding.override</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

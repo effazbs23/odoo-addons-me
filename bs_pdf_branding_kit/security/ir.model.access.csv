@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bs_pdf_branding_override_system,bs.pdf.branding.override.system,model_bs_pdf_branding_override,base.group_system,1,1,1,1
+access_bs_pdf_branding_override_user,bs.pdf.branding.override.user,model_bs_pdf_branding_override,base.group_user,1,0,0,0
+access_bs_pdf_branding_preview_wizard_user,bs.pdf.branding.preview.wizard.user,model_bs_pdf_branding_preview_wizard,base.group_user,1,1,1,1

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_delivery_document_inherit" inherit_id="stock.report_delivery_document">
+        <xpath expr="//t[@t-call='web.external_layout']" position="inside">
+            <t t-call="bs_pdf_branding_kit.branding_overlay">
+                <t t-set="bs_doc" t-value="o"/>
+                <t t-set="bs_report_type" t-value="'delivery_slip'"/>
+            </t>
+        </xpath>
+    </template>
+</odoo>

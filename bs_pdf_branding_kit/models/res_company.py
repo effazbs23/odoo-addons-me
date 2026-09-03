@@ -1,0 +1,155 @@
+import base64
+import logging
+
+from odoo import fields, models
+
+_logger = logging.getLogger(__name__)
+
+# Report types where a "payment portal link" QR source is meaningful.
+_QR_PORTAL_LINK_REPORT_TYPES = ('invoice',)
+
+# Base (100%) sizes in mm, matched to the overlay template's own defaults --
+# pdf_logo_scale/pdf_watermark_scale multiply these, so 100% renders exactly
+# what the template rendered before resizing existed.
+_LOGO_BASE_MAX_HEIGHT_MM = 14.0
+_LOGO_BASE_MAX_WIDTH_MM = 40.0
+_WATERMARK_BASE_FONT_SIZE_MM = 18.0
+_WATERMARK_BASE_MAX_WIDTH_MM = 160.0
+_WATERMARK_BASE_IMAGE_MAX_MM = 90.0
+_SCALE_MIN, _SCALE_MAX = 25.0, 300.0
+
+
+def _clamp_scale(value):
+    return max(_SCALE_MIN, min(_SCALE_MAX, value or 100.0))
+
+
+def qrcode_data_uri(env, value, size=120):
+    """Inline data: URI for Odoo's own QR generator (reportlab, via
+    ir.actions.report.barcode -- reused as-is elsewhere in Odoo core, e.g.
+    l10n_es_edi_tbai's invoice QR; no new QR library needed for this module).
+
+    Generated server-side and embedded inline rather than left as a
+    /report/barcode/... URL for wkhtmltopdf to fetch: on a single-worker
+    instance, wkhtmltopdf's own callback request for that URL can never be
+    served because the one worker is already blocked waiting on wkhtmltopdf,
+    deadlocking the render. Inline avoids that request entirely.
+
+    Returns False (never raises) if the underlying generator itself fails --
+    e.g. a broken reportlab/renderPM install -- so one broken QR code degrades
+    to "no QR on this document" rather than taking down the whole report,
+    consistent with how a missing logo/watermark image is handled.
+    """
+    try:
+        png = env['ir.actions.report'].barcode('QR', value, width=size, height=size)
+    except Exception:
+        _logger.warning('bs_pdf_branding_kit: QR code generation failed for value %r', value, exc_info=True)
+        return False
+    return 'data:image/png;base64,%s' % base64.b64encode(png).decode()
+
+
+def pdf_page_size_mm(company):
+    """(width_mm, height_mm) of the company's PRINTABLE content area -- the
+    page size minus wkhtmltopdf's own margins, since that margin band is
+    where `position: absolute; top: 0; left: 0` (no positioned ancestor)
+    resolves to in wkhtmltopdf: confirmed empirically by rendering a real PDF
+    and measuring where a 50%-centered element actually landed. Using the
+    full physical page size here (rather than the printable area) computed
+    "center" using a taller box than what's actually visible, pushing
+    watermarks noticeably below true center.
+
+    print_page_width/print_page_height resolve the paperformat's named size
+    (A4, Letter, ...) or custom page_width/page_height, honoring orientation
+    -- see report.paperformat._compute_print_page_size.
+    """
+    paperformat = company.paperformat_id
+    if paperformat and paperformat.print_page_width and paperformat.print_page_height:
+        width = paperformat.print_page_width - paperformat.margin_left - paperformat.margin_right
+        height = paperformat.print_page_height - paperformat.margin_top - paperformat.margin_bottom
+        return width, height
+    return 196.0, 225.0
+
+
+class ResCompany(models.Model):
+    _inherit = 'res.company'
+
+    # Edge case (spec 9): multi-company isolation. Plain per-record fields with no
+    # `default=` pointing at another company/record, so a new company created after
+    # install starts with none of these set -- never inherits another company's
+    # uploaded logo/watermark image.
+    pdf_print_logo = fields.Binary(
+        string='Print Logo',
+        help='Print-specific logo used on PDF report headers. Falls back to the company logo when unset.',
+    )
+    pdf_watermark_type = fields.Selection(
+        [('none', 'None'), ('text', 'Text'), ('image', 'Image')],
+        string='Watermark Type', default='none', required=True,
+    )
+    pdf_watermark_text = fields.Char(string='Watermark Text')
+    pdf_watermark_image = fields.Binary(string='Watermark Image')
+    pdf_watermark_opacity = fields.Float(string='Watermark Opacity (%)', default=15.0)
+    pdf_watermark_diagonal = fields.Boolean(string='Watermark Diagonal', default=True)
+    # Position of the logo/watermark on the page, as a percentage of the
+    # printable content area (0,0 = top-left, 100,100 = bottom-right) --
+    # dragged into place on the demo invoice in the settings panel, rather
+    # than picked from a handful of fixed presets, so what's dragged is
+    # exactly what's used to render the real reports.
+    pdf_logo_position_x = fields.Float(string='Logo Position X (%)', default=78.0)
+    pdf_logo_position_y = fields.Float(string='Logo Position Y (%)', default=2.0)
+    pdf_watermark_position_x = fields.Float(string='Watermark Position X (%)', default=50.0)
+    pdf_watermark_position_y = fields.Float(string='Watermark Position Y (%)', default=50.0)
+    # Size of the logo/watermark as a percentage of their base size (see
+    # _LOGO_BASE_MM/_WATERMARK_BASE_MM below) -- resized via the same drag
+    # picker, using a corner handle, so what's resized is exactly what prints.
+    pdf_logo_scale = fields.Float(string='Logo Scale (%)', default=100.0)
+    pdf_watermark_scale = fields.Float(string='Watermark Scale (%)', default=100.0)
+    pdf_qrcode_enabled = fields.Boolean(string='Enable QR Code')
+    pdf_qrcode_source = fields.Selection(
+        [('payment_portal_link', 'Payment Portal Link'), ('custom_url', 'Custom URL')],
+        string='QR Code Source', default='custom_url',
+    )
+    pdf_qrcode_custom_url = fields.Char(string='QR Code Custom URL')
+
+    def _get_pdf_branding(self, report_type, record=None):
+        """Effective branding settings for one report render.
+
+        `record` is the document being rendered (e.g. an account.move for the
+        invoice report), used for the when_overdue watermark condition and to
+        resolve the payment portal link QR source. May be a falsy/empty
+        recordset for the live preview (no real document to link to).
+        """
+        self.ensure_one()
+        watermark = self.env['bs.pdf.branding.override']._get_effective_watermark(self, report_type, record)
+        opacity = max(0.0, min(100.0, self.pdf_watermark_opacity))
+        page_width_mm, page_height_mm = pdf_page_size_mm(self)
+        logo_scale = _clamp_scale(self.pdf_logo_scale) / 100.0
+        watermark_scale = _clamp_scale(self.pdf_watermark_scale) / 100.0
+
+        qrcode_value = False
+        if self.pdf_qrcode_enabled:
+            if self.pdf_qrcode_source == 'payment_portal_link':
+                if report_type in _QR_PORTAL_LINK_REPORT_TYPES and record and record._name == 'account.move':
+                    qrcode_value = record.get_portal_url()
+            else:
+                qrcode_value = self.pdf_qrcode_custom_url
+
+        return {
+            'logo': self.pdf_print_logo or self.logo,
+            'print_logo': self.pdf_print_logo,
+            'logo_position_x': self.pdf_logo_position_x,
+            'logo_position_y': self.pdf_logo_position_y,
+            'logo_max_height_mm': _LOGO_BASE_MAX_HEIGHT_MM * logo_scale,
+            'logo_max_width_mm': _LOGO_BASE_MAX_WIDTH_MM * logo_scale,
+            'watermark_type': watermark['type'],
+            'watermark_text': watermark['text'],
+            'watermark_image': watermark['image'],
+            'watermark_opacity': opacity,
+            'watermark_diagonal': self.pdf_watermark_diagonal,
+            'watermark_position_x': self.pdf_watermark_position_x,
+            'watermark_position_y': self.pdf_watermark_position_y,
+            'watermark_font_size_mm': _WATERMARK_BASE_FONT_SIZE_MM * watermark_scale,
+            'watermark_max_width_mm': _WATERMARK_BASE_MAX_WIDTH_MM * watermark_scale,
+            'watermark_image_max_mm': _WATERMARK_BASE_IMAGE_MAX_MM * watermark_scale,
+            'qrcode_data_uri': qrcode_data_uri(self.env, qrcode_value) if qrcode_value else False,
+            'page_width_mm': page_width_mm,
+            'page_height_mm': page_height_mm,
+        }
