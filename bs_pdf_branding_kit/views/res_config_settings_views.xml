@@ -41,6 +41,11 @@
                     <block title="Position" id="bs_pdf_branding_position">
                         <setting id="bs_pdf_branding_position_setting"
                                  help="Drag the logo and watermark onto the demo invoice below to set exactly where they print.">
+                            <field name="pdf_logo_position_y" invisible="1"/>
+                            <field name="pdf_watermark_position_x" invisible="1"/>
+                            <field name="pdf_watermark_position_y" invisible="1"/>
+                            <field name="pdf_logo_scale" invisible="1"/>
+                            <field name="pdf_watermark_scale" invisible="1"/>
                             <field name="pdf_logo_position_x" widget="bs_pdf_branding_position_picker"
                                    nolabel="1"/>
                         </setting>

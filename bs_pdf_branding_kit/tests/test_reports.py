@@ -121,6 +121,20 @@ class TestReportsIntegration(BrandingTestCommon):
         # And the company itself must be untouched (settings not applied via execute()).
         self.assertEqual(self.company.pdf_watermark_type, 'none')
 
+    def test_purchase_order_preview_does_not_raise_and_leaves_no_record(self):
+        """purchase.order hard-requires state == 'cancel' before unlink()
+        (@api.ondelete _unlink_if_cancelled in Odoo core) -- a freshly created
+        dummy purchase order defaults to 'draft', so a plain unlink() in the
+        wizard's cleanup would raise UserError("... you must cancel it
+        first.") on every single preview, masking an otherwise successful
+        render. The wizard must cancel the dummy PO before deleting it.
+        """
+        settings = self.env['res.config.settings'].new({'company_id': self.company.id})
+        po_count_before = self.env['purchase.order'].search_count([])
+        action = settings.with_context(force_report_rendering=True).action_preview_purchase_order()
+        self.assertEqual(action['type'], 'ir.actions.act_url')
+        self.assertEqual(self.env['purchase.order'].search_count([]), po_count_before)
+
     def test_multi_company_branding_does_not_cross_contaminate(self):
         """Spec 9/10: two companies in one database render independently correct
         branding, verified via an actual render, not just code inspection."""

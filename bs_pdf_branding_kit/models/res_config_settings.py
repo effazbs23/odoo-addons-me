@@ -1,6 +1,10 @@
 from odoo import fields, models
 
-from .res_company import pdf_page_size_mm, qrcode_data_uri
+from .res_company import (
+    _LOGO_BASE_MAX_HEIGHT_MM, _LOGO_BASE_MAX_WIDTH_MM,
+    _WATERMARK_BASE_FONT_SIZE_MM, _WATERMARK_BASE_IMAGE_MAX_MM, _WATERMARK_BASE_MAX_WIDTH_MM,
+    _clamp_scale, pdf_page_size_mm, qrcode_data_uri,
+)
 
 
 class ResConfigSettings(models.TransientModel):
@@ -16,6 +20,8 @@ class ResConfigSettings(models.TransientModel):
     pdf_logo_position_y = fields.Float(related='company_id.pdf_logo_position_y', readonly=False)
     pdf_watermark_position_x = fields.Float(related='company_id.pdf_watermark_position_x', readonly=False)
     pdf_watermark_position_y = fields.Float(related='company_id.pdf_watermark_position_y', readonly=False)
+    pdf_logo_scale = fields.Float(related='company_id.pdf_logo_scale', readonly=False)
+    pdf_watermark_scale = fields.Float(related='company_id.pdf_watermark_scale', readonly=False)
     pdf_qrcode_enabled = fields.Boolean(related='company_id.pdf_qrcode_enabled', readonly=False)
     pdf_qrcode_source = fields.Selection(related='company_id.pdf_qrcode_source', readonly=False)
     pdf_qrcode_custom_url = fields.Char(related='company_id.pdf_qrcode_custom_url', readonly=False)
@@ -44,11 +50,15 @@ class ResConfigSettings(models.TransientModel):
                 else 'https://example.com/my/invoices/preview'
             )
         page_width_mm, page_height_mm = pdf_page_size_mm(self.company_id)
+        logo_scale = _clamp_scale(self.pdf_logo_scale) / 100.0
+        watermark_scale = _clamp_scale(self.pdf_watermark_scale) / 100.0
         branding = {
             'logo': self.pdf_print_logo or self.company_id.logo,
             'print_logo': self.pdf_print_logo,
             'logo_position_x': self.pdf_logo_position_x,
             'logo_position_y': self.pdf_logo_position_y,
+            'logo_max_height_mm': _LOGO_BASE_MAX_HEIGHT_MM * logo_scale,
+            'logo_max_width_mm': _LOGO_BASE_MAX_WIDTH_MM * logo_scale,
             'watermark_type': self.pdf_watermark_type,
             'watermark_text': self.pdf_watermark_text,
             'watermark_image': self.pdf_watermark_image,
@@ -56,6 +66,9 @@ class ResConfigSettings(models.TransientModel):
             'watermark_diagonal': self.pdf_watermark_diagonal,
             'watermark_position_x': self.pdf_watermark_position_x,
             'watermark_position_y': self.pdf_watermark_position_y,
+            'watermark_font_size_mm': _WATERMARK_BASE_FONT_SIZE_MM * watermark_scale,
+            'watermark_max_width_mm': _WATERMARK_BASE_MAX_WIDTH_MM * watermark_scale,
+            'watermark_image_max_mm': _WATERMARK_BASE_IMAGE_MAX_MM * watermark_scale,
             'qrcode_data_uri': qrcode_data_uri(self.env, qrcode_value) if qrcode_value else False,
             'page_width_mm': page_width_mm,
             'page_height_mm': page_height_mm,

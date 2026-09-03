@@ -1,5 +1,9 @@
+import logging
+
 from odoo import _, api, models
 from odoo.exceptions import UserError
+
+_logger = logging.getLogger(__name__)
 
 _REPORT_ACTIONS = {
     'quotation': 'sale.action_report_saleorder',
@@ -74,7 +78,26 @@ class BsPdfBrandingPreviewWizard(models.TransientModel):
                 bs_pdf_branding_preview=branding,
             )._render_qweb_pdf(xmlid, res_ids=record.ids)
         finally:
-            record.unlink()
+            # Best-effort cleanup -- a failure here must not mask a successful
+            # render, so it only gets logged, matching qrcode_data_uri's
+            # graceful-degradation approach in models/res_company.py. The
+            # leftover is named "(Preview)" so it's identifiable if this ever
+            # fires (and Odoo rolls back this whole request's transaction on
+            # an uncaught exception, so nothing actually survives even then).
+            try:
+                # purchase.order hard-requires state == 'cancel' before
+                # unlink() (its own @api.ondelete guard, _unlink_if_cancelled
+                # in addons/purchase/models/purchase_order.py) -- a freshly
+                # created record defaults to 'draft', so a plain unlink()
+                # would otherwise raise here every time, for every user.
+                if report_type == 'purchase_order':
+                    record.button_cancel()
+                record.unlink()
+            except Exception:
+                _logger.warning(
+                    'bs_pdf_branding_kit: could not delete the throwaway %s preview record %r',
+                    report_type, record, exc_info=True,
+                )
 
         self.env['ir.attachment'].search([
             ('name', '=', _PREVIEW_ATTACHMENT_NAME), ('create_uid', '=', self.env.uid),

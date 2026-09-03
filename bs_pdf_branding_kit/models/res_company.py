@@ -8,6 +8,20 @@ _logger = logging.getLogger(__name__)
 # Report types where a "payment portal link" QR source is meaningful.
 _QR_PORTAL_LINK_REPORT_TYPES = ('invoice',)
 
+# Base (100%) sizes in mm, matched to the overlay template's own defaults --
+# pdf_logo_scale/pdf_watermark_scale multiply these, so 100% renders exactly
+# what the template rendered before resizing existed.
+_LOGO_BASE_MAX_HEIGHT_MM = 14.0
+_LOGO_BASE_MAX_WIDTH_MM = 40.0
+_WATERMARK_BASE_FONT_SIZE_MM = 18.0
+_WATERMARK_BASE_MAX_WIDTH_MM = 160.0
+_WATERMARK_BASE_IMAGE_MAX_MM = 90.0
+_SCALE_MIN, _SCALE_MAX = 25.0, 300.0
+
+
+def _clamp_scale(value):
+    return max(_SCALE_MIN, min(_SCALE_MAX, value or 100.0))
+
 
 def qrcode_data_uri(env, value, size=120):
     """Inline data: URI for Odoo's own QR generator (reportlab, via
@@ -83,6 +97,11 @@ class ResCompany(models.Model):
     pdf_logo_position_y = fields.Float(string='Logo Position Y (%)', default=2.0)
     pdf_watermark_position_x = fields.Float(string='Watermark Position X (%)', default=50.0)
     pdf_watermark_position_y = fields.Float(string='Watermark Position Y (%)', default=50.0)
+    # Size of the logo/watermark as a percentage of their base size (see
+    # _LOGO_BASE_MM/_WATERMARK_BASE_MM below) -- resized via the same drag
+    # picker, using a corner handle, so what's resized is exactly what prints.
+    pdf_logo_scale = fields.Float(string='Logo Scale (%)', default=100.0)
+    pdf_watermark_scale = fields.Float(string='Watermark Scale (%)', default=100.0)
     pdf_qrcode_enabled = fields.Boolean(string='Enable QR Code')
     pdf_qrcode_source = fields.Selection(
         [('payment_portal_link', 'Payment Portal Link'), ('custom_url', 'Custom URL')],
@@ -102,6 +121,8 @@ class ResCompany(models.Model):
         watermark = self.env['bs.pdf.branding.override']._get_effective_watermark(self, report_type, record)
         opacity = max(0.0, min(100.0, self.pdf_watermark_opacity))
         page_width_mm, page_height_mm = pdf_page_size_mm(self)
+        logo_scale = _clamp_scale(self.pdf_logo_scale) / 100.0
+        watermark_scale = _clamp_scale(self.pdf_watermark_scale) / 100.0
 
         qrcode_value = False
         if self.pdf_qrcode_enabled:
@@ -116,6 +137,8 @@ class ResCompany(models.Model):
             'print_logo': self.pdf_print_logo,
             'logo_position_x': self.pdf_logo_position_x,
             'logo_position_y': self.pdf_logo_position_y,
+            'logo_max_height_mm': _LOGO_BASE_MAX_HEIGHT_MM * logo_scale,
+            'logo_max_width_mm': _LOGO_BASE_MAX_WIDTH_MM * logo_scale,
             'watermark_type': watermark['type'],
             'watermark_text': watermark['text'],
             'watermark_image': watermark['image'],
@@ -123,6 +146,9 @@ class ResCompany(models.Model):
             'watermark_diagonal': self.pdf_watermark_diagonal,
             'watermark_position_x': self.pdf_watermark_position_x,
             'watermark_position_y': self.pdf_watermark_position_y,
+            'watermark_font_size_mm': _WATERMARK_BASE_FONT_SIZE_MM * watermark_scale,
+            'watermark_max_width_mm': _WATERMARK_BASE_MAX_WIDTH_MM * watermark_scale,
+            'watermark_image_max_mm': _WATERMARK_BASE_IMAGE_MAX_MM * watermark_scale,
             'qrcode_data_uri': qrcode_data_uri(self.env, qrcode_value) if qrcode_value else False,
             'page_width_mm': page_width_mm,
             'page_height_mm': page_height_mm,

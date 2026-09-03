@@ -10,15 +10,19 @@
           <div class="bs_pbk_line" style="width:40%"/>
           <div class="bs_pbk_line" style="width:56%"/>
         </div>
-        <div class="bs_pbk_handle bs_pbk_handle_logo" data-target="logo" t-att-style="logoStyle"
-             t-attf-title="Drag to position the logo">
+        <div class="bs_pbk_handle bs_pbk_handle_logo" t-att-style="logoStyle"
+             title="Drag to position the logo" t-on-pointerdown="(ev) => this.onHandlePointerDown(ev, 'logo')">
             <img t-if="logoDataUrl" t-att-src="logoDataUrl"/>
             <span t-else="">LOGO</span>
+            <div class="bs_pbk_resize" title="Drag to resize the logo"
+                 t-on-pointerdown="(ev) => this.onResizePointerDown(ev, 'logo')"/>
         </div>
-        <div t-if="hasWatermark" class="bs_pbk_handle bs_pbk_handle_watermark" data-target="watermark"
-             t-att-style="watermarkStyle" title="Drag to position the watermark">
+        <div t-if="hasWatermark" class="bs_pbk_handle bs_pbk_handle_watermark" t-att-style="watermarkStyle"
+             title="Drag to position the watermark" t-on-pointerdown="(ev) => this.onHandlePointerDown(ev, 'watermark')">
             <img t-if="watermarkType === 'image' &amp;&amp; watermarkImageUrl" t-att-src="watermarkImageUrl"/>
             <t t-else="" t-esc="watermarkText or 'WATERMARK'"/>
+            <div class="bs_pbk_resize" title="Drag to resize the watermark"
+                 t-on-pointerdown="(ev) => this.onResizePointerDown(ev, 'watermark')"/>
         </div>
       </div>
       <p class="bs_pbk_hint">Drag the logo and watermark onto the demo invoice. Position is saved as it moves.</p>
