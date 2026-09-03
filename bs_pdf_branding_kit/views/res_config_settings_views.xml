@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.bs_pdf_branding_kit</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="50"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="PDF Branding" string="PDF Branding" name="bs_pdf_branding_kit"
+                     groups="base.group_system">
+                    <block title="Logo" id="bs_pdf_branding_logo">
+                        <setting id="bs_pdf_branding_logo_setting"
+                                 help="Print-specific logo used on PDF report headers. Falls back to the company logo when left empty.">
+                            <field name="pdf_print_logo" widget="image" class="oe_avatar"/>
+                        </setting>
+                    </block>
+                    <block title="Watermark" id="bs_pdf_branding_watermark">
+                        <setting id="bs_pdf_branding_watermark_setting"
+                                 help="Applied to Quotation, Invoice, Delivery Slip and Purchase Order PDFs, unless overridden per report type below.">
+                            <field name="pdf_watermark_type" widget="radio" options="{'horizontal': true}"/>
+                            <div class="content-group" invisible="pdf_watermark_type == 'none'">
+                                <div class="row mt16" invisible="pdf_watermark_type != 'text'">
+                                    <label for="pdf_watermark_text" class="col-lg-3 o_light_label"/>
+                                    <field name="pdf_watermark_text" class="col-lg-6"/>
+                                </div>
+                                <div class="row mt8" invisible="pdf_watermark_type != 'image'">
+                                    <label for="pdf_watermark_image" class="col-lg-3 o_light_label"/>
+                                    <field name="pdf_watermark_image" widget="image" class="col-lg-6"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="pdf_watermark_position" class="col-lg-3 o_light_label"/>
+                                    <field name="pdf_watermark_position" class="col-lg-6"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="pdf_watermark_opacity" class="col-lg-3 o_light_label"/>
+                                    <field name="pdf_watermark_opacity" class="col-lg-6"/> %
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="QR Code" id="bs_pdf_branding_qrcode">
+                        <setting id="bs_pdf_branding_qrcode_setting"
+                                 help="Payment Portal Link is only meaningful on Invoice PDFs; other report types always use the Custom URL.">
+                            <field name="pdf_qrcode_enabled"/>
+                            <div class="content-group" invisible="not pdf_qrcode_enabled">
+                                <div class="row mt8">
+                                    <label for="pdf_qrcode_source" class="col-lg-3 o_light_label"/>
+                                    <field name="pdf_qrcode_source" class="col-lg-6"/>
+                                </div>
+                                <div class="row mt8" invisible="pdf_qrcode_source != 'custom_url'">
+                                    <label for="pdf_qrcode_custom_url" class="col-lg-3 o_light_label"/>
+                                    <field name="pdf_qrcode_custom_url" class="col-lg-6"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Per-Document Overrides" id="bs_pdf_branding_overrides">
+                        <setting id="bs_pdf_branding_overrides_setting"
+                                 help="Override the watermark for one report type only, e.g. auto-watermark 'OVERDUE' on invoices past due date.">
+                            <button name="%(action_bs_pdf_branding_override)d" type="action"
+                                    string="Branding Overrides" class="btn-link" icon="fa-arrow-right"/>
+                        </setting>
+                    </block>
+                    <block title="Live Preview" id="bs_pdf_branding_preview">
+                        <setting id="bs_pdf_branding_preview_setting"
+                                 help="Renders each report against a dummy record using the values currently on this screen, even if not yet saved.">
+                            <button name="action_preview_quotation" type="object"
+                                    string="Preview Quotation" class="btn-link" icon="fa-arrow-right"/>
+                            <button name="action_preview_invoice" type="object"
+                                    string="Preview Invoice" class="btn-link" icon="fa-arrow-right"/>
+                            <button name="action_preview_delivery_slip" type="object"
+                                    string="Preview Delivery Slip" class="btn-link" icon="fa-arrow-right"/>
+                            <button name="action_preview_purchase_order" type="object"
+                                    string="Preview Purchase Order" class="btn-link" icon="fa-arrow-right"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_bs_pdf_branding_kit_config_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'module': 'bs_pdf_branding_kit'}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_bs_pdf_branding_override" name="PDF Branding Overrides"
+              parent="base.menu_custom" action="action_bs_pdf_branding_override"
+              sequence="50" groups="base.group_system"/>
+</odoo>
