@@ -1,0 +1,267 @@
+.o_wrd {
+    height: 100%;
+    overflow: auto;
+    background: #F4F7FC;
+
+    .o_wrd_filters {
+        display: flex;
+        gap: 8px;
+        margin-right: 16px;
+    }
+
+    .o_wrd_body {
+        padding: 24px 32px 48px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .o_wrd_loading {
+        padding: 64px;
+        text-align: center;
+        color: #6B7280;
+    }
+
+    .o_wrd_card {
+        background: #fff;
+        border: 1px solid #E5E9F2;
+        border-radius: 14px;
+        padding: 20px 24px;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    }
+
+    .o_wrd_card_title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #101828;
+        margin: 0 0 16px;
+    }
+
+    .o_wrd_empty {
+        color: #98A2B3;
+        font-size: 13px;
+        margin: 0;
+    }
+
+    // KPI cards
+    .o_wrd_kpis {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    .o_wrd_kpi {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .o_wrd_kpi_icon {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .o_wrd_icon_blue { background: #EAF2FF; }
+    .o_wrd_icon_green { background: #E7F8EF; }
+    .o_wrd_icon_red { background: #FDEDEE; color: #DC2626; }
+
+    .o_wrd_kpi_label {
+        font-size: 13px;
+        color: #667085;
+        margin-bottom: 2px;
+    }
+
+    .o_wrd_kpi_value {
+        font-size: 26px;
+        font-weight: 700;
+        color: #101828;
+        line-height: 1.2;
+    }
+
+    .o_wrd_kpi_delta {
+        font-size: 12px;
+        font-weight: 600;
+        margin-top: 4px;
+    }
+
+    .o_wrd_delta_up { color: #12B76A; }
+    .o_wrd_delta_down { color: #F04438; }
+    .o_wrd_delta_muted { color: #98A2B3; }
+
+    // Two-column rows
+    .o_wrd_row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    // Lost reasons donut
+    .o_wrd_donut_wrap {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .o_wrd_donut_canvas {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        min-width: 150px;
+    }
+
+    .o_wrd_donut_center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        pointer-events: none;
+    }
+
+    .o_wrd_donut_number {
+        font-size: 22px;
+        font-weight: 700;
+        color: #101828;
+    }
+
+    .o_wrd_donut_caption {
+        font-size: 11px;
+        color: #98A2B3;
+    }
+
+    .o_wrd_legend {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        flex: 1;
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            padding: 5px 0;
+        }
+    }
+
+    .o_wrd_dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .o_wrd_legend_label {
+        color: #344054;
+        flex: 1;
+    }
+
+    .o_wrd_legend_pct {
+        color: #101828;
+        font-weight: 600;
+    }
+
+    // Salesperson bars
+    .o_wrd_sp_row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 7px 0;
+    }
+
+    .o_wrd_sp_name {
+        width: 110px;
+        min-width: 110px;
+        font-size: 13px;
+        color: #344054;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .o_wrd_sp_bar_track {
+        flex: 1;
+        height: 8px;
+        border-radius: 4px;
+        background: #EEF2F8;
+        overflow: hidden;
+    }
+
+    .o_wrd_sp_bar_fill {
+        height: 100%;
+        border-radius: 4px;
+        background: linear-gradient(90deg, #60A5FA, #2563EB);
+    }
+
+    .o_wrd_sp_pct {
+        width: 42px;
+        text-align: right;
+        font-size: 13px;
+        font-weight: 600;
+        color: #101828;
+    }
+
+    // Funnel
+    .o_wrd_funnel_wrap {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .o_wrd_funnel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        width: 140px;
+        min-width: 140px;
+    }
+
+    .o_wrd_funnel_bar {
+        height: 22px;
+        background: linear-gradient(90deg, #93C5FD, #3B82F6);
+        clip-path: polygon(4% 0, 96% 0, 88% 100%, 12% 100%);
+    }
+
+    .o_wrd_funnel_won {
+        background: linear-gradient(90deg, #6EE7B7, #10B981);
+    }
+
+    .o_wrd_funnel_lost {
+        background: linear-gradient(90deg, #FCA5A5, #EF4444);
+    }
+
+    .o_wrd_funnel_table {
+        flex: 1;
+        border-collapse: collapse;
+        font-size: 13px;
+
+        th {
+            text-align: left;
+            color: #98A2B3;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-bottom: 1px solid #EEF2F8;
+        }
+
+        td {
+            padding: 6px 8px;
+            color: #344054;
+            border-bottom: 1px solid #F4F7FC;
+        }
+
+        td:first-child { color: #101828; font-weight: 500; }
+    }
+
+    .o_wrd_source_chart {
+        height: 220px;
+        position: relative;
+    }
+}

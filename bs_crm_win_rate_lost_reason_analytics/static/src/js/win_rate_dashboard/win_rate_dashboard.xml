@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="bs_crm_win_rate_lost_reason_analytics.WinRateDashboard">
+    <div class="o_wrd">
+        <Layout display="display">
+            <t t-set-slot="control-panel-navigation-additional">
+                <div class="o_wrd_filters">
+                    <SelectMenu choices="dateRangeChoices" value="state.dateRange"
+                        onSelect.bind="(v) => this.state.dateRange = v"/>
+                    <SelectMenu choices="teamChoices" value="state.teamId"
+                        onSelect.bind="(v) => this.state.teamId = v"/>
+                    <SelectMenu choices="salespersonChoices" value="state.userId"
+                        onSelect.bind="(v) => this.state.userId = v"/>
+                </div>
+            </t>
+
+            <div class="o_wrd_body" t-if="state.data">
+                <!-- KPI cards -->
+                <div class="o_wrd_kpis">
+                    <div class="o_wrd_card o_wrd_kpi">
+                        <div class="o_wrd_kpi_icon o_wrd_icon_blue">🎯</div>
+                        <div>
+                            <div class="o_wrd_kpi_label">Win Rate</div>
+                            <div class="o_wrd_kpi_value">
+                                <t t-if="state.data.win_rate === false">No data</t>
+                                <t t-else="" t-esc="state.data.win_rate.toFixed(1) + '%'"/>
+                            </div>
+                            <div t-att-class="'o_wrd_kpi_delta ' + deltaClass(state.data.win_rate_delta)"
+                                t-esc="deltaLabel(state.data.win_rate_delta) + ' vs previous period'"/>
+                        </div>
+                    </div>
+                    <div class="o_wrd_card o_wrd_kpi">
+                        <div class="o_wrd_kpi_icon o_wrd_icon_green">🏆</div>
+                        <div>
+                            <div class="o_wrd_kpi_label">Won Deals</div>
+                            <div class="o_wrd_kpi_value" t-esc="state.data.won"/>
+                            <div t-att-class="'o_wrd_kpi_delta ' + deltaClass(state.data.won_delta)"
+                                t-esc="deltaLabel(state.data.won_delta)"/>
+                        </div>
+                    </div>
+                    <div class="o_wrd_card o_wrd_kpi">
+                        <div class="o_wrd_kpi_icon o_wrd_icon_red">✕</div>
+                        <div>
+                            <div class="o_wrd_kpi_label">Lost Deals</div>
+                            <div class="o_wrd_kpi_value" t-esc="state.data.lost"/>
+                            <div t-att-class="'o_wrd_kpi_delta ' + deltaClass(state.data.lost_delta)"
+                                t-esc="deltaLabel(state.data.lost_delta)"/>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lost Reasons + Win Rate by Salesperson -->
+                <div class="o_wrd_row">
+                    <div class="o_wrd_card o_wrd_half">
+                        <h3 class="o_wrd_card_title">Lost Reasons</h3>
+                        <div class="o_wrd_donut_wrap" t-if="state.data.lost_reasons.length">
+                            <div class="o_wrd_donut_canvas">
+                                <canvas t-ref="donutCanvas"/>
+                                <div class="o_wrd_donut_center">
+                                    <div class="o_wrd_donut_number" t-esc="state.data.lost"/>
+                                    <div class="o_wrd_donut_caption">Lost Deals</div>
+                                </div>
+                            </div>
+                            <ul class="o_wrd_legend">
+                                <t t-foreach="state.data.lost_reasons" t-as="reason" t-key="reason.category">
+                                    <li>
+                                        <span class="o_wrd_dot" t-attf-style="background-color: {{categoryColor(reason.category)}}"/>
+                                        <span class="o_wrd_legend_label" t-esc="reason.label"/>
+                                        <span class="o_wrd_legend_pct" t-esc="reason.pct + '%'"/>
+                                    </li>
+                                </t>
+                            </ul>
+                        </div>
+                        <p class="o_wrd_empty" t-else="">No lost deals in this period.</p>
+                    </div>
+
+                    <div class="o_wrd_card o_wrd_half">
+                        <h3 class="o_wrd_card_title">Win Rate by Salesperson</h3>
+                        <div class="o_wrd_salespeople" t-if="state.data.salespeople.length">
+                            <t t-foreach="state.data.salespeople" t-as="sp" t-key="sp.id">
+                                <div class="o_wrd_sp_row">
+                                    <span class="o_wrd_sp_name" t-esc="sp.name"/>
+                                    <div class="o_wrd_sp_bar_track">
+                                        <div class="o_wrd_sp_bar_fill" t-attf-style="width: {{sp.win_rate}}%"/>
+                                    </div>
+                                    <span class="o_wrd_sp_pct" t-esc="sp.win_rate + '%'"/>
+                                </div>
+                            </t>
+                        </div>
+                        <p class="o_wrd_empty" t-else="">No won/lost deals in this period.</p>
+                    </div>
+                </div>
+
+                <!-- Stage Drop-off Funnel + Leads by Source -->
+                <div class="o_wrd_row">
+                    <div class="o_wrd_card o_wrd_half">
+                        <h3 class="o_wrd_card_title">Stage Drop-off Funnel</h3>
+                        <div class="o_wrd_funnel_wrap">
+                            <div class="o_wrd_funnel">
+                                <t t-foreach="funnelRows" t-as="row" t-key="row.label">
+                                    <div t-attf-class="o_wrd_funnel_bar {{row.label === 'Won' ? 'o_wrd_funnel_won' : ''}} {{row.label === 'Lost' ? 'o_wrd_funnel_lost' : ''}}"
+                                        t-attf-style="width: {{row.widthPct}}%"/>
+                                </t>
+                            </div>
+                            <table class="o_wrd_funnel_table">
+                                <thead>
+                                    <tr><th/><th>Leads</th><th>Drop-off</th></tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.data.funnel" t-as="row" t-key="row.label">
+                                        <tr>
+                                            <td t-esc="row.label"/>
+                                            <td t-esc="row.count"/>
+                                            <td>
+                                                <t t-if="row.dropoff_pct !== null" t-esc="row.dropoff_pct + '%'"/>
+                                                <t t-else="">—</t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="o_wrd_card o_wrd_half">
+                        <h3 class="o_wrd_card_title">Leads by Source</h3>
+                        <div class="o_wrd_source_chart" t-if="state.data.sources.length">
+                            <canvas t-ref="sourceCanvas"/>
+                        </div>
+                        <p class="o_wrd_empty" t-else="">No leads in this period.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="o_wrd_loading" t-if="!state.data and state.loading">
+                <i class="fa fa-spin fa-circle-o-notch"/> Loading dashboard…
+            </div>
+        </Layout>
+    </div>
+</t>
+
+</templates>

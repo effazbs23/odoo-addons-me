@@ -164,11 +164,14 @@
         </field>
     </record>
 
+    <!-- Superseded as the primary landing page by the custom OWL
+         dashboard (crm_win_rate_dashboard_action.xml, sequence 4) -
+         kept here, demoted, for raw pivot/graph drill-down and export. -->
     <menuitem id="crm_menu_win_rate_dashboard"
-              name="Win Rate"
+              name="Win Rate (Pivot)"
               parent="crm.crm_menu_report"
               action="crm_lead_win_rate_dashboard_action"
-              sequence="5"/>
+              sequence="8"/>
 
     <menuitem id="crm_menu_loss_reasons"
               name="Loss Reasons"

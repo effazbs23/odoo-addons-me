@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Custom OWL dashboard (win_rate_dashboard.js/.xml) - the primary
+         landing page under CRM > Reporting > Win Rate Dashboard. The
+         native pivot/graph "Win Rate" action from
+         crm_lead_dashboard_views.xml stays available as a secondary
+         menu item for raw-data drill-down/export. -->
+    <record id="crm_win_rate_dashboard_client_action" model="ir.actions.client">
+        <field name="name">Win Rate Dashboard</field>
+        <field name="tag">bs_crm_win_rate_dashboard</field>
+    </record>
+
+    <menuitem id="crm_menu_win_rate_dashboard_client"
+              name="Win Rate Dashboard"
+              parent="crm.crm_menu_report"
+              action="crm_win_rate_dashboard_client_action"
+              sequence="4"/>
+
+</odoo>
