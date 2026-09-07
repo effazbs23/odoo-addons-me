@@ -10,6 +10,7 @@
             </field>
             <group position="after">
                 <group>
+                    <label for="lost_note" class="o_form_label">Lost Note</label>
                     <field name="lost_note" placeholder="Extra context for the dashboard (optional)" nolabel="1" colspan="2"/>
                 </group>
             </group>
