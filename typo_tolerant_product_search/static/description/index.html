@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Typo-Tolerant Product Search — User Manual</title>
+</head>
+<body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#F7F9FC;color:#001844;line-height:1.6;">
+<div style="max-width:960px;margin:0 auto;padding:40px 20px 80px;">
+
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:48px 40px;margin-bottom:20px;">
+  <span style="display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1.5px solid #00A0DB;color:#00668E;padding:8px 14px;margin:0 0 16px;">User Manual</span>
+  <h1 style="font-size:38px;font-weight:700;color:#001844;margin:0 0 12px;line-height:1.2;">Typo-Tolerant Product Search</h1>
+  <p style="margin:0;color:#797F8B;font-size:17px;max-width:720px;">Odoo's storefront search already tolerates a single-word typo, but it gives up the moment your query has more than one word. This module fixes that, adds a sensitivity dial, and logs every near-miss so you can see what customers are actually searching for.</p>
+</section>
+
+<!-- 1 -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
+  <h2 style="font-size:24px;margin:0 0 6px;">1. What a customer sees: a multi-word typo, corrected</h2>
+  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">Type something like <em>"Ofice Chiar"</em> into the storefront search — two typos, two words. Native Odoo would show zero results and stop there. This module notices the exact search returned nothing, retries word-by-word with fuzzy matching, and shows the corrected results with a clear "Showing results for..." note so nothing is silently substituted.</p>
+  <img src="./assets/01-search-correction.jpg" alt="Storefront search results for a corrected multi-word typo query" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
+</section>
+
+<!-- 2 -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
+  <h2 style="font-size:24px;margin:0 0 6px;">2. Every fallback is logged, click-through included</h2>
+  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">Website → Reporting → Search Miss Log records the term as typed, what it was corrected to, how many results came back, and whether the visitor actually clicked into a result. Use this to spot recurring near-misses worth fixing in your product naming, or to confirm the fuzzy fallback is actually converting.</p>
+  <img src="./assets/02-search-miss-log.jpg" alt="Search Miss Log list showing searched term, corrected term, and clicked-through status" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
+</section>
+
+<!-- 3 -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;">
+  <h2 style="font-size:24px;margin:0 0 6px;">3. Tune it: Website → Configuration → Settings → "fuzzy"</h2>
+  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">Search the settings page for "fuzzy" to jump straight to it. <strong>Sensitivity</strong> controls how loose the match is — Tight only fixes near-exact typos, Loose catches more but risks less-relevant results on a large catalog. <strong>Minimum results before fallback</strong> controls when it kicks in at all; the default of 1 means it only fires on a genuine zero-result search, never on a query that already found something.</p>
+  <img src="./assets/03-settings-sensitivity.jpg" alt="Website settings page showing Typo-Tolerant Search sensitivity options" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
+</section>
+
+</div>
+</body>
+</html>
