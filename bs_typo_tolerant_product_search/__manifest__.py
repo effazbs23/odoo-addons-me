@@ -7,6 +7,8 @@
     'website': 'https://erp23.com',
     'support': 'erp23@brainstation-23.com',
     'license': 'OPL-1',
+    'images': ['static/description/banner.gif'],
+    'icon': '/bs_typo_tolerant_product_search/static/description/icon.png',
     'depends': ['website_sale'],
     'data': [
         'security/ir.model.access.csv',
