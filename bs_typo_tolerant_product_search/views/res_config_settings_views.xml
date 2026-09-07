@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_inherit_fuzzy" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.typo.tolerant.product.search</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="website_sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <block id="website_payment_block" position="inside">
+                <setting
+                    string="Typo-Tolerant Search"
+                    id="fuzzy_search_setting"
+                    help="Fall back to a fuzzy (typo-tolerant) product name match when the storefront search returns too few results."
+                >
+                    <field name="fuzzy_search_sensitivity" widget="radio" class="o_light_label"/>
+                    <div class="mt8">
+                        <label for="fuzzy_search_min_results" string="Minimum results before fallback"/>
+                        <field name="fuzzy_search_min_results" class="oe_inline"/>
+                    </div>
+                </setting>
+            </block>
+        </field>
+    </record>
+
+</odoo>

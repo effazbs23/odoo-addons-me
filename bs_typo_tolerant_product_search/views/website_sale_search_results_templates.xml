@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- The "No results found for X. Showing results for Y." note itself is
+         native (website_sale.products, see templates.xml). We only tag it
+         with the fuzzy-log id so the frontend click tracker (spec 6 - best-
+         effort click tracking) knows which log row to mark as clicked. -->
+    <template id="products_fuzzy_log_id" inherit_id="website_sale.products">
+        <xpath expr="//div[hasclass('alert-warning')][@t-if='original_search and products']" position="attributes">
+            <attribute name="t-att-data-fuzzy-log-id">request.fuzzy_search_log_id</attribute>
+        </xpath>
+    </template>
+
+</odoo>
