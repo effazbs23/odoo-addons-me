@@ -44,4 +44,6 @@
     'license': 'OPL-1',
     'currency': 'USD',
     'price': 0.00,
+    'images': ['static/description/banner.gif'],
+    'icon': 'static/description/icon.png',
 }

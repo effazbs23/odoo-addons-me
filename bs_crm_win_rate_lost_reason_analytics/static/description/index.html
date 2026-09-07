@@ -1,52 +1,258 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<title>CRM Win Rate &amp; Lost Reason Analytics — User Manual</title>
+  <meta charset="UTF-8">
+  <title>CRM Win Rate &amp; Lost Reason Analytics</title>
 </head>
 <body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#F7F9FC;color:#001844;line-height:1.6;">
-<div style="max-width:960px;margin:0 auto;padding:40px 20px 80px;">
+<div style="max-width:1200px;margin:0 auto;padding:40px 20px 80px;">
 
-<section style="border:1px solid #DCE1E8;border-radius:16px;padding:48px 40px;margin-bottom:20px;">
-  <span style="display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1.5px solid #00A0DB;color:#00668E;padding:8px 14px;margin:0 0 16px;">User Manual</span>
-  <h1 style="font-size:38px;font-weight:700;color:#001844;margin:0 0 12px;line-height:1.2;">CRM Win Rate &amp; Lost Reason Analytics</h1>
-  <p style="margin:0;color:#797F8B;font-size:17px;max-width:720px;">A step-by-step guide to what this module adds to CRM: structured lost-reason categories, mandatory reason capture on Mark Lost, and a single-page visual Win Rate Dashboard.</p>
-</section>
+  <!-- 1. Compatibility / support header -->
+  <div style="border:1px solid #DCE1E8;border-radius:16px;padding:20px 16px;margin-bottom:20px;box-sizing:border-box;text-align:center;">
+    <div style="display:inline-block;width:100%;max-width:180px;vertical-align:middle;padding:8px;box-sizing:border-box;">
+      <img src="./assets/erp23.png" alt="CRM Win Rate &amp; Lost Reason Analytics" style="max-height:48px;max-width:100%;width:auto;height:auto;">
+    </div>
+    <div style="display:inline-block;width:100%;max-width:320px;vertical-align:middle;text-align:left;padding:8px;box-sizing:border-box;">
+      <p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#00A0DB;">Supports</p>
+      <span style="display:inline-block;margin:0 6px 6px 0;padding:7px 12px;color:#001844;border:1.5px solid #00A0DB;border-radius:8px;font-size:12px;font-weight:600;"><img src="./assets/check-circle.svg" alt="Supported" style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px;">Enterprise</span>
+      <span style="display:inline-block;margin:0 6px 6px 0;padding:7px 12px;color:#001844;border:1.5px solid #00A0DB;border-radius:8px;font-size:12px;font-weight:600;"><img src="./assets/check-circle.svg" alt="Supported" style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px;">Community</span>
+    </div>
+  </div>
 
-<!-- 1 -->
-<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
-  <h2 style="font-size:24px;margin:0 0 6px;">1. Categorize your lost reasons</h2>
-  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">CRM → Configuration → Lost Reasons now has a <strong>Category</strong> column: Pricing, Timing, Competitor, No Budget, No Response, Not a Fit, or Other. Odoo's three default reasons ship pre-categorized; anything you add yourself defaults to "Other" until you set it, so nothing is ever left blank.</p>
-  <img src="./assets/01-lost-reason-categories.jpg" alt="Lost Reasons list with Category column" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
-</section>
+  <!-- 2. Banner -->
+  <div style="margin-top:3rem;margin-bottom:3rem;">
+    <img src="./assets/main_screenshot.png" alt="CRM Win Rate &amp; Lost Reason Analytics main screenshot" style="display:block;width:100%;height:auto;border-radius:10px;">
+  </div>
 
-<!-- 2 -->
-<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
-  <h2 style="font-size:24px;margin:0 0 6px;">2. A reason is now required to mark a lead lost</h2>
-  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">Click <strong>Lost</strong> on any lead and the same wizard you already know opens — but "Mark as Lost" is blocked until a reason is selected. This is enforced natively (the field is simply required), so it works whether you're at the kanban "Lost" button or the form's "Lost" button.</p>
-  <img src="./assets/02-mark-lost-validation.jpg" alt="Mark Lost wizard showing Missing required fields validation" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
-</section>
+  <!-- 3. Hero -->
+  <section style="border:1px solid #DCE1E8;border-radius:16px;padding:60px 48px;margin-bottom:20px;">
+    <span style="display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1.5px solid #00A0DB;color:#00668E;padding:8px 14px;margin:0 8px 12px 0;">Odoo Module</span>
+    <span style="display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1.5px solid #00A0DB;color:#00668E;padding:8px 14px;margin:0 8px 12px 0;">CRM</span>
+    <h1 style="font-size:48px;font-weight:700;color:#001844;margin:16px 0 12px;line-height:1.2;">CRM Win Rate &amp; Lost Reason Analytics</h1>
+    <p style="margin:0;color:#797F8B;font-size:18px;max-width:800px;line-height:1.7;">Mandatory, categorized lost-reason capture plus an executive win-rate and stage drop-off analytics dashboard for the CRM pipeline.</p>
+  </section>
 
-<!-- 3 -->
-<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
-  <h2 style="font-size:24px;margin:0 0 6px;">3. Two separate notes: Closing Note and Lost Note</h2>
-  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">The native <strong>Closing Note</strong> is posted to the lead's chatter, same as always. The new <strong>Lost Note</strong> below it is a separate, optional field stored directly on the lead — it's what shows up in drill-down views on the dashboard, and it's never used for aggregation, just context for whoever reviews it later.</p>
-  <img src="./assets/03-mark-lost-filled.jpg" alt="Mark Lost wizard with reason selected and both notes filled" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
-</section>
+  <!-- 5. Feature overview -->
+  <section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 8px;font-weight:700;">Feature overview</h2>
+    <p style="margin:0 0 28px;color:#797F8B;font-size:16px;line-height:1.7;">Gain complete visibility into sales pipeline drop-offs with structured reason categorization, enforced capture, and real-time executive analytics.</p>
+    <div>
+      <div style="display:inline-block;vertical-align:top;width:29%;min-width:250px;margin:0 1.5% 20px 0;">
+        <h3 style="font-size:20px;color:#001844;margin:0 0 14px;font-weight:700;">Reason Categorization</h3>
+        <ul style="margin:0;padding:0 0 0 18px;color:#797F8B;font-size:15px;line-height:1.9;">
+          <li>7 standard categories: Pricing, Timing, Competitor, No Budget, No Response, Not a Fit, Other</li>
+          <li>Default native lost reasons pre-mapped to appropriate categories out of the box</li>
+          <li>New user-created reasons default to "Other" so data is never blank</li>
+          <li>Category column integrated directly into Lost Reasons list and form views</li>
+          <li>Automated post-install backfill categorizes pre-existing CRM records</li>
+        </ul>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:29%;min-width:250px;margin:0 1.5% 20px 1.5%;">
+        <h3 style="font-size:20px;color:#001844;margin:0 0 14px;font-weight:700;">Loss Capture &amp; Context</h3>
+        <ul style="margin:0;padding:0 0 0 18px;color:#797F8B;font-size:15px;line-height:1.9;">
+          <li>Mandatory reason selection enforced whenever marking any opportunity lost</li>
+          <li>Consistent validation across both Kanban "Lost" and Form "Mark Lost" buttons</li>
+          <li>Dedicated Lost Note field stored directly on lead for qualitative context</li>
+          <li>Preserves native chatter closing feedback while isolating clean reporting data</li>
+          <li>Automatic cleanup of reason, category, and lost note when restoring a lead</li>
+        </ul>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:29%;min-width:250px;margin:0 0 20px 1.5%;">
+        <h3 style="font-size:20px;color:#001844;margin:0 0 14px;font-weight:700;">Analytics Dashboard</h3>
+        <ul style="margin:0;padding:0 0 0 18px;color:#797F8B;font-size:15px;line-height:1.9;">
+          <li>Dedicated single-page dashboard at CRM &gt; Reporting &gt; Win Rate Dashboard</li>
+          <li>Executive KPI summary cards for Win Rate %, Won Deals, and Lost Deals</li>
+          <li>Interactive donut chart visualizing lost deal share by reason category</li>
+          <li>Salesperson win-rate comparison and stage drop-off funnel visualizations</li>
+          <li>Instant multi-filtering by Date Range, Sales Team, and Salesperson</li>
+          <li>Companion pivot and graph views for ad-hoc aggregation and Excel export</li>
+        </ul>
+      </div>
+    </div>
 
-<!-- 4 -->
-<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
-  <h2 style="font-size:24px;margin:0 0 6px;">4. The result: a lead with a categorized, traceable loss</h2>
-  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">Once confirmed, the lead is marked Lost with the reason recorded on the record and the closing note logged to the chatter. Reopening a lost lead (<strong>Restore</strong>) automatically clears the reason, category, and lost note — nothing stale carries forward if the deal comes back to life.</p>
-  <img src="./assets/04-lead-marked-lost.jpg" alt="Lead form showing the Lost ribbon, Lost Reason, and chatter entry" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
-</section>
+    <h2 style="font-size:32px;color:#001844;margin:36px 0 20px;font-weight:700;">What&rsquo;s included</h2>
+    <div style="border:1px solid #DCE1E8;border-radius:16px;padding:28px 32px;">
+      <div style="display:inline-block;vertical-align:top;width:47%;min-width:280px;margin:0 1.5% 0 0;">
+        <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Structured lost reason categorization system</p>
+        <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Mandatory reason enforcement on Mark Lost wizard</p>
+        <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Dedicated Lost Note field stored on lead record</p>
+        <p style="margin:0;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Interactive Win Rate &amp; Loss Analytics dashboard</p>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:47%;min-width:280px;margin:0 0 0 1.5%;">
+        <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Loss category distribution donut chart</p>
+        <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Salesperson win rate and stage drop-off metrics</p>
+        <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Interactive date, sales team, and rep filters</p>
+        <p style="margin:0;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Seamless upgrade hook for pre-existing pipeline data</p>
+      </div>
+    </div>
+  </section>
 
-<!-- 5 -->
-<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;">
-  <h2 style="font-size:24px;margin:0 0 6px;">5. Win Rate Dashboard: CRM → Reporting → Win Rate Dashboard</h2>
-  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">One page, everything a sales manager checks weekly: win rate, won/lost deals (each with a vs-previous-period trend), which reason category dominates your losses, win rate by salesperson, where deals drop off in the pipeline, and where your leads are coming from. Filter by date range, team, or salesperson from the dropdowns at top right — the whole page re-fetches instantly. The previous native pivot/graph views are still there under "Win Rate (Pivot)", "Loss Reasons", and "Stage Drop-off" for raw data export or custom grouping.</p>
-  <img src="./assets/05-win-rate-dashboard.jpg" alt="Win Rate Dashboard: KPI cards, lost reasons donut, win rate by salesperson, stage drop-off funnel, and leads by source" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
-</section>
+  <!-- 6. Dependencies -->
+  <section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;margin-bottom:15px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Dependencies</h2>
+    <span style="display:inline-block;border:1.5px solid #00A0DB;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;font-weight:600;">CRM (crm)</span>
+  </section>
+
+  <!-- 7. Screenshots -->
+  <section style="margin-top:28px;margin-bottom:40px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Screenshots</h2>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Categorized Lost Reasons</h5>
+      </div>
+      <img src="./assets/01-lost-reason-categories.jpg" alt="CRM Lost Reasons configuration list with structured categories" style="display:block;width:100%;height:auto;object-fit:contain;">
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Mandatory Reason Validation</h5>
+      </div>
+      <img src="./assets/02-mark-lost-validation.jpg" alt="Mark Lost wizard blocking confirmation until a lost reason is selected" style="display:block;width:100%;height:auto;object-fit:contain;">
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Mark Lost Wizard with Context Note</h5>
+      </div>
+      <img src="./assets/03-mark-lost-filled.jpg" alt="Mark Lost wizard with selected reason and optional context note" style="display:block;width:100%;height:auto;object-fit:contain;">
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Opportunity Form with Traceable Lost Record</h5>
+      </div>
+      <img src="./assets/04-lead-marked-lost.jpg" alt="Opportunity record displaying Lost ribbon, categorized reason, and chatter history" style="display:block;width:100%;height:auto;object-fit:contain;">
+    </div>
+
+    <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Interactive Win Rate &amp; Pipeline Analytics Dashboard</h5>
+      </div>
+      <img src="./assets/05-win-rate-dashboard.jpg" alt="Win Rate Dashboard with KPI summary cards, lost reasons donut, salesperson win rates, and stage drop-off" style="display:block;width:100%;height:auto;object-fit:contain;">
+    </div>
+  </section>
+
+  <!-- 8. Our Services -->
+  <section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Our Services</h2>
+    <div style="font-size:0;">
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-gear.svg" alt="Odoo Customization" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Customization</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-wrench.svg" alt="Odoo Implementation" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Implementation</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-life-ring.svg" alt="Odoo Support" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Support</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-arrows-repeat.svg" alt="Odoo Migration" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Migration</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-puzzle.svg" alt="Odoo Integration" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Integration</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-consultancy.svg" alt="Odoo Consultancy" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Consultancy</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-licencing.svg" alt="Odoo Licensing" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Licensing</h6>
+      </div>
+      <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+        <img src="./assets/svc-hire-odoo.svg" alt="Hire Odoo Developer" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+        <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Hire Odoo Developer</h6>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Why Choose ERP23 -->
+  <div style="border:1px solid #DCE1E8;border-radius:16px;padding:24px 12px;margin-top:28px;margin-bottom:20px;box-sizing:border-box;">
+    <h2 style="font-size:24px;color:#001844;margin:0 0 6px;font-weight:700;text-align:center;line-height:1.3;">Why Choose ERP23</h2>
+    <div style="text-align:center;font-size:0;">
+      <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+          <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+            <img src="./assets/silver-partner.webp" alt="Odoo Silver Partner" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+          </div>
+          <div style="padding:18px 18px 22px;">
+            <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">Silver Partner</span></h5>
+            <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Official Odoo Silver Partner with certified expertise.</p>
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+          <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+            <img src="./assets/countries-served.webp" alt="Countries Served" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+          </div>
+          <div style="padding:18px 18px 22px;">
+            <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">30+</span> Countries Served</h5>
+            <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Global reach with clients across 30+ countries worldwide.</p>
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+          <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+            <img src="./assets/projects-completed.webp" alt="Projects Completed" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+          </div>
+          <div style="padding:18px 18px 22px;">
+            <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">50+</span> Projects Completed</h5>
+            <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Proven Odoo delivery across diverse business requirements.</p>
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+          <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+            <img src="./assets/industries-served.webp" alt="Industries Served" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+          </div>
+          <div style="padding:18px 18px 22px;">
+            <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">15+</span> Industries Served</h5>
+            <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Specialized Odoo expertise across retail, services, and trading.</p>
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+          <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+            <img src="./assets/certifications.webp" alt="Certifications" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+          </div>
+          <div style="padding:18px 18px 22px;">
+            <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">7+</span> Certifications</h5>
+            <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Team certified across specialized Odoo framework domains.</p>
+          </div>
+        </div>
+      </div>
+      <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+          <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+            <img src="./assets/years-experience.webp" alt="Years Experience" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+          </div>
+          <div style="padding:18px 18px 22px;">
+            <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">10+</span> Years Experience</h5>
+            <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Over a decade of enterprise ERP engineering and support.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. Support & Company -->
+  <section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;text-align:center;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Support &amp; Company</h2>
+    <img src="./assets/erp23.png" alt="ERP23 logo" style="max-height:48px;width:auto;margin-bottom:16px;">
+    <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.6;">Developed and maintained by ERP23.</p>
+    <p style="margin:8px 0 0;">Website: <a href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer" style="color:#00A0DB;text-decoration:none;font-weight:600;">https://www.erp-23.com/</a></p>
+    <p style="margin:0;">Email: <a href="mailto:erp23@brainstation-23.com" style="color:#00A0DB;text-decoration:none;font-weight:600;">erp23@brainstation-23.com</a></p>
+  </section>
 
 </div>
 </body>
