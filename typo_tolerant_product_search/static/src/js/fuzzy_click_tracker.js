@@ -4,7 +4,7 @@
 // carries a fuzzy log id (i.e. a fuzzy correction actually fired). A failure
 // here must never affect navigation - see fuzzy_search_log_click() in
 // controllers/main.py, which is equally best-effort.
-document.addEventListener('DOMContentLoaded', () => {
+function initFuzzyClickTracker() {
     const notice = document.querySelector('[data-fuzzy-log-id]');
     if (!notice) {
         return;
@@ -32,4 +32,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // best-effort: never block the visitor's navigation
         }
     }, {once: true});
-});
+}
+
+// Odoo's module loader fetches/evaluates this script asynchronously after
+// the initial page parse, so DOMContentLoaded has almost always already
+// fired by the time this runs - a plain addEventListener here would
+// silently never call back. Run immediately if the DOM is already ready.
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFuzzyClickTracker);
+} else {
+    initFuzzyClickTracker();
+}
