@@ -85,7 +85,7 @@ class TypoTolerantWebsiteSale(WebsiteSale):
             # same cost order as core's own single-word fuzzy attempt above -
             # this extension doesn't give a scraper a cheaper way to load the
             # DB than native search already allows.
-            widened_term, widened_count, widened_result = super()._shop_lookup_products(
+            __, widened_count, widened_result = super()._shop_lookup_products(
                 options, post, corrected_search, website
             )
             # Results merging (spec 7.4): replace, never append, and only
