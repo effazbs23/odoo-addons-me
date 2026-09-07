@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sensible default categories for Odoo's out-of-box lost reasons,
+             so a fresh install doesn't leave them under the generic
+             field-level 'other' default. -->
+        <record id="crm.lost_reason_1" model="crm.lost.reason">
+            <field name="category">pricing</field>
+        </record>
+        <record id="crm.lost_reason_2" model="crm.lost.reason">
+            <field name="category">not_a_fit</field>
+        </record>
+        <record id="crm.lost_reason_3" model="crm.lost.reason">
+            <field name="category">other</field>
+        </record>
+    </data>
+</odoo>

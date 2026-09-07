@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Shared search view: native CRM filter/groupby conventions -->
+    <record id="crm_lead_win_rate_dashboard_view_search" model="ir.ui.view">
+        <field name="name">crm.lead.win.rate.dashboard.search</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <search string="Win Rate Dashboard">
+                <filter string="Won" name="filter_won" domain="[('won_status', '=', 'won')]"/>
+                <filter string="Lost" name="filter_lost" domain="[('active', '=', False), ('won_status', '=', 'lost')]"/>
+                <filter string="Lost Without Reason" name="filter_lost_no_reason"
+                        domain="[('active', '=', False), ('won_status', '=', 'lost'), ('lost_reason_id', '=', False)]"/>
+                <separator/>
+                <field name="team_id"/>
+                <field name="user_id" string="Salesperson"/>
+                <field name="source_id"/>
+                <field name="lost_reason_id"/>
+                <separator/>
+                <filter string="Date" date="create_date" name="filter_create_date" default_period="year"/>
+                <filter string="Closed Date" date="date_closed" name="filter_date_closed"/>
+                <group>
+                    <filter string="Lost Reason Category" name="groupby_lost_reason_category" context="{'group_by': 'lost_reason_category'}"/>
+                    <filter string="Salesperson" name="groupby_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Sales Team" name="groupby_team" context="{'group_by': 'team_id'}"/>
+                    <filter string="Source" name="groupby_source" context="{'group_by': 'source_id'}"/>
+                    <filter string="Stage" name="groupby_stage" context="{'group_by': 'stage_id'}"/>
+                    <filter string="Won/Lost" name="groupby_won_status" context="{'group_by': 'won_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Win Rate: pivot. Default grouped by salesperson, NOT lost-reason
+         category - category is only ever set on lost leads, so grouping
+         a won+lost population by it would dump every won lead into the
+         same "None" bucket as leads genuinely lost with no reason,
+         making that bucket meaningless. Salesperson/team/source don't
+         have this problem (every lead has one regardless of outcome),
+         so they're safe default/manual groupings here. -->
+    <record id="crm_lead_win_rate_view_pivot" model="ir.ui.view">
+        <field name="name">crm.lead.win.rate.pivot</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <pivot string="Win Rate" sample="1">
+                <field name="user_id" type="row" string="Salesperson"/>
+                <field name="won_status" type="col"/>
+                <field name="probability" type="measure" string="Win Rate %"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Win Rate: graph. probability already carries aggregator="avg" in
+         crm core and is exactly 100/0 for won/lost by construction, so
+         averaging it per group IS the win rate for that group - no new
+         computed field needed. -->
+    <record id="crm_lead_win_rate_view_graph" model="ir.ui.view">
+        <field name="name">crm.lead.win.rate.graph</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <graph string="Win Rate" type="bar" sample="1">
+                <field name="user_id" string="Salesperson"/>
+                <field name="probability" type="measure" string="Win Rate %"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="crm_lead_win_rate_dashboard_action" model="ir.actions.act_window">
+        <field name="name">Win Rate Dashboard</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="crm_lead_win_rate_dashboard_view_search"/>
+        <field name="context">{'active_test': False, 'search_default_filter_create_date': 1}</field>
+        <field name="domain">[('won_status', '!=', 'pending')]</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                      (0, 0, {'view_mode': 'graph', 'view_id': ref('crm_lead_win_rate_view_graph')}),
+                      (0, 0, {'view_mode': 'pivot', 'view_id': ref('crm_lead_win_rate_view_pivot')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No data found!</p>
+            <p>Overall win rate, by salesperson, team, or source. Switch grouping from the search panel.</p>
+        </field>
+    </record>
+
+    <!-- Loss Reasons: how losses break down by category. Scoped to lost
+         leads only (category is undefined for won/pending leads), with
+         count as the measure - "Pricing is 40% of losses" is a
+         distribution question, not a win-rate-per-category one, since
+         a lost-only population has no won leads to compute a ratio
+         against (see spec UX flow's own example). -->
+    <record id="crm_lead_loss_reasons_view_pivot" model="ir.ui.view">
+        <field name="name">crm.lead.loss.reasons.pivot</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <pivot string="Loss Reasons" sample="1">
+                <field name="lost_reason_category" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="crm_lead_loss_reasons_view_graph" model="ir.ui.view">
+        <field name="name">crm.lead.loss.reasons.graph</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <graph string="Loss Reasons" type="pie" sample="1">
+                <field name="lost_reason_category"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="crm_lead_loss_reasons_action" model="ir.actions.act_window">
+        <field name="name">Loss Reasons</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="crm_lead_win_rate_dashboard_view_search"/>
+        <field name="context">{'active_test': False, 'search_default_filter_create_date': 1}</field>
+        <field name="domain">[('active', '=', False), ('won_status', '=', 'lost')]</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                      (0, 0, {'view_mode': 'graph', 'view_id': ref('crm_lead_loss_reasons_view_graph')}),
+                      (0, 0, {'view_mode': 'pivot', 'view_id': ref('crm_lead_loss_reasons_view_pivot')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No data found!</p>
+            <p>Which reason category dominates your losses this period. "None" means lost with no reason recorded - use the "Lost Without Reason" filter to review those leads directly.</p>
+        </field>
+    </record>
+
+    <!-- Stage Drop-off: closest 19.0 equivalent to a funnel (web's graph
+         view only supports bar/line/pie - no funnel type) -->
+    <record id="crm_lead_stage_dropoff_view_graph" model="ir.ui.view">
+        <field name="name">crm.lead.stage.dropoff.graph</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <graph string="Stage Drop-off" type="bar" sample="1">
+                <field name="stage_id"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="crm_lead_stage_dropoff_view_pivot" model="ir.ui.view">
+        <field name="name">crm.lead.stage.dropoff.pivot</field>
+        <field name="model">crm.lead</field>
+        <field name="arch" type="xml">
+            <pivot string="Stage Drop-off" sample="1">
+                <field name="stage_id" type="row"/>
+                <field name="won_status" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="crm_lead_stage_dropoff_action" model="ir.actions.act_window">
+        <field name="name">Stage Drop-off</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="crm_lead_win_rate_dashboard_view_search"/>
+        <field name="context">{'active_test': False, 'search_default_filter_create_date': 1}</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                      (0, 0, {'view_mode': 'graph', 'view_id': ref('crm_lead_stage_dropoff_view_graph')}),
+                      (0, 0, {'view_mode': 'pivot', 'view_id': ref('crm_lead_stage_dropoff_view_pivot')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No data found!</p>
+            <p>Lead volume per pipeline stage, split by Won/Lost/Pending, to spot where deals stall.</p>
+        </field>
+    </record>
+
+    <!-- Superseded as the primary landing page by the custom OWL
+         dashboard (crm_win_rate_dashboard_action.xml, sequence 4) -
+         kept here, demoted, for raw pivot/graph drill-down and export. -->
+    <menuitem id="crm_menu_win_rate_dashboard"
+              name="Win Rate (Pivot)"
+              parent="crm.crm_menu_report"
+              action="crm_lead_win_rate_dashboard_action"
+              sequence="8"/>
+
+    <menuitem id="crm_menu_loss_reasons"
+              name="Loss Reasons"
+              parent="crm.crm_menu_report"
+              action="crm_lead_loss_reasons_action"
+              sequence="6"/>
+
+    <menuitem id="crm_menu_stage_dropoff"
+              name="Stage Drop-off"
+              parent="crm.crm_menu_report"
+              action="crm_lead_stage_dropoff_action"
+              sequence="7"/>
+
+</odoo>
