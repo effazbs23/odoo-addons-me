@@ -24,5 +24,5 @@
     'application': False,
     'installable': True,
     'currency': 'USD',
-    'price': 0.00,
+    'price': 10.00,
 }
