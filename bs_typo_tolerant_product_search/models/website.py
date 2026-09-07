@@ -1,4 +1,4 @@
-# Part of typo_tolerant_product_search. See LICENSE file for full copyright and licensing details.
+# Part of bs_typo_tolerant_product_search. See LICENSE file for full copyright and licensing details.
 from odoo import fields, models
 
 

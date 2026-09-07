@@ -1,4 +1,4 @@
-# Part of typo_tolerant_product_search. See LICENSE file for full copyright and licensing details.
+# Part of bs_typo_tolerant_product_search. See LICENSE file for full copyright and licensing details.
 import logging
 import re
 
@@ -162,7 +162,7 @@ class TypoTolerantWebsiteSale(WebsiteSale):
             })
             request.fuzzy_search_log_id = log.id
         except Exception:
-            _logger.warning('typo_tolerant_product_search: failed to log fuzzy search miss', exc_info=True)
+            _logger.warning('bs_typo_tolerant_product_search: failed to log fuzzy search miss', exc_info=True)
 
     @route('/shop/fuzzy_search/click/<int:log_id>', type='http', auth='public', website=True,
            sitemap=False, csrf=False, methods=['GET', 'POST'])
@@ -174,5 +174,5 @@ class TypoTolerantWebsiteSale(WebsiteSale):
         try:
             request.env['bs.search.fuzzy.log'].sudo().browse(log_id).write({'clicked': True})
         except Exception:
-            _logger.warning('typo_tolerant_product_search: failed to record fuzzy search click', exc_info=True)
+            _logger.warning('bs_typo_tolerant_product_search: failed to record fuzzy search click', exc_info=True)
         return request.make_json_response({'ok': True})

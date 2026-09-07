@@ -16,7 +16,7 @@
     ],
     'assets': {
         'web.assets_frontend': [
-            'typo_tolerant_product_search/static/src/js/fuzzy_click_tracker.js',
+            'bs_typo_tolerant_product_search/static/src/js/fuzzy_click_tracker.js',
         ],
     },
     'application': False,

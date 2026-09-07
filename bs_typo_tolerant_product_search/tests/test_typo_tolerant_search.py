@@ -1,4 +1,4 @@
-# Part of typo_tolerant_product_search. See LICENSE file for full copyright and licensing details.
+# Part of bs_typo_tolerant_product_search. See LICENSE file for full copyright and licensing details.
 import time
 
 from odoo.tests import HttpCase, TransactionCase, tagged
@@ -6,7 +6,7 @@ from odoo.tests import HttpCase, TransactionCase, tagged
 from odoo.addons.http_routing.tests.common import MockRequest
 from odoo.addons.website_sale.tests.common import WebsiteSaleCommon
 
-from odoo.addons.typo_tolerant_product_search.controllers.main import TypoTolerantWebsiteSale
+from odoo.addons.bs_typo_tolerant_product_search.controllers.main import TypoTolerantWebsiteSale
 
 SEARCH_OPTIONS = {
     'displayDescription': True, 'displayDetail': True, 'displayExtraDetail': True,
