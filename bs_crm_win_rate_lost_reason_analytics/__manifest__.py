@@ -45,5 +45,5 @@
     'currency': 'USD',
     'price': 0.00,
     'images': ['static/description/banner.gif'],
-    'icon': 'static/description/icon.png',
+    'icon': '/bs_crm_win_rate_lost_reason_analytics/static/description/icon.png',
 }
