@@ -43,7 +43,7 @@
     'auto_install': False,
     'license': 'OPL-1',
     'currency': 'USD',
-    'price': 0.00,
+    'price': 19.00,
     'images': ['static/description/banner.gif'],
     'icon': '/bs_crm_win_rate_lost_reason_analytics/static/description/icon.png',
 }
