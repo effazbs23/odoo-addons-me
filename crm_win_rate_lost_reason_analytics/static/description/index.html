@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CRM Win Rate &amp; Lost Reason Analytics — User Manual</title>
+</head>
+<body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#F7F9FC;color:#001844;line-height:1.6;">
+<div style="max-width:960px;margin:0 auto;padding:40px 20px 80px;">
+
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:48px 40px;margin-bottom:20px;">
+  <span style="display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1.5px solid #00A0DB;color:#00668E;padding:8px 14px;margin:0 0 16px;">User Manual</span>
+  <h1 style="font-size:38px;font-weight:700;color:#001844;margin:0 0 12px;line-height:1.2;">CRM Win Rate &amp; Lost Reason Analytics</h1>
+  <p style="margin:0;color:#797F8B;font-size:17px;max-width:720px;">A step-by-step guide to the four things this module adds to CRM: structured lost-reason categories, mandatory reason capture on Mark Lost, a Win Rate Dashboard, and a Loss Reasons breakdown.</p>
+</section>
+
+<!-- 1 -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
+  <h2 style="font-size:24px;margin:0 0 6px;">1. Categorize your lost reasons</h2>
+  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">CRM → Configuration → Lost Reasons now has a <strong>Category</strong> column: Pricing, Timing, Competitor, No Budget, No Response, Not a Fit, or Other. Odoo's three default reasons ship pre-categorized; anything you add yourself defaults to "Other" until you set it, so nothing is ever left blank.</p>
+  <img src="./assets/01-lost-reason-categories.jpg" alt="Lost Reasons list with Category column" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
+</section>
+
+<!-- 2 -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
+  <h2 style="font-size:24px;margin:0 0 6px;">2. A reason is now required to mark a lead lost</h2>
+  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">Click <strong>Lost</strong> on any lead and the same wizard you already know opens — but "Mark as Lost" is blocked until a reason is selected. This is enforced natively (the field is simply required), so it works whether you're at the kanban "Lost" button or the form's "Lost" button.</p>
+  <img src="./assets/02-mark-lost-validation.jpg" alt="Mark Lost wizard showing Missing required fields validation" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
+</section>
+
+<!-- 3 -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
+  <h2 style="font-size:24px;margin:0 0 6px;">3. Two separate notes: Closing Note and Lost Note</h2>
+  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">The native <strong>Closing Note</strong> is posted to the lead's chatter, same as always. The new <strong>Lost Note</strong> below it is a separate, optional field stored directly on the lead — it's what shows up in drill-down views on the dashboard, and it's never used for aggregation, just context for whoever reviews it later.</p>
+  <img src="./assets/03-mark-lost-filled.jpg" alt="Mark Lost wizard with reason selected and both notes filled" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
+</section>
+
+<!-- 4 -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
+  <h2 style="font-size:24px;margin:0 0 6px;">4. The result: a lead with a categorized, traceable loss</h2>
+  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">Once confirmed, the lead is marked Lost with the reason recorded on the record and the closing note logged to the chatter. Reopening a lost lead (<strong>Restore</strong>) automatically clears the reason, category, and lost note — nothing stale carries forward if the deal comes back to life.</p>
+  <img src="./assets/04-lead-marked-lost.jpg" alt="Lead form showing the Lost ribbon, Lost Reason, and chatter entry" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
+</section>
+
+<!-- 5 -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
+  <h2 style="font-size:24px;margin:0 0 6px;">5. Win Rate Dashboard: CRM → Reporting → Win Rate</h2>
+  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">Shows the overall win rate and lets you break it down by salesperson, team, or source using the search panel's Group By options — switch between graph and pivot with the icons in the top-right. Win rate is computed the same way Odoo itself defines it: won and lost deals only, pending pipeline excluded.</p>
+  <img src="./assets/05-win-rate-bar.jpg" alt="Win Rate Dashboard bar chart by salesperson" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;margin-bottom:14px;">
+  <img src="./assets/06-win-rate-pivot.jpg" alt="Win Rate Dashboard pivot table with Lost, Won, and overall percentage columns" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
+</section>
+
+<!-- 6 -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
+  <h2 style="font-size:24px;margin:0 0 6px;">6. Loss Reasons: which category dominates your losses</h2>
+  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">CRM → Reporting → Loss Reasons shows only lost deals, broken down by category — this is the "Pricing is 40% of our losses this quarter" view. A "None" slice means leads lost with no reason recorded at all; use the "Lost Without Reason" filter in the search panel to pull up those leads directly and follow up on them.</p>
+  <img src="./assets/07-loss-reasons-pie.jpg" alt="Loss Reasons pie chart by category" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
+</section>
+
+<!-- 7 -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;">
+  <h2 style="font-size:24px;margin:0 0 6px;">7. Stage Drop-off: where deals stall</h2>
+  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">CRM → Reporting → Stage Drop-off shows lead volume per pipeline stage — the sharpest drop between two bars is where the most deals are stalling or getting lost. This is the closest equivalent to a funnel chart that Odoo 19's native view framework supports.</p>
+  <img src="./assets/08-stage-dropoff.jpg" alt="Stage Drop-off bar chart from New through Won" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
+</section>
+
+</div>
+</body>
+</html>
