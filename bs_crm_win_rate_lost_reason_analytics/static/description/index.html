@@ -10,7 +10,7 @@
 <section style="border:1px solid #DCE1E8;border-radius:16px;padding:48px 40px;margin-bottom:20px;">
   <span style="display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1.5px solid #00A0DB;color:#00668E;padding:8px 14px;margin:0 0 16px;">User Manual</span>
   <h1 style="font-size:38px;font-weight:700;color:#001844;margin:0 0 12px;line-height:1.2;">CRM Win Rate &amp; Lost Reason Analytics</h1>
-  <p style="margin:0;color:#797F8B;font-size:17px;max-width:720px;">A step-by-step guide to the four things this module adds to CRM: structured lost-reason categories, mandatory reason capture on Mark Lost, a Win Rate Dashboard, and a Loss Reasons breakdown.</p>
+  <p style="margin:0;color:#797F8B;font-size:17px;max-width:720px;">A step-by-step guide to what this module adds to CRM: structured lost-reason categories, mandatory reason capture on Mark Lost, and a single-page visual Win Rate Dashboard.</p>
 </section>
 
 <!-- 1 -->
@@ -42,25 +42,10 @@
 </section>
 
 <!-- 5 -->
-<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
-  <h2 style="font-size:24px;margin:0 0 6px;">5. Win Rate Dashboard: CRM → Reporting → Win Rate</h2>
-  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">Shows the overall win rate and lets you break it down by salesperson, team, or source using the search panel's Group By options — switch between graph and pivot with the icons in the top-right. Win rate is computed the same way Odoo itself defines it: won and lost deals only, pending pipeline excluded.</p>
-  <img src="./assets/05-win-rate-bar.jpg" alt="Win Rate Dashboard bar chart by salesperson" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;margin-bottom:14px;">
-  <img src="./assets/06-win-rate-pivot.jpg" alt="Win Rate Dashboard pivot table with Lost, Won, and overall percentage columns" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
-</section>
-
-<!-- 6 -->
-<section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;margin-bottom:20px;">
-  <h2 style="font-size:24px;margin:0 0 6px;">6. Loss Reasons: which category dominates your losses</h2>
-  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">CRM → Reporting → Loss Reasons shows only lost deals, broken down by category — this is the "Pricing is 40% of our losses this quarter" view. A "None" slice means leads lost with no reason recorded at all; use the "Lost Without Reason" filter in the search panel to pull up those leads directly and follow up on them.</p>
-  <img src="./assets/07-loss-reasons-pie.jpg" alt="Loss Reasons pie chart by category" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
-</section>
-
-<!-- 7 -->
 <section style="border:1px solid #DCE1E8;border-radius:16px;padding:36px 40px;">
-  <h2 style="font-size:24px;margin:0 0 6px;">7. Stage Drop-off: where deals stall</h2>
-  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">CRM → Reporting → Stage Drop-off shows lead volume per pipeline stage — the sharpest drop between two bars is where the most deals are stalling or getting lost. This is the closest equivalent to a funnel chart that Odoo 19's native view framework supports.</p>
-  <img src="./assets/08-stage-dropoff.jpg" alt="Stage Drop-off bar chart from New through Won" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
+  <h2 style="font-size:24px;margin:0 0 6px;">5. Win Rate Dashboard: CRM → Reporting → Win Rate Dashboard</h2>
+  <p style="margin:0 0 20px;color:#797F8B;font-size:15px;">One page, everything a sales manager checks weekly: win rate, won/lost deals (each with a vs-previous-period trend), which reason category dominates your losses, win rate by salesperson, where deals drop off in the pipeline, and where your leads are coming from. Filter by date range, team, or salesperson from the dropdowns at top right — the whole page re-fetches instantly. The previous native pivot/graph views are still there under "Win Rate (Pivot)", "Loss Reasons", and "Stage Drop-off" for raw data export or custom grouping.</p>
+  <img src="./assets/05-win-rate-dashboard.jpg" alt="Win Rate Dashboard: KPI cards, lost reasons donut, win rate by salesperson, stage drop-off funnel, and leads by source" style="display:block;width:100%;border:1px solid #DCE1E8;border-radius:10px;">
 </section>
 
 </div>
