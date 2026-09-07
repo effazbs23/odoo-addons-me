@@ -1,5 +1,5 @@
 {
-    'name': 'CRM Lost Reason + Win Rate Dashboard',
+    'name': 'CRM Win Rate & Lost Reason Analytics',
     'version': '19.0.1.0.0',
     'category': 'CRM',
     'summary': 'Mandatory, categorized lost-reason capture plus a native win-rate '
