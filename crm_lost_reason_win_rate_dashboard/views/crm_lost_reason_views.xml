@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="crm_lost_reason_view_form_inherit" model="ir.ui.view">
+        <field name="name">crm.lost.reason.form.inherit.win.rate.dashboard</field>
+        <field name="model">crm.lost.reason</field>
+        <field name="inherit_id" ref="crm.crm_lost_reason_view_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="category"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="crm_lost_reason_view_tree_inherit" model="ir.ui.view">
+        <field name="name">crm.lost.reason.list.inherit.win.rate.dashboard</field>
+        <field name="model">crm.lost.reason</field>
+        <field name="inherit_id" ref="crm.crm_lost_reason_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="category"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="crm_lost_reason_view_search_inherit" model="ir.ui.view">
+        <field name="name">crm.lost.reason.search.inherit.win.rate.dashboard</field>
+        <field name="model">crm.lost.reason</field>
+        <field name="inherit_id" ref="crm.crm_lost_reason_view_search"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="category"/>
+                <filter string="Category" name="groupby_category" context="{'group_by': 'category'}"/>
+            </field>
+        </field>
+    </record>
+</odoo>
