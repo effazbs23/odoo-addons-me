@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.bs.conflict.guard</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="calendar.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='calendar']" position="inside">
+                <setting id="bs_conflict_guard_setting"
+                         string="Conflict Guard"
+                         help="Block double-booking of the same employee or resource on overlapping events">
+                    <field name="bs_conflict_active"/>
+                    <div class="content-group" invisible="not bs_conflict_active">
+                        <div class="mt8">
+                            <field name="bs_conflict_check_employees" class="oe_inline"/>
+                            <label for="bs_conflict_check_employees"/>
+                        </div>
+                        <div class="mt8">
+                            <field name="bs_conflict_check_resources" class="oe_inline"/>
+                            <label for="bs_conflict_check_resources"/>
+                        </div>
+                        <div class="mt8">
+                            <label for="bs_conflict_buffer_minutes"/>
+                            <field name="bs_conflict_buffer_minutes" class="oe_inline"/>
+                            <span> minutes required before/after each booking (0 = exact overlap only)</span>
+                        </div>
+                        <div class="text-muted mt8">
+                            All-day events currently block the entire calendar day (00:00-24:00) for
+                            the resource, not just Odoo's internal 8:00-18:00 display window.
+                        </div>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>
