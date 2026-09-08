@@ -39,7 +39,7 @@ class TestBsOverrideFlow(TransactionCase):
             self._make_event(override_env, 'New', '2026-05-02 10:30:00', '2026-05-02 11:30:00')
             self.fail('Expected a RedirectWarning')
         except RedirectWarning as e:
-            action_id, _button_text, extra_context = e.args[1], e.args[2], e.args[3]
+            extra_context = e.args[3]
 
         wizard = override_env['bs.conflict.override.wizard'].with_context(**extra_context).create({})
         self.assertEqual(wizard.mode, 'create')
