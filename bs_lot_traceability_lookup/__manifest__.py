@@ -28,6 +28,11 @@
         'views/bs_trace_export_log_views.xml',
         'views/bs_trace_menus.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'bs_lot_traceability_lookup/static/src/css/bs_trace_lookup.css',
+        ],
+    },
     'images': ['static/description/assets/main_screenshot.png'],
     'icon': '/bs_lot_traceability_lookup/static/description/icon.png',
     'installable': True,

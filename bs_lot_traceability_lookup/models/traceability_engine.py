@@ -348,23 +348,42 @@ class TraceabilityEngine(models.AbstractModel):
 
     # ------------------------------------------------------------- html tree
 
+    # boundary -> (fa-icon, short type label shown above the lot line)
+    _NODE_META = {
+        'vendor': ('fa-truck', 'Raw Material'),
+        'production': ('fa-industry', 'Manufacturing Order'),
+        'customer': ('fa-user', 'Customer Delivery'),
+        'adjustment': ('fa-wrench', 'Inventory Adjustment'),
+        'scrap_or_adjustment': ('fa-recycle', 'Scrap / Adjustment'),
+        'not_tracked': ('fa-question-circle', 'Not Individually Tracked'),
+        'unknown': ('fa-circle-o', 'Movement'),
+    }
+
     def render_chain_html(self, nodes):
-        """Simple nested <ul> rendering - the 'straightforward QWeb-rendered
-        nested list' from the spec, built once in Python and reused for both
-        the wizard's on-screen preview and the PDF export."""
+        """Timeline-styled nested list - built once in Python and reused for
+        both the wizard's on-screen preview (CSS turns it into a vertical
+        timeline) and the PDF export (renders as a plain nested list)."""
         if not nodes:
             return Markup('<p class="text-muted">No data.</p>')
-        return Markup('<ul>%s</ul>') % Markup('').join(self._render_node_html(n) for n in nodes)
+        return Markup('<ul class="o_bs_trace_timeline">%s</ul>') % Markup('').join(
+            self._render_node_html(n) for n in nodes)
 
     def _render_node_html(self, node):
         boundary = node['boundary']
         if boundary == 'truncated':
             label = '... and %d more %s' % (node['more_count'], node.get('more_label') or 'items')
-            return Markup('<li><em>%s</em></li>') % escape(label)
+            return Markup('<li class="o_bs_trace_node o_bs_trace_node-muted">'
+                           '<span class="o_bs_trace_dot"><i class="fa fa-ellipsis-h"/></span>'
+                           '<div class="o_bs_trace_node_body"><em>%s</em></div></li>') % escape(label)
         if boundary == 'circular':
-            return Markup('<li>%s <em>(circular reference - already shown above)</em></li>') % escape(node['lot_name'] or '')
+            return Markup('<li class="o_bs_trace_node o_bs_trace_node-circular">'
+                           '<span class="o_bs_trace_dot"><i class="fa fa-refresh"/></span>'
+                           '<div class="o_bs_trace_node_body">%s <em>(circular reference - already shown above)</em></div></li>'
+                           ) % escape(node['lot_name'] or '')
         if boundary == 'no_history':
-            return Markup('<li><em>No further history found.</em></li>')
+            return Markup('<li class="o_bs_trace_node o_bs_trace_node-muted">'
+                           '<span class="o_bs_trace_dot"><i class="fa fa-ban"/></span>'
+                           '<div class="o_bs_trace_node_body"><em>No further history found.</em></div></li>')
 
         label_bits = []
         if node.get('lot_name'):
@@ -387,6 +406,13 @@ class TraceabilityEngine(models.AbstractModel):
         line = Markup(' ').join([Markup(b) for b in label_bits] + ([Markup('- %s' % detail)] if detail else []))
         children_html = ''
         if node.get('children'):
-            children_html = Markup('<ul>%s</ul>') % Markup('').join(
+            children_html = Markup('<ul class="o_bs_trace_timeline o_bs_trace_timeline-nested">%s</ul>') % Markup('').join(
                 self._render_node_html(c) for c in node['children'])
-        return Markup('<li>%s%s</li>') % (line, children_html)
+
+        icon, type_label = self._NODE_META.get(boundary, ('fa-circle-o', ''))
+        type_html = Markup('<span class="o_bs_trace_node_type">%s</span>') % escape(type_label) if type_label else ''
+        return Markup(
+            '<li class="o_bs_trace_node o_bs_trace_node-%s">'
+            '<span class="o_bs_trace_dot"><i class="fa %s"/></span>'
+            '<div class="o_bs_trace_node_body">%s<div class="o_bs_trace_node_line">%s</div>%s</div></li>'
+        ) % (boundary, icon, type_html, line, children_html)

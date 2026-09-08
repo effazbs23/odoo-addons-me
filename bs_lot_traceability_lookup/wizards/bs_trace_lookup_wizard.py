@@ -19,6 +19,18 @@ class BsTraceLookupWizard(models.TransientModel):
     summary_text = fields.Text(string='Plain-Language Summary', readonly=True)
     chain_html = fields.Html(string='Full Chain', readonly=True, sanitize=False)
     has_result = fields.Boolean(readonly=True)
+    status_class = fields.Selection([
+        ('success', 'Completed'),
+        ('info', 'In Stock'),
+        ('secondary', 'Backward Trace Only'),
+    ], readonly=True, string='Status')
+
+    def _compute_status_class(self, forward_nodes):
+        if forward_nodes is None:
+            return 'secondary'
+        if len(forward_nodes) == 1 and forward_nodes[0]['boundary'] == 'no_history':
+            return 'info'
+        return 'success'
 
     def action_search(self):
         self.ensure_one()
@@ -33,6 +45,7 @@ class BsTraceLookupWizard(models.TransientModel):
             'summary_text': summary,
             'chain_html': engine.render_chain_html(nodes),
             'has_result': True,
+            'status_class': self._compute_status_class(forward),
         })
         return {
             'type': 'ir.actions.act_window',
