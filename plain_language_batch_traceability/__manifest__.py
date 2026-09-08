@@ -1,0 +1,22 @@
+{
+    'name': 'Plain-Language Batch Traceability Lookup',
+    'category': 'Manufacturing/Inventory',
+    'summary': 'Search a lot/serial number, get a plain-language backward + forward traceability chain, exportable as a PDF for audits and recalls.',
+    'version': '19.0.1.0.0',
+    'license': 'OPL-1',
+    'price': 0.00,
+    'currency': 'USD',
+    'author': 'ERP23',
+    'website': 'https://erp-23.com',
+    'support': 'erp23@brainstation-23.com',
+    'depends': ['stock', 'mrp'],
+    'data': [
+        'security/ir.model.access.csv',
+        'report/bs_trace_export_report.xml',
+        'views/bs_trace_lookup_views.xml',
+        'views/bs_trace_export_log_views.xml',
+        'views/bs_trace_menus.xml',
+    ],
+    'installable': True,
+    'application': True,
+}
