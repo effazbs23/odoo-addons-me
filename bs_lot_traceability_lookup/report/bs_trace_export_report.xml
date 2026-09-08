@@ -4,8 +4,8 @@
         <field name="name">Traceability Trace Report</field>
         <field name="model">bs.trace.lookup.wizard</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">plain_language_batch_traceability.bs_trace_export_report_document</field>
-        <field name="report_file">plain_language_batch_traceability.bs_trace_export_report_document</field>
+        <field name="report_name">bs_lot_traceability_lookup.bs_trace_export_report_document</field>
+        <field name="report_file">bs_lot_traceability_lookup.bs_trace_export_report_document</field>
         <field name="print_report_name">'Traceability - %s' % (object.lot_id.name or 'trace')</field>
     </record>
 

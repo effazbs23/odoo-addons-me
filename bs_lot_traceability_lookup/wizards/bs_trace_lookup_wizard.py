@@ -44,4 +44,4 @@ class BsTraceLookupWizard(models.TransientModel):
             'lot_id': self.lot_id.id,
             'direction': self.direction,
         })
-        return self.env.ref('plain_language_batch_traceability.action_report_bs_trace_export').report_action(self)
+        return self.env.ref('bs_lot_traceability_lookup.action_report_bs_trace_export').report_action(self)

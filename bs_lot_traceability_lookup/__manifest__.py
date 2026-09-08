@@ -1,5 +1,5 @@
 {
-    'name': 'Plain-Language Batch Traceability Lookup',
+    'name': 'Lot Traceability Lookup',
     'category': 'Manufacturing/Inventory',
     'summary': 'Search a lot/serial number, get a plain-language backward + forward traceability chain, exportable as a PDF for audits and recalls.',
     'version': '19.0.1.0.0',

@@ -40,6 +40,6 @@ class TestTraceExport(TraceabilityCommon):
         # that the wkhtmltopdf pipeline renders without error.
         pdf_content, report_type = self.env['ir.actions.report'].with_context(
             force_report_rendering=True)._render_qweb_pdf(
-            'plain_language_batch_traceability.bs_trace_export_report_document', [wizard.id])
+            'bs_lot_traceability_lookup.bs_trace_export_report_document', [wizard.id])
         self.assertEqual(report_type, 'pdf')
         self.assertTrue(pdf_content)
