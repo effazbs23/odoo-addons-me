@@ -27,8 +27,16 @@ class BsCalendarConflictConfig(models.Model):
 
     @api.model
     def _get_config(self):
-        """Return the singleton config record, creating it with defaults if missing."""
-        config = self.sudo().search([], limit=1, order='id asc')
+        """Return the singleton config record, creating it with defaults if missing.
+
+        active_test=False is required here: this model has a field literally named
+        'active' (the global on/off switch), and Odoo auto-injects an active=True
+        filter into every search() on any model with such a field. Without disabling
+        that, turning the switch off would make this method blind to its own record
+        and silently recreate a fresh (active=True) one on the very next read —
+        defeating the toggle entirely.
+        """
+        config = self.sudo().with_context(active_test=False).search([], limit=1, order='id asc')
         if not config:
             config = self.sudo().create({})
         return config

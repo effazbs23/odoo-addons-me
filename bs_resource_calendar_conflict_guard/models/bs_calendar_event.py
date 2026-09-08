@@ -1,6 +1,16 @@
+import json
 from datetime import datetime, time, timedelta
 
-from odoo import fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import RedirectWarning, UserError
+
+# Fields whose change can affect whether an event conflicts with another booking.
+# write() only re-runs the conflict guard when one of these actually changed, so a
+# renamed/re-described event doesn't get needlessly re-checked.
+_BS_CONFLICT_TRIGGER_FIELDS = {
+    'start', 'stop', 'allday', 'start_date', 'stop_date',
+    'partner_ids', 'bs_resource_ids', 'active', 'recurrence_id',
+}
 
 
 class CalendarEvent(models.Model):
@@ -173,3 +183,87 @@ class CalendarEvent(models.Model):
         if candidate <= horizon_end:
             return candidate
         return None
+
+    def _bs_build_conflict_message(self, conflict, next_slot):
+        other = conflict['conflicting_event']
+        message = _(
+            '%(resource)s is already booked for "%(event)s" from %(start)s to %(stop)s.',
+            resource=conflict['label'], event=other.name,
+            start=fields.Datetime.to_string(other.start), stop=fields.Datetime.to_string(other.stop),
+        )
+        if next_slot:
+            message += ' ' + _('Next available slot: %s.', fields.Datetime.to_string(next_slot))
+        return message
+
+    def _bs_log_conflict(self, conflict, action_taken):
+        self.ensure_one()
+        return self.env['bs.calendar.conflict.log'].sudo().create({
+            'event_id': self.id,
+            'conflicting_event_id': conflict['conflicting_event'].id,
+            'resource_type': conflict['resource_type'],
+            'resource_ref': '%s,%s' % (conflict['resource_ref']._name, conflict['resource_ref'].id),
+            'action_taken': action_taken,
+            'overridden_by': self.env.user.id if action_taken == 'overridden' else False,
+        })
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        events = super().create(vals_list)
+        if not self.env.context.get('bs_conflict_override'):
+            events._bs_check_conflicts_on_save(vals_list=vals_list, mode='create')
+        else:
+            # Confirmed via the override wizard: log, never block.
+            for event in events:
+                for conflict in event._bs_find_conflicts(self.env['bs.calendar.conflict.config']._get_config()):
+                    event._bs_log_conflict(conflict, 'overridden')
+        return events
+
+    def write(self, vals):
+        need_check = bool(_BS_CONFLICT_TRIGGER_FIELDS & set(vals))
+        res = super().write(vals)
+        if need_check:
+            if not self.env.context.get('bs_conflict_override'):
+                self._bs_check_conflicts_on_save(vals_list=[vals], mode='write')
+            else:
+                config = self.env['bs.calendar.conflict.config']._get_config()
+                for event in self:
+                    for conflict in event._bs_find_conflicts(config):
+                        event._bs_log_conflict(conflict, 'overridden')
+        return res
+
+    def _bs_check_conflicts_on_save(self, vals_list, mode):
+        """Block on the first conflict found among ``self``, unless the current user can
+        override — in which case redirect to the confirmation wizard instead of a hard
+        block. Never silently bypasses: every blocked attempt is logged immediately, and
+        an override is only ever logged once the wizard's explicit "Book Anyway" is
+        clicked (see the wizard's action_book_anyway).
+        """
+        config = self.env['bs.calendar.conflict.config']._get_config()
+        if not config.active:
+            return
+        can_override = self.env.user.has_group('bs_resource_calendar_conflict_guard.group_conflict_override')
+        for index, event in enumerate(self):
+            if not event.active:
+                continue
+            conflicts = event._bs_find_conflicts(config)
+            if not conflicts:
+                continue
+            conflict = conflicts[0]
+            next_slot = event._bs_suggest_next_slot(conflict['resource_type'], conflict['resource_ref'], config)
+            message = event._bs_build_conflict_message(conflict, next_slot)
+            if can_override:
+                if mode == 'create':
+                    payload = vals_list[index]
+                    event_ids = []
+                else:
+                    payload = vals_list[0]
+                    event_ids = self.ids
+                action = self.env.ref('bs_resource_calendar_conflict_guard.action_bs_conflict_override_wizard')
+                raise RedirectWarning(message, action.id, _('Review Conflict'), {
+                    'default_mode': mode,
+                    'default_event_ids': [(6, 0, event_ids)],
+                    'default_vals_json': json.dumps(payload, default=str),
+                    'default_conflict_summary': message,
+                })
+            event._bs_log_conflict(conflict, 'blocked')
+            raise UserError(message)

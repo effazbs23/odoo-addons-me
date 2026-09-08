@@ -11,7 +11,9 @@ class TestBsBuffer(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.config = cls.env['bs.calendar.conflict.config']._get_config()
-        cls.config.write({'check_employees': False, 'check_resources': True, 'buffer_minutes': 15})
+        # active=False so fixture creation isn't blocked by the create() hook — these
+        # tests call _bs_find_conflicts() directly (see test_bs_overlap.py for why).
+        cls.config.write({'check_employees': False, 'check_resources': True, 'buffer_minutes': 15, 'active': False})
         cls.room = cls.env['resource.resource'].create({'name': 'BS Buffer Room', 'resource_type': 'material'})
 
     def _make_event(self, name, start, stop):

@@ -12,7 +12,11 @@ class TestBsOverlap(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.config = cls.env['bs.calendar.conflict.config']._get_config()
-        cls.config.write({'check_employees': True, 'check_resources': True, 'buffer_minutes': 0})
+        # active=False: these tests call _bs_find_conflicts() directly to test the query
+        # itself, deliberately creating overlapping fixtures — active=False keeps the
+        # create()/write() hook from blocking that fixture setup. (_bs_find_conflicts()
+        # does not consult config.active, only check_employees/check_resources/buffer.)
+        cls.config.write({'check_employees': True, 'check_resources': True, 'buffer_minutes': 0, 'active': False})
 
         cls.internal_user = cls.env['res.users'].create({
             'name': 'BS Conflict Test User',
