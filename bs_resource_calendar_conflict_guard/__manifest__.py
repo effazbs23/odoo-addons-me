@@ -15,7 +15,7 @@
     'author': 'ERP23',
     'website': 'https://erp-23.com',
     'support': 'erp23@brainstation-23.com',
-    'price': 0.00,
+    'price': 5.99,
     'currency': 'USD',
     'depends': [
         'calendar',
