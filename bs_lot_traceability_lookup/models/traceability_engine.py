@@ -208,6 +208,13 @@ class TraceabilityEngine(models.AbstractModel):
                 if not boundary_lines:
                     container.append(self._no_history_node(lot))
                     continue
+                # Wide fan-out cap (spec 9): a lot consumed into 100+ MOs, or received
+                # across 100+ separate lines, must not dump an unbounded node list -
+                # this caps THIS lot's own boundary lines, distinct from the cap below
+                # on how many *further* lots get expanded from this level's children.
+                line_overflow = len(boundary_lines) - self.WIDE_RESULT_LIMIT
+                if line_overflow > 0:
+                    boundary_lines = boundary_lines[:self.WIDE_RESULT_LIMIT]
                 for line in boundary_lines:
                     if is_bridge(line):
                         node = self._base_node(lot, line, 'production')
@@ -218,6 +225,8 @@ class TraceabilityEngine(models.AbstractModel):
                             pending.append((node['children'], path_seen, bridge_lines(line)))
                     else:
                         container.append(self._base_node(lot, line, classify(line)))
+                if line_overflow > 0:
+                    container.append(self._more_node(line_overflow, more_label))
 
             next_frontier = []
             if pending:
@@ -270,8 +279,9 @@ class TraceabilityEngine(models.AbstractModel):
         return ' '.join(p for p in parts if p)
 
     def _backward_summary(self, lot, nodes):
-        if not nodes:
-            return "No upstream history found for lot %s." % lot.name
+        if not nodes or (len(nodes) == 1 and nodes[0]['boundary'] == 'no_history'):
+            return ("No upstream history found for lot %s (e.g. a manual adjustment "
+                    "with no receipt/production trail)." % lot.name)
         clauses = []
         for node in nodes:
             boundary = node['boundary']
@@ -283,8 +293,6 @@ class TraceabilityEngine(models.AbstractModel):
                 clauses.append('produced in %s from %d traceable component line(s)' % (node['reference'], comp_count))
             elif boundary == 'adjustment':
                 clauses.append('created via inventory adjustment (%s)' % node['reference'])
-            elif boundary == 'no_history':
-                clauses.append('has no recorded upstream history (e.g. a manual adjustment with no receipt/production trail)')
             else:
                 clauses.append('recorded via %s' % node['reference'])
         return 'Lot %s was %s.' % (lot.name, '; and '.join(clauses))
