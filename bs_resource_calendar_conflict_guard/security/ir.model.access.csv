@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_bs_calendar_conflict_config_system,bs.calendar.conflict.config.system,model_bs_calendar_conflict_config,base.group_system,1,1,1,0
 access_bs_calendar_conflict_log_system,bs.calendar.conflict.log.system,model_bs_calendar_conflict_log,base.group_system,1,0,0,0
+access_bs_conflict_override_wizard,bs.conflict.override.wizard,model_bs_conflict_override_wizard,bs_resource_calendar_conflict_guard.group_conflict_override,1,1,1,1
