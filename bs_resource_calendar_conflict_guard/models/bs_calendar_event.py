@@ -130,3 +130,46 @@ class CalendarEvent(models.Model):
                         break
 
         return conflicts
+
+    def _bs_suggest_next_slot(self, resource_type, resource_ref, config, search_days=14):
+        """Scan forward from this event's requested start, against ``resource_ref``'s
+        existing bookings, for the next open window of at least this event's duration.
+
+        Returns a start datetime, or None if nothing opens up within ``search_days``.
+        """
+        self.ensure_one()
+        self_start, self_stop = self._bs_get_check_window()
+        duration = self_stop - self_start
+        buf = timedelta(minutes=config.buffer_minutes or 0)
+        horizon_end = self_start + timedelta(days=search_days)
+
+        if resource_type == 'employee':
+            domain = [('partner_ids', 'in', resource_ref.id)]
+        else:
+            domain = [('bs_resource_ids', 'in', resource_ref.id)]
+        bookings = self.env['calendar.event'].search(
+            domain + [('id', '!=', self.id), ('start', '<', horizon_end)], order='start asc')
+
+        busy = []
+        for booking in bookings:
+            if resource_type == 'employee':
+                # EDGE CASE: a declined attendee is not an active booking for that person.
+                attendee = booking.attendee_ids.filtered(lambda a: a.partner_id == resource_ref)
+                if attendee and attendee[0].state == 'declined':
+                    continue
+            b_start, b_stop = booking._bs_get_check_window()
+            b_start, b_stop = b_start - buf, b_stop + buf
+            if b_stop <= self_start:
+                continue
+            busy.append((b_start, b_stop))
+        busy.sort()
+
+        candidate = self_start
+        for b_start, b_stop in busy:
+            if candidate + duration <= b_start:
+                return candidate
+            if b_stop > candidate:
+                candidate = b_stop
+        if candidate <= horizon_end:
+            return candidate
+        return None
