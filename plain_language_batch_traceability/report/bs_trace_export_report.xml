@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_bs_trace_export" model="ir.actions.report">
+        <field name="name">Traceability Trace Report</field>
+        <field name="model">bs.trace.lookup.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">plain_language_batch_traceability.bs_trace_export_report_document</field>
+        <field name="report_file">plain_language_batch_traceability.bs_trace_export_report_document</field>
+        <field name="print_report_name">'Traceability - %s' % (object.lot_id.name or 'trace')</field>
+    </record>
+
+    <template id="bs_trace_export_report_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>Batch Traceability Report</h2>
+                            <h4>
+                                Lot/Serial: <span t-esc="o.lot_id.display_name"/>
+                            </h4>
+                        </div>
+
+                        <h4 class="mt32">Summary</h4>
+                        <p t-esc="o.summary_text"/>
+
+                        <h4 class="mt32">Full Chain</h4>
+                        <div t-out="o.chain_html"/>
+
+                        <p class="text-muted mt32">
+                            Generated on <span t-esc="datetime.datetime.now()" t-options='{"widget": "datetime"}'/>
+                        </p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

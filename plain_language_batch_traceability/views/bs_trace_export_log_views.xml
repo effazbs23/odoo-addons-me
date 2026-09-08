@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bs_traceability_export_log_list" model="ir.ui.view">
+        <field name="name">bs.traceability.export.log.list</field>
+        <field name="model">bs.traceability.export.log</field>
+        <field name="arch" type="xml">
+            <list string="Traceability Export Log" create="false" edit="false" delete="false">
+                <field name="create_date" string="Exported On"/>
+                <field name="lot_id"/>
+                <field name="direction"/>
+                <field name="exported_by"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_bs_traceability_export_log" model="ir.actions.act_window">
+        <field name="name">Traceability Export Log</field>
+        <field name="res_model">bs.traceability.export.log</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

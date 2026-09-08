@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bs_trace_lookup_wizard,bs.trace.lookup.wizard,model_bs_trace_lookup_wizard,base.group_user,1,1,1,1
+access_bs_traceability_export_log_user,bs.traceability.export.log.user,model_bs_traceability_export_log,base.group_user,1,0,1,0
+access_bs_traceability_export_log_manager,bs.traceability.export.log.manager,model_bs_traceability_export_log,stock.group_stock_manager,1,0,1,1

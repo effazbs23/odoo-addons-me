@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bs_trace_lookup_wizard_form" model="ir.ui.view">
+        <field name="name">bs.trace.lookup.wizard.form</field>
+        <field name="model">bs.trace.lookup.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Trace Lookup">
+                <sheet>
+                    <field name="has_result" invisible="1"/>
+                    <group>
+                        <field name="lot_id" placeholder="Type or scan a lot/serial number..."/>
+                        <field name="direction"/>
+                        <field name="max_depth"/>
+                    </group>
+                    <group invisible="not has_result" string="Plain-Language Summary">
+                        <field name="summary_text" nolabel="1" readonly="1"/>
+                    </group>
+                    <notebook invisible="not has_result">
+                        <page string="Full Chain">
+                            <field name="chain_html" nolabel="1" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_search" type="object" string="Trace" class="btn-primary"/>
+                    <button name="action_export_pdf" type="object" string="Export Trace Report (PDF)"
+                            class="btn-secondary" invisible="not has_result"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bs_trace_lookup_wizard" model="ir.actions.act_window">
+        <field name="name">Trace Lookup</field>
+        <field name="res_model">bs.trace.lookup.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
