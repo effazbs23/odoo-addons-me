@@ -24,6 +24,7 @@
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
+        'views/bs_calendar_event_views.xml',
         'views/bs_calendar_conflict_log_views.xml',
         'views/res_config_settings_views.xml',
     ],
