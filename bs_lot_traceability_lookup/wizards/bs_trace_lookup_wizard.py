@@ -34,7 +34,14 @@ class BsTraceLookupWizard(models.TransientModel):
             'chain_html': engine.render_chain_html(nodes),
             'has_result': True,
         })
-        return True
+        return {
+            'type': 'ir.actions.act_window',
+            'name': self.env._('Trace Lookup'),
+            'res_model': self._name,
+            'res_id': self.id,
+            'view_mode': 'form',
+            'target': 'new',
+        }
 
     def action_export_pdf(self):
         self.ensure_one()
