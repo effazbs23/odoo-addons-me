@@ -8,8 +8,9 @@ class BsCalendarConflictLog(models.Model):
     _order = 'create_date desc'
 
     event_id = fields.Many2one(
-        'calendar.event', string='Event', required=True, ondelete='cascade',
-        help='The event that triggered the conflict check.')
+        'calendar.event', string='Event', ondelete='cascade',
+        help='The event that triggered the conflict check. Empty for a blocked create() attempt: '
+             'the event that would have been created never persists, so there is nothing to link to.')
     conflicting_event_id = fields.Many2one(
         'calendar.event', string='Conflicting Event', ondelete='set null',
         help='The existing event it conflicted with.')

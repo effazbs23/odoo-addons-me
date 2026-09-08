@@ -1,8 +1,11 @@
 import json
 from datetime import datetime, time, timedelta
 
+import psycopg2
+
 from odoo import _, api, fields, models
 from odoo.exceptions import RedirectWarning, UserError
+from odoo.sql_db import db_connect
 
 # Fields whose change can affect whether an event conflicts with another booking.
 # write() only re-runs the conflict guard when one of these actually changed, so a
@@ -195,16 +198,34 @@ class CalendarEvent(models.Model):
             message += ' ' + _('Next available slot: %s.', fields.Datetime.to_string(next_slot))
         return message
 
-    def _bs_log_conflict(self, conflict, action_taken):
+    def _bs_log_conflict(self, conflict, action_taken, event_id=None, durable=False):
         self.ensure_one()
-        return self.env['bs.calendar.conflict.log'].sudo().create({
-            'event_id': self.id,
+        vals = {
+            'event_id': self.id if event_id is None else event_id,
             'conflicting_event_id': conflict['conflicting_event'].id,
             'resource_type': conflict['resource_type'],
             'resource_ref': '%s,%s' % (conflict['resource_ref']._name, conflict['resource_ref'].id),
             'action_taken': action_taken,
             'overridden_by': self.env.user.id if action_taken == 'overridden' else False,
-        })
+        }
+        if not durable:
+            return self.env['bs.calendar.conflict.log'].sudo().create(vals)
+        # A 'blocked' log is written immediately before raising UserError/RedirectWarning,
+        # and that exception rolls back the whole request transaction on the way out —
+        # which would silently wipe this very audit entry along with it. Write it on a
+        # separate connection/commit so it survives regardless of how the request ends.
+        db_name = self.env.cr.dbname
+        try:
+            with db_connect(db_name).cursor() as new_cr:
+                api.Environment(new_cr, self.env.uid, self.env.context)['bs.calendar.conflict.log'].sudo().create(vals)
+        except psycopg2.Error:
+            # Both events referenced above were created earlier in THIS SAME still-open
+            # transaction (e.g. two conflicting events from one create_multi() call) and
+            # so aren't visible yet to the separate connection — the FK insert fails.
+            # Never let that sink the audit entry itself: retry unlinked from either event.
+            fallback_vals = dict(vals, event_id=False, conflicting_event_id=False)
+            with db_connect(db_name).cursor() as new_cr:
+                api.Environment(new_cr, self.env.uid, self.env.context)['bs.calendar.conflict.log'].sudo().create(fallback_vals)
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -265,5 +286,11 @@ class CalendarEvent(models.Model):
                     'default_vals_json': json.dumps(payload, default=str),
                     'default_conflict_summary': message,
                 })
-            event._bs_log_conflict(conflict, 'blocked')
+            # durable=True: this log must survive the UserError/RedirectWarning raised right
+            # after it, which rolls back this whole request including the log write itself
+            # unless it's committed on its own connection (see _bs_log_conflict).
+            # event_id=False for 'create': the about-to-be-rolled-back new record never
+            # persists, so there's nothing valid to link the log to.
+            event._bs_log_conflict(conflict, 'blocked',
+                                    event_id=False if mode == 'create' else event.id, durable=True)
             raise UserError(message)

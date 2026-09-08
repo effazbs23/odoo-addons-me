@@ -1,3 +1,4 @@
+from odoo import api
 from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase, tagged
 
@@ -30,6 +31,18 @@ class TestBsValidationHook(TransactionCase):
         self.assertIn('Client Demo', message)
         self.assertIn('Next available slot', message)
 
+    def _fresh_cursor_blocked_log_count(self):
+        """The 'blocked' log is written on its own connection/commit specifically so
+        it survives the UserError-triggered rollback of the main request transaction
+        (see _bs_log_conflict's durable=True path) — which means it is invisible to
+        self.env's own still-open transaction (REPEATABLE READ snapshot) no matter
+        what. A genuinely separate cursor/transaction is the only way to observe it,
+        exactly like a follow-up HTTP request would in production.
+        """
+        with self.registry.cursor() as cr2:
+            env2 = api.Environment(cr2, self.env.uid, self.env.context)
+            return env2['bs.calendar.conflict.log'].sudo().search_count([('action_taken', '=', 'blocked')])
+
     def test_blocked_attempt_is_logged(self):
         # NOTE: deliberately NOT using self.assertRaises() here. Odoo's BaseCase
         # overrides assertRaises to wrap the block in a savepoint that always rolls
@@ -38,17 +51,15 @@ class TestBsValidationHook(TransactionCase):
         # the very log entry we're trying to observe, since it's a side effect of
         # a raise) is intentional and audit history, not a leftover to discard.
         self._make_event('Existing', '2026-04-02 14:00:00', '2026-04-02 15:00:00')
-        log_count_before = self.env['bs.calendar.conflict.log'].sudo().search_count([])
+        log_count_before = self._fresh_cursor_blocked_log_count()
         raised = False
         try:
             self._make_event('New', '2026-04-02 14:30:00', '2026-04-02 15:30:00')
         except UserError:
             raised = True
         self.assertTrue(raised, "Expected a UserError to be raised")
-        log_count_after = self.env['bs.calendar.conflict.log'].sudo().search_count([])
+        log_count_after = self._fresh_cursor_blocked_log_count()
         self.assertEqual(log_count_after, log_count_before + 1)
-        last_log = self.env['bs.calendar.conflict.log'].sudo().search([], order='id desc', limit=1)
-        self.assertEqual(last_log.action_taken, 'blocked')
 
     def test_non_conflicting_create_behaves_like_native_odoo(self):
         """Regression: no error, no log entry, when there is no overlap."""
