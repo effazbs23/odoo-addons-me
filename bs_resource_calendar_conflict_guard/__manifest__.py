@@ -30,6 +30,8 @@
         'views/res_config_settings_views.xml',
     ],
     'demo': [],
+    'images': ['static/description/assets/main_screenshot.png'],
+    'icon': '/bs_resource_calendar_conflict_guard/static/description/icon.png',
     'installable': True,
     'application': False,
     'auto_install': False,
