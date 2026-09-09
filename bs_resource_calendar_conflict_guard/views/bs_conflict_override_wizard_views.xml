@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bs_conflict_override_wizard_form" model="ir.ui.view">
+        <field name="name">bs.conflict.override.wizard.form</field>
+        <field name="model">bs.conflict.override.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Booking Conflict">
+                <field name="mode" invisible="1"/>
+                <field name="event_ids" invisible="1"/>
+                <field name="vals_json" invisible="1"/>
+                <div class="alert alert-warning" role="alert">
+                    <field name="conflict_summary" readonly="1" nolabel="1"/>
+                </div>
+                <p>Proceeding will book this anyway and log the override under your name.</p>
+                <footer>
+                    <button name="action_book_anyway" type="object" string="Book Anyway"
+                            class="btn-primary" confirm="Are you sure you want to book this despite the conflict?"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bs_conflict_override_wizard" model="ir.actions.act_window">
+        <field name="name">Review Conflict</field>
+        <field name="res_model">bs.conflict.override.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
