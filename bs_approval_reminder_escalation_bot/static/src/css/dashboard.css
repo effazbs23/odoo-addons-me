@@ -135,6 +135,7 @@
 }
 
 .o_bs_ar_menu_open {
+    display: block;
     position: absolute;
     right: 0;
     top: 100%;
