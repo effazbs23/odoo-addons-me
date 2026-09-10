@@ -11,7 +11,7 @@ Covers Purchase Orders, Expenses, and Time Off requests.
     'author': 'ERP23',
     'website': 'https://erp23.com',
     'license': 'LGPL-3',
-    'depends': ['base', 'purchase', 'hr_expense', 'hr_holidays'],
+    'depends': ['base', 'mail', 'resource', 'purchase', 'hr_expense', 'hr_holidays'],
     'data': [
         'data/bs_approval_reminder_activity_type.xml',
         'data/ir_cron_approval_reminder.xml',

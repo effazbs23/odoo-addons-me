@@ -18,7 +18,10 @@ class PurchaseOrder(models.Model):
         if self.user_id:
             return self.user_id
         # No buyer set: fall back to an active purchase manager to own reminders.
-        return self.env.ref('purchase.group_purchase_manager').users.filtered('active')[:1]
+        group = self.env.ref('purchase.group_purchase_manager', raise_if_not_found=False)
+        if not group:
+            return self.env['res.users']
+        return group.sudo().all_user_ids.filtered('active')[:1]
 
     def _bs_pending_domain(self):
         return [('state', '=', 'to approve')]

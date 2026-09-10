@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from odoo import fields, models
 
 
@@ -39,11 +41,16 @@ class BsApprovalReminderLog(models.Model):
         })
 
     def _was_acted_today(self, record_ref, actions=('reminded', 'escalated'), ref_date=None):
+        ref_date = ref_date or fields.Date.context_today(self)
+        # Bound the scan to a +/- 1 day UTC window around the local reference
+        # date, so this stays cheap on records with a long reminder history
+        # while still covering every timezone offset.
         logs = self.sudo().search([
             ('record_ref', '=', record_ref),
             ('action_taken', 'in', list(actions)),
+            ('create_date', '>=', fields.Datetime.to_datetime(ref_date - timedelta(days=1))),
+            ('create_date', '<=', fields.Datetime.to_datetime(ref_date + timedelta(days=2))),
         ])
-        ref_date = ref_date or fields.Date.context_today(self)
         for log in logs:
             log_local_date = fields.Datetime.context_timestamp(self, log.create_date).date()
             if log_local_date == ref_date:

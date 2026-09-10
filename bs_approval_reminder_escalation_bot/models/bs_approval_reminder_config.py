@@ -39,10 +39,20 @@ class BsApprovalReminderConfig(models.Model):
     )
     active = fields.Boolean(string='Active', default=True)
 
-    _unique_type = models.Constraint(
-        'UNIQUE(approval_type)',
-        'A configuration already exists for this approval type.',
-    )
+    @api.constrains('approval_type', 'active')
+    def _check_unique_active_type(self):
+        for config in self:
+            if not config.active:
+                continue
+            duplicate = self.sudo().search_count([
+                ('approval_type', '=', config.approval_type),
+                ('active', '=', True),
+                ('id', '!=', config.id),
+            ])
+            if duplicate:
+                raise ValidationError(
+                    _('An active configuration already exists for this approval type.'),
+                )
 
     @api.constrains('reminder_threshold_days', 'escalation_threshold_days')
     def _check_thresholds(self):

@@ -89,7 +89,7 @@
                                                         t-on-click.stop="() => this.toggleMenu(row)">
                                                     <i class="fa fa-ellipsis-v"/>
                                                 </button>
-                                                <ul t-if="state.openMenu === row"
+                                                <ul t-if="state.openMenu === row.uid"
                                                     class="dropdown-menu dropdown-menu-end o_bs_ar_menu_open">
                                                     <li>
                                                         <a class="dropdown-item" href="#"

@@ -15,7 +15,7 @@
                        widget="many2one_avatar_user"/>
                 <field name="action_taken" string="Action" widget="badge"
                        decoration-danger="action_taken == 'escalated'"
-                       decoration-success="action_taken == 'sent'"
+                       decoration-success="action_taken == 'reminded'"
                        decoration-info="action_taken == 'snoozed'"/>
             </list>
         </field>
@@ -29,26 +29,30 @@
                 <field name="record_ref" string="Reference"/>
                 <field name="original_approver_id" string="Original Approver"/>
                 <field name="escalated_to_id" string="Escalated To"/>
-                <filter string="All Types" name="filter_all_types"
-                        domain="[]"/>
                 <filter string="Purchase Orders" name="filter_type_po"
-                        domain="[('approval_type', '=' , 'purchase_order')]"/>
+                        domain="[('approval_type', '=', 'purchase_order')]"/>
                 <filter string="Expenses" name="filter_type_expense"
-                        domain="[('approval_type', '=', 'expense')]"/>
+                        domain="[('approval_type', '=', 'expense_report')]"/>
                 <filter string="Time Off" name="filter_type_leave"
-                        domain="[('approval_type', '=', 'leave')]"/>
+                        domain="[('approval_type', '=', 'time_off')]"/>
                 <separator/>
                 <filter string="Last 7 Days" name="filter_date_last_7_days"
-                        domain="[('create_date', '&gt;=', (context_today() - 7))]"/>
+                        domain="[('create_date', '&gt;=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d 00:00:00'))]"/>
                 <filter string="Last 30 Days" name="filter_date_last_30_days"
-                        domain="[('create_date', '&gt;=', (context_today() - 30))]"/>
+                        domain="[('create_date', '&gt;=', (context_today() - relativedelta(days=30)).strftime('%Y-%m-%d 00:00:00'))]"/>
                 <filter string="This Month" name="filter_date_this_month"
-                        domain="[('create_date', '&gt;=', (context_today() - 30))]"/>
+                        domain="[('create_date', '&gt;=', context_today().strftime('%Y-%m-01 00:00:00'))]"/>
                 <separator/>
-                <filter string="None Escalated" name="filter_action_sent"
-                        domain="[('action_taken', 'in', ('sent', 'snoozed'))]"/>
+                <filter string="Not Escalated" name="filter_action_sent"
+                        domain="[('action_taken', 'in', ('reminded', 'snoozed'))]"/>
                 <filter string="Escalated Only" name="filter_action_escalated"
                         domain="[('action_taken', '=', 'escalated')]"/>
+                <group>
+                    <filter string="Approval Type" name="group_by_approval_type"
+                            context="{'group_by': 'approval_type'}"/>
+                    <filter string="Action" name="group_by_action"
+                            context="{'group_by': 'action_taken'}"/>
+                </group>
             </search>
         </field>
     </record>

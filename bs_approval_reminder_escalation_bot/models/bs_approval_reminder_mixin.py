@@ -70,9 +70,10 @@ class BsApprovalReminderMixin(models.AbstractModel):
         end_dt = ref_dt
         if start_dt > end_dt:
             return 0.0
-        calendar = self.company_id.resource_calendar_id
+        company = self.company_id if 'company_id' in self._fields else self.env.company
+        calendar = company.sudo().resource_calendar_id if company else False
         if not calendar:
-            calendar = self.env.company.resource_calendar_id
+            calendar = self.env.company.sudo().resource_calendar_id
         if not calendar:
             # No configured calendar anywhere: raw calendar-day fallback.
             start_local = fields.Datetime.context_timestamp(self, start_dt)
@@ -102,11 +103,13 @@ class BsApprovalReminderMixin(models.AbstractModel):
             recipient = config.fallback_admin_id
         if not recipient:
             # Last-resort safe defaults rather than a silent no-op.
-            recipient = self.env.ref(
+            group = self.env.ref(
                 'base.group_erp_manager', raise_if_not_found=False,
-            ).all_user_ids.filtered('active')[:1]
+            )
+            if group:
+                recipient = group.sudo().all_user_ids.filtered('active')[:1]
         if not recipient:
-            recipient = self.env['res.users'].search([
+            recipient = self.env['res.users'].sudo().search([
                 ('active', '=', True),
                 ('share', '=', False),
             ], limit=1)
@@ -185,28 +188,27 @@ class BsApprovalReminderMixin(models.AbstractModel):
             return 'none'
 
         approver = fresh._bs_get_primary_approver()
-
-        # Edge case: no assignable approver at all -> escalate to whatever
-        # recipient the chain resolves (config backup / fallback admin) rather
-        # than silently dropping the record.
-        if not approver:
-            fresh._bs_send_escalation(config, approver)
-            return 'escalated'
-
-        # Edge case: pending approver's account is inactive -> a reminder to
-        # them is pointless, escalate immediately instead of waiting for the
-        # normal threshold.
-        if not approver.active:
-            fresh._bs_send_escalation(config, approver)
-            return 'escalated'
+        record_ref = '%s,%s' % (fresh._name, fresh.id)
+        log_model = self.env['bs.approval.reminder.log']
 
         # Snooze check: while snoozed until (>=) today, no reminder/escalation.
+        # Checked before the immediate-escalation edge cases so an explicit
+        # snooze is never overridden by them.
         if fresh.bs_reminder_snoozed_until and fresh.bs_reminder_snoozed_until >= ref_date:
             return 'snoozed'
 
+        # Edge cases that escalate immediately rather than waiting for the
+        # threshold: no assignable approver at all, or an approver whose
+        # account is archived (a reminder to them would go nowhere). Both run
+        # through the same once-per-day guard as the threshold path, so a
+        # long-stale record is not escalated again on every cron run.
+        if not approver or not approver.active:
+            if log_model._was_acted_today(record_ref, ('escalated',), ref_date):
+                return 'none'
+            fresh._bs_send_escalation(config, approver)
+            return 'escalated'
+
         days = fresh._bs_business_days_pending(ref_dt)
-        record_ref = '%s,%s' % (fresh._name, fresh.id)
-        log_model = self.env['bs.approval.reminder.log']
 
         # Edge case: no duplicate reminder/escalation for the same record on
         # the same day (prevents daily spam on long-stale records).
@@ -282,6 +284,7 @@ class BsApprovalReminderMixin(models.AbstractModel):
             'subject': subject,
             'body_html': body,
             'email_to': recipient.email,
+            'auto_delete': True,
         })
         try:
             mail.send()

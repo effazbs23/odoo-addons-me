@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from odoo import _, api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 
 class BsApprovalReminderSnoozeWizard(models.TransientModel):
@@ -46,9 +46,21 @@ class BsApprovalReminderSnoozeWizard(models.TransientModel):
                 )
 
     def action_confirm(self):
+        self.ensure_one()
         active_model = self.env.context.get('active_model')
         active_id = self.env.context.get('active_id')
-        record = self.env[active_model].browse(active_id)
+        # The wizard is always opened from a record; without that context there
+        # is nothing to snooze, so fail loudly instead of raising a KeyError.
+        if not active_model or not active_id:
+            raise UserError(_('No record to snooze was provided.'))
+        if active_model not in self.env or \
+                'bs_reminder_snoozed_until' not in self.env[active_model]._fields:
+            raise UserError(
+                _('Approval reminders are not tracked on %s records.', active_model),
+            )
+        record = self.env[active_model].browse(active_id).exists()
+        if not record:
+            raise UserError(_('The record to snooze no longer exists.'))
         until = fields.Date.context_today(self) + timedelta(days=self.days)
         record.bs_reminder_snoozed_until = until
         if hasattr(record, '_bs_log'):

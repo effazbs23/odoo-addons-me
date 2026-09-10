@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from odoo import fields
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests import TransactionCase, new_test_user, tagged
 
 
@@ -387,3 +387,82 @@ class TestRaceAndInactiveApprover(CommonApprovalReminderCase):
         self.assertTrue(self._logs('purchase.order,%s' % po.id))
         self.assertTrue(self._logs('hr.expense,%s' % expense.id))
         self.assertTrue(self._logs('hr.leave,%s' % leave.id))
+
+
+@tagged('post_install', '-at_install')
+class TestRegressions(CommonApprovalReminderCase):
+    """Regressions for the defects found in the static review."""
+
+    def test_inactive_approver_not_escalated_twice_in_one_day(self):
+        config = self._make_config('purchase_order', 1, 5)
+        inactive_user = new_test_user(
+            self.env, login='bs_inactive2', groups='base.group_user',
+        )
+        inactive_user.active = False
+        po = self._create_po(user=inactive_user)
+        self._backdate(po, fields.Datetime.now() - timedelta(days=3))
+        self.assertEqual(po._bs_check_and_act(config), 'escalated')
+        # Previously this escalated again on every single cron run.
+        self.assertEqual(po._bs_check_and_act(config), 'none')
+        self.assertEqual(len(self._logs('purchase.order,%s' % po.id, 'escalated')), 1)
+
+    def test_snooze_wins_over_inactive_approver(self):
+        config = self._make_config('purchase_order', 1, 5)
+        inactive_user = new_test_user(
+            self.env, login='bs_inactive3', groups='base.group_user',
+        )
+        inactive_user.active = False
+        po = self._create_po(user=inactive_user)
+        self._backdate(po, self.FRI_9)
+        po.bs_reminder_snoozed_until = fields.Date.to_date('2026-01-12')
+        self.assertEqual(po._bs_check_and_act(config, self.MON_17), 'snoozed')
+        self.assertEqual(len(self._logs('purchase.order,%s' % po.id)), 0)
+
+    def test_no_approver_escalates_to_fallback_chain(self):
+        config = self._make_config(
+            'purchase_order', 1, 3, fallback=self.manager_user,
+        )
+        po = self._create_po(user=self.approver_user)
+        po.sudo().user_id = False
+        self._backdate(po, self.FRI_9)
+        self.assertEqual(po._bs_check_and_act(config, self.MON_17), 'escalated')
+        logs = self._logs('purchase.order,%s' % po.id, 'escalated')
+        self.assertEqual(len(logs), 1)
+        self.assertTrue(logs.escalated_to_id)
+
+    def test_archived_config_can_be_replaced(self):
+        first = self._make_config('purchase_order', 1, 3)
+        first.active = False
+        # UNIQUE(approval_type) used to block this outright.
+        second = self._make_config('purchase_order', 2, 4)
+        self.assertTrue(second.active)
+        with self.assertRaises(ValidationError):
+            self._make_config('purchase_order', 1, 5)
+
+    def test_snooze_wizard_requires_a_target_record(self):
+        wizard = self.env['bs.approval.reminder.snooze.wizard'].create({'days': 3})
+        with self.assertRaises(UserError):
+            wizard.action_confirm()
+        with self.assertRaises(UserError):
+            wizard.with_context(
+                active_model='res.partner', active_id=self.vendor.id,
+            ).action_confirm()
+
+    def test_snooze_wizard_sets_the_date_and_logs(self):
+        self._make_config('purchase_order', 1, 3)
+        po = self._create_po(user=self.approver_user)
+        wizard = self.env['bs.approval.reminder.snooze.wizard'].with_context(
+            active_model='purchase.order', active_id=po.id, active_ids=po.ids,
+        ).create({'days': 5})
+        wizard.action_confirm()
+        self.assertEqual(
+            po.bs_reminder_snoozed_until,
+            fields.Date.context_today(po) + timedelta(days=5),
+        )
+        self.assertEqual(len(self._logs('purchase.order,%s' % po.id, 'snoozed')), 1)
+
+    def test_snooze_wizard_preset_drives_days(self):
+        wizard = self.env['bs.approval.reminder.snooze.wizard'].create({'days': 3})
+        wizard.snooze_preset = '7'
+        wizard._onchange_snooze_preset()
+        self.assertEqual(wizard.days, 7)

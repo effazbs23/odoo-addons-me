@@ -3,6 +3,7 @@
 import { Component, useState, onWillStart } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { _t } from "@web/core/l10n/translation";
 
 // Mirror of the module's _bs_pending_domain() / _bs_get_primary_approver
 // display signals, per approval type. The authoritative business-day math
@@ -69,12 +70,18 @@ export class BsApprovalReminderDashboard extends Component {
             }
             const cards = [];
             const rows = [];
-            for (const [key, meta] of Object.entries(TYPE_META)) {
-                const records = await this.orm.call(meta.model, "search_read", [
-                    meta.domain,
-                    meta.fields,
-                    [["create_date", "desc"]],
-                ]);
+            const entries = Object.entries(TYPE_META);
+            // The third positional argument of search_read is `offset`, not the
+            // order: pass the order through searchRead's kwargs instead.
+            const results = await Promise.all(
+                entries.map(([, meta]) =>
+                    this.orm.searchRead(meta.model, meta.domain, meta.fields, {
+                        order: "create_date desc",
+                    })
+                )
+            );
+            for (const [index, [key, meta]] of entries.entries()) {
+                const records = results[index];
                 const card = {
                     key,
                     label: meta.label,
@@ -86,7 +93,7 @@ export class BsApprovalReminderDashboard extends Component {
                 };
                 const cfg = thresholdByType[key] || {
                     reminder_threshold_days: 3,
-                    escalation_threshold_days: 7,
+                    escalation_threshold_days: 5,
                 };
                 for (const rec of records) {
                     const status = this._status(rec, cfg);
@@ -106,8 +113,8 @@ export class BsApprovalReminderDashboard extends Component {
                         icon: meta.icon,
                         color: meta.color,
                         reference: rec.name,
-                        requestedBy: this._requestedBy(meta, rec),
-                        approver: this._approver(meta, rec),
+                        requestedBy: this._requestedBy(key, rec),
+                        approver: this._approver(key, rec),
                         pendingDays: this._daysPending(rec),
                         status,
                     });
@@ -118,7 +125,7 @@ export class BsApprovalReminderDashboard extends Component {
             this.state.rows = rows;
         } catch (error) {
             this.notification.add(
-                "Failed to load the approvals dashboard: " + error.message,
+                _t("Failed to load the approvals dashboard: %s", error.message || error.data?.message || error),
                 { type: "danger" }
             );
         } finally {
@@ -138,7 +145,7 @@ export class BsApprovalReminderDashboard extends Component {
 
     _status(rec, cfg) {
         const days = this._daysPending(rec);
-        if (days >= Number(cfg.escalation_threshold_days || 7)) {
+        if (days >= Number(cfg.escalation_threshold_days || 5)) {
             return "escalation_due";
         }
         if (days >= Number(cfg.reminder_threshold_days || 3)) {
@@ -151,8 +158,8 @@ export class BsApprovalReminderDashboard extends Component {
         return value && value[1] ? String(value[1]) : "—";
     }
 
-    _requestedBy(meta, rec) {
-        if (meta.key === "expense_report" || meta.key === "time_off") {
+    _requestedBy(typeKey, rec) {
+        if (typeKey === "expense_report" || typeKey === "time_off") {
             if (rec.employee_id) {
                 return this._displayName(rec.employee_id);
             }
@@ -160,11 +167,11 @@ export class BsApprovalReminderDashboard extends Component {
         return this._displayName(rec.create_uid);
     }
 
-    _approver(meta, rec) {
-        if (meta.key === "purchase_order") {
+    _approver(typeKey, rec) {
+        if (typeKey === "purchase_order") {
             return this._displayName(rec.user_id);
         }
-        if (meta.key === "expense_report") {
+        if (typeKey === "expense_report") {
             return this._displayName(rec.manager_id);
         }
         return "—";
@@ -175,7 +182,7 @@ export class BsApprovalReminderDashboard extends Component {
     }
 
     toggleMenu(row) {
-        this.state.openMenu = this.state.openMenu === row ? null : row;
+        this.state.openMenu = this.state.openMenu === row.uid ? null : row.uid;
     }
 
     get visibleRows() {
@@ -210,6 +217,8 @@ export class BsApprovalReminderDashboard extends Component {
                 active_ids: [row.id],
                 active_model: row.model,
             },
+        }, {
+            onClose: () => this._load(),
         });
     }
 }
