@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bs_approval_reminder_config_tree" model="ir.ui.view">
+        <field name="name">bs.approval.reminder.config.tree</field>
+        <field name="model">bs.approval.reminder.config</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" string="Reminder Configuration">
+                <field name="approval_type"/>
+                <field name="reminder_threshold_days"/>
+                <field name="escalation_threshold_days"/>
+                <field name="backup_approver_id"/>
+                <field name="fallback_admin_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="bs_approval_reminder_config_form" model="ir.ui.view">
+        <field name="name">bs.approval.reminder.config.form</field>
+        <field name="model">bs.approval.reminder.config</field>
+        <field name="arch" type="xml">
+            <form string="Approval Reminder Configuration">
+                <header/>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="approval_type"/>
+                            <field name="reminder_threshold_days"
+                                   help="Business days (per the company resource calendar) before the first reminder fires."/>
+                            <field name="escalation_threshold_days"
+                                   help="Business days before escalation to the backup approver. Must exceed the reminder threshold."/>
+                        </group>
+                        <group>
+                            <field name="backup_approver_id"
+                                   help="Who receives escalations. Falls back to the original approver's manager, then the final fallback recipient, when unset."/>
+                            <field name="fallback_admin_id"
+                                   help="Last-resort recipient when no backup approver exists and the original approver has no manager."/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_approval_reminder_config" model="ir.actions.act_window">
+        <field name="name">Approval Reminder Configuration</field>
+        <field name="res_model">bs.approval.reminder.config</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No approval reminder configurations yet.
+            </p>
+            <p>
+                Configure reminder and escalation thresholds for each approval type.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_approval_reminder_config_root"
+        name="Approvals"
+        parent="base.menu_administration"
+        sequence="40"
+    />
+
+    <menuitem
+        id="menu_approval_reminder_config"
+        name="Reminder Configuration"
+        parent="menu_approval_reminder_config_root"
+        action="action_approval_reminder_config"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_approval_reminder_log"
+        name="Escalation Log"
+        parent="menu_approval_reminder_config_root"
+        action="action_approval_reminder_log"
+        sequence="20"
+    />
+</odoo>

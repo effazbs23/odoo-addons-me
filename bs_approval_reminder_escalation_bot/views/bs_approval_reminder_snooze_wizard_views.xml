@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bs_approval_reminder_snooze_wizard_form" model="ir.ui.view">
+        <field name="name">bs.approval.reminder.snooze.wizard.form</field>
+        <field name="model">bs.approval.reminder.snooze.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Snooze Approval Reminder">
+                <p class="text-muted">
+                    Postpone the next reminder for this approval for the number of
+                    days below (1-14). It will remain snoozed even if the escalation
+                    threshold is crossed.
+                </p>
+                <group>
+                    <field name="days"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object"
+                            string="Confirm Snooze" class="btn-primary"/>
+                    <button string="Cancel" class="btn-link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

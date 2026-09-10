@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bs_approval_reminder_config_user,bs.approval.reminder.config.user,model_bs_approval_reminder_config,base.group_user,1,0,0,0
+access_bs_approval_reminder_config_manager,bs.approval.reminder.config.manager,model_bs_approval_reminder_config,base.group_erp_manager,1,1,1,1
+access_bs_approval_reminder_log_user,bs.approval.reminder.log.user,model_bs_approval_reminder_log,base.group_user,1,0,0,0
+access_bs_approval_reminder_log_manager,bs.approval.reminder.log.manager,model_bs_approval_reminder_log,base.group_erp_manager,1,1,1,1

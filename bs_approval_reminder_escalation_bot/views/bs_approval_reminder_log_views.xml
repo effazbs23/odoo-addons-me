@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bs_approval_reminder_log_tree" model="ir.ui.view">
+        <field name="name">bs.approval.reminder.log.tree</field>
+        <field name="model">bs.approval.reminder.log</field>
+        <field name="arch" type="xml">
+            <list string="Escalation Log">
+                <field name="create_date"/>
+                <field name="approval_type"/>
+                <field name="record_ref"/>
+                <field name="action_taken"/>
+                <field name="original_approver_id"/>
+                <field name="escalated_to_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="bs_approval_reminder_log_form" model="ir.ui.view">
+        <field name="name">bs.approval.reminder.log.form</field>
+        <field name="model">bs.approval.reminder.log</field>
+        <field name="arch" type="xml">
+            <form string="Escalation Log Entry">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="create_date"/>
+                            <field name="approval_type"/>
+                            <field name="record_ref"/>
+                        </group>
+                        <group>
+                            <field name="action_taken"/>
+                            <field name="original_approver_id"/>
+                            <field name="escalated_to_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_approval_reminder_log" model="ir.actions.act_window">
+        <field name="name">Escalation Log</field>
+        <field name="res_model">bs.approval.reminder.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p>
+                Every reminder, escalation and snooze event is recorded here so
+                admins can see how often approvals stall.
+            </p>
+        </field>
+    </record>
+</odoo>
