@@ -1,0 +1,162 @@
+/* ERP23 palette: primary #00A0DB, navy #001844, purple #8E59FD,
+   orange #FBAF33, green #2ECC71, neutral #797F8B / #BDC3C7.
+   Danger uses Odoo's own danger (#dc3545, primary_variables.scss $o-danger). */
+
+.o_bs_ar_dashboard {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.o_bs_ar_title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #001844;
+    margin: 0;
+}
+
+.o_bs_ar_subtitle {
+    font-size: 0.9rem;
+    margin: 0 0 0.25rem;
+}
+
+.o_bs_ar_cards .o_bs_ar_card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    text-align: left;
+    border: 1px solid #e4e8f0;
+    border-radius: 12px;
+    background: #ffffff;
+    padding: 1rem 1.25rem;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.o_bs_ar_cards .o_bs_ar_card:hover {
+    box-shadow: 0 6px 18px rgba(0, 24, 68, 0.08);
+    transform: translateY(-1px);
+}
+
+.o_bs_ar_cards .o_bs_ar_card_selected {
+    border-color: #00A0DB;
+    box-shadow: 0 0 0 2px rgba(0, 160, 219, 0.25);
+}
+
+.o_bs_ar_card_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 1.35rem;
+    flex: 0 0 auto;
+}
+
+.o_bs_ar_card_type {
+    font-size: 0.8rem;
+    color: #797F8B;
+}
+
+.o_bs_ar_card_count {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #001844;
+}
+
+.o_bs_ar_card_sub {
+    font-size: 0.78rem;
+    color: #FBAF33;
+    font-weight: 600;
+}
+
+.o_bs_ar_card_sub_esc {
+    color: #dc3545;
+}
+
+.o_bs_ar_list td,
+.o_bs_ar_list th {
+    vertical-align: middle;
+    padding: 0.6rem 0.75rem;
+}
+
+.o_bs_ar_type {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+}
+
+.o_bs_ar_type_icon {
+    font-size: 1.05rem;
+}
+
+.o_bs_ar_reference {
+    color: #00A0DB;
+    font-weight: 500;
+}
+
+.o_bs_ar_badge {
+    display: inline-block;
+    padding: 0.22rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.25;
+    white-space: nowrap;
+    color: #ffffff;
+}
+
+.o_bs_ar_badge_pending {
+    background: #797F8B;
+}
+
+.o_bs_ar_badge_reminder {
+    background: #FBAF33;
+}
+
+.o_bs_ar_badge_escalation {
+    background: #dc3545;
+}
+
+.o_bs_ar_menu {
+    position: relative;
+}
+
+.o_bs_ar_kebab {
+    padding: 0.15rem 0.4rem;
+    color: #797F8B;
+}
+
+.o_bs_ar_kebab:hover {
+    color: #001844;
+}
+
+.o_bs_ar_menu_open {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 5;
+    min-width: 150px;
+    box-shadow: 0 6px 18px rgba(0, 24, 68, 0.12);
+    border: 1px solid #e4e8f0;
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 0.25rem 0;
+}
+
+.o_bs_ar_menu_open .dropdown-item {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.9rem;
+    color: #001844;
+}
+
+.o_bs_ar_menu_open .dropdown-item:hover {
+    background: #eef6fb;
+}
+
+.o_bs_ar_menu_open .dropdown-item i {
+    color: #00A0DB;
+}

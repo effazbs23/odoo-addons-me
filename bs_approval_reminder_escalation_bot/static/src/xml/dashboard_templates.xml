@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="bs_approval_reminder_escalation_bot.Dashboard">
+        <div class="o_bs_ar_dashboard p-3">
+            <div class="o_bs_ar_intro">
+                <h1 class="o_bs_ar_title">Pending Approvals</h1>
+                <p class="o_bs_ar_subtitle text-muted">
+                    Everything waiting on an approval decision. Pick a card to filter the list.
+                </p>
+            </div>
+
+            <div t-if="state.loading" class="text-center py-5">
+                <i class="fa fa-circle-o-notch fa-spin fa-2x text-muted"/>
+            </div>
+
+            <t t-else="">
+                <div class="row g-3 o_bs_ar_cards">
+                    <t t-foreach="state.cards" t-as="card" t-key="card.key">
+                        <div class="col-lg-4 col-md-6">
+                            <button type="button" class="o_bs_ar_card"
+                                    t-att-class="{ 'o_bs_ar_card_selected': state.selected === card.key }"
+                                    t-on-click="() => this.selectCard(card.key)">
+                                <div class="o_bs_ar_card_icon" t-attf-style="background-color: {{card.color}};">
+                                    <i class="fa fa-fw" t-attf-class="{{card.icon}}"/>
+                                </div>
+                                <div class="o_bs_ar_card_body">
+                                    <div class="o_bs_ar_card_type" t-esc="card.label"/>
+                                    <div class="o_bs_ar_card_count" t-esc="card.count"/>
+                                    <div class="o_bs_ar_card_sub">
+                                        <span t-if="card.reminderOverdue > 0">
+                                            <span t-esc="card.reminderOverdue"/> overdue for reminder
+                                        </span>
+                                        <span t-else="">All within threshold</span>
+                                        <span t-if="card.escalationDue > 0" class="o_bs_ar_card_sub_esc">
+                                            · <span t-esc="card.escalationDue"/> escalated
+                                        </span>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </t>
+                </div>
+
+                <div class="o_bs_ar_table card mt-4">
+                    <div class="card-body p-0">
+                        <table class="table table-hover mb-0 o_bs_ar_list">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Reference</th>
+                                    <th>Requested By</th>
+                                    <th>Approver</th>
+                                    <th class="text-end">Days Pending</th>
+                                    <th>Status</th>
+                                    <th class="o_bs_ar_menu_col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="visibleRows" t-as="row" t-key="row.uid">
+                                    <tr>
+                                        <td>
+                                            <span class="o_bs_ar_type">
+                                                <i class="fa fa-fw o_bs_ar_type_icon" t-attf-class="{{row.icon}}"
+                                                   t-attf-style="color: {{row.color}};"/>
+                                                <span t-esc="row.typeLabel"/>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="#" class="o_bs_ar_reference"
+                                               t-on-click.prevent="() => this.viewRecord(row)"
+                                               t-esc="row.reference"/>
+                                        </td>
+                                        <td t-esc="row.requestedBy"/>
+                                        <td t-esc="row.approver"/>
+                                        <td class="text-end fw-semibold" t-esc="row.pendingDays"/>
+                                        <td>
+                                            <span class="o_bs_ar_badge o_bs_ar_badge_pending"
+                                                  t-if="row.status === 'pending'">Pending</span>
+                                            <span class="o_bs_ar_badge o_bs_ar_badge_reminder"
+                                                  t-elif="row.status === 'reminder_due'">Reminder Due</span>
+                                            <span class="o_bs_ar_badge o_bs_ar_badge_escalation"
+                                                  t-else="">Escalation Due</span>
+                                        </td>
+                                        <td class="o_bs_ar_menu_col">
+                                            <div class="o_bs_ar_menu">
+                                                <button type="button" class="btn btn-sm btn-link o_bs_ar_kebab"
+                                                        title="Actions"
+                                                        t-on-click.stop="() => this.toggleMenu(row)">
+                                                    <i class="fa fa-ellipsis-v"/>
+                                                </button>
+                                                <ul t-if="state.openMenu === row"
+                                                    class="dropdown-menu dropdown-menu-end o_bs_ar_menu_open">
+                                                    <li>
+                                                        <a class="dropdown-item" href="#"
+                                                           t-on-click.prevent="() => this.viewRecord(row)">
+                                                            <i class="fa fa-eye fa-fw"/> View record
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="#"
+                                                           t-on-click.prevent="() => this.snoozeRecord(row)">
+                                                            <i class="fa fa-clock-o fa-fw"/> Snooze…
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr t-if="!visibleRows.length">
+                                    <td colspan="7" class="text-center text-muted py-4">
+                                        No pending approvals.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

@@ -4,13 +4,17 @@
         <field name="name">bs.approval.reminder.config.tree</field>
         <field name="model">bs.approval.reminder.config</field>
         <field name="arch" type="xml">
-            <list editable="bottom" string="Reminder Configuration">
+            <list string="Approval Reminder &amp; Escalation" editable="bottom">
                 <field name="approval_type"/>
-                <field name="reminder_threshold_days"/>
-                <field name="escalation_threshold_days"/>
-                <field name="backup_approver_id"/>
-                <field name="fallback_admin_id"/>
-                <field name="active"/>
+                <field name="reminder_threshold_days" string="Reminder After (Business Days)"
+                       help="Business days (per the company resource calendar) before the first reminder fires."/>
+                <field name="escalation_threshold_days" string="Escalation After (Business Days)"
+                       help="Business days before the approval is escalated to the backup approver. Must exceed the reminder threshold."/>
+                <field name="backup_approver_id" string="Backup Approver"
+                       help="Who receives the escalation. Falls back to the original approver's manager, then the final fallback recipient, when unset."/>
+                <field name="fallback_admin_id" string="Fallback Approver"
+                       help="Last-resort recipient when no backup approver exists and the original approver has no manager."/>
+                <field name="active" string="Enabled"/>
             </list>
         </field>
     </record>
@@ -19,21 +23,25 @@
         <field name="name">bs.approval.reminder.config.form</field>
         <field name="model">bs.approval.reminder.config</field>
         <field name="arch" type="xml">
-            <form string="Approval Reminder Configuration">
+            <form string="Approval Reminder &amp; Escalation">
                 <header/>
                 <sheet>
                     <group>
-                        <group>
+                        <group string="Thresholds &amp; Reminders">
                             <field name="approval_type"/>
                             <field name="reminder_threshold_days"
+                                   string="Reminder After (Business Days)"
                                    help="Business days (per the company resource calendar) before the first reminder fires."/>
                             <field name="escalation_threshold_days"
+                                   string="Escalation After (Business Days)"
                                    help="Business days before escalation to the backup approver. Must exceed the reminder threshold."/>
                         </group>
-                        <group>
+                        <group string="Backup Approvers">
                             <field name="backup_approver_id"
+                                   string="Backup Approver"
                                    help="Who receives escalations. Falls back to the original approver's manager, then the final fallback recipient, when unset."/>
                             <field name="fallback_admin_id"
+                                   string="Fallback Approver"
                                    help="Last-resort recipient when no backup approver exists and the original approver has no manager."/>
                             <field name="active"/>
                         </group>
@@ -44,7 +52,7 @@
     </record>
 
     <record id="action_approval_reminder_config" model="ir.actions.act_window">
-        <field name="name">Approval Reminder Configuration</field>
+        <field name="name">Approval Reminder &amp; Escalation</field>
         <field name="res_model">bs.approval.reminder.config</field>
         <field name="view_mode">list,form</field>
         <field name="help" type="html">
@@ -52,7 +60,8 @@
                 No approval reminder configurations yet.
             </p>
             <p>
-                Configure reminder and escalation thresholds for each approval type.
+                Set how long (in business days) each approval type waits before
+                a reminder is sent, and when it escalates to a backup approver.
             </p>
         </field>
     </record>
@@ -66,17 +75,9 @@
 
     <menuitem
         id="menu_approval_reminder_config"
-        name="Reminder Configuration"
+        name="Approval Reminder &amp; Escalation"
         parent="menu_approval_reminder_config_root"
         action="action_approval_reminder_config"
         sequence="10"
-    />
-
-    <menuitem
-        id="menu_approval_reminder_log"
-        name="Escalation Log"
-        parent="menu_approval_reminder_config_root"
-        action="action_approval_reminder_log"
-        sequence="20"
     />
 </odoo>

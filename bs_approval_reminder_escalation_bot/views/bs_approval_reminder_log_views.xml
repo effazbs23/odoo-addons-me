@@ -4,14 +4,52 @@
         <field name="name">bs.approval.reminder.log.tree</field>
         <field name="model">bs.approval.reminder.log</field>
         <field name="arch" type="xml">
-            <list string="Escalation Log">
-                <field name="create_date"/>
+            <list string="Escalation Log"
+                  default_order="create_date desc">
+                <field name="create_date" string="Date &amp; Time"/>
                 <field name="approval_type"/>
-                <field name="record_ref"/>
-                <field name="action_taken"/>
-                <field name="original_approver_id"/>
-                <field name="escalated_to_id"/>
+                <field name="record_ref" string="Reference"/>
+                <field name="original_approver_id" string="Original Approver"
+                       widget="many2one_avatar_user"/>
+                <field name="escalated_to_id" string="Escalated To"
+                       widget="many2one_avatar_user"/>
+                <field name="action_taken" string="Action" widget="badge"
+                       decoration-danger="action_taken == 'escalated'"
+                       decoration-success="action_taken == 'sent'"
+                       decoration-info="action_taken == 'snoozed'"/>
             </list>
+        </field>
+    </record>
+
+    <record id="bs_approval_reminder_log_search" model="ir.ui.view">
+        <field name="name">bs.approval.reminder.log.search</field>
+        <field name="model">bs.approval.reminder.log</field>
+        <field name="arch" type="xml">
+            <search string="Escalation Log">
+                <field name="record_ref" string="Reference"/>
+                <field name="original_approver_id" string="Original Approver"/>
+                <field name="escalated_to_id" string="Escalated To"/>
+                <filter string="All Types" name="filter_all_types"
+                        domain="[]"/>
+                <filter string="Purchase Orders" name="filter_type_po"
+                        domain="[('approval_type', '=' , 'purchase_order')]"/>
+                <filter string="Expenses" name="filter_type_expense"
+                        domain="[('approval_type', '=', 'expense')]"/>
+                <filter string="Time Off" name="filter_type_leave"
+                        domain="[('approval_type', '=', 'leave')]"/>
+                <separator/>
+                <filter string="Last 7 Days" name="filter_date_last_7_days"
+                        domain="[('create_date', '&gt;=', (context_today() - 7))]"/>
+                <filter string="Last 30 Days" name="filter_date_last_30_days"
+                        domain="[('create_date', '&gt;=', (context_today() - 30))]"/>
+                <filter string="This Month" name="filter_date_this_month"
+                        domain="[('create_date', '&gt;=', (context_today() - 30))]"/>
+                <separator/>
+                <filter string="None Escalated" name="filter_action_sent"
+                        domain="[('action_taken', 'in', ('sent', 'snoozed'))]"/>
+                <filter string="Escalated Only" name="filter_action_escalated"
+                        domain="[('action_taken', '=', 'escalated')]"/>
+            </search>
         </field>
     </record>
 
@@ -20,20 +58,18 @@
         <field name="model">bs.approval.reminder.log</field>
         <field name="arch" type="xml">
             <form string="Escalation Log Entry">
-                <sheet>
+                <group>
                     <group>
-                        <group>
-                            <field name="create_date"/>
-                            <field name="approval_type"/>
-                            <field name="record_ref"/>
-                        </group>
-                        <group>
-                            <field name="action_taken"/>
-                            <field name="original_approver_id"/>
-                            <field name="escalated_to_id"/>
-                        </group>
+                        <field name="create_date" string="Date &amp; Time"/>
+                        <field name="approval_type"/>
+                        <field name="record_ref" string="Reference"/>
                     </group>
-                </sheet>
+                    <group>
+                        <field name="action_taken" string="Action"/>
+                        <field name="original_approver_id" string="Original Approver"/>
+                        <field name="escalated_to_id" string="Escalated To"/>
+                    </group>
+                </group>
             </form>
         </field>
     </record>
@@ -49,4 +85,12 @@
             </p>
         </field>
     </record>
+
+    <menuitem
+        id="menu_approval_reminder_log"
+        name="Escalation Log"
+        parent="menu_approval_reminder_config_root"
+        action="action_approval_reminder_log"
+        sequence="20"
+    />
 </odoo>
