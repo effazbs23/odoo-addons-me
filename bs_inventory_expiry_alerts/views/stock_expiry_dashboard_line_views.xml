@@ -18,7 +18,7 @@
                 <field name="suggested_action"/>
                 <button name="%(bs_inventory_expiry_alerts.action_stock_expiry_writeoff_wizard)d"
                         type="action" string="Write Off" icon="fa-trash"
-                        context="{'active_model': 'stock.quant'}"
+                        context="{'default_quant_id': id}"
                         invisible="expiry_bucket != 'expired'"/>
             </list>
         </field>

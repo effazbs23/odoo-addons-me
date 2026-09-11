@@ -78,7 +78,7 @@ class TestExpiryAlerts(TransactionCase):
     def test_writeoff_wizard_creates_flagged_scrap(self):
         near_quant = self._quant_for_lot(self.lot_near)
         wizard = self.env['stock.expiry.writeoff.wizard'].with_context(
-            active_model='stock.quant', active_id=near_quant.id).create({})
+            default_quant_id=near_quant.id).create({})
         self.assertEqual(wizard.product_id, self.product)
         self.assertEqual(wizard.scrap_qty, 10)
         wizard.action_create_writeoff()

@@ -15,15 +15,31 @@ class StockExpiryWriteoffWizard(models.TransientModel):
     product_uom_id = fields.Many2one('uom.uom', string='Unit of Measure', required=True)
     scrap_qty = fields.Float(string='Quantity', required=True, default=1.0)
 
+    @api.onchange('quant_id')
+    def _onchange_quant_id(self):
+        for wizard in self:
+            quant = wizard.quant_id
+            if not quant:
+                continue
+            default_scrap_location = self.env['stock.location'].search(
+                [('usage', '=', 'inventory'), ('company_id', 'in', [quant.company_id.id, False])], limit=1)
+            wizard.update({
+                'product_id': quant.product_id.id,
+                'lot_id': quant.lot_id.id,
+                'location_id': quant.location_id.id,
+                'product_uom_id': quant.product_uom_id.id,
+                'scrap_qty': quant.quantity,
+                'scrap_location_id': default_scrap_location.id,
+            })
+
     @api.model
     def default_get(self, fields_list):
         res = super().default_get(fields_list)
-        quant = self.env['stock.quant'].browse(self.env.context.get('active_id'))
-        if self.env.context.get('active_model') == 'stock.quant' and quant.exists():
+        quant = self.env['stock.quant'].browse(res.get('quant_id'))
+        if quant.exists():
             default_scrap_location = self.env['stock.location'].search(
                 [('usage', '=', 'inventory'), ('company_id', 'in', [quant.company_id.id, False])], limit=1)
             res.update({
-                'quant_id': quant.id,
                 'product_id': quant.product_id.id,
                 'lot_id': quant.lot_id.id,
                 'location_id': quant.location_id.id,
