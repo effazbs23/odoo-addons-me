@@ -58,6 +58,12 @@ class TypoTolerantWebsiteSale(WebsiteSale):
     FUZZY_MAX_DIGIT_RATIO = 0.8
 
     def _shop_lookup_products(self, options, post, search, website):
+        # Template default (products_fuzzy_log_id): the alert banner reads
+        # request.fuzzy_search_log_id whenever core's own single-word fuzzy
+        # fallback fires results, not just this module's multi-word one, so
+        # it must exist even when _log_fuzzy_search_miss never runs below.
+        request.fuzzy_search_log_id = False
+
         # Fallback Only, Never a Replacement (spec 4.4): the exact/substring
         # search (including core's own single-word fuzzy attempt) always
         # runs first, completely unmodified.
