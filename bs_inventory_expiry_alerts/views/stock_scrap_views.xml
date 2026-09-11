@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock_scrap_search_view_expiry_alert" model="ir.ui.view">
+        <field name="name">stock.scrap.search.expiry.alert</field>
+        <field name="model">stock.scrap</field>
+        <field name="inherit_id" ref="stock.stock_scrap_search_view"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field name="is_expiry_writeoff"/>
+            </field>
+            <filter name="product" position="before">
+                <filter name="expiry_writeoff" string="Expiry Write-offs" domain="[('is_expiry_writeoff', '=', True)]"/>
+            </filter>
+        </field>
+    </record>
+
+    <record id="view_stock_scrap_expiry_writeoff_pivot" model="ir.ui.view">
+        <field name="name">stock.scrap.expiry.writeoff.pivot</field>
+        <field name="model">stock.scrap</field>
+        <field name="arch" type="xml">
+            <pivot string="Expired Stock Write-off Value">
+                <field name="date_done" type="row" interval="month"/>
+                <field name="product_id" type="row"/>
+                <field name="expiry_writeoff_value" type="measure"/>
+                <field name="scrap_qty" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_stock_scrap_expiry_writeoff_report" model="ir.actions.act_window">
+        <field name="name">Expired Stock Write-off Value</field>
+        <field name="res_model">stock.scrap</field>
+        <field name="view_mode">pivot,list</field>
+        <field name="domain">[('is_expiry_writeoff', '=', True)]</field>
+        <field name="search_view_id" ref="stock.stock_scrap_search_view"/>
+    </record>
+
+    <menuitem id="menu_stock_scrap_expiry_writeoff_report"
+              parent="stock.menu_stock_warehouse_mgmt"
+              name="Expired Stock Write-off Value"
+              action="action_stock_scrap_expiry_writeoff_report"
+              sequence="21"/>
+</odoo>

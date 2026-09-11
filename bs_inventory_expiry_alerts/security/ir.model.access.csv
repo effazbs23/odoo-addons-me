@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_expiry_dashboard_line_user,stock.expiry.dashboard.line.user,model_stock_expiry_dashboard_line,stock.group_stock_user,1,0,0,0
+access_stock_expiry_writeoff_wizard_user,stock.expiry.writeoff.wizard.user,model_stock_expiry_writeoff_wizard,stock.group_stock_user,1,1,1,1
