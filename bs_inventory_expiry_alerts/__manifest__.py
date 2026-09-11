@@ -24,13 +24,21 @@
     'data': [
         'security/ir.model.access.csv',
         'data/ir_cron.xml',
-        'views/product_category_views.xml',
         'views/res_config_settings_views.xml',
         'wizards/stock_expiry_writeoff_wizard_views.xml',
         'views/stock_expiry_dashboard_line_views.xml',
+        'views/product_category_views.xml',
         'views/stock_scrap_views.xml',
     ],
     'demo': [],
+    'assets': {
+        'web.assets_backend': [
+            ('include', 'web.chartjs_lib'),
+            'bs_inventory_expiry_alerts/static/src/js/expiry_dashboard.js',
+            'bs_inventory_expiry_alerts/static/src/xml/expiry_dashboard.xml',
+            'bs_inventory_expiry_alerts/static/src/scss/expiry_dashboard.scss',
+        ],
+    },
     'images': ['static/description/banner.gif'],
     'icon': '/bs_inventory_expiry_alerts/static/description/icon.png',
     'installable': True,

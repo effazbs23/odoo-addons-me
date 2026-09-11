@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="bs_inventory_expiry_alerts.ExpiryDashboard">
+        <div class="bs-eda-dashboard p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="mb-0">Expiry Dashboard</h2>
+                <button class="btn btn-primary" t-on-click="_onRefresh">
+                    <i class="fa fa-refresh me-1"/>Refresh
+                </button>
+            </div>
+
+            <div t-if="state.loading" class="text-center p-5">
+                <i class="fa fa-spinner fa-spin fa-2x"/>
+            </div>
+
+            <div t-else="">
+                <!-- KPI Row -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <div class="bs-eda-kpi-card border-start border-4 border-danger">
+                            <div class="bs-eda-kpi-icon bg-danger-subtle text-danger"><i class="fa fa-exclamation-circle"/></div>
+                            <div>
+                                <div class="bs-eda-kpi-value" t-esc="state.kpis.expiring_soon"/>
+                                <div class="bs-eda-kpi-label">Expiring Soon<br/><small>(&lt;= 7 days)</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="bs-eda-kpi-card border-start border-4 border-warning">
+                            <div class="bs-eda-kpi-icon bg-warning-subtle text-warning"><i class="fa fa-clock-o"/></div>
+                            <div>
+                                <div class="bs-eda-kpi-value" t-esc="state.kpis.at_risk"/>
+                                <div class="bs-eda-kpi-label">At Risk<br/><small>(8-30 days)</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="bs-eda-kpi-card border-start border-4 border-success">
+                            <div class="bs-eda-kpi-icon bg-success-subtle text-success"><i class="fa fa-check-circle"/></div>
+                            <div>
+                                <div class="bs-eda-kpi-value" t-esc="state.kpis.safe"/>
+                                <div class="bs-eda-kpi-label">Safe<br/><small>(&gt; 30 days)</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="bs-eda-kpi-card border-start border-4 border-primary">
+                            <div class="bs-eda-kpi-icon bg-primary-subtle text-primary"><i class="fa fa-usd"/></div>
+                            <div>
+                                <div class="bs-eda-kpi-value"><t t-esc="state.currencySymbol"/><t t-esc="Math.round(state.kpis.value_at_risk).toLocaleString()"/></div>
+                                <div class="bs-eda-kpi-label">Total Value at Risk<br/><small>Estimated</small></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-8">
+                        <div class="bs-eda-panel">
+                            <h5>Lots by Days to Expiry</h5>
+                            <div class="bs-eda-chart-wrap">
+                                <canvas id="bsExpiryBucketChart"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="bs-eda-panel">
+                            <h5>By Warehouse</h5>
+                            <div class="bs-eda-donut-wrap">
+                                <div class="bs-eda-chart-wrap bs-eda-donut">
+                                    <canvas id="bsExpiryWarehouseChart"/>
+                                    <div class="bs-eda-donut-center">
+                                        <div class="bs-eda-donut-total" t-esc="state.totalLots"/>
+                                        <div class="bs-eda-donut-label">Total Lots</div>
+                                    </div>
+                                </div>
+                                <ul class="bs-eda-legend">
+                                    <li t-foreach="state.byWarehouse" t-as="wh" t-key="wh.name">
+                                        <span class="bs-eda-legend-dot" t-attf-style="background-color:{{wh.color}}"/>
+                                        <t t-esc="wh.name"/> <span class="text-muted"><t t-esc="wh.percentage"/>%</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lots Nearing Expiry Table -->
+                <div class="bs-eda-panel mb-3">
+                    <h5>Lots Nearing Expiry</h5>
+                    <table class="table table-sm bs-eda-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Lot/Serial</th>
+                                <th>Warehouse</th>
+                                <th>Expiration Date</th>
+                                <th>Days Left</th>
+                                <th>Status</th>
+                                <th/>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="state.tableRows" t-as="row" t-key="row.quant_id">
+                                <td><t t-esc="row.product_name"/></td>
+                                <td><t t-esc="row.lot_name"/></td>
+                                <td><t t-esc="row.warehouse_name"/></td>
+                                <td><t t-esc="row.expiration_date"/></td>
+                                <td><t t-esc="row.days_to_expiry"/> days</td>
+                                <td>
+                                    <span t-attf-class="badge bs-eda-badge-{{row.status}}">
+                                        <t t-if="row.status === 'critical'">Critical</t>
+                                        <t t-elif="row.status === 'warning'">Warning</t>
+                                        <t t-else="">Watch</t>
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" t-on-click="() => this.onViewRow(row.quant_id)">View</button>
+                                </td>
+                            </tr>
+                            <tr t-if="!state.tableRows.length">
+                                <td colspan="7" class="text-center text-muted">No lots nearing expiry</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Expiry Assistant -->
+                <div class="bs-eda-panel">
+                    <h5><i class="fa fa-magic me-1"/>Expiry Assistant</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="bs-eda-assist-card">
+                                <div class="bs-eda-assist-icon bg-warning-subtle text-warning"><i class="fa fa-tags"/></div>
+                                <div class="flex-grow-1">
+                                    <strong>Markdown / Promotion Candidates</strong>
+                                    <div class="text-muted small"><t t-esc="state.markdownCount"/> products suggested for discount or promotion</div>
+                                </div>
+                                <button class="btn btn-sm btn-link" t-on-click="onViewSuggestions">View Suggestions &#8594;</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="bs-eda-assist-card">
+                                <div class="bs-eda-assist-icon bg-info-subtle text-info"><i class="fa fa-exchange"/></div>
+                                <div class="flex-grow-1">
+                                    <strong>Internal Transfer Candidates</strong>
+                                    <div class="text-muted small"><t t-esc="state.transferCount"/> products can be moved to faster-moving locations</div>
+                                </div>
+                                <button class="btn btn-sm btn-link" t-on-click="onViewTransfers">View Transfers &#8594;</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>
