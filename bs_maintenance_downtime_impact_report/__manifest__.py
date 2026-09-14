@@ -39,7 +39,7 @@
     'auto_install': False,
     'license': 'OPL-1',
     'currency': 'USD',
-    'price': 0.00,
+    'price': 9.99,
     'images': ['static/description/banner.gif'],
     'icon': '/bs_maintenance_downtime_impact_report/static/description/icon.png',
 }
