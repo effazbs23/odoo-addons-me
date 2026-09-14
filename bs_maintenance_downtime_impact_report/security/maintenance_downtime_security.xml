@@ -1,0 +1,7 @@
+<odoo>
+    <record model="ir.rule" id="maintenance_downtime_impact_report_comp_rule">
+        <field name="name">Maintenance downtime impact report company rule</field>
+        <field name="model_id" ref="model_maintenance_downtime_impact_report"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

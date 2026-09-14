@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="bs_maintenance_downtime_impact_report.Dashboard">
+    <Layout display="display" className="'o_downtime_content'">
+        <t t-set-slot="layout-buttons">
+            <div class="d-flex flex-wrap gap-2 align-items-center o_downtime_filters">
+                <input type="date" class="form-control form-control-sm" t-att-value="state.dateFrom" t-on-change="onDateFromChange"/>
+                <input type="date" class="form-control form-control-sm" t-att-value="state.dateTo" t-on-change="onDateToChange"/>
+                <button class="btn btn-primary ms-2" t-on-click="() => this.exportXlsx()">Export</button>
+            </div>
+        </t>
+
+        <div class="o_downtime_dashboard p-3">
+            <h2>Maintenance Downtime Impact Report</h2>
+            <p class="text-muted">Correlates logged equipment downtime against missed manufacturing order due dates.</p>
+
+            <div t-if="!state.loading and state.summary" class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <div class="card p-3"><div class="text-muted small">Total Downtime (h)</div><div class="fs-3 fw-bold" t-esc="state.summary.total_downtime_hours"/></div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3"><div class="text-muted small">Affected Manufacturing Orders</div><div class="fs-3 fw-bold" t-esc="state.summary.affected_mo_count"/></div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3"><div class="text-muted small">Missed Due Dates</div><div class="fs-3 fw-bold" t-esc="state.summary.missed_due_date_count"/></div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3"><div class="text-muted small">Estimated Cost</div><div class="fs-3 fw-bold" t-esc="state.summary.estimated_cost"/></div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <h5>Downtime vs. Missed Due Dates</h5>
+                    <div class="card p-3" style="height:280px"><canvas t-ref="comboCanvas"/></div>
+                </div>
+                <div class="col-md-3">
+                    <h5>Impact by Work Center</h5>
+                    <div class="card p-3" style="height:280px"><canvas t-ref="donutCanvas"/></div>
+                </div>
+                <div class="col-md-3">
+                    <h5>Top Equipment by Disruption</h5>
+                    <div class="card p-3" style="height:280px"><canvas t-ref="barCanvas"/></div>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <h5>Downtime Impact Details</h5>
+                    <table class="table table-sm">
+                        <thead><tr><th>Date</th><th>Equipment</th><th>Work Center</th><th>Manufacturing Orders</th><th>Downtime (h)</th><th>Cost</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="state.details" t-as="row" t-key="row.request">
+                                <td t-esc="row.date"/><td t-esc="row.equipment"/><td t-esc="row.workcenter"/>
+                                <td t-esc="row.productions"/><td t-esc="row.downtime_hours"/><td t-esc="row.cost"/>
+                                <td><span t-attf-class="badge {{ row.missed ? 'bg-danger' : 'bg-success' }}" t-esc="row.status"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <h5>Recent Maintenance Events</h5>
+                    <ul class="list-group">
+                        <li t-foreach="state.recentEvents" t-as="event" t-key="event.name" class="list-group-item">
+                            <div class="fw-bold" t-esc="event.reference"/>
+                            <div class="small text-muted" t-esc="event.name"/>
+                            <div class="small text-muted" t-esc="event.date"/>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </Layout>
+</t>
+</templates>
