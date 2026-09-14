@@ -1,0 +1,49 @@
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.bs_subcontracting_stock_dashboard</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="50"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Subcontracting Stock Dashboard" string="Subcontracting Stock Dashboard"
+                     name="bs_subcontracting_stock_dashboard" groups="stock.group_stock_manager">
+                    <block title="Aging Buckets" id="subcon_aging_buckets">
+                        <setting id="subcon_bucket_1_setting">
+                            <field name="subcon_bucket_1_max"/>
+                        </setting>
+                        <setting id="subcon_bucket_2_setting">
+                            <field name="subcon_bucket_2_max"/>
+                        </setting>
+                        <setting id="subcon_bucket_3_setting">
+                            <field name="subcon_bucket_3_max"/>
+                        </setting>
+                    </block>
+                    <block title="Subcontracting Alerts" id="subcon_alerts">
+                        <setting id="subcon_enable_alerts_setting"
+                                 help="Get notified when components stay beyond a configured number of days without the expected finished-goods receipt.">
+                            <field name="subcon_enable_alerts"/>
+                        </setting>
+                        <setting id="subcon_alert_days_setting">
+                            <field name="subcon_alert_days"/>
+                        </setting>
+                        <setting id="subcon_notification_type_setting">
+                            <field name="subcon_notification_type" widget="radio"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_subcon_config_settings" model="ir.actions.act_window">
+        <field name="name">Configuration</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'module': 'bs_subcontracting_stock_dashboard'}</field>
+    </record>
+
+    <menuitem id="menu_subcon_configuration" name="Configuration" action="action_subcon_config_settings"
+              parent="menu_subcon_root" groups="stock.group_stock_manager" sequence="7"/>
+</odoo>

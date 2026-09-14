@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="bs_subcontracting_stock_dashboard.Dashboard">
+    <Layout display="display">
+        <t t-set-slot="layout-buttons">
+            <div class="d-flex flex-wrap gap-2 align-items-center o_subcon_filters">
+                <t t-if="mode !== 'dashboard'">
+                    <SelectMenu choices="partnerChoices" value="state.partnerId" onSelect.bind="(v) => state.partnerId = v"/>
+                    <SelectMenu choices="locationChoices" value="state.locationId" onSelect.bind="(v) => state.locationId = v"/>
+                    <button class="btn btn-primary ms-2" t-on-click="() => this.exportXlsx()">Export</button>
+                </t>
+            </div>
+        </t>
+
+        <div class="o_subcon_dashboard p-3">
+            <h2 t-esc="title"/>
+            <p t-if="subtitle" class="text-muted" t-esc="subtitle"/>
+
+            <div t-if="!state.loading and state.summary" class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <div class="card p-3"><div class="text-muted small">Total Quantity (at locations)</div><div class="fs-3 fw-bold" t-esc="state.summary.total_quantity"/></div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3"><div class="text-muted small">Company-Owned</div><div class="fs-3 fw-bold" t-esc="state.summary.company_quantity"/></div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3"><div class="text-muted small">Subcontractor-Owned</div><div class="fs-3 fw-bold" t-esc="state.summary.subcontractor_quantity"/></div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3"><div class="text-muted small">Locations</div><div class="fs-3 fw-bold" t-esc="state.summary.location_count"/></div>
+                </div>
+            </div>
+
+            <div t-if="mode === 'dashboard'" class="row g-3">
+                <div class="col-md-6">
+                    <h5>Stock by Ownership</h5>
+                    <div class="card p-3" style="height:280px"><canvas t-ref="donutCanvas"/></div>
+                </div>
+                <div class="col-md-6">
+                    <h5>Stock at Subcontractor Locations</h5>
+                    <div class="card p-3" style="height:280px"><canvas t-ref="barCanvas"/></div>
+                </div>
+            </div>
+
+            <div t-if="mode === 'per_subcontractor'">
+                <table class="table table-sm">
+                    <thead><tr><th>Subcontractor</th><th>Location</th><th>Company-Owned Qty</th><th>Company-Owned Value</th><th>Subcontractor-Owned Qty</th><th>Subcontractor-Owned Value</th></tr></thead>
+                    <tbody>
+                        <tr t-foreach="state.breakdown" t-as="row" t-key="row.partner + row.location">
+                            <td t-esc="row.partner"/><td t-esc="row.location"/>
+                            <td t-esc="row.company_qty"/><td t-esc="row.company_value"/>
+                            <td t-esc="row.subcontractor_qty"/><td t-esc="row.subcontractor_value"/>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div t-if="mode === 'aging_report'">
+                <table class="table table-sm">
+                    <thead><tr><th>Component</th><th>Subcontractor</th><th>Location</th><th>Days at Subcon</th><th>Quantity</th><th>Value</th><th>Aging Bucket</th></tr></thead>
+                    <tbody>
+                        <tr t-foreach="state.aging" t-as="row" t-key="row_index">
+                            <td t-esc="row.product"/><td t-esc="row.partner"/><td t-esc="row.location"/>
+                            <td t-esc="row.age_days"/><td t-esc="row.quantity"/><td t-esc="row.value"/>
+                            <td><span class="badge bg-secondary" t-esc="bucketLabel(row.aging_bucket)"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div t-if="mode === 'value_report' and state.valueReport">
+                <table class="table table-sm">
+                    <thead><tr><th>Location</th><th>Subcontractor</th><th>Total Company Stock Value</th></tr></thead>
+                    <tbody>
+                        <tr t-foreach="state.valueReport.rows" t-as="row" t-key="row.location + row.partner">
+                            <td t-esc="row.location"/><td t-esc="row.partner"/><td t-esc="row.value"/>
+                        </tr>
+                        <tr class="fw-bold"><td colspan="2">Total at Risk</td><td t-esc="state.valueReport.total_at_risk"/></tr>
+                    </tbody>
+                </table>
+                <p class="text-muted small">This report shows the total value of company stock currently 'at risk' at each subcontractor location. Useful for finance and insurance purposes.</p>
+            </div>
+        </div>
+    </Layout>
+</t>
+</templates>

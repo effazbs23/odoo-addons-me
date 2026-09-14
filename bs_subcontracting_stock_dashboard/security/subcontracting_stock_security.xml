@@ -1,0 +1,7 @@
+<odoo>
+    <record model="ir.rule" id="subcontracting_stock_report_comp_rule">
+        <field name="name">Subcontracting stock report company rule</field>
+        <field name="model_id" ref="model_subcontracting_stock_report"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>
