@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_expiry_alert" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.bs.expiry.alerts</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="stock.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <block id="production_lot_info" position="inside">
+                <setting id="expiry_alert_days_default_setting"
+                         string="Expiry Alerts"
+                         help="Default number of days before expiration to flag a lot as near-expiry">
+                    <field name="expiry_alert_days_default" class="oe_inline"/>
+                    <span> days (used when a product's category doesn't set its own threshold)</span>
+                </setting>
+            </block>
+        </field>
+    </record>
+</odoo>
