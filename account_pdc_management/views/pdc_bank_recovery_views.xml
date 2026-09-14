@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_pdc_bank_recovery_form" model="ir.ui.view">
+        <field name="name">pdc.bank.recovery.form</field>
+        <field name="model">pdc.bank.recovery</field>
+        <field name="arch" type="xml">
+            <form string="Bank Charge Recovery">
+                <header>
+                    <button name="action_post_charge" type="object" string="Post Bank Charge"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="%(action_pdc_recovery_waiver_wizard)d" type="action"
+                            string="Waive" class="btn-secondary"
+                            invisible="state not in ('draft', 'charged')"/>
+                    <button name="action_create_invoice" type="object"
+                            string="Create Recovery Invoice" class="btn-primary"
+                            invisible="state != 'charged'"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state == 'cancel'"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft"
+                            invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,charged,invoiced"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_charge_move" type="object" class="oe_stat_button"
+                                icon="fa-book" invisible="not charge_move_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Bank Charge</span>
+                                <span class="o_stat_text">Entry</span>
+                            </div>
+                        </button>
+                        <button name="action_view_invoice" type="object" class="oe_stat_button"
+                                icon="fa-pencil-square-o" invisible="not invoice_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Recovery</span>
+                                <span class="o_stat_text">Invoice</span>
+                            </div>
+                        </button>
+                        <button name="action_view_payment" type="object" class="oe_stat_button"
+                                icon="fa-money">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Bounced</span>
+                                <span class="o_stat_text">Cheque</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Bounced Cheque">
+                            <field name="payment_id" readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="partner_id" readonly="state != 'draft'"/>
+                            <field name="cheque_number"/>
+                            <field name="bounce_date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Bank Charge">
+                            <field name="charge_amount" readonly="state != 'draft'"/>
+                            <field name="charge_date" readonly="state != 'draft'"/>
+                            <field name="bank_journal_id" readonly="state != 'draft'"/>
+                            <field name="charge_move_id" invisible="not charge_move_id"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Recovered From Partner">
+                            <field name="waiver_amount" readonly="state not in ('draft', 'charged')"/>
+                            <field name="recovery_amount"/>
+                            <field name="tax_ids" widget="many2many_tags"
+                                   readonly="state not in ('draft', 'charged')"/>
+                            <field name="tax_amount"/>
+                            <field name="total_amount" class="oe_subtotal_footer_separator"/>
+                        </group>
+                        <group string="Invoice" invisible="not invoice_id">
+                            <field name="invoice_id"/>
+                            <field name="invoice_state"/>
+                            <field name="invoice_payment_state"/>
+                        </group>
+                    </group>
+
+                    <div class="alert alert-info" role="alert" invisible="state == 'cancel'">
+                        A bounced cheque fee is passed on at cost: the recovery invoice can
+                        never be raised for more than the bank actually charged.
+                    </div>
+
+                    <group>
+                        <field name="charge_reason" placeholder="Bank advice reference, reason given..."/>
+                        <field name="waiver_reason" invisible="not waiver_amount"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pdc_bank_recovery_tree" model="ir.ui.view">
+        <field name="name">pdc.bank.recovery.list</field>
+        <field name="model">pdc.bank.recovery</field>
+        <field name="arch" type="xml">
+            <list string="Bank Charge Recoveries">
+                <field name="name"/>
+                <field name="payment_id"/>
+                <field name="cheque_number"/>
+                <field name="partner_id"/>
+                <field name="bounce_date"/>
+                <field name="charge_amount" sum="Bank Charge"/>
+                <field name="waiver_amount" sum="Waived" optional="show"/>
+                <field name="recovery_amount" sum="Recoverable"/>
+                <field name="total_amount" sum="Total Invoiced" optional="show"/>
+                <field name="invoice_id" optional="show"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'invoiced'"
+                       decoration-info="state == 'charged'"
+                       decoration-muted="state == 'cancel'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_pdc_bank_recovery_search" model="ir.ui.view">
+        <field name="name">pdc.bank.recovery.search</field>
+        <field name="model">pdc.bank.recovery</field>
+        <field name="arch" type="xml">
+            <search string="Bank Charge Recoveries">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="cheque_number"/>
+                <field name="payment_id"/>
+                <filter name="state_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="state_charged" string="Charge Posted" domain="[('state', '=', 'charged')]"/>
+                <filter name="state_invoiced" string="Invoiced" domain="[('state', '=', 'invoiced')]"/>
+                <separator/>
+                <filter name="waived" string="Partly Waived" domain="[('waiver_amount', '>', 0)]"/>
+                <group>
+                    <filter name="group_partner" string="Partner" context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_bounce_date" string="Bounce Date" context="{'group_by': 'bounce_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pdc_bank_recovery" model="ir.actions.act_window">
+        <field name="name">Bank Charge Recovery</field>
+        <field name="res_model">pdc.bank.recovery</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

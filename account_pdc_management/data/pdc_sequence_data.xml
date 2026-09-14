@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_pdc_bank_recovery" model="ir.sequence">
+            <field name="name">Bounced Cheque Bank Charge Recovery</field>
+            <field name="code">pdc.bank.recovery</field>
+            <field name="prefix">PDC/REC/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

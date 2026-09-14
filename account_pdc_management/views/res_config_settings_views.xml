@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_pdc" model="ir.ui.view">
+        <field name="name">res.config.settings.form.pdc</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='account']" position="inside">
+                <block title="Post Dated Cheques" name="pdc_settings">
+                    <setting string="PDC Operations Journal">
+                        <field name="pdc_operations_journal_id"
+                               domain="[('type', '=', 'general'), ('company_id', '=', company_id)]"
+                               options="{'no_create': True}"/>
+                    </setting>
+                    <setting string="Bank Charge Account">
+                        <field name="pdc_bank_charge_account_id"
+                               domain="[('company_ids', '=', company_id)]"
+                               options="{'no_create': True}"/>
+                    </setting>
+                    <setting string="Bank Charge Recovery Account">
+                        <field name="pdc_recovery_income_account_id"
+                               domain="[('company_ids', '=', company_id)]"
+                               options="{'no_create': True}"/>
+                    </setting>
+                    <setting string="Bank Charge Recovery Journal">
+                        <field name="pdc_recovery_journal_id"
+                               domain="[('type', '=', 'sale'), ('company_id', '=', company_id)]"
+                               options="{'no_create': True}"/>
+                    </setting>
+                    <setting string="Bank Charge Recovery Taxes">
+                        <field name="pdc_recovery_tax_ids" widget="many2many_tags"
+                               domain="[('type_tax_use', '=', 'sale'), ('company_id', '=', company_id)]"
+                               options="{'no_create': True}"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_pdc_config_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'module': 'account'}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Left updatable on purpose: the implication below has to be re-applied on
+         every module upgrade, otherwise a database that was installed before this
+         record existed never gets it. -->
+    <data>
+        <!--
+            Give the Accounting Administrator the accounting features.
+
+            With only `account` installed, `group_account_manager` implies nothing
+            but `group_account_invoice` (see account/security/account_security.xml).
+            `group_account_readonly` is what gates the "Journal Items" tab on
+            account.move, so an Administrator cannot see a single debit/credit line.
+            For a misc entry, whose Invoice Lines tab is invisible by move_type,
+            the form comes up completely empty.
+
+            That is unworkable for this module: every step it performs (clearing,
+            bounce, redeposit, bank charge) IS a journal entry, and the whole
+            point is that the accountant can audit it. So the Administrator is
+            wired to the full accounting topology Odoo itself documents for
+            "Invoicing + Accounting":
+
+                group_account_readonly => group_account_user => group_account_manager
+
+            `group_account_user` in turn implies `group_account_basic` and
+            `group_account_readonly`, so one link is enough. Writing implied_ids
+            back-fills every existing member of the group transitively, so admins
+            created before this module was installed are covered too.
+        -->
+        <record id="account.group_account_manager" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('account.group_account_user'))]"/>
+        </record>
+    </data>
+
+    <data noupdate="1">
+        <!-- Multi-company isolation. account.payment and account.move already
+             carry their own company rules; only the model added here needs one. -->
+        <record id="pdc_bank_recovery_company_rule" model="ir.rule">
+            <field name="name">Bank Charge Recovery: multi-company</field>
+            <field name="model_id" ref="model_pdc_bank_recovery"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>
