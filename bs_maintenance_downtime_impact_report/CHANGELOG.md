@@ -10,8 +10,9 @@
   module adds its own `workcenter_id` field on `maintenance.equipment` (and
   the inverse `equipment_ids` on `mrp.workcenter`) instead of depending on
   Enterprise, keeping the whole module Community-compatible.
-- No `icon.png` supplied in the source assets folder for this module; the
-  manifest ships without an `icon` key.
+- Added `icon.png`, `main_screenshot.png`, and an animated `banner.gif`
+  (used as the top listing-page banner) once supplied in the source assets
+  folder.
 - The dashboard passes `className="'o_downtime_content'"` to `<Layout>` and
   scopes `overflow-y: auto; min-height: 0;` to it in the SCSS, so the page
   scrolls correctly instead of being clipped by Odoo's `.o_action_manager`

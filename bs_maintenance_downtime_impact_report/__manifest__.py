@@ -40,4 +40,5 @@
     'license': 'OPL-1',
     'currency': 'USD',
     'price': 0.00,
+    'icon': '/bs_maintenance_downtime_impact_report/static/description/icon.png',
 }
