@@ -1,0 +1,77 @@
+<odoo>
+    <record id="action_downtime_dashboard" model="ir.actions.client">
+        <field name="name">Downtime Impact Report</field>
+        <field name="tag">bs_maintenance_downtime_dashboard</field>
+    </record>
+
+    <record id="maintenance_downtime_report_view_search" model="ir.ui.view">
+        <field name="name">maintenance.downtime.impact.report.search</field>
+        <field name="model">maintenance.downtime.impact.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="equipment_id"/>
+                <field name="workcenter_id"/>
+                <field name="production_id"/>
+                <filter name="filter_missed" string="Missed Due Date" domain="[('missed_due_date', '=', True)]"/>
+                <group>
+                    <filter name="group_equipment" string="Equipment" context="{'group_by': 'equipment_id'}"/>
+                    <filter name="group_workcenter" string="Work Center" context="{'group_by': 'workcenter_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="maintenance_downtime_report_view_pivot" model="ir.ui.view">
+        <field name="name">maintenance.downtime.impact.report.pivot</field>
+        <field name="model">maintenance.downtime.impact.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Equipment Reliability Ranking">
+                <field name="equipment_id" type="row"/>
+                <field name="downtime_hours" type="measure"/>
+                <field name="estimated_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="maintenance_downtime_report_view_graph" model="ir.ui.view">
+        <field name="name">maintenance.downtime.impact.report.graph</field>
+        <field name="model">maintenance.downtime.impact.report</field>
+        <field name="arch" type="xml">
+            <graph string="Equipment Reliability Ranking" type="bar">
+                <field name="equipment_id"/>
+                <field name="downtime_hours" type="measure"/>
+                <field name="estimated_cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="maintenance_downtime_report_view_list" model="ir.ui.view">
+        <field name="name">maintenance.downtime.impact.report.list</field>
+        <field name="model">maintenance.downtime.impact.report</field>
+        <field name="arch" type="xml">
+            <list string="Downtime Impact" create="false" edit="false">
+                <field name="downtime_start"/>
+                <field name="equipment_id"/>
+                <field name="workcenter_id"/>
+                <field name="production_id"/>
+                <field name="downtime_hours" sum="Total"/>
+                <field name="estimated_cost" sum="Total"/>
+                <field name="missed_due_date" widget="boolean_toggle" readonly="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_downtime_reliability_ranking" model="ir.actions.act_window">
+        <field name="name">Equipment Reliability Ranking</field>
+        <field name="res_model">maintenance.downtime.impact.report</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="search_view_id" ref="maintenance_downtime_report_view_search"/>
+    </record>
+
+    <menuitem id="menu_downtime_root" name="Downtime Impact Report"
+              parent="maintenance.menu_maintenance_title" sequence="20"/>
+    <menuitem id="menu_downtime_dashboard" name="Dashboard" action="action_downtime_dashboard"
+              parent="menu_downtime_root" sequence="1"/>
+    <menuitem id="menu_downtime_reliability_ranking" name="Equipment Reliability Ranking"
+              action="action_downtime_reliability_ranking" parent="menu_downtime_root" sequence="2"/>
+</odoo>

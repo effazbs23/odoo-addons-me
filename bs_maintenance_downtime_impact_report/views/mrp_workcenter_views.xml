@@ -1,0 +1,23 @@
+<odoo>
+    <record id="hr_equipment_view_form_inherit" model="ir.ui.view">
+        <field name="name">equipment.form.inherit.bs_maintenance_downtime_impact_report</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+        <field name="arch" type="xml">
+            <field name="maintenance_team_id" position="after">
+                <field name="workcenter_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="mrp_workcenter_view_form_inherit" model="ir.ui.view">
+        <field name="name">mrp.workcenter.form.inherit.bs_maintenance_downtime_impact_report</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='costing']" position="inside">
+                <field name="equipment_ids" widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

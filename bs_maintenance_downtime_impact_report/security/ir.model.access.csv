@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_maintenance_downtime_impact_report_user,maintenance.downtime.impact.report.user,model_maintenance_downtime_impact_report,maintenance.group_equipment_manager,1,0,0,0
