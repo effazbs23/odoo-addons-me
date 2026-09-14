@@ -42,5 +42,6 @@
     'license': 'OPL-1',
     'currency': 'USD',
     'price': 0.00,
+    'images': ['static/description/banner.gif'],
     'icon': '/bs_subcontracting_stock_dashboard/static/description/icon.png',
 }
