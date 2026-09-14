@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="mail_template_amc_expiry_reminder" model="mail.template">
+            <field name="name">AMC: Expiry Reminder</field>
+            <field name="model_id" ref="amc_management.model_amc_contract"/>
+            <field name="subject">{{ object.company_id.name }}: AMC {{ object.amc_ref or object.name }} expires on {{ format_date(object.end_date) }}</field>
+            <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.contractor_id.id }}</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html" type="html">
+                <div style="margin:0px;padding:0px;font-size:13px;">
+                    <p>Dear <t t-out="object.contractor_id.name or ''">Contractor</t>,</p>
+                    <p>
+                        This is a reminder that the annual maintenance contract below is
+                        approaching its end date.
+                    </p>
+                    <table style="border-collapse:collapse;margin:12px 0;">
+                        <tr>
+                            <td style="padding:4px 12px 4px 0;"><strong>Reference</strong></td>
+                            <td style="padding:4px 0;"><t t-out="object.amc_ref or object.name or ''">AMC-1</t></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:4px 12px 4px 0;"><strong>Contract</strong></td>
+                            <td style="padding:4px 0;"><t t-out="object.name or ''">Contract</t></td>
+                        </tr>
+                        <tr t-if="object.site_id">
+                            <td style="padding:4px 12px 4px 0;"><strong>Site</strong></td>
+                            <td style="padding:4px 0;"><t t-out="object.site_id.display_name or ''">Site</t></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:4px 12px 4px 0;"><strong>Period</strong></td>
+                            <td style="padding:4px 0;">
+                                <t t-out="format_date(object.start_date) or ''">01/01/2025</t> -
+                                <t t-out="format_date(object.end_date) or ''">31/12/2025</t>
+                            </td>
+                        </tr>
+                        <tr t-if="object.po_id">
+                            <td style="padding:4px 12px 4px 0;"><strong>Purchase Order</strong></td>
+                            <td style="padding:4px 0;"><t t-out="object.po_id.name or ''">PO0001</t></td>
+                        </tr>
+                    </table>
+                    <p>Please get in touch to arrange the renewal.</p>
+                    <p>Kind regards,<br/><t t-out="object.company_id.name or ''">Company</t></p>
+                </div>
+            </field>
+            <field name="lang">{{ object.contractor_id.lang }}</field>
+        </record>
+
+    </data>
+</odoo>

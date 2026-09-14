@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_amc_root"
+              name="AMC"
+              web_icon="amc_management,static/description/icon.png"
+              groups="amc_management.group_amc_user"
+              sequence="86"/>
+
+    <menuitem id="menu_amc_contracts"
+              name="Contracts"
+              parent="menu_amc_root"
+              sequence="10"/>
+
+    <menuitem id="menu_amc_contract"
+              name="AMC Contracts"
+              parent="menu_amc_contracts"
+              action="action_amc_contract"
+              sequence="10"/>
+
+    <menuitem id="menu_amc_service_period"
+              name="Service Periods"
+              parent="menu_amc_contracts"
+              action="action_amc_service_period"
+              sequence="20"/>
+
+    <menuitem id="menu_amc_purchase_order"
+              name="AMC Orders"
+              parent="menu_amc_contracts"
+              action="action_amc_purchase_order"
+              groups="purchase.group_purchase_user"
+              sequence="30"/>
+
+    <menuitem id="menu_amc_accounting"
+              name="Accounting"
+              parent="menu_amc_root"
+              groups="account.group_account_readonly"
+              sequence="20"/>
+
+    <menuitem id="menu_amc_provision_move"
+              name="Provision Entries"
+              parent="menu_amc_accounting"
+              action="action_amc_provision_move"
+              sequence="10"/>
+
+    <menuitem id="menu_amc_reporting"
+              name="Reporting"
+              parent="menu_amc_root"
+              sequence="30"/>
+
+    <menuitem id="menu_amc_schedule_report"
+              name="AMC Schedule"
+              parent="menu_amc_reporting"
+              action="action_amc_schedule_report_wizard"
+              sequence="10"/>
+
+    <menuitem id="menu_amc_configuration"
+              name="Configuration"
+              parent="menu_amc_root"
+              groups="amc_management.group_amc_manager"
+              sequence="90"/>
+
+    <menuitem id="menu_amc_site"
+              name="Sites"
+              parent="menu_amc_configuration"
+              action="action_amc_site"
+              sequence="10"/>
+
+    <menuitem id="menu_amc_settings"
+              name="Settings"
+              parent="menu_amc_configuration"
+              action="action_amc_config_settings"
+              groups="base.group_system"
+              sequence="90"/>
+
+    <!-- Finance reaches the provision entries where it looks for journal entries. -->
+    <menuitem id="menu_amc_provision_move_accounting"
+              name="AMC Provision Entries"
+              parent="account.menu_finance_entries"
+              action="action_amc_provision_move"
+              groups="account.group_account_readonly"
+              sequence="30"/>
+
+</odoo>

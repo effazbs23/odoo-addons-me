@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_amc" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.amc</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="40"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="AMC Management" string="AMC Management" name="amc_management"
+                     groups="amc_management.group_amc_manager">
+                    <block title="Accounting" name="amc_accounting_setting_container">
+                        <setting id="amc_provision_journal"
+                                 string="Provision Journal">
+                            <field name="amc_provision_journal_id"/>
+                        </setting>
+                    </block>
+                    <block title="Reminders" name="amc_reminder_setting_container">
+                        <setting id="amc_expiry_reminder"
+                                 string="Expiry Reminder">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="amc_expiry_reminder_days" class="col-lg-4 o_light_label"/>
+                                    <field name="amc_expiry_reminder_days"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_amc_config_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'module': 'amc_management'}</field>
+    </record>
+
+</odoo>
