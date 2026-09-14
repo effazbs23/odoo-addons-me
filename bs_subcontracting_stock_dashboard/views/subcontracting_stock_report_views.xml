@@ -1,0 +1,37 @@
+<odoo>
+    <record id="action_subcon_dashboard" model="ir.actions.client">
+        <field name="name">Subcontracting Stock Dashboard</field>
+        <field name="tag">bs_subcontracting_stock_dashboard</field>
+        <field name="params">{"mode": "dashboard"}</field>
+    </record>
+
+    <record id="action_subcon_per_subcontractor" model="ir.actions.client">
+        <field name="name">Per-Subcontractor Breakdown</field>
+        <field name="tag">bs_subcontracting_stock_dashboard</field>
+        <field name="params">{"mode": "per_subcontractor"}</field>
+    </record>
+
+    <record id="action_subcon_aging_report" model="ir.actions.client">
+        <field name="name">Aging Report</field>
+        <field name="tag">bs_subcontracting_stock_dashboard</field>
+        <field name="params">{"mode": "aging_report"}</field>
+    </record>
+
+    <record id="action_subcon_value_report" model="ir.actions.client">
+        <field name="name">Value Report</field>
+        <field name="tag">bs_subcontracting_stock_dashboard</field>
+        <field name="params">{"mode": "value_report"}</field>
+    </record>
+
+    <menuitem id="menu_subcon_root" name="Subcontracting Stock"
+              parent="stock.menu_warehouse_report" sequence="20"/>
+
+    <menuitem id="menu_subcon_dashboard" name="Dashboard" action="action_subcon_dashboard"
+              parent="menu_subcon_root" sequence="1"/>
+    <menuitem id="menu_subcon_per_subcontractor" name="Per-Subcontractor Breakdown" action="action_subcon_per_subcontractor"
+              parent="menu_subcon_root" sequence="2"/>
+    <menuitem id="menu_subcon_aging_report" name="Aging Report" action="action_subcon_aging_report"
+              parent="menu_subcon_root" sequence="3"/>
+    <menuitem id="menu_subcon_value_report" name="Value Report" action="action_subcon_value_report"
+              parent="menu_subcon_root" sequence="4"/>
+</odoo>
