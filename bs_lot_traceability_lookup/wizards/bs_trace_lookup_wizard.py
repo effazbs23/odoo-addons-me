@@ -1,5 +1,6 @@
 from odoo import fields, models
 from odoo.exceptions import UserError
+from odoo.tools import float_is_zero
 
 
 class BsTraceLookupWizard(models.TransientModel):
@@ -20,7 +21,8 @@ class BsTraceLookupWizard(models.TransientModel):
     chain_html = fields.Html(string='Full Chain', readonly=True, sanitize=False)
     has_result = fields.Boolean(readonly=True)
     status_class = fields.Selection([
-        ('success', 'Completed'),
+        ('success', 'Cleared'),
+        ('warning', 'Partial'),
         ('info', 'In Stock'),
         ('secondary', 'Backward Trace Only'),
     ], readonly=True, string='Status')
@@ -30,7 +32,13 @@ class BsTraceLookupWizard(models.TransientModel):
             return 'secondary'
         if len(forward_nodes) == 1 and forward_nodes[0]['boundary'] == 'no_history':
             return 'info'
-        return 'success'
+        # Something has moved out, but the lot isn't necessarily fully
+        # cleared - part of its quantity may still sit on hand (e.g. 60
+        # of 100 units consumed into an MO, 40 still in stock). Only
+        # report "Cleared" once nothing of this lot remains anywhere.
+        on_hand = self.env['bs.traceability.engine'].lot_on_hand_qty(self.lot_id)
+        rounding = self.lot_id.product_id.uom_id.rounding
+        return 'success' if float_is_zero(on_hand, precision_rounding=rounding) else 'warning'
 
     def action_search(self):
         self.ensure_one()
@@ -64,4 +72,8 @@ class BsTraceLookupWizard(models.TransientModel):
             'lot_id': self.lot_id.id,
             'direction': self.direction,
         })
-        return self.env.ref('bs_lot_traceability_lookup.action_report_bs_trace_export').report_action(self)
+        action = self.env.ref('bs_lot_traceability_lookup.action_report_bs_trace_export').report_action(self)
+        # Close this target=new dialog automatically once the PDF has
+        # downloaded, instead of leaving it open behind the download.
+        action['close_on_report_download'] = True
+        return action

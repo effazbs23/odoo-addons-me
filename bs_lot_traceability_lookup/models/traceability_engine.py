@@ -28,6 +28,17 @@ class TraceabilityEngine(models.AbstractModel):
 
     # ---------------------------------------------------------------- utils
 
+    def lot_on_hand_qty(self, lot):
+        """Current on-hand quantity of `lot` across internal/transit
+        locations - used to tell a lot that has PARTIALLY moved out
+        (some quantity consumed/shipped, some still on hand) apart from
+        one that is fully cleared (nothing left anywhere)."""
+        quants = self.env['stock.quant'].search([
+            ('lot_id', '=', lot.id),
+            ('location_id.usage', 'in', INTERNAL_USAGES),
+        ])
+        return sum(quants.mapped('quantity'))
+
     def _lot_lines(self, lot_ids):
         # Spec section 9: "multi-company data" - plain search() (never
         # sudo()) so normal stock.move.line record rules apply; a user

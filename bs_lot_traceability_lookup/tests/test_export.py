@@ -33,6 +33,28 @@ class TestTraceExport(TraceabilityCommon):
         self.assertEqual(logs.exported_by, self.env.user)
         self.assertEqual(logs.direction, 'both')
 
+    def test_export_pdf_closes_dialog_on_download(self):
+        wizard = self._searched_wizard()
+        action = wizard.action_export_pdf()
+        self.assertTrue(action.get('close_on_report_download'))
+
+    def test_status_cleared_when_fully_delivered(self):
+        # _searched_wizard() produces 1 unit and delivers all of it.
+        wizard = self._searched_wizard()
+        self.assertEqual(wizard.status_class, 'success')
+
+    def test_status_partial_when_some_quantity_remains_on_hand(self):
+        raw = self._make_product('Raw Partial')
+        finished = self._make_product('Finished Partial')
+        raw_lot = self._receive_from_vendor(raw, 'RAWP', 10)
+        bom = self._make_bom(finished, [(raw, 1)])
+        fin_lot, _ = self._produce(bom, finished, {raw: raw_lot}, 'FINP', qty=5)
+        self._deliver_to_customer(finished, fin_lot, 2)  # 3 of 5 still on hand
+
+        wizard = self.env['bs.trace.lookup.wizard'].create({'lot_id': fin_lot.id, 'direction': 'both'})
+        wizard.action_search()
+        self.assertEqual(wizard.status_class, 'warning')
+
     def test_export_renders_pdf(self):
         wizard = self._searched_wizard()
         # PDF generation is short-circuited to HTML in test mode unless

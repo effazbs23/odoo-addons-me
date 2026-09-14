@@ -28,6 +28,7 @@
                             <field name="lot_id" nolabel="1" readonly="1" class="o_bs_trace_lot_name"/>
                             <field name="status_class" widget="badge" nolabel="1" class="o_bs_trace_badge"
                                    decoration-success="status_class == 'success'"
+                                   decoration-warning="status_class == 'warning'"
                                    decoration-info="status_class == 'info'"
                                    decoration-muted="status_class == 'secondary'"/>
                         </div>
