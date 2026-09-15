@@ -97,6 +97,7 @@
                             <field name="amc_provision_type" readonly="1" invisible="not amc_provision_type"/>
                             <field name="amc_provision_month" readonly="1" invisible="not amc_provision_type"/>
                             <field name="amc_milestone_label" readonly="1" invisible="not amc_milestone_number"/>
+                            <field name="amc_quarter_id" readonly="1" invisible="not amc_quarter_id"/>
                             <field name="amc_is_advance" readonly="1" invisible="not amc_milestone_number"/>
                             <field name="amc_milestone_number" invisible="1"/>
                         </group>

@@ -17,6 +17,12 @@ class AccountMove(models.Model):
                                       'move_id', 'amc_period_id', string='AMC Service Periods',
                                       copy=False)
     amc_milestone_number = fields.Integer(string='AMC Payment Milestone', copy=False)
+    amc_quarter_id = fields.Many2one('amc.contract', string='AMC Quarter',
+                                     index=True, copy=False, ondelete='set null',
+                                     domain="[('parent_amc_id', '!=', False)]",
+                                     help='Service period this bill is raised for. A quarterly AMC '
+                                          'bills one period per quarter, so this reads back as the '
+                                          'quarter the bill covers.')
     amc_milestone_label = fields.Char(string='AMC Milestone', compute='_compute_amc_milestone_label',
                                       store=True)
     amc_is_advance = fields.Boolean(string='AMC Advance Bill', copy=False)

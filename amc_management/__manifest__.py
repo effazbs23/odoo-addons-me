@@ -47,9 +47,9 @@ service calendar and accrual accounting.
     ],
     'images': [
         'static/description/banner.png',
-        'static/description/images/02_amc_purchase_order.png',
-        'static/description/images/04_amc_contract_form.png',
-        'static/description/images/09_provision_entry_lines.png',
+        'static/description/assets/02_amc_purchase_order.png',
+        'static/description/assets/04_amc_contract_form.png',
+        'static/description/assets/09_provision_entry_lines.png',
     ],
     'assets': {
         'web.assets_backend': [

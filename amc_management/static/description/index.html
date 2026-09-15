@@ -1,407 +1,317 @@
-<section style="font-family:'Segoe UI',Roboto,Arial,sans-serif;color:#1f2d3d;line-height:1.6;max-width:1160px;margin:0 auto;">
+<body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#F7F9FC;color:#001844;line-height:1.6;">
+<div style="max-width:1200px;margin:0 auto;padding:40px 20px 80px;">
 
-  <!-- ============================ HERO ============================ -->
-  <div style="background:linear-gradient(135deg,#0f2b46 0%,#17466f 55%,#1d5c8f 100%);color:#fff;padding:48px 44px;border-radius:10px;">
-    <div style="display:inline-block;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#8fd0ff;border:1px solid rgba(143,208,255,.45);padding:6px 14px;border-radius:4px;margin-bottom:22px;">
-      Odoo 19 &middot; Purchase &amp; Accounting
-    </div>
-    <h1 style="margin:0 0 14px;font-size:46px;line-height:1.1;font-weight:700;color:#fff;">
-      AMC <span style="color:#ffc65c;">Management</span>
-    </h1>
-    <p style="margin:0;font-size:20px;color:#dceaf6;max-width:820px;">
-      Annual maintenance contracts that accrue month by month, prove every service visit,
-      and bill the vendor against the provision they earned.
-    </p>
-    <div style="margin-top:30px;">
-      <span style="display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:9px 16px;margin:0 8px 8px 0;font-size:15px;">Mark as Signed</span>
-      <span style="display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:9px 16px;margin:0 8px 8px 0;font-size:15px;">Monthly provisions</span>
-      <span style="display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:9px 16px;margin:0 8px 8px 0;font-size:15px;">Service periods &amp; reports</span>
-      <span style="display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:9px 16px;margin:0 8px 8px 0;font-size:15px;">Milestone vendor bills</span>
-      <span style="display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:9px 16px;margin:0 8px 8px 0;font-size:15px;">XLSX schedule</span>
-    </div>
+<!-- 1. Compatibility / support header -->
+<div style="border:1px solid #DCE1E8;border-radius:16px;padding:20px 16px;margin-bottom:20px;box-sizing:border-box;text-align:center;">
+  <div style="display:inline-block;width:100%;max-width:180px;vertical-align:middle;padding:8px;box-sizing:border-box;">
+    <img src="./assets/logo.png" alt="AMC Management logo" style="max-height:48px;max-width:100%;width:auto;height:auto;">
   </div>
-
-  <!-- ============================ PROBLEM / SOLUTION ============================ -->
-  <div style="padding:44px 6px 10px;">
-    <h2 style="font-size:30px;margin:0 0 10px;color:#0f2b46;">One invoice in January, twelve months of service</h2>
-    <p style="font-size:17px;color:#475b6e;max-width:900px;margin:0 0 26px;">
-      A lift contract, a chiller contract, a generator contract &mdash; each is signed once and consumed all year.
-      Booked the standard way, the whole cost lands in one month, the other eleven look free, and nothing in the
-      system records whether the vendor actually turned up in May.
-    </p>
-
-    <div style="display:flex;gap:20px;flex-wrap:wrap;">
-      <div style="flex:1 1 320px;border:1px solid #f0c9c9;background:#fdf5f5;border-radius:8px;padding:22px 24px;">
-        <div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#c0392b;font-weight:700;margin-bottom:10px;">Without this module</div>
-        <ul style="margin:0;padding-left:20px;font-size:15px;color:#5d4040;">
-          <li>The full contract value hits a single month.</li>
-          <li>Service visits live in e-mail, not in Odoo.</li>
-          <li>A missed visit is still paid in full.</li>
-          <li>Quarterly vendor bills are typed by hand and drift out of sequence.</li>
-          <li>No one can answer &ldquo;how much AMC is accrued so far?&rdquo;</li>
-        </ul>
-      </div>
-      <div style="flex:1 1 320px;border:1px solid #bfe3c9;background:#f4fbf6;border-radius:8px;padding:22px 24px;">
-        <div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#1e7e45;font-weight:700;margin-bottom:10px;">With AMC Management</div>
-        <ul style="margin:0;padding-left:20px;font-size:15px;color:#385243;">
-          <li>The cost is spread across the months it covers, automatically.</li>
-          <li>Every service period is a record, with a mandatory service report.</li>
-          <li>Unserviced days are reversed out of the provision.</li>
-          <li>Milestone bills follow the order's payment term and refuse to skip a step.</li>
-          <li>A twelve-month provision grid is one click away in Excel.</li>
-        </ul>
-      </div>
-    </div>
+  <div style="display:inline-block;width:100%;max-width:320px;vertical-align:middle;text-align:left;padding:8px;box-sizing:border-box;">
+    <p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#00A0DB;">Supports</p>
+    <span style="display:inline-block;margin:0 6px 6px 0;padding:7px 12px;color:#001844;border:1.5px solid #00A0DB;border-radius:8px;font-size:12px;font-weight:600;"><img src="./assets/check-circle.svg" alt="Supported" style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px;">Enterprise</span>
+    <span style="display:inline-block;margin:0 6px 6px 0;padding:7px 12px;color:#001844;border:1.5px solid #00A0DB;border-radius:8px;font-size:12px;font-weight:600;"><img src="./assets/check-circle.svg" alt="Supported" style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px;">Community</span>
   </div>
+</div>
 
-  <!-- ============================ WORKFLOW ============================ -->
-  <div style="padding:40px 6px 0;">
-    <h2 style="font-size:30px;margin:0 0 6px;color:#0f2b46;">The whole flow, five steps</h2>
-    <p style="font-size:17px;color:#475b6e;margin:0 0 30px;">Nothing to learn beyond the purchase order you already use.</p>
+<!-- 2. Banner -->
+<div style="margin-top:3rem;margin-bottom:3rem;">
+  <img src="./assets/04_amc_contract_form.png" alt="AMC Management main screenshot" style="display:block;width:100%;height:auto;border-radius:10px;">
+</div>
 
-    <!-- step 1 -->
-    <div style="margin-bottom:38px;">
-      <div style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#1d5c8f;font-weight:700;">Step 1</div>
-      <h3 style="font-size:23px;margin:4px 0 8px;color:#0f2b46;">Tick &ldquo;AMC Order&rdquo; on the request for quotation</h3>
-      <p style="font-size:16px;color:#475b6e;margin:0 0 16px;max-width:900px;">
-        The AMC block appears on the order header: site, start date, duration and how many service periods the
-        contract is cut into. From that moment the order accepts <b>service products only</b> &mdash; enforced by the
-        product domain in the view and by a Python constraint, so nothing storable slips onto a maintenance contract.
-      </p>
-      <img src="images/01_mark_as_signed.png" alt="AMC purchase order with the Mark as Signed button"
-           style="width:100%;border:1px solid #dde5ec;border-radius:8px;box-shadow:0 2px 10px rgba(15,43,70,.08);">
-    </div>
-
-    <!-- step 2 -->
-    <div style="margin-bottom:38px;">
-      <div style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#1d5c8f;font-weight:700;">Step 2</div>
-      <h3 style="font-size:23px;margin:4px 0 8px;color:#0f2b46;">Confirm &mdash; one contract per line, cut into service periods</h3>
-      <p style="font-size:16px;color:#475b6e;margin:0 0 16px;max-width:900px;">
-        Each order line becomes a <b>Mother AMC</b>, split into the number of service periods you asked for:
-        four for quarterly servicing, twelve for monthly. A contract spanning whole months is cut on the calendar
-        (15 Jan &rarr; 14 Feb); anything else is split evenly by days, with the remainder handed to the earliest periods
-        so the parts always add back up to the whole.
-      </p>
-      <img src="images/04_amc_contract_form.png" alt="Mother AMC contract with its service periods"
-           style="width:100%;border:1px solid #dde5ec;border-radius:8px;box-shadow:0 2px 10px rgba(15,43,70,.08);">
-    </div>
-
-    <!-- step 3 -->
-    <div style="margin-bottom:38px;">
-      <div style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#1d5c8f;font-weight:700;">Step 3</div>
-      <h3 style="font-size:23px;margin:4px 0 8px;color:#0f2b46;">Press &ldquo;Mark as Signed&rdquo; &mdash; the provisions write themselves</h3>
-      <p style="font-size:16px;color:#475b6e;margin:0 0 16px;max-width:900px;">
-        One button on the purchase order signs every contract it carries and generates the monthly provision
-        entries in <b>draft</b>, one entry per order per month, with one debit and one credit line per site and the
-        site's analytic account already stamped on them. Signed the contract three months late? The months already
-        gone are folded into a single catch-up entry, so the accrual is never short.
-      </p>
-      <img src="images/09_provision_entry_lines.png" alt="AMC catch-up provision journal entry, debit expense credit provision"
-           style="width:100%;border:1px solid #dde5ec;border-radius:8px;box-shadow:0 2px 10px rgba(15,43,70,.08);">
-    </div>
-
-    <!-- step 4 -->
-    <div style="margin-bottom:38px;">
-      <div style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#1d5c8f;font-weight:700;">Step 4</div>
-      <h3 style="font-size:23px;margin:4px 0 8px;color:#0f2b46;">Close each period: Done, Partially Serviced or Expired</h3>
-      <p style="font-size:16px;color:#475b6e;margin:0 0 16px;max-width:900px;">
-        A service report is <b>mandatory</b> to mark a period done, and a reason is mandatory to expire one.
-        Partially Serviced asks how many days were actually covered and books a draft reversal entry for the rest;
-        Expired reverses the whole period. Existing provision entries are never edited &mdash; the correction is always a
-        separate, reviewable entry.
-      </p>
-      <img src="images/06_mark_done_wizard.png" alt="Mark service period as done wizard with mandatory service report"
-           style="width:100%;border:1px solid #dde5ec;border-radius:8px;box-shadow:0 2px 10px rgba(15,43,70,.08);">
-    </div>
-
-    <!-- step 5 -->
-    <div style="margin-bottom:10px;">
-      <div style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#1d5c8f;font-weight:700;">Step 5</div>
-      <h3 style="font-size:23px;margin:4px 0 8px;color:#0f2b46;">Bill the vendor, milestone by milestone</h3>
-      <p style="font-size:16px;color:#475b6e;margin:0 0 16px;max-width:900px;">
-        The order's payment term decides how many bills the contract splits into and how much each one carries.
-        Milestone Q2 cannot be raised before Q1 has left draft, and the same milestone cannot be billed twice.
-        The bill line is posted <b>against the provision account</b>, drawing down what was accrued, and the selected
-        periods' service reports plus the signed contract are copied onto it as attachments.
-      </p>
-      <img src="images/07_vendor_bill_wizard.png" alt="AMC milestone vendor bill wizard"
-           style="width:100%;border:1px solid #dde5ec;border-radius:8px;box-shadow:0 2px 10px rgba(15,43,70,.08);">
-    </div>
-  </div>
-
-  <!-- ============================ ACCOUNTING ============================ -->
-  <div style="margin:44px 0 0;background:#f6f9fc;border:1px solid #e3ebf2;border-radius:10px;padding:34px 32px;">
-    <h2 style="font-size:30px;margin:0 0 8px;color:#0f2b46;">What it books, exactly</h2>
-    <p style="font-size:16px;color:#475b6e;margin:0 0 22px;max-width:900px;">
-      No hidden postings. Three entry types, all created in draft for your accountant to review and post.
-    </p>
-    <table style="width:100%;border-collapse:collapse;font-size:15px;background:#fff;">
-      <thead>
-        <tr style="background:#0f2b46;color:#fff;text-align:left;">
-          <th style="padding:12px 14px;">When</th>
-          <th style="padding:12px 14px;">Debit</th>
-          <th style="padding:12px 14px;">Credit</th>
-          <th style="padding:12px 14px;">Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="border-bottom:1px solid #e6edf3;">
-          <td style="padding:12px 14px;"><b>Monthly provision</b><br><span style="color:#6b7f92;">one per order per month</span></td>
-          <td style="padding:12px 14px;">AMC Expense account<br><span style="color:#6b7f92;">product / category</span></td>
-          <td style="padding:12px 14px;">AMC Provision account<br><span style="color:#6b7f92;">product category</span></td>
-          <td style="padding:12px 14px;">Contract value &times; days in the month &divide; total days</td>
-        </tr>
-        <tr style="border-bottom:1px solid #e6edf3;background:#fbfdfe;">
-          <td style="padding:12px 14px;"><b>Catch-up provision</b><br><span style="color:#6b7f92;">signed late</span></td>
-          <td style="padding:12px 14px;">AMC Expense account</td>
-          <td style="padding:12px 14px;">AMC Provision account</td>
-          <td style="padding:12px 14px;">Every elapsed month, folded into one entry</td>
-        </tr>
-        <tr style="border-bottom:1px solid #e6edf3;">
-          <td style="padding:12px 14px;"><b>Reversal</b><br><span style="color:#6b7f92;">partially serviced / expired</span></td>
-          <td style="padding:12px 14px;">AMC Provision account</td>
-          <td style="padding:12px 14px;">AMC Expense account</td>
-          <td style="padding:12px 14px;">Daily rate &times; days not serviced</td>
-        </tr>
-        <tr style="background:#fbfdfe;">
-          <td style="padding:12px 14px;"><b>Milestone vendor bill</b></td>
-          <td style="padding:12px 14px;">AMC Provision account</td>
-          <td style="padding:12px 14px;">Vendor payable<br><span style="color:#6b7f92;">standard Odoo</span></td>
-          <td style="padding:12px 14px;">The installment of the order's payment term</td>
-        </tr>
-      </tbody>
-    </table>
-    <p style="font-size:14px;color:#6b7f92;margin:18px 0 0;">
-      Contract values are taken <b>net of tax</b>, so a fully billed AMC lands exactly on the provision accrued for it.
-      Provision lines carry the site's analytic account, so cost-centre reporting works out of the box.
-    </p>
-  </div>
-
-  <!-- ============================ FEATURES ============================ -->
-  <div style="padding:44px 6px 6px;">
-    <h2 style="font-size:30px;margin:0 0 24px;color:#0f2b46;">Everything in the box</h2>
-    <div style="display:flex;flex-wrap:wrap;gap:18px;">
-
-      <div style="flex:1 1 300px;border:1px solid #e3ebf2;border-radius:8px;padding:20px 22px;">
-        <h4 style="margin:0 0 6px;font-size:18px;color:#0f2b46;">Service products only</h4>
-        <p style="margin:0;font-size:15px;color:#5b6f81;">AMC orders reject storable products in the view and in a
-          constraint, so a maintenance contract can never be mixed with goods.</p>
-      </div>
-
-      <div style="flex:1 1 300px;border:1px solid #e3ebf2;border-radius:8px;padding:20px 22px;">
-        <h4 style="margin:0 0 6px;font-size:18px;color:#0f2b46;">One entry per order per month</h4>
-        <p style="margin:0;font-size:15px;color:#5b6f81;">Guaranteed by a partial unique index in the database, not by
-          convention. An order covering four sites still yields one consolidated entry per month.</p>
-      </div>
-
-      <div style="flex:1 1 300px;border:1px solid #e3ebf2;border-radius:8px;padding:20px 22px;">
-        <h4 style="margin:0 0 6px;font-size:18px;color:#0f2b46;">Sites with analytic accounts</h4>
-        <p style="margin:0;font-size:15px;color:#5b6f81;">Buildings, plants, floors or data centres. Each site carries a
-          code and an analytic account, stamped on every provision and reversal line raised for it.</p>
-      </div>
-
-      <div style="flex:1 1 300px;border:1px solid #e3ebf2;border-radius:8px;padding:20px 22px;">
-        <h4 style="margin:0 0 6px;font-size:18px;color:#0f2b46;">Sequential milestone billing</h4>
-        <p style="margin:0;font-size:15px;color:#5b6f81;">Q2 waits for Q1 to leave draft, a milestone cannot be billed
-          twice, and a payment term with four installments allows exactly four bills.</p>
-      </div>
-
-      <div style="flex:1 1 300px;border:1px solid #e3ebf2;border-radius:8px;padding:20px 22px;">
-        <h4 style="margin:0 0 6px;font-size:18px;color:#0f2b46;">Documents that follow the money</h4>
-        <p style="margin:0;font-size:15px;color:#5b6f81;">Service reports are copied from the periods onto the bill, along
-          with the signed contract &mdash; the originals stay on the period, so deleting a bill takes nothing away.</p>
-      </div>
-
-      <div style="flex:1 1 300px;border:1px solid #e3ebf2;border-radius:8px;padding:20px 22px;">
-        <h4 style="margin:0 0 6px;font-size:18px;color:#0f2b46;">Expiry reminders</h4>
-        <p style="margin:0;font-size:15px;color:#5b6f81;">A scheduled action mails the contractor a configurable number of
-          days before a contract ends, and keeps the days-to-expiry counter current.</p>
-      </div>
-
-      <div style="flex:1 1 300px;border:1px solid #e3ebf2;border-radius:8px;padding:20px 22px;">
-        <h4 style="margin:0 0 6px;font-size:18px;color:#0f2b46;">AMC Schedule in Excel</h4>
-        <p style="margin:0;font-size:15px;color:#5b6f81;">A twelve-month provision grid per contract and year, with days,
-          contract value, provision to date and provision required &mdash; and no third-party report library to install.</p>
-      </div>
-
-      <div style="flex:1 1 300px;border:1px solid #e3ebf2;border-radius:8px;padding:20px 22px;">
-        <h4 style="margin:0 0 6px;font-size:18px;color:#0f2b46;">Two roles, no accounting rights needed</h4>
-        <p style="margin:0;font-size:15px;color:#5b6f81;">Users close service periods; managers configure sites, terminate
-          contracts and raise bills. Neither needs access to the accounting app for the entries to be written.</p>
-      </div>
-
-      <div style="flex:1 1 300px;border:1px solid #e3ebf2;border-radius:8px;padding:20px 22px;">
-        <h4 style="margin:0 0 6px;font-size:18px;color:#0f2b46;">Multi-company &amp; multi-currency</h4>
-        <p style="margin:0;font-size:15px;color:#5b6f81;">Record rules per company, and a foreign-currency order is
-          converted to company currency at the order date before it is provisioned.</p>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ============================ SCREENSHOT GALLERY ============================ -->
-  <div style="padding:44px 6px 6px;">
-    <h2 style="font-size:30px;margin:0 0 24px;color:#0f2b46;">A closer look</h2>
-
-    <div style="margin-bottom:30px;">
-      <h4 style="margin:0 0 10px;font-size:18px;color:#0f2b46;">Every contract, at a glance</h4>
-      <img src="images/03_amc_contract_list.png" alt="AMC contracts list"
-           style="width:100%;border:1px solid #dde5ec;border-radius:8px;">
-    </div>
-
-    <div style="margin-bottom:30px;">
-      <h4 style="margin:0 0 10px;font-size:18px;color:#0f2b46;">Service periods across every contract, filtered by status</h4>
-      <img src="images/05_service_periods.png" alt="AMC service periods list"
-           style="width:100%;border:1px solid #dde5ec;border-radius:8px;">
-    </div>
-
-    <div style="margin-bottom:30px;">
-      <h4 style="margin:0 0 10px;font-size:18px;color:#0f2b46;">Provision entries, grouped by contract</h4>
-      <img src="images/08_provision_entries.png" alt="AMC provision entries list"
-           style="width:100%;border:1px solid #dde5ec;border-radius:8px;">
-    </div>
-
-    <div style="margin-bottom:30px;">
-      <h4 style="margin:0 0 10px;font-size:18px;color:#0f2b46;">The signed order, its contracts and its provisions</h4>
-      <img src="images/02_amc_purchase_order.png" alt="Signed AMC purchase order"
-           style="width:100%;border:1px solid #dde5ec;border-radius:8px;">
-    </div>
-
-    <div style="margin-bottom:30px;">
-      <h4 style="margin:0 0 10px;font-size:18px;color:#0f2b46;">The milestone bill, posted against the provision account</h4>
-      <img src="images/10_amc_vendor_bill.png" alt="AMC vendor bill"
-           style="width:100%;border:1px solid #dde5ec;border-radius:8px;">
-    </div>
-
-    <div style="margin-bottom:30px;">
-      <h4 style="margin:0 0 10px;font-size:18px;color:#0f2b46;">AMC Schedule report (XLSX)</h4>
-      <img src="images/14_amc_schedule_xlsx.png" alt="AMC schedule XLSX report"
-           style="width:100%;border:1px solid #dde5ec;border-radius:8px;">
-      <p style="font-size:14px;color:#6b7f92;margin:8px 0 0;">
-        Twelve months across, one row per contract: days in the year, contract value, month-by-month provision,
-        provision booked to date and provision required by a chosen date.
-      </p>
-    </div>
-
-    <div style="display:flex;gap:20px;flex-wrap:wrap;">
-      <div style="flex:1 1 340px;">
-        <h4 style="margin:0 0 10px;font-size:18px;color:#0f2b46;">Sites</h4>
-        <img src="images/12_amc_sites.png" alt="AMC sites"
-             style="width:100%;border:1px solid #dde5ec;border-radius:8px;">
-      </div>
-      <div style="flex:1 1 340px;">
-        <h4 style="margin:0 0 10px;font-size:18px;color:#0f2b46;">Settings</h4>
-        <img src="images/13_amc_settings.png" alt="AMC settings"
-             style="width:100%;border:1px solid #dde5ec;border-radius:8px;">
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================ SETUP ============================ -->
-  <div style="margin:44px 0 0;background:#0f2b46;color:#fff;border-radius:10px;padding:34px 32px;">
-    <h2 style="font-size:30px;margin:0 0 6px;color:#fff;">Set up in four minutes</h2>
-    <p style="font-size:16px;color:#c6dcec;margin:0 0 24px;">Install, point it at two accounts, list your sites. Done.</p>
-    <div style="display:flex;gap:18px;flex-wrap:wrap;">
-      <div style="flex:1 1 240px;background:rgba(255,255,255,.07);border-radius:8px;padding:18px 20px;">
-        <div style="font-size:26px;color:#ffc65c;font-weight:700;">1</div>
-        <p style="margin:6px 0 0;font-size:15px;color:#e2eef7;">On the product category used by your maintenance services,
-          set the <b>AMC Provision Account</b>.</p>
-      </div>
-      <div style="flex:1 1 240px;background:rgba(255,255,255,.07);border-radius:8px;padding:18px 20px;">
-        <div style="font-size:26px;color:#ffc65c;font-weight:700;">2</div>
-        <p style="margin:6px 0 0;font-size:15px;color:#e2eef7;">Make sure the same product or category carries an
-          <b>Expense Account</b>.</p>
-      </div>
-      <div style="flex:1 1 240px;background:rgba(255,255,255,.07);border-radius:8px;padding:18px 20px;">
-        <div style="font-size:26px;color:#ffc65c;font-weight:700;">3</div>
-        <p style="margin:6px 0 0;font-size:15px;color:#e2eef7;">In <b>AMC &rarr; Configuration &rarr; Settings</b>, pick the provision
-          journal and the expiry reminder window.</p>
-      </div>
-      <div style="flex:1 1 240px;background:rgba(255,255,255,.07);border-radius:8px;padding:18px 20px;">
-        <div style="font-size:26px;color:#ffc65c;font-weight:700;">4</div>
-        <p style="margin:6px 0 0;font-size:15px;color:#e2eef7;">Create your <b>Sites</b> &mdash; a code, a name and an analytic
-          account each.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================ REQUIREMENTS ============================ -->
-  <div style="padding:44px 6px 6px;">
-    <h2 style="font-size:30px;margin:0 0 18px;color:#0f2b46;">Requirements</h2>
-    <table style="width:100%;border-collapse:collapse;font-size:16px;">
-      <tr style="border-bottom:1px solid #e6edf3;">
-        <td style="padding:12px 6px;width:230px;color:#6b7f92;">Odoo version</td>
-        <td style="padding:12px 6px;"><b>19.0</b> &mdash; Community and Enterprise</td>
-      </tr>
-      <tr style="border-bottom:1px solid #e6edf3;">
-        <td style="padding:12px 6px;color:#6b7f92;">Depends on</td>
-        <td style="padding:12px 6px;"><b>Accounting</b> (<code>account</code>) and <b>Purchase</b> (<code>purchase</code>) &mdash; both standard</td>
-      </tr>
-      <tr style="border-bottom:1px solid #e6edf3;">
-        <td style="padding:12px 6px;color:#6b7f92;">Third-party modules</td>
-        <td style="padding:12px 6px;"><b>None.</b> The XLSX engine ships inside the module; no <code>report_xlsx</code>, no OCA dependency</td>
-      </tr>
-      <tr style="border-bottom:1px solid #e6edf3;">
-        <td style="padding:12px 6px;color:#6b7f92;">Python libraries</td>
-        <td style="padding:12px 6px;"><code>xlsxwriter</code>, already required by Odoo itself</td>
-      </tr>
-      <tr>
-        <td style="padding:12px 6px;color:#6b7f92;">Core code changes</td>
-        <td style="padding:12px 6px;">None. Everything is added through <code>_inherit</code> and view inheritance</td>
-      </tr>
-    </table>
-  </div>
-
-  <!-- ============================ FAQ ============================ -->
-  <div style="padding:34px 6px 6px;">
-    <h2 style="font-size:30px;margin:0 0 20px;color:#0f2b46;">Questions people ask first</h2>
-
-    <div style="border-left:3px solid #1d5c8f;padding:2px 0 2px 18px;margin-bottom:20px;">
-      <h4 style="margin:0 0 4px;font-size:17px;color:#0f2b46;">Are the journal entries posted automatically?</h4>
-      <p style="margin:0;font-size:15px;color:#5b6f81;">No. Every provision and reversal entry is created in <b>draft</b>.
-        Your accountant reviews and posts them like any other entry.</p>
-    </div>
-
-    <div style="border-left:3px solid #1d5c8f;padding:2px 0 2px 18px;margin-bottom:20px;">
-      <h4 style="margin:0 0 4px;font-size:17px;color:#0f2b46;">What happens if we sign the contract months after it started?</h4>
-      <p style="margin:0;font-size:15px;color:#5b6f81;">The elapsed months are folded into a single catch-up entry dated in
-        the current month, and the remaining months are provisioned normally from there.</p>
-    </div>
-
-    <div style="border-left:3px solid #1d5c8f;padding:2px 0 2px 18px;margin-bottom:20px;">
-      <h4 style="margin:0 0 4px;font-size:17px;color:#0f2b46;">Can one order cover several buildings?</h4>
-      <p style="margin:0;font-size:15px;color:#5b6f81;">Yes. One order line per site gives one Mother AMC per site, and the
-        monthly provision consolidates them into a single entry carrying one debit and one credit line per site.</p>
-    </div>
-
-    <div style="border-left:3px solid #1d5c8f;padding:2px 0 2px 18px;margin-bottom:20px;">
-      <h4 style="margin:0 0 4px;font-size:17px;color:#0f2b46;">Does the person closing a service period need accounting rights?</h4>
-      <p style="margin:0;font-size:15px;color:#5b6f81;">No. The AMC roles drive the workflow; the accounting side is written
-        for them, and the entries land with Finance for review.</p>
-    </div>
-
-    <div style="border-left:3px solid #1d5c8f;padding:2px 0 2px 18px;margin-bottom:20px;">
-      <h4 style="margin:0 0 4px;font-size:17px;color:#0f2b46;">Can we cancel an order after signing?</h4>
-      <p style="margin:0;font-size:15px;color:#5b6f81;">Not silently. An order whose AMCs are signed refuses to be cancelled
-        or reset to draft until the contracts are terminated and their entries handled &mdash; provisions exist by then.</p>
-    </div>
-
-    <div style="border-left:3px solid #1d5c8f;padding:2px 0 2px 18px;">
-      <h4 style="margin:0 0 4px;font-size:17px;color:#0f2b46;">Does it work with an existing chart of accounts?</h4>
-      <p style="margin:0;font-size:15px;color:#5b6f81;">Yes. You choose the expense and provision accounts; the module creates
-        none of its own and localisations are untouched.</p>
-    </div>
-  </div>
-
-  <!-- ============================ SUPPORT ============================ -->
-  <div style="margin:34px 0 10px;border:1px solid #e3ebf2;border-radius:10px;padding:30px 32px;text-align:center;">
-    <h2 style="font-size:26px;margin:0 0 8px;color:#0f2b46;">Support</h2>
-    <p style="font-size:16px;color:#5b6f81;margin:0 0 6px;">
-      Questions, configuration help or a feature you need? Reach us through the Odoo Apps support form on this page.
-    </p>
-    <p style="font-size:15px;color:#6b7f92;margin:0;">
-      Brain Station 23 PLC &middot; <a href="https://www.brainstation-23.com" style="color:#1d5c8f;text-decoration:none;">www.brainstation-23.com</a>
-    </p>
-  </div>
-
+<!-- 3. Hero -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:60px 48px;margin-bottom:20px;">
+  <span style="display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1.5px solid #00A0DB;color:#00668E;padding:8px 14px;margin:0 8px 12px 0;">Odoo Module</span>
+  <span style="display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1.5px solid #00A0DB;color:#00668E;padding:8px 14px;margin:0 8px 12px 0;">Purchase &amp; Accounting</span>
+  <h1 style="font-size:48px;font-weight:700;color:#001844;margin:16px 0 12px;line-height:1.2;">AMC Management</h1>
+  <p style="margin:0;color:#797F8B;font-size:18px;max-width:800px;line-height:1.7;">Annual maintenance contracts that accrue month by month, prove every service visit, and bill the vendor against the provision they earned.</p>
 </section>
+
+<!-- 4. Feature overview -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;">
+  <h2 style="font-size:32px;color:#001844;margin:0 0 8px;font-weight:700;">Feature overview</h2>
+  <p style="margin:0 0 28px;color:#797F8B;font-size:16px;line-height:1.7;">A lift contract, a chiller contract, a generator contract &mdash; each signed once and consumed all year. AMC Management turns the purchase order into a tracked contract with its own service calendar, its own accrual entries and its own milestone bills, all configured from the order you already raise.</p>
+  <div>
+    <div style="display:inline-block;vertical-align:top;width:29%;min-width:250px;margin:0 1.5% 20px 0;">
+      <h3 style="font-size:20px;color:#001844;margin:0 0 14px;font-weight:700;">Contracts &amp; service periods</h3>
+      <ul style="margin:0;padding:0 0 0 18px;color:#797F8B;font-size:15px;line-height:1.9;">
+        <li>Flag a purchase order as an AMC order; its lines then accept service products only.</li>
+        <li><strong>Mark as Signed</strong> raises one Mother AMC per order line.</li>
+        <li>Each contract is cut into service periods by the chosen frequency, on the calendar where the dates allow it and evenly by days where they do not.</li>
+        <li>Every contract and period carries a traceable reference, right down to <em>PO-1-P3</em>.</li>
+        <li>Sites, contractors and product categories carried through from the order.</li>
+      </ul>
+    </div>
+    <div style="display:inline-block;vertical-align:top;width:29%;min-width:250px;margin:0 1.5% 20px 1.5%;">
+      <h3 style="font-size:20px;color:#001844;margin:0 0 14px;font-weight:700;">Accrual accounting</h3>
+      <ul style="margin:0;padding:0 0 0 18px;color:#797F8B;font-size:15px;line-height:1.9;">
+        <li>Monthly draft provisions per order: Dr AMC Expense / Cr AMC Provision.</li>
+        <li>Catch-up folding for a contract signed late, so no month is missed.</li>
+        <li>Expense and provision accounts resolved per product category, so one order can cover sites booked to different accounts.</li>
+        <li>Unserviced days are reversed out of the provision with their own draft entry.</li>
+        <li>Analytic distribution stamped per site on every line.</li>
+      </ul>
+    </div>
+    <div style="display:inline-block;vertical-align:top;width:29%;min-width:250px;margin:0 0 20px 1.5%;">
+      <h3 style="font-size:20px;color:#001844;margin:0 0 14px;font-weight:700;">Billing &amp; reporting</h3>
+      <ul style="margin:0;padding:0 0 0 18px;color:#797F8B;font-size:15px;line-height:1.9;">
+        <li>Milestone vendor bills driven by the order's payment term.</li>
+        <li>Sequential-billing control: Q3 cannot be raised while Q2 is still in draft.</li>
+        <li>Each bill records the quarter it is for and the service periods it covers.</li>
+        <li>Service reports copied onto the bill, signed contract attached automatically.</li>
+        <li>AMC Schedule report in XLSX: a twelve-month provision grid per contract and year.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 style="font-size:32px;color:#001844;margin:36px 0 20px;font-weight:700;">What's included</h2>
+  <div style="border:1px solid #DCE1E8;border-radius:16px;padding:28px 32px;">
+    <div style="display:inline-block;vertical-align:top;width:47%;min-width:280px;margin:0 1.5% 0 0;">
+      <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">AMC contracts with their own list, form and service-period tree</p>
+      <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Mark as Signed on the confirmed purchase order</p>
+      <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Scheduled action generating monthly provision entries</p>
+      <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Close a period as Done, Partially Serviced or Expired</p>
+      <p style="margin:0;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Mandatory service report on every settled period</p>
+    </div>
+    <div style="display:inline-block;vertical-align:top;width:47%;min-width:280px;margin:0 0 0 1.5%;">
+      <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Milestone vendor bill wizard with quarter reference</p>
+      <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">AMC Sites with their own analytic distribution</p>
+      <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">AMC accounts configured per product category</p>
+      <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">AMC Schedule XLSX report with a twelve-month grid</p>
+      <p style="margin:0;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">User and Manager security groups, plus expiry reminder mails</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Dependencies -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;margin-bottom:15px;">
+  <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Dependencies</h2>
+  <span style="display:inline-block;border:1.5px solid #00A0DB;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;font-weight:600;">account</span>
+  <span style="display:inline-block;border:1.5px solid #00A0DB;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;font-weight:600;">purchase</span>
+</section>
+
+<!-- 6. Screenshots -->
+<section style="margin-top:28px;margin-bottom:40px;">
+  <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Screenshots</h2>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">Mark as Signed on the confirmed AMC order</h5>
+    </div>
+    <img src="./assets/01_mark_as_signed.png" alt="AMC purchase order with the Mark as Signed button" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">Signed AMC purchase order</h5>
+    </div>
+    <img src="./assets/02_amc_purchase_order.png" alt="Signed AMC purchase order" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">AMC contracts list</h5>
+    </div>
+    <img src="./assets/03_amc_contract_list.png" alt="AMC contracts list" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">Mother AMC with its service periods</h5>
+    </div>
+    <img src="./assets/04_amc_contract_form.png" alt="Mother AMC contract with its service periods" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">Service periods list</h5>
+    </div>
+    <img src="./assets/05_service_periods.png" alt="AMC service periods list" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">Mark a period as done, with its service report</h5>
+    </div>
+    <img src="./assets/06_mark_done_wizard.png" alt="Mark service period as done wizard with mandatory service report" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">Milestone vendor bill wizard</h5>
+    </div>
+    <img src="./assets/07_vendor_bill_wizard.png" alt="AMC milestone vendor bill wizard" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">AMC provision entries</h5>
+    </div>
+    <img src="./assets/08_provision_entries.png" alt="AMC provision entries list" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">Provision entry lines: Dr expense, Cr provision</h5>
+    </div>
+    <img src="./assets/09_provision_entry_lines.png" alt="AMC catch-up provision journal entry, debit expense credit provision" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">AMC vendor bill</h5>
+    </div>
+    <img src="./assets/10_amc_vendor_bill.png" alt="AMC vendor bill" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">AMC schedule report wizard</h5>
+    </div>
+    <img src="./assets/11_schedule_report_wizard.png" alt="AMC schedule report wizard" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">AMC sites</h5>
+    </div>
+    <img src="./assets/12_amc_sites.png" alt="AMC sites" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">AMC settings</h5>
+    </div>
+    <img src="./assets/13_amc_settings.png" alt="AMC settings" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+
+  <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">AMC schedule XLSX report</h5>
+    </div>
+    <img src="./assets/14_amc_schedule_xlsx.png" alt="AMC schedule XLSX report" style="display:block;width:100%;height:auto;object-fit:contain;">
+  </div>
+</section>
+
+<!-- 7. Our Services -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;">
+  <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Our Services</h2>
+  <div style="font-size:0;">
+    <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+      <img src="./assets/svc-gear.svg" alt="Odoo Customization" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+      <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Customization</h6>
+    </div>
+    <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+      <img src="./assets/svc-wrench.svg" alt="Odoo Implementation" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+      <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Implementation</h6>
+    </div>
+    <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+      <img src="./assets/svc-life-ring.svg" alt="Odoo Support" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+      <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Support</h6>
+    </div>
+    <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+      <img src="./assets/svc-arrows-repeat.svg" alt="Odoo Migration" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+      <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Migration</h6>
+    </div>
+    <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+      <img src="./assets/svc-puzzle.svg" alt="Odoo Integration" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+      <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Integration</h6>
+    </div>
+    <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+      <img src="./assets/svc-consultancy.svg" alt="Odoo Consultancy" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+      <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Consultancy</h6>
+    </div>
+    <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+      <img src="./assets/svc-licencing.svg" alt="Odoo Licensing" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+      <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Licensing</h6>
+    </div>
+    <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+      <img src="./assets/svc-hire-odoo.svg" alt="Hire Odoo Developer" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+      <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Hire Odoo Developer</h6>
+    </div>
+  </div>
+</section>
+
+<!-- 8. Why Choose ERP23 -->
+<div style="border:1px solid #DCE1E8;border-radius:16px;padding:24px 12px;margin-top:28px;margin-bottom:20px;box-sizing:border-box;">
+  <h2 style="font-size:24px;color:#001844;margin:0 0 6px;font-weight:700;text-align:center;line-height:1.3;">Why Choose ERP23</h2>
+  <div style="text-align:center;font-size:0;">
+    <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+      <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+        <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+          <img src="./assets/silver-partner.webp" alt="Silver Partner" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+        </div>
+        <div style="padding:18px 18px 22px;">
+          <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">Silver</span> Odoo Partner</h5>
+          <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Official Odoo Silver Partner with proven delivery track record.</p>
+        </div>
+      </div>
+    </div>
+    <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+      <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+        <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+          <img src="./assets/countries-served.webp" alt="Countries Served" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+        </div>
+        <div style="padding:18px 18px 22px;">
+          <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">30+</span> Countries Served</h5>
+          <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Global delivery footprint across six continents.</p>
+        </div>
+      </div>
+    </div>
+    <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+      <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+        <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+          <img src="./assets/projects-completed.webp" alt="Projects Completed" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+        </div>
+        <div style="padding:18px 18px 22px;">
+          <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">200+</span> Projects Completed</h5>
+          <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Successful Odoo implementations across industries.</p>
+        </div>
+      </div>
+    </div>
+    <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+      <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+        <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+          <img src="./assets/industries-served.webp" alt="Industries Served" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+        </div>
+        <div style="padding:18px 18px 22px;">
+          <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">20+</span> Industries Served</h5>
+          <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">From manufacturing to healthcare, retail to services.</p>
+        </div>
+      </div>
+    </div>
+    <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+      <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+        <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+          <img src="./assets/certifications.webp" alt="Certifications" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+        </div>
+        <div style="padding:18px 18px 22px;">
+          <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">15+</span> Certifications</h5>
+          <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Certified Odoo professionals across the team.</p>
+        </div>
+      </div>
+    </div>
+    <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+      <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+        <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+          <img src="./assets/years-experience.webp" alt="Years Experience" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+        </div>
+        <div style="padding:18px 18px 22px;">
+          <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">12+</span> Years Experience</h5>
+          <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Over a decade of Odoo expertise and counting.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 9. Support & Company -->
+<section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;text-align:center;">
+  <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Support &amp; Company</h2>
+  <img src="./assets/erp23.png" alt="ERP23 logo" style="max-height:48px;width:auto;margin-bottom:16px;">
+  <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.6;">Developed and maintained by ERP23.</p>
+  <p style="margin:8px 0 0;">Website: <a href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer" style="color:#00A0DB;text-decoration:none;font-weight:600;">https://www.erp-23.com/</a></p>
+  <p style="margin:0;">Email: <a href="mailto:erp23@brainstation-23.com" style="color:#00A0DB;text-decoration:none;font-weight:600;">erp23@brainstation-23.com</a></p>
+</section>
+
+</div>
+</body>

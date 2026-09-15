@@ -2,7 +2,7 @@
 <odoo>
 
     <menuitem id="menu_amc_root"
-              name="AMC"
+              name="AMC Management"
               web_icon="amc_management,static/description/icon.png"
               groups="amc_management.group_amc_user"
               sequence="86"/>

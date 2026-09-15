@@ -29,6 +29,16 @@ class AmcVendorBillWizard(models.TransientModel):
     is_advance = fields.Boolean(string='Advance Bill',
                                 help='An advance bill carries no service period attachments; '
                                      'only the signed AMC contract is attached.')
+    # The milestone number says which bill this is; the quarter says which slice of the
+    # contract it pays for. They line up one-to-one on a standard quarterly AMC, but a
+    # payment term that bills more or fewer times than the contract has periods breaks
+    # that, so the quarter is stored in its own right rather than derived at read time.
+    quarter_id = fields.Many2one(
+        'amc.contract', string='Quarter',
+        compute='_compute_quarter_id', store=True, readonly=False,
+        domain="[('parent_amc_id', '=', amc_id)]",
+        help='Service period this bill is raised for. Defaults to the period whose '
+             'number matches the milestone.')
     service_period_ids = fields.Many2many(
         'amc.contract', 'amc_vendor_bill_wizard_period_rel', 'wizard_id', 'period_id',
         string='Service Periods',
@@ -73,6 +83,20 @@ class AmcVendorBillWizard(models.TransientModel):
     def _compute_milestone_label(self):
         for wizard in self:
             wizard.milestone_label = 'Q%s' % wizard.milestone_number if wizard.milestone_number else False
+
+    @api.depends('amc_id', 'milestone_number')
+    def _compute_quarter_id(self):
+        """Default the quarter to the service period carrying the milestone's number.
+
+        Left writable: an advance raised on Q1 money may well be paid against a later
+        period, and a contract billed in fewer instalments than it has periods has no
+        one-to-one mapping to fall back on. Falls back to empty rather than guessing
+        when no period carries that number.
+        """
+        for wizard in self:
+            periods = wizard.amc_id.child_amc_ids if wizard.amc_id else self.env['amc.contract']
+            match = periods.filtered(lambda period: period.period_seq == wizard.milestone_number)
+            wizard.quarter_id = match[:1]
 
     @api.depends('amc_id')
     def _compute_site_id(self):
@@ -238,6 +262,7 @@ class AmcVendorBillWizard(models.TransientModel):
             'amc_po_id': amc.po_id.id,
             'amc_period_ids': [Command.set(self.service_period_ids.ids)],
             'amc_milestone_number': self.milestone_number,
+            'amc_quarter_id': self.quarter_id.id or False,
             'amc_is_advance': self.is_advance,
             'amc_remarks': self.remarks,
             'invoice_line_ids': [Command.create({
@@ -270,6 +295,9 @@ class AmcVendorBillWizard(models.TransientModel):
         self._check_sequential_billing()
         if self.bill_amount <= 0:
             raise ValidationError(_("The bill amount must be greater than zero."))
+        if self.quarter_id and self.quarter_id.parent_amc_id != amc:
+            raise ValidationError(_(
+                "The quarter %s does not belong to this AMC.", self.quarter_id.display_name))
         if self.is_advance and self.service_period_attachment_ids:
             raise ValidationError(_("An advance bill cannot carry service report attachments."))
         invalid = self.service_period_attachment_ids.filtered(
