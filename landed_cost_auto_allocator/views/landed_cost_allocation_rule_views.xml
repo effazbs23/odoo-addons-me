@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_landed_cost_allocation_rule_list" model="ir.ui.view">
+        <field name="name">landed.cost.allocation.rule.list</field>
+        <field name="model">landed.cost.allocation.rule</field>
+        <field name="arch" type="xml">
+            <tree string="Landed Cost Allocation Rules">
+                <field name="sequence" widget="handle"/>
+                <field name="vendor_id"/>
+                <field name="product_id"/>
+                <field name="split_method"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_landed_cost_allocation_rule_form" model="ir.ui.view">
+        <field name="name">landed.cost.allocation.rule.form</field>
+        <field name="model">landed.cost.allocation.rule</field>
+        <field name="arch" type="xml">
+            <form string="Landed Cost Allocation Rule">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <group>
+                        <group>
+                            <field name="vendor_id"/>
+                            <field name="product_id"/>
+                        </group>
+                        <group>
+                            <field name="split_method"/>
+                            <field name="sequence"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">
+                        Leave Vendor and/or Cost Type empty to match more
+                        broadly. When several rules could match the same
+                        landed cost line, Auto-Allocate prefers, in order:
+                        an exact vendor + cost type match, then a cost-type-
+                        only rule, then a vendor-only rule.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_landed_cost_allocation_rule" model="ir.actions.act_window">
+        <field name="name">Landed Cost Allocation Rules</field>
+        <field name="res_model">landed.cost.allocation.rule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first allocation rule
+            </p>
+            <p>
+                Save an allocation method per vendor and/or cost type (e.g.
+                "always allocate DHL freight by weight") so Auto-Allocate
+                can suggest it automatically.
+            </p>
+        </field>
+    </record>
+
+    <!-- Verify this xmlid against the target Odoo 17 database - the core
+         Inventory > Configuration menu is assumed to be
+         `stock.menu_stock_config_settings` (not confirmed against source
+         in this environment, see CHANGELOG.md). -->
+    <menuitem id="menu_landed_cost_allocation_rule"
+              name="Landed Cost Allocation Rules"
+              action="action_landed_cost_allocation_rule"
+              parent="stock.menu_stock_config_settings"
+              sequence="60"/>
+
+</odoo>

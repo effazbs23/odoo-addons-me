@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Landed Cost Auto-Allocator</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body style="margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#F7F9FC;color:#001844;line-height:1.6;">
+<div style="max-width:1100px;margin:0 auto;padding:40px 20px 80px;">
+
+  <div style="margin-bottom:32px;">
+    <img src="assets/main_screenshot.png" class="img-fluid" alt="Landed Cost Auto-Allocator main screenshot" style="width:100%;max-height:340px;object-fit:cover;border-radius:16px;">
+  </div>
+
+  <section style="background:linear-gradient(135deg,#EAF6FC 0%,#F0F4FF 100%);border:1px solid #DCE1E8;border-radius:16px;padding:56px 48px;margin-bottom:32px;">
+    <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Odoo Module</span>
+    <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Inventory</span>
+    <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Landed Costs</span>
+    <h1 style="font-size:48px;font-weight:700;color:#001844;margin:16px 0 12px;line-height:1.15;">Landed Cost Auto-Allocator</h1>
+    <p style="margin:0;color:#797F8B;font-size:18px;max-width:760px;line-height:1.7;">Automatically splits freight/duty/customs charges across a purchase order's lines by weight, volume, or value &mdash; one click instead of a manual entry per receipt line.</p>
+  </section>
+
+  <div style="margin-bottom:32px;padding:28px 32px;border:1px solid #DCE1E8;border-radius:16px;background:#ffffff;display:flex;flex-wrap:wrap;gap:32px;align-items:center;">
+    <div>
+      <h6 style="margin:0 0 10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Edition</h6>
+      <div class="d-flex gap-2 flex-wrap">
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Enterprise</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Community</span>
+      </div>
+    </div>
+    <div>
+      <h6 style="margin:0 0 10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Requires</h6>
+      <div class="d-flex gap-2 flex-wrap">
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Inventory (Landed Costs)</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Purchase</span>
+      </div>
+    </div>
+  </div>
+
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Overview</h2>
+    <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.75;">Splitting freight, duty and customs charges across the lines of a receipt is one of the most fiddly, error-prone parts of landed cost accounting &mdash; Odoo already lets you enter the split manually, but picking a rate and typing it in for every line, every shipment, adds up fast and is easy to get wrong. Landed Cost Auto-Allocator adds a single "Auto-Allocate" button to the Landed Cost record: it suggests the right allocation method per cost line from reusable rule templates (e.g. "always allocate DHL freight by weight"), checks that every affected product has the weight or volume data a weight/volume split needs, then lets Odoo's own computation populate the valuation adjustment lines &mdash; nothing about the underlying accounting flow changes. Freight, duty and customs can each use a different method on the very same record, an Allocation Preview shows quantity, weight, volume and value per line before you post, and a plain-language audit trail records exactly how each amount was calculated for finance review. Built for purchasing, logistics and inventory teams who process import shipments with multi-component landed costs on a regular basis.</p>
+  </section>
+
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 24px;font-weight:700;">Highlights</h2>
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;"><i class="fa fa-bolt"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">One-Click Auto-Allocate</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Suggest a method, check the data, then run Odoo's own computation &mdash; all from one button.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#F1EAFE;color:#8E59FD;font-size:20px;margin-bottom:16px;"><i class="fa fa-random"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Mixed Allocation</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Freight by weight, duty by value, customs by quantity &mdash; independently, on the same record.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;"><i class="fa fa-clipboard-list"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Rule Templates</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Save a method per vendor and/or cost type once; Auto-Allocate suggests it every time after.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#FFF4E0;color:#FBAF33;font-size:20px;margin-bottom:16px;"><i class="fa fa-search-dollar"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Allocation Preview</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Quantity, weight, volume and value per line, so you can sanity-check the split before posting.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#FDE6F1;color:#FE0C7D;font-size:20px;margin-bottom:16px;"><i class="fa fa-file-invoice"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Allocation Audit Trail</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">A plain-language formula per line &mdash; totals, rate and result &mdash; ready for finance review.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;"><i class="fa fa-recycle"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">No Parallel Split Math</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Reuses core's own allocation-method field and computation &mdash; the accounting flow never changes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Features</h2>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">01</span>
+      <div><strong style="color:#001844;">One-click Auto-Allocate</strong><br><span style="color:#797F8B;">Splits an additional cost across a receipt's lines by value, weight, volume, or quantity in a single action.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">02</span>
+      <div><strong style="color:#001844;">Mixed allocation support</strong><br><span style="color:#797F8B;">Allocate freight by weight and duty by value on the very same landed cost record.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">03</span>
+      <div><strong style="color:#001844;">Rule templates</strong><br><span style="color:#797F8B;">Save an allocation method as a reusable rule per vendor or cost type, matched automatically by Auto-Allocate.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">04</span>
+      <div><strong style="color:#001844;">Allocation preview before posting</strong><br><span style="color:#797F8B;">Sanity-check the split &mdash; quantity, weight, volume, value and allocated cost per line &mdash; before it hits inventory valuation.</span></div>
+    </div>
+    <div style="padding:14px 0;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">05</span>
+      <div><strong style="color:#001844;">Allocation audit trail</strong><br><span style="color:#797F8B;">Shows exactly how each line's added cost was calculated &mdash; totals, rate and formula &mdash; for finance review.</span></div>
+    </div>
+  </section>
+
+  <section style="margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Screenshots</h2>
+    <div style="margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Auto-Allocate on a Landed Cost</h5>
+      </div>
+      <img src="assets/main_screenshot.png" class="img-fluid" alt="Landed cost lines with per-line allocation method, allocation preview and audit trail" style="width:100%;height:auto;object-fit:contain;">
+      <div style="padding:16px 20px;font-size:14px;color:#797F8B;">Freight allocated by weight, duty by value and customs by quantity on the same record, with the resulting split and audit-trail formula shown below.</div>
+    </div>
+  </section>
+
+  <section style="background:#F7F9FC;border:1px solid #DCE1E8;border-radius:16px;padding:56px 48px;margin-bottom:28px;">
+    <div class="row d-flex align-items-center g-4">
+      <div class="col col-12 col-lg-6">
+        <h4 style="margin:0;font-size:32px;line-height:1.25;color:#001844;font-weight:700;">Audit-ready formulas, not just numbers</h4>
+        <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:560px;">Every allocated line keeps a plain-language record of exactly how its share was worked out &mdash; the totals, the rate, and the formula applied &mdash; so finance can review a split without reverse-engineering it from the numbers alone.</p>
+        <ul style="margin-top:1rem;color:#797F8B;padding-left:1.1rem;">
+          <li>One formula template per allocation method (equal, quantity, value, weight, volume)</li>
+          <li>Stored per line, so mixed-method records stay fully explainable</li>
+          <li>Open from the landed cost form with a single click</li>
+        </ul>
+      </div>
+      <div class="col col-12 col-lg-6">
+        <img class="img-fluid" src="assets/main_screenshot.png" alt="Allocation audit trail panel with formula" style="width:100%;border-radius:16px;object-fit:cover;">
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#F7F9FC;border:1px solid #DCE1E8;border-radius:16px;padding:56px 48px;margin-bottom:28px;">
+    <div class="row d-flex align-items-center g-4">
+      <div class="col col-12 col-lg-6 order-2 order-lg-1">
+        <img class="img-fluid" src="assets/main_screenshot.png" alt="Rule templates matched by vendor and cost type" style="width:100%;border-radius:16px;object-fit:cover;">
+      </div>
+      <div class="col col-12 col-lg-6 order-1 order-lg-2">
+        <h4 style="margin:0;font-size:32px;line-height:1.25;color:#001844;font-weight:700;">Rules that remember your vendors</h4>
+        <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:560px;">"Always allocate DHL freight by weight" becomes a saved rule instead of a habit someone has to remember. Auto-Allocate matches the best rule for each cost line &mdash; vendor and cost type, cost type alone, or vendor alone, in that order &mdash; so new shipments from the same vendor default correctly from the start.</p>
+        <ul style="margin-top:1rem;color:#797F8B;padding-left:1.1rem;">
+          <li>One rule set, reused across every future landed cost</li>
+          <li>Clear, documented priority order when several rules could match</li>
+          <li>Managed from Inventory &gt; Configuration like any other setting</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#ECF0F1;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:28px;color:#001844;margin:0 0 24px;font-weight:700;text-align:center;">Why Choose ERP23</h2>
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-award" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">Silver Partner</span></h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Official Odoo Silver Partner with certified expertise</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-globe" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">30+</span> Countries Served</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Global reach with clients across 30+ countries</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-check-double" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">200+</span> Projects Completed</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Proven Odoo delivery across diverse business requirements</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-industry" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">15+</span> Industries Served</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Specialized Odoo expertise across retail, manufacturing, and services</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-certificate" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">7+</span> Certifications</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Team certified in 7+ specialized Odoo domains</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-user-clock" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">10+</span> Years Experience</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Nearly a decade of specialized Odoo expertise</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#001844;border-radius:16px;padding:40px;margin-bottom:12px;text-align:center;">
+    <h2 style="font-size:28px;color:#00A0DB;margin:0 0 16px;font-weight:700;">Contact &amp; Support</h2>
+    <p style="margin:0 0 8px;color:#DCE1E8;font-size:20px;font-weight:800;letter-spacing:0.5px;">ERP23</p>
+    <p style="margin:0 0 8px;color:#DCE1E8;font-size:16px;line-height:1.6;">Developed and maintained by ERP23.</p>
+    <p style="margin:0 0 4px;color:#DCE1E8;">Website: <a href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer" style="color:#00A0DB;text-decoration:none;font-weight:600;">https://www.erp-23.com/</a></p>
+    <p style="margin:0;color:#DCE1E8;">Email: <a href="mailto:erp23@brainstation-23.com" style="color:#00A0DB;text-decoration:none;font-weight:600;">erp23@brainstation-23.com</a></p>
+  </section>
+
+</div>
+</body>
+</html>

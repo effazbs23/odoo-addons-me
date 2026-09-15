@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Standalone popup form for a single stock.valuation.adjustment.lines
+         record, used only to display the allocation_breakdown audit-trail
+         text read-only (see action_view_allocation_breakdown). -->
+    <record id="view_stock_valuation_adjustment_lines_form_breakdown" model="ir.ui.view">
+        <field name="name">stock.valuation.adjustment.lines.form.breakdown</field>
+        <field name="model">stock.valuation.adjustment.lines</field>
+        <field name="arch" type="xml">
+            <form string="Allocation Breakdown">
+                <sheet>
+                    <group>
+                        <field name="product_id" readonly="1"/>
+                        <field name="quantity" readonly="1"/>
+                        <field name="additional_landed_cost" readonly="1"/>
+                    </group>
+                    <separator string="Formula"/>
+                    <field name="allocation_breakdown" readonly="1" nolabel="1"
+                           widget="text"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Verify this xmlid against the target Odoo 17 database - assumed to
+         be `stock_landed_costs.view_stock_landed_cost_form` (not confirmed
+         against source in this environment, see CHANGELOG.md). -->
+    <record id="view_stock_landed_cost_form_auto_allocate" model="ir.ui.view">
+        <field name="name">stock.landed.cost.form.auto.allocate</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Auto-Allocate button, next to core's Compute/Validate
+                 buttons, visible only while the record is still editable
+                 (draft). Appended inside the existing <header> rather than
+                 anchored to a specific sibling button, since the exact
+                 button order in core's header could not be verified. -->
+            <xpath expr="//header" position="inside">
+                <button name="action_auto_allocate" type="object"
+                        string="Auto-Allocate" class="btn-primary"
+                        invisible="state != 'draft'"
+                        help="Suggest an allocation method per cost line from matching rule templates, check for missing weight/volume data, then compute the split."/>
+            </xpath>
+
+            <!-- Allocation Preview columns (Weight/Volume/Value) and a
+                 details button for the audit-trail formula, added to the
+                 existing valuation_adjustment_lines embedded list. Assumes
+                 the embedded list still uses the <tree> tag in the target
+                 Odoo 17 database (not confirmed against source, see
+                 CHANGELOG.md). -->
+            <xpath expr="//field[@name='valuation_adjustment_lines']/tree" position="inside">
+                <field name="preview_weight" optional="show"/>
+                <field name="preview_volume" optional="show"/>
+                <field name="preview_value" optional="show"/>
+                <button name="action_view_allocation_breakdown" type="object"
+                        string="Details" icon="fa-info-circle"
+                        title="View the allocation formula for this line"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
