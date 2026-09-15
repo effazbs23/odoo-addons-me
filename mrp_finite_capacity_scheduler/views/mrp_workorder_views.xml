@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_workorder_gantt_capacity" model="ir.ui.view">
+        <field name="name">mrp.workorder.gantt.capacity.scheduler</field>
+        <field name="model">mrp.workorder</field>
+        <field name="arch" type="xml">
+            <gantt string="Finite Capacity Scheduler"
+                   date_start="date_planned_start"
+                   date_stop="date_planned_finished"
+                   default_group_by="workcenter_id"
+                   color="has_conflict"
+                   precision="{'day': 'hour:half', 'week': 'day:half', 'month': 'day'}"
+                   default_scale="week"
+                   class="o_mrp_finite_capacity_gantt">
+                <field name="workcenter_id"/>
+                <field name="production_id"/>
+                <field name="has_conflict"/>
+                <field name="due_risk"/>
+                <field name="state"/>
+                <templates>
+                    <div t-name="gantt-popover">
+                        <ul class="list-unstyled mb-0">
+                            <li><strong>Manufacturing Order:</strong> <t t-esc="production_id[1]"/></li>
+                            <li><strong>Status:</strong> <t t-esc="state"/></li>
+                            <li t-if="has_conflict" class="text-danger">
+                                <strong>Capacity conflict on this workcenter</strong>
+                            </li>
+                            <li t-if="due_risk == 'high_risk'" class="text-danger">
+                                <strong>High risk of missing the MO due date</strong>
+                            </li>
+                            <li t-if="due_risk == 'at_risk'" class="text-warning">
+                                <strong>At risk of missing the MO due date</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </templates>
+            </gantt>
+        </field>
+    </record>
+
+    <record id="view_mrp_workorder_list_capacity" model="ir.ui.view">
+        <field name="name">mrp.workorder.list.capacity.scheduler</field>
+        <field name="model">mrp.workorder</field>
+        <field name="arch" type="xml">
+            <list string="Work Orders" decoration-danger="has_conflict">
+                <field name="production_id"/>
+                <field name="name"/>
+                <field name="workcenter_id"/>
+                <field name="date_planned_start"/>
+                <field name="date_planned_finished"/>
+                <field name="duration_expected"/>
+                <field name="state" widget="badge"/>
+                <field name="has_conflict" widget="boolean_toggle" readonly="1"/>
+                <field name="due_risk" widget="badge"
+                       decoration-danger="due_risk == 'high_risk'"
+                       decoration-warning="due_risk == 'at_risk'"
+                       decoration-success="due_risk == 'on_track'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mrp_workorder_search_capacity" model="ir.ui.view">
+        <field name="name">mrp.workorder.search.capacity.scheduler</field>
+        <field name="model">mrp.workorder</field>
+        <field name="arch" type="xml">
+            <search string="Work Orders">
+                <field name="production_id"/>
+                <field name="workcenter_id"/>
+                <filter string="Unscheduled" name="filter_unscheduled"
+                        domain="[('date_planned_start', '=', False)]"/>
+                <filter string="In Conflict" name="filter_conflict"
+                        domain="[('has_conflict', '=', True)]"/>
+                <filter string="At Risk" name="filter_at_risk"
+                        domain="[('due_risk', 'in', ('at_risk', 'high_risk'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Workcenter" name="group_workcenter" context="{'group_by': 'workcenter_id'}"/>
+                    <filter string="Due-Date Risk" name="group_due_risk" context="{'group_by': 'due_risk'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mrp_finite_capacity_scheduler" model="ir.actions.act_window">
+        <field name="name">Finite Capacity Scheduler</field>
+        <field name="res_model">mrp.workorder</field>
+        <field name="view_mode">gantt,list</field>
+        <field name="search_view_id" ref="view_mrp_workorder_search_capacity"/>
+        <field name="context">{'search_default_filter_unscheduled': 0}</field>
+    </record>
+
+    <record id="action_mrp_finite_capacity_scheduler_view_gantt" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">gantt</field>
+        <field name="view_id" ref="view_mrp_workorder_gantt_capacity"/>
+        <field name="act_window_id" ref="action_mrp_finite_capacity_scheduler"/>
+    </record>
+    <record id="action_mrp_finite_capacity_scheduler_view_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_mrp_workorder_list_capacity"/>
+        <field name="act_window_id" ref="action_mrp_finite_capacity_scheduler"/>
+    </record>
+</odoo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_workcenter_form_capacity" model="ir.ui.view">
+        <field name="name">mrp.workcenter.form.capacity.scheduler</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
+        <field name="arch" type="xml">
+            <field name="resource_calendar_id" position="after">
+                <field name="capacity_per_day" readonly="1"/>
+                <field name="utilization_pct" widget="percentage" readonly="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_mrp_workcenter_list_capacity" model="ir.ui.view">
+        <field name="name">mrp.workcenter.list.capacity.scheduler</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="arch" type="xml">
+            <list string="Workcenters">
+                <field name="name"/>
+                <field name="resource_calendar_id"/>
+                <field name="capacity_per_day"/>
+                <field name="utilization_pct" widget="progressbar"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_mrp_workcenter_capacity" model="ir.actions.act_window">
+        <field name="name">Workcenter Capacity</field>
+        <field name="res_model">mrp.workcenter</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_mrp_workcenter_list_capacity"/>
+    </record>
+</odoo>

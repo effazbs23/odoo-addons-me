@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mrp_finite_capacity_scheduler"
+              name="Finite Capacity Scheduler"
+              parent="mrp.menu_mrp_planning"
+              action="action_mrp_finite_capacity_scheduler"
+              sequence="5"/>
+    <menuitem id="menu_mrp_auto_schedule_wizard"
+              name="Auto-schedule"
+              parent="mrp.menu_mrp_planning"
+              action="action_mrp_auto_schedule_wizard"
+              sequence="6"/>
+    <menuitem id="menu_mrp_workcenter_capacity"
+              name="Workcenter Capacity"
+              parent="mrp.menu_mrp_planning"
+              action="action_mrp_workcenter_capacity"
+              sequence="7"/>
+</odoo>
