@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lot_recall_report_line_list" model="ir.ui.view">
+        <field name="name">lot.recall.report.line.list</field>
+        <field name="model">lot.recall.report.line</field>
+        <field name="arch" type="xml">
+            <list string="Recall Report Lines" create="false" edit="false" delete="false">
+                <field name="report_id"/>
+                <field name="lot_id"/>
+                <field name="direction"/>
+                <field name="source_type"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="quantity"/>
+                <field name="delivery_date"/>
+            </list>
+        </field>
+    </record>
+</odoo>

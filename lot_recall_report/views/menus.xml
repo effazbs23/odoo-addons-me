@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Placed at the Inventory app's root menu bar (alongside Operations,
+         Reporting, Configuration) rather than nested inside the core
+         "Reporting" submenu: its exact external id varies across Odoo
+         versions and could not be verified without a running instance. -->
+    <menuitem id="menu_lot_recall_report"
+              name="Recall Reports"
+              parent="stock.menu_stock_root"
+              action="action_lot_recall_report"
+              groups="group_recall_report_user"
+              sequence="60"/>
+</odoo>

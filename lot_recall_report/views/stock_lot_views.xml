@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_lot_form_recall" model="ir.ui.view">
+        <field name="name">stock.lot.form.recall.report</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_recall_reports" type="object"
+                        class="oe_stat_button" icon="fa-recycle"
+                        invisible="recall_report_count == 0">
+                    <field name="recall_report_count" widget="statinfo" string="Recall Reports"/>
+                </button>
+                <button name="action_generate_recall_report" type="object"
+                        class="oe_stat_button" icon="fa-recycle"
+                        invisible="recall_report_count != 0">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Recall Report</span>
+                    </div>
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>

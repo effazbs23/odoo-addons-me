@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lot Recall Report</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body style="margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#F7F9FC;color:#001844;line-height:1.6;">
+<div style="max-width:1100px;margin:0 auto;padding:40px 20px 80px;">
+
+  <!-- 1. Banner -->
+  <div style="margin-bottom:32px;">
+    <img src="assets/main_screenshot.png" class="img-fluid" alt="Lot Recall Report main screenshot" style="width:100%;max-height:340px;object-fit:cover;border-radius:16px;">
+  </div>
+
+  <!-- 2. Hero -->
+  <section style="background:linear-gradient(135deg,#EAF6FC 0%,#F0F4FF 100%);border:1px solid #DCE1E8;border-radius:16px;padding:56px 48px;margin-bottom:32px;">
+    <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Odoo Module</span>
+    <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Inventory</span>
+    <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Traceability</span>
+    <h1 style="font-size:48px;font-weight:700;color:#001844;margin:16px 0 12px;line-height:1.15;">Lot Recall Report</h1>
+    <p style="margin:0;color:#797F8B;font-size:18px;max-width:760px;line-height:1.7;">One-click recall report tracing a lot/serial number to every customer, order, and shipment it touched.</p>
+  </section>
+
+  <!-- 3. Compatibility strip -->
+  <div style="margin-bottom:32px;padding:28px 32px;border:1px solid #DCE1E8;border-radius:16px;background:#ffffff;display:flex;flex-wrap:wrap;gap:32px;align-items:center;">
+    <div>
+      <h6 style="margin:0 0 10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Edition</h6>
+      <div class="d-flex gap-2 flex-wrap">
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Enterprise</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Community</span>
+      </div>
+    </div>
+    <div>
+      <h6 style="margin:0 0 10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Requires</h6>
+      <div class="d-flex gap-2 flex-wrap">
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Inventory</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Sales</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Manufacturing</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Purchase</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Overview -->
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Overview</h2>
+    <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.75;">When a lot or serial number turns out to be defective, the clock starts running: quality, compliance, and sales teams all need the same answer immediately &mdash; who has this stock, and where did it come from? Lot Recall Report turns that scramble into a single click from any lot or serial number record. It walks Odoo's own traceability graph (the same stock move data behind Inventory &gt; Traceability) to build a forward trace of every customer, sales order and delivery that received the lot, and a backward trace of the vendor, purchase order, or manufacturing order that produced it. Reports can cover a single lot or an entire production batch at once, and every report generated is saved to a searchable recall log for audit and compliance evidence. Built for regulated industries &mdash; pharmaceuticals, food, chemicals, electronics &mdash; where a documented, repeatable recall procedure matters as much as the recall itself.</p>
+  </section>
+
+  <!-- 5. Highlights -->
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 24px;font-weight:700;">Highlights</h2>
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;"><i class="fa fa-bolt"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">One-Click Generation</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Launch straight from a lot's own form view &mdash; no separate module to hunt for.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#F1EAFE;color:#8E59FD;font-size:20px;margin-bottom:16px;"><i class="fa fa-exchange-alt"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Forward &amp; Backward Trace</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">See downstream customers and upstream vendors/manufacturing in one screen.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;"><i class="fa fa-layer-group"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Batch Mode</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Trace an entire production run's worth of lots in a single consolidated report.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#FFF4E0;color:#FBAF33;font-size:20px;margin-bottom:16px;"><i class="fa fa-file-export"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">PDF &amp; XLSX Export</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Branded, print-ready output for regulators, customers, or internal sign-off.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;"><i class="fa fa-history"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Searchable Recall Log</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Every report generated is kept for future audit and compliance review.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#FDE6F1;color:#FE0C7D;font-size:20px;margin-bottom:16px;"><i class="fa fa-envelope"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Customer Notification Helper</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Pre-filled list of affected customer contacts, ready for the sales team to follow up.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Features -->
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Features</h2>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">01</span>
+      <div><strong style="color:#001844;">One-click recall wizard</strong><br><span style="color:#797F8B;">Launched directly from a lot/serial number (stock.lot) with a single "Generate Recall Report" action.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">02</span>
+      <div><strong style="color:#001844;">Forward trace</strong><br><span style="color:#797F8B;">Every sales order, delivery, and customer that received stock containing the selected lot, with quantities and dates.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">03</span>
+      <div><strong style="color:#001844;">Backward trace</strong><br><span style="color:#797F8B;">The originating purchase order or manufacturing order, and the vendor/component lot(s), that fed into the selected lot.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">04</span>
+      <div><strong style="color:#001844;">Multi-lot batch mode</strong><br><span style="color:#797F8B;">Select several lots at once &mdash; e.g. an entire production run &mdash; and generate one consolidated report.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">05</span>
+      <div><strong style="color:#001844;">Print-ready PDF &amp; XLSX export</strong><br><span style="color:#797F8B;">Company-branded output with the generation date/time and the user who ran it.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">06</span>
+      <div><strong style="color:#001844;">Recall log</strong><br><span style="color:#797F8B;">Every generated report is stored and searchable later for audit and compliance purposes.</span></div>
+    </div>
+    <div style="padding:14px 0;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">07</span>
+      <div><strong style="color:#001844;">Customer notification helper</strong><br><span style="color:#797F8B;">A pre-filled list of affected customer emails/contacts for the sales team to follow up with (does not auto-send).</span></div>
+    </div>
+  </section>
+
+  <!-- 7. Screenshots -->
+  <section style="margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Screenshots</h2>
+    <div style="margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Recall Report Dashboard</h5>
+      </div>
+      <img src="assets/main_screenshot.png" class="img-fluid" alt="Lot recall report dashboard with forward and backward trace" style="width:100%;height:auto;object-fit:contain;">
+      <div style="padding:16px 20px;font-size:14px;color:#797F8B;">Generate, print, and export a recall report directly from a lot/serial number, with forward and backward trace side by side.</div>
+    </div>
+  </section>
+
+  <!-- 8. Page Experience -->
+  <section style="background:#F7F9FC;border:1px solid #DCE1E8;border-radius:16px;padding:56px 48px;margin-bottom:28px;">
+    <div class="row d-flex align-items-center g-4">
+      <div class="col col-12 col-lg-6">
+        <h4 style="margin:0;font-size:32px;line-height:1.25;color:#001844;font-weight:700;">Built on Odoo's own traceability graph</h4>
+        <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:560px;">Instead of maintaining a second, parallel record of stock movements that can drift out of sync with reality, Lot Recall Report reads directly from the same <code>stock.move.line</code> data that powers Inventory &gt; Traceability. The value-add is entirely in the report format, the batch/audit layer, and the one-click workflow &mdash; not a competing tracking system.</p>
+        <ul style="margin-top:1rem;color:#797F8B;padding-left:1.1rem;">
+          <li>No duplicate data to keep in sync with core Inventory</li>
+          <li>Works with whatever traceability data already exists in your database</li>
+          <li>Community Edition compatible &mdash; no Enterprise-only dependency</li>
+        </ul>
+      </div>
+      <div class="col col-12 col-lg-6">
+        <img class="img-fluid" src="assets/main_screenshot.png" alt="Forward and backward trace cards" style="width:100%;border-radius:16px;object-fit:cover;">
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Why Choose ERP23 -->
+  <section style="background:#ECF0F1;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:28px;color:#001844;margin:0 0 24px;font-weight:700;text-align:center;">Why Choose ERP23</h2>
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-award" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">Silver Partner</span></h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Official Odoo Silver Partner with certified expertise</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-globe" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">30+</span> Countries Served</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Global reach with clients across 30+ countries</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-check-double" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">200+</span> Projects Completed</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Proven Odoo delivery across diverse business requirements</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-industry" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">15+</span> Industries Served</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Specialized Odoo expertise across retail, manufacturing, and services</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-certificate" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">7+</span> Certifications</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Team certified in 7+ specialized Odoo domains</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-user-clock" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">10+</span> Years Experience</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Nearly a decade of specialized Odoo expertise</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Contact & Support -->
+  <section style="background:#001844;border-radius:16px;padding:40px;margin-bottom:12px;text-align:center;">
+    <h2 style="font-size:28px;color:#00A0DB;margin:0 0 16px;font-weight:700;">Contact &amp; Support</h2>
+    <p style="margin:0 0 8px;color:#DCE1E8;font-size:20px;font-weight:800;letter-spacing:0.5px;">ERP23</p>
+    <p style="margin:0 0 8px;color:#DCE1E8;font-size:16px;line-height:1.6;">Developed and maintained by ERP23.</p>
+    <p style="margin:0 0 4px;color:#DCE1E8;">Website: <a href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer" style="color:#00A0DB;text-decoration:none;font-weight:600;">https://www.erp-23.com/</a></p>
+    <p style="margin:0;color:#DCE1E8;">Email: <a href="mailto:erp23@brainstation-23.com" style="color:#00A0DB;text-decoration:none;font-weight:600;">erp23@brainstation-23.com</a></p>
+  </section>
+
+</div>
+</body>
+</html>
