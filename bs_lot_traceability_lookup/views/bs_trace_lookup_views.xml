@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bs_trace_lookup_wizard_form" model="ir.ui.view">
+        <field name="name">bs.trace.lookup.wizard.form</field>
+        <field name="model">bs.trace.lookup.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Trace Lookup" class="o_bs_trace_lookup">
+                <sheet>
+                    <field name="has_result" invisible="1"/>
+
+                    <div class="o_bs_trace_searchbar">
+                        <i class="fa fa-barcode o_bs_trace_search_icon" title="Lot/Serial number" aria-hidden="1"/>
+                        <field name="lot_id" nolabel="1" placeholder="Type or scan a lot/serial number..."
+                               class="o_bs_trace_search_input"/>
+                        <button name="action_search" type="object" string="Trace"
+                                class="btn-primary o_bs_trace_search_btn">
+                            <i class="fa fa-search" title="Trace"/>
+                        </button>
+                    </div>
+                    <group class="o_bs_trace_options">
+                        <field name="direction"/>
+                        <field name="max_depth"/>
+                    </group>
+
+                    <div class="o_bs_trace_result" invisible="not has_result">
+                        <div class="o_bs_trace_result_header">
+                            <i class="fa fa-check-circle o_bs_trace_check_icon" title="Trace result"/>
+                            <field name="lot_id" nolabel="1" readonly="1" class="o_bs_trace_lot_name"/>
+                            <field name="status_class" widget="badge" nolabel="1" class="o_bs_trace_badge"
+                                   decoration-success="status_class == 'success'"
+                                   decoration-warning="status_class == 'warning'"
+                                   decoration-info="status_class == 'info'"
+                                   decoration-muted="status_class == 'secondary'"/>
+                        </div>
+                        <p class="o_bs_trace_summary">
+                            <field name="summary_text" nolabel="1" readonly="1"/>
+                        </p>
+
+                        <div class="o_bs_trace_flow">
+                            <div class="o_bs_trace_flow_step">
+                                <i class="fa fa-truck" title="Suppliers"/>
+                                <div class="o_bs_trace_flow_label">Suppliers</div>
+                                <div class="o_bs_trace_flow_sublabel">Raw Materials</div>
+                            </div>
+                            <i class="fa fa-long-arrow-right o_bs_trace_flow_arrow" title="then"/>
+                            <div class="o_bs_trace_flow_step">
+                                <i class="fa fa-industry" title="Production"/>
+                                <div class="o_bs_trace_flow_label">Production</div>
+                                <div class="o_bs_trace_flow_sublabel">MO</div>
+                            </div>
+                            <i class="fa fa-long-arrow-right o_bs_trace_flow_arrow" title="then"/>
+                            <div class="o_bs_trace_flow_step">
+                                <i class="fa fa-cube" title="Stock"/>
+                                <div class="o_bs_trace_flow_label">Stock</div>
+                                <div class="o_bs_trace_flow_sublabel">Finished Goods</div>
+                            </div>
+                            <i class="fa fa-long-arrow-right o_bs_trace_flow_arrow" title="then"/>
+                            <div class="o_bs_trace_flow_step">
+                                <i class="fa fa-user" title="Customers"/>
+                                <div class="o_bs_trace_flow_label">Customers</div>
+                                <div class="o_bs_trace_flow_sublabel">Deliveries</div>
+                            </div>
+                        </div>
+
+                        <div class="o_bs_trace_chain_card">
+                            <h6 class="o_bs_trace_chain_title">Trace Chain</h6>
+                            <field name="chain_html" nolabel="1" readonly="1"/>
+                        </div>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_export_pdf" type="object" string="Export Traceability Report (PDF)"
+                            class="btn-secondary o_bs_trace_export_btn" icon="fa-file-pdf-o"
+                            invisible="not has_result"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bs_trace_lookup_wizard" model="ir.actions.act_window">
+        <field name="name">Trace Lookup</field>
+        <field name="res_model">bs.trace.lookup.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
