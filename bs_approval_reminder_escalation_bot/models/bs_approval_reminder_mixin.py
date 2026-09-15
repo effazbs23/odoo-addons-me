@@ -146,7 +146,11 @@ class BsApprovalReminderMixin(models.AbstractModel):
             kind=self._bs_record_label(),
             days=days,
         )
-        self._bs_schedule_activity(approver, summary, note)
+        # Notify everyone who can act on it (e.g. a PO's buyer and its
+        # purchase managers), while the log keeps a single primary approver
+        # for traceability.
+        for user in self._bs_get_approver_users():
+            self._bs_schedule_activity(user, summary, note)
         self._bs_log('reminded', approver)
 
     def _bs_send_escalation(self, config, approver):

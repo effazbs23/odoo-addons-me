@@ -23,5 +23,14 @@ class PurchaseOrder(models.Model):
             return self.env['res.users']
         return group.sudo().all_user_ids.filtered('active')[:1]
 
+    def _bs_get_approver_users(self):
+        # The buyer can't approve their own PO once it needs double
+        # validation, so reminders must also reach whoever actually can:
+        # the purchase managers. Both get notified.
+        self.ensure_one()
+        group = self.env.ref('purchase.group_purchase_manager', raise_if_not_found=False)
+        managers = group.sudo().all_user_ids.filtered('active') if group else self.env['res.users']
+        return (self.user_id | managers).filtered('active')
+
     def _bs_pending_domain(self):
         return [('state', '=', 'to approve')]

@@ -68,8 +68,8 @@
 
     <menuitem
         id="menu_approval_reminder_config_root"
-        name="Approvals"
-        parent="base.menu_administration"
+        name="Approval Reminders"
+        web_icon="bs_approval_reminder_escalation_bot,static/description/icon.png"
         sequence="40"
     />
 

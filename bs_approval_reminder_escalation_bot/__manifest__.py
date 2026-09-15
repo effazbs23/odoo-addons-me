@@ -38,6 +38,6 @@ Covers Purchase Orders, Expenses, and Time Off requests.
         ],
     },
     'installable': True,
-    'application': False,
+    'application': True,
     'auto_install': False,
 }
