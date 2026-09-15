@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_soft_reservation_stock_user,stock.soft.reservation.stock.user,model_stock_soft_reservation,stock.group_stock_user,1,0,0,0
+access_stock_soft_reservation_pos_user,stock.soft.reservation.pos.user,model_stock_soft_reservation,point_of_sale.group_pos_user,1,0,0,0
+access_stock_soft_reservation_manager,stock.soft.reservation.manager,model_stock_soft_reservation,stock.group_stock_manager,1,1,1,1
+access_multichannel_stock_buffer_stock_user,multichannel.stock.buffer.stock.user,model_multichannel_stock_buffer,stock.group_stock_user,1,0,0,0
+access_multichannel_stock_buffer_pos_user,multichannel.stock.buffer.pos.user,model_multichannel_stock_buffer,point_of_sale.group_pos_user,1,0,0,0
+access_multichannel_stock_buffer_manager,multichannel.stock.buffer.manager,model_multichannel_stock_buffer,stock.group_stock_manager,1,1,1,1
+access_multichannel_oversell_alert_stock_user,multichannel.oversell.alert.stock.user,model_multichannel_oversell_alert,stock.group_stock_user,1,0,0,0
+access_multichannel_oversell_alert_pos_user,multichannel.oversell.alert.pos.user,model_multichannel_oversell_alert,point_of_sale.group_pos_user,1,0,0,0
+access_multichannel_oversell_alert_manager,multichannel.oversell.alert.manager,model_multichannel_oversell_alert,stock.group_stock_manager,1,1,1,1
+access_multichannel_sellable_report_stock_user,multichannel.sellable.report.stock.user,model_multichannel_sellable_report,stock.group_stock_user,1,0,0,0
+access_multichannel_sellable_report_pos_user,multichannel.sellable.report.pos.user,model_multichannel_sellable_report,point_of_sale.group_pos_user,1,0,0,0
+access_multichannel_sellable_report_manager,multichannel.sellable.report.manager,model_multichannel_sellable_report,stock.group_stock_manager,1,0,0,0

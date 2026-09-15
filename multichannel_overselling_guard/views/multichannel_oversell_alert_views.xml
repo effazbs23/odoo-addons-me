@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_multichannel_oversell_alert_list" model="ir.ui.view">
+        <field name="name">multichannel.oversell.alert.list</field>
+        <field name="model">multichannel.oversell.alert</field>
+        <field name="arch" type="xml">
+            <list string="Oversell Detected" create="false"
+                  decoration-danger="state == 'pending'" decoration-muted="state == 'reviewed'">
+                <field name="create_date" string="Detected On"/>
+                <field name="product_id"/>
+                <field name="channel" widget="badge"/>
+                <field name="requested_qty"/>
+                <field name="available_qty"/>
+                <field name="oversell_qty"/>
+                <field name="state" widget="badge"
+                       decoration-danger="state == 'pending'" decoration-success="state == 'reviewed'"/>
+                <button name="action_mark_reviewed" type="object" string="Manual Review"
+                        invisible="state == 'reviewed'" class="btn-link"/>
+                <button name="action_view_order" type="object" string="View Order" class="btn-link"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_multichannel_oversell_alert_kanban" model="ir.ui.view">
+        <field name="name">multichannel.oversell.alert.kanban</field>
+        <field name="model">multichannel.oversell.alert</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <field name="product_id"/>
+                <field name="channel"/>
+                <field name="requested_qty"/>
+                <field name="available_qty"/>
+                <field name="oversell_qty"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card o_kanban_record border-start border-4 #{record.state.raw_value == 'pending' ? 'border-danger' : 'border-secondary'}">
+                            <div class="o_kanban_record_top">
+                                <strong>
+                                    <i t-if="record.state.raw_value == 'pending'" class="fa fa-exclamation-triangle text-danger"/>
+                                    Oversell Detected
+                                </strong>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div><strong t-esc="record.product_id.value"/></div>
+                                <div>Channel: <field name="channel" widget="badge"/></div>
+                                <div>Requested Qty: <field name="requested_qty"/></div>
+                                <div>Available to Promise: <field name="available_qty"/></div>
+                                <div class="text-danger">Oversell Qty: <field name="oversell_qty"/></div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <button t-if="record.state.raw_value != 'reviewed'"
+                                            name="action_mark_reviewed" type="object" string="Manual Review"
+                                            class="btn btn-primary btn-sm"/>
+                                    <button name="action_view_order" type="object" string="View Order"
+                                            class="btn btn-secondary btn-sm"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_multichannel_oversell_alert_form" model="ir.ui.view">
+        <field name="name">multichannel.oversell.alert.form</field>
+        <field name="model">multichannel.oversell.alert</field>
+        <field name="arch" type="xml">
+            <form string="Oversell Alert" create="false">
+                <header>
+                    <button name="action_mark_reviewed" type="object" string="Manual Review"
+                            class="btn-primary" invisible="state == 'reviewed'"/>
+                    <button name="action_view_order" type="object" string="View Order"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="channel"/>
+                            <field name="sale_order_id"/>
+                            <field name="pos_order_id"/>
+                        </group>
+                        <group>
+                            <field name="requested_qty"/>
+                            <field name="available_qty"/>
+                            <field name="oversell_qty"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Reviewer notes..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_multichannel_oversell_alert_search" model="ir.ui.view">
+        <field name="name">multichannel.oversell.alert.search</field>
+        <field name="model">multichannel.oversell.alert</field>
+        <field name="arch" type="xml">
+            <search string="Search Oversell Alerts">
+                <field name="product_id"/>
+                <field name="channel"/>
+                <filter string="Pending Review" name="filter_pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="Reviewed" name="filter_reviewed" domain="[('state', '=', 'reviewed')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Channel" name="group_channel" context="{'group_by': 'channel'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_multichannel_oversell_alert" model="ir.actions.act_window">
+        <field name="name">Oversell Detected</field>
+        <field name="res_model">multichannel.oversell.alert</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="context">{'search_default_filter_pending': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No oversell alerts. Nothing has been sold twice.
+            </p>
+            <p>
+                This is the safety net, not the primary mechanism: it flags a
+                confirmation for manual review when two channels raced past
+                what was actually sellable. It never blocks or reverses the
+                sale itself.
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_multichannel_stock_buffer_list" model="ir.ui.view">
+        <field name="name">multichannel.stock.buffer.list</field>
+        <field name="model">multichannel.stock.buffer</field>
+        <field name="arch" type="xml">
+            <list string="Reserved Buffer" editable="bottom">
+                <field name="product_id"/>
+                <field name="warehouse_id"/>
+                <field name="on_hand" readonly="1"/>
+                <field name="buffer_qty" string="Reserved Buffer"/>
+                <field name="buffer_percent" string="Buffer %" readonly="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_multichannel_stock_buffer_search" model="ir.ui.view">
+        <field name="name">multichannel.stock.buffer.search</field>
+        <field name="model">multichannel.stock.buffer</field>
+        <field name="arch" type="xml">
+            <search string="Search Reserved Buffers">
+                <field name="product_id"/>
+                <field name="warehouse_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Warehouse" name="group_warehouse" context="{'group_by': 'warehouse_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_multichannel_stock_buffer" model="ir.actions.act_window">
+        <field name="name">Reserved Buffer</field>
+        <field name="res_model">multichannel.stock.buffer</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configure a reserved buffer.
+            </p>
+            <p>
+                Hold back a quantity per product/warehouse from online and POS
+                sale, to absorb timing gaps between channels. Only matters for
+                products whose category has the overselling guard enabled.
+            </p>
+        </field>
+    </record>
+
+</odoo>

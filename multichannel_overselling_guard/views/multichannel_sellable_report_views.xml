@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_multichannel_sellable_report_list" model="ir.ui.view">
+        <field name="name">multichannel.sellable.report.list</field>
+        <field name="model">multichannel.sellable.report</field>
+        <field name="arch" type="xml">
+            <list string="Sellable Now" create="false" edit="false"
+                  decoration-danger="status == 'out_of_stock'" decoration-warning="status == 'low_stock'">
+                <field name="product_id"/>
+                <field name="warehouse_id"/>
+                <field name="on_hand"/>
+                <field name="reserved"/>
+                <field name="buffer_qty" string="Buffer"/>
+                <field name="sellable_now"/>
+                <field name="status" widget="badge"
+                       decoration-success="status == 'available'"
+                       decoration-warning="status == 'low_stock'"
+                       decoration-danger="status == 'out_of_stock'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_multichannel_sellable_report_kanban" model="ir.ui.view">
+        <field name="name">multichannel.sellable.report.kanban</field>
+        <field name="model">multichannel.sellable.report</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column" default_group_by="warehouse_id" quick_create="false">
+                <field name="product_id"/>
+                <field name="warehouse_id"/>
+                <field name="sellable_now"/>
+                <field name="status"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card o_kanban_record">
+                            <div class="o_kanban_record_top">
+                                <strong t-esc="record.product_id.value"/>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div>Sellable Now: <strong t-esc="record.sellable_now.value"/></div>
+                                <field name="status" widget="badge"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_multichannel_sellable_report_search" model="ir.ui.view">
+        <field name="name">multichannel.sellable.report.search</field>
+        <field name="model">multichannel.sellable.report</field>
+        <field name="arch" type="xml">
+            <search string="Search Sellable Now">
+                <field name="product_id"/>
+                <field name="warehouse_id"/>
+                <filter string="Available" name="filter_available" domain="[('status', '=', 'available')]"/>
+                <filter string="Low Stock" name="filter_low_stock" domain="[('status', '=', 'low_stock')]"/>
+                <filter string="Out of Stock" name="filter_out_of_stock" domain="[('status', '=', 'out_of_stock')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Warehouse" name="group_warehouse" context="{'group_by': 'warehouse_id'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_multichannel_sellable_report" model="ir.actions.act_window">
+        <field name="name">Sellable Now</field>
+        <field name="res_model">multichannel.sellable.report</field>
+        <field name="view_mode">list,kanban</field>
+        <field name="context">{'search_default_group_warehouse': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Nothing to report yet.
+            </p>
+            <p>
+                What's actually sellable right now per product/warehouse, after
+                the reserved buffer and any active cross-channel reservations.
+                Note: this is grouped by warehouse, not by sales channel --
+                sellable stock itself has no channel, only reservations do. See
+                CHANGELOG.md for a v2 idea on a true per-channel breakdown.
+            </p>
+        </field>
+    </record>
+
+</odoo>

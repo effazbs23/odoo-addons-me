@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- UNVERIFIED core view external ID: this environment has no vendored
+         copy of the core `product` module to confirm against. Based on
+         standard Odoo 17 Community convention (product.product_category_form_view).
+         Verify against the target instance and adjust the xpath if it differs. -->
+    <record id="view_product_category_form_inherit_multichannel" model="ir.ui.view">
+        <field name="name">product.category.form.inherit.multichannel.overselling.guard</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="overselling_guard_enabled"/>
+                <field name="default_reserved_buffer_qty"
+                       invisible="not overselling_guard_enabled"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

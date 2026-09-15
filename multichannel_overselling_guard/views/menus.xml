@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_multichannel_overselling_guard_root"
+              name="Multichannel Overselling Guard"
+              sequence="60"/>
+
+    <menuitem id="menu_multichannel_stock_buffer"
+              name="Reserved Buffer"
+              parent="menu_multichannel_overselling_guard_root"
+              action="action_multichannel_stock_buffer"
+              sequence="10"/>
+
+    <menuitem id="menu_stock_soft_reservation_open"
+              name="Reserved Open Orders"
+              parent="menu_multichannel_overselling_guard_root"
+              action="action_stock_soft_reservation_open"
+              sequence="20"/>
+
+    <menuitem id="menu_multichannel_sellable_report"
+              name="Sellable Now"
+              parent="menu_multichannel_overselling_guard_root"
+              action="action_multichannel_sellable_report"
+              sequence="30"/>
+
+    <menuitem id="menu_multichannel_oversell_alert"
+              name="Oversell Detected"
+              parent="menu_multichannel_overselling_guard_root"
+              action="action_multichannel_oversell_alert"
+              sequence="40"/>
+
+    <menuitem id="menu_multichannel_overselling_guard_configuration"
+              name="Configuration"
+              parent="menu_multichannel_overselling_guard_root"
+              sequence="100"/>
+
+    <menuitem id="menu_multichannel_stock_buffer_config"
+              name="Reserved Buffers"
+              parent="menu_multichannel_overselling_guard_configuration"
+              action="action_multichannel_stock_buffer"
+              sequence="10"/>
+
+    <!-- UNVERIFIED core action external ID: no vendored `product` module in
+         this environment to confirm against. Based on standard Odoo 17
+         Community convention (product.product_category_action_form). -->
+    <menuitem id="menu_product_category_config"
+              name="Product Categories"
+              parent="menu_multichannel_overselling_guard_configuration"
+              action="product.product_category_action_form"
+              sequence="20"/>
+
+</odoo>

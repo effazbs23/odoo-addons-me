@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_stock_soft_reservation_list" model="ir.ui.view">
+        <field name="name">stock.soft.reservation.list</field>
+        <field name="model">stock.soft.reservation</field>
+        <field name="arch" type="xml">
+            <list string="Reserved Open Orders" create="false" edit="false">
+                <field name="origin_display_name" string="Order"/>
+                <field name="channel" widget="badge"
+                       decoration-info="channel == 'website'"
+                       decoration-success="channel == 'pos'"
+                       decoration-warning="channel == 'b2b'"/>
+                <field name="product_id"/>
+                <field name="quantity"/>
+                <field name="expires_at" string="Reserved Until"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'active'"
+                       decoration-muted="state in ('expired', 'released')"
+                       decoration-info="state == 'confirmed'"/>
+                <button name="action_open_origin" type="object" string="Open Order"
+                        icon="fa-external-link" class="btn-link"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_stock_soft_reservation_form" model="ir.ui.view">
+        <field name="name">stock.soft.reservation.form</field>
+        <field name="model">stock.soft.reservation</field>
+        <field name="arch" type="xml">
+            <form string="Soft Reservation" create="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="warehouse_id"/>
+                            <field name="quantity"/>
+                            <field name="channel"/>
+                        </group>
+                        <group>
+                            <field name="state"/>
+                            <field name="expires_at"/>
+                            <field name="origin_display_name" string="Order"/>
+                        </group>
+                    </group>
+                    <button name="action_open_origin" type="object" string="Open Order"
+                            class="btn-secondary"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_stock_soft_reservation_search" model="ir.ui.view">
+        <field name="name">stock.soft.reservation.search</field>
+        <field name="model">stock.soft.reservation</field>
+        <field name="arch" type="xml">
+            <search string="Search Soft Reservations">
+                <field name="product_id"/>
+                <field name="warehouse_id"/>
+                <field name="channel"/>
+                <filter string="Active" name="filter_active" domain="[('state', '=', 'active')]"/>
+                <filter string="Confirmed" name="filter_confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Channel" name="group_channel" context="{'group_by': 'channel'}"/>
+                    <filter string="Warehouse" name="group_warehouse" context="{'group_by': 'warehouse_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_stock_soft_reservation_open" model="ir.actions.act_window">
+        <field name="name">Reserved Open Orders</field>
+        <field name="res_model">stock.soft.reservation</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'active')]</field>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No open channel reservations right now.
+            </p>
+            <p>
+                Soft holds put on stock by in-progress website, B2B or POS
+                orders show up here until they are confirmed, expire, or are
+                released.
+            </p>
+        </field>
+    </record>
+
+</odoo>
