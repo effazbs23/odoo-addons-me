@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bs_approval_reminder_log_tree" model="ir.ui.view">
+        <field name="name">bs.approval.reminder.log.tree</field>
+        <field name="model">bs.approval.reminder.log</field>
+        <field name="arch" type="xml">
+            <list string="Escalation Log"
+                  default_order="create_date desc">
+                <field name="create_date" string="Date &amp; Time"/>
+                <field name="approval_type"/>
+                <field name="record_ref" string="Reference"/>
+                <field name="original_approver_id" string="Original Approver"
+                       widget="many2one_avatar_user"/>
+                <field name="escalated_to_id" string="Escalated To"
+                       widget="many2one_avatar_user"/>
+                <field name="action_taken" string="Action" widget="badge"
+                       decoration-danger="action_taken == 'escalated'"
+                       decoration-success="action_taken == 'reminded'"
+                       decoration-info="action_taken == 'snoozed'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="bs_approval_reminder_log_search" model="ir.ui.view">
+        <field name="name">bs.approval.reminder.log.search</field>
+        <field name="model">bs.approval.reminder.log</field>
+        <field name="arch" type="xml">
+            <search string="Escalation Log">
+                <field name="record_ref" string="Reference"/>
+                <field name="original_approver_id" string="Original Approver"/>
+                <field name="escalated_to_id" string="Escalated To"/>
+                <filter string="Purchase Orders" name="filter_type_po"
+                        domain="[('approval_type', '=', 'purchase_order')]"/>
+                <filter string="Expenses" name="filter_type_expense"
+                        domain="[('approval_type', '=', 'expense_report')]"/>
+                <filter string="Time Off" name="filter_type_leave"
+                        domain="[('approval_type', '=', 'time_off')]"/>
+                <separator/>
+                <filter string="Last 7 Days" name="filter_date_last_7_days"
+                        domain="[('create_date', '&gt;=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter string="Last 30 Days" name="filter_date_last_30_days"
+                        domain="[('create_date', '&gt;=', (context_today() - relativedelta(days=30)).strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter string="This Month" name="filter_date_this_month"
+                        domain="[('create_date', '&gt;=', context_today().strftime('%Y-%m-01 00:00:00'))]"/>
+                <separator/>
+                <filter string="Not Escalated" name="filter_action_sent"
+                        domain="[('action_taken', 'in', ('reminded', 'snoozed'))]"/>
+                <filter string="Escalated Only" name="filter_action_escalated"
+                        domain="[('action_taken', '=', 'escalated')]"/>
+                <group>
+                    <filter string="Approval Type" name="group_by_approval_type"
+                            context="{'group_by': 'approval_type'}"/>
+                    <filter string="Action" name="group_by_action"
+                            context="{'group_by': 'action_taken'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="bs_approval_reminder_log_form" model="ir.ui.view">
+        <field name="name">bs.approval.reminder.log.form</field>
+        <field name="model">bs.approval.reminder.log</field>
+        <field name="arch" type="xml">
+            <form string="Escalation Log Entry">
+                <group>
+                    <group>
+                        <field name="create_date" string="Date &amp; Time"/>
+                        <field name="approval_type"/>
+                        <field name="record_ref" string="Reference"/>
+                    </group>
+                    <group>
+                        <field name="action_taken" string="Action"/>
+                        <field name="original_approver_id" string="Original Approver"/>
+                        <field name="escalated_to_id" string="Escalated To"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_approval_reminder_log" model="ir.actions.act_window">
+        <field name="name">Escalation Log</field>
+        <field name="res_model">bs.approval.reminder.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p>
+                Every reminder, escalation and snooze event is recorded here so
+                admins can see how often approvals stall.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_approval_reminder_log"
+        name="Escalation Log"
+        parent="menu_approval_reminder_config_root"
+        action="action_approval_reminder_log"
+        sequence="20"
+    />
+</odoo>

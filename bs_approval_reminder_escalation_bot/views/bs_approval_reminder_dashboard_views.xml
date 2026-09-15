@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_bs_approval_reminder_dashboard" model="ir.actions.client">
+        <field name="name">Pending Approvals</field>
+        <field name="tag">bs_approval_reminder_escalation_bot.dashboard</field>
+        <field name="res_model">bs.approval.reminder.config</field>
+    </record>
+
+    <menuitem
+        id="menu_bs_approval_reminder_dashboard"
+        name="Pending Approvals"
+        parent="menu_approval_reminder_config_root"
+        action="action_bs_approval_reminder_dashboard"
+        sequence="2"
+    />
+</odoo>

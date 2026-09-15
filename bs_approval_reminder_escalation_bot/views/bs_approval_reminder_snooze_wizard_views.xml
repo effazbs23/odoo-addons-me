@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bs_approval_reminder_snooze_wizard_form" model="ir.ui.view">
+        <field name="name">bs.approval.reminder.snooze.wizard.form</field>
+        <field name="model">bs.approval.reminder.snooze.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Snooze Approval Reminder">
+                <div class="oe_avatar o_approval_reminder_snooze_icon">
+                    <i class="fa fa-clock-o" aria-label="Snooze"/>
+                </div>
+                <p class="mt-3 mb-0">
+                    <strong>Postpone this reminder.</strong>
+                </p>
+                <p class="text-muted">
+                    The approval will stay snoozed for the chosen duration, even
+                    if the escalation threshold is crossed meanwhile.
+                </p>
+                <group>
+                    <field name="snooze_preset"/>
+                    <field name="days" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object"
+                            string="Snooze" class="btn-primary"/>
+                    <button string="Cancel" class="btn-link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
