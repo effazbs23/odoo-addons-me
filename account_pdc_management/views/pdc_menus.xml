@@ -2,7 +2,7 @@
 <odoo>
 
     <menuitem id="menu_pdc_root"
-              name="Post Dated Cheques"
+              name="PDC Management"
               web_icon="account_pdc_management,static/description/icon.png"
               sequence="52"
               groups="account.group_account_invoice,account.group_account_readonly"/>
