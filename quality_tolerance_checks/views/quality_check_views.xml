@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_quality_check_graph_control_chart" model="ir.ui.view">
+        <field name="name">quality.check.graph.control.chart</field>
+        <field name="model">quality.check</field>
+        <field name="arch" type="xml">
+            <graph string="Control Chart" type="line">
+                <field name="create_date" interval="day"/>
+                <field name="measured_value" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_quality_check_form_tolerance" model="ir.ui.view">
+        <field name="name">quality.check.form.tolerance.checks</field>
+        <field name="model">quality.check</field>
+        <field name="inherit_id" ref="quality.quality_check_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_view_control_chart" type="object"
+                            string="Control Chart" class="btn-secondary"
+                            invisible="test_type != 'tolerance_check'"/>
+                </header>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <div class="o_tolerance_checks_wrapper" invisible="test_type != 'tolerance_check'">
+                    <group>
+                        <group string="Tolerance">
+                            <label for="tolerance_target"/>
+                            <div class="o_row">
+                                <field name="tolerance_target" readonly="1"/>
+                                <field name="tolerance_norm_unit" nolabel="1" readonly="1"/>
+                            </div>
+                            <label for="tolerance_min"/>
+                            <div class="o_row">
+                                <field name="tolerance_min" readonly="1"/>
+                                <field name="tolerance_norm_unit" nolabel="1" readonly="1"/>
+                            </div>
+                            <label for="tolerance_max"/>
+                            <div class="o_row">
+                                <field name="tolerance_max" readonly="1"/>
+                                <field name="tolerance_norm_unit" nolabel="1" readonly="1"/>
+                            </div>
+                            <label for="measured_value"/>
+                            <div class="o_row">
+                                <field name="measured_value"/>
+                                <field name="tolerance_norm_unit" nolabel="1" readonly="1"/>
+                            </div>
+                        </group>
+                        <group>
+                            <div class="o_tolerance_result_banner alert alert-success mb-0"
+                                 role="alert" invisible="quality_state != 'pass'">
+                                <i class="fa fa-check-circle fa-3x" title="Pass"/>
+                                <div class="o_tolerance_result_label">PASS</div>
+                                <div>Measured value is within tolerance limits.</div>
+                            </div>
+                            <div class="o_tolerance_result_banner alert alert-danger mb-0"
+                                 role="alert" invisible="quality_state != 'fail'">
+                                <i class="fa fa-times-circle fa-3x" title="Fail"/>
+                                <div class="o_tolerance_result_label">FAIL</div>
+                                <div>Measured value is out of tolerance limits.</div>
+                            </div>
+                        </group>
+                    </group>
+                    <group string="Measurement History">
+                        <field name="sibling_check_ids" nolabel="1" readonly="1">
+                            <list create="0" edit="0" delete="0" decoration-danger="quality_state == 'fail'">
+                                <field name="create_date" string="Date"/>
+                                <field name="measured_value"/>
+                                <field name="quality_state" widget="badge"
+                                       decoration-success="quality_state == 'pass'"
+                                       decoration-danger="quality_state == 'fail'"/>
+                            </list>
+                        </field>
+                    </group>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

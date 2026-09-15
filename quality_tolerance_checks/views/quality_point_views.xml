@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_quality_point_form_tolerance" model="ir.ui.view">
+        <field name="name">quality.point.form.tolerance.checks</field>
+        <field name="model">quality.point</field>
+        <field name="inherit_id" ref="quality.quality_point_view_form"/>
+        <field name="arch" type="xml">
+            <field name="test_type" position="after">
+                <field name="tolerance_mode" invisible="test_type != 'tolerance_check'"/>
+                <field name="tolerance_deviation_type"
+                       invisible="test_type != 'tolerance_check' or tolerance_mode != 'symmetric'"/>
+                <field name="tolerance_target" invisible="test_type != 'tolerance_check'"/>
+                <field name="tolerance_deviation"
+                       invisible="test_type != 'tolerance_check' or tolerance_mode != 'symmetric'"/>
+                <field name="tolerance_min" invisible="test_type != 'tolerance_check'"/>
+                <field name="tolerance_max" invisible="test_type != 'tolerance_check'"/>
+                <field name="norm_unit" invisible="test_type != 'tolerance_check'"/>
+            </field>
+        </field>
+    </record>
+</odoo>

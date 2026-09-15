@@ -1,0 +1,29 @@
+.o_tolerance_checks_wrapper {
+    .o_tolerance_result_banner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 24px 16px;
+        height: 100%;
+        border-radius: 12px;
+
+        .o_tolerance_result_label {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+    }
+
+    .o_tolerance_result_banner.alert-success {
+        background-color: rgba(40, 167, 69, 0.12);
+        color: #1e7e34;
+    }
+
+    .o_tolerance_result_banner.alert-danger {
+        background-color: rgba(220, 53, 69, 0.12);
+        color: #bd2130;
+    }
+}

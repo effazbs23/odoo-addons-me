@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Custom Numeric-Tolerance Quality Checks</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body style="margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#F7F9FC;color:#001844;line-height:1.6;">
+<div style="max-width:1100px;margin:0 auto;padding:40px 20px 80px;">
+
+  <div style="margin-bottom:32px;">
+    <img src="assets/main_screenshot.png" class="img-fluid" alt="Custom Numeric-Tolerance Quality Checks main screenshot" style="width:100%;max-height:340px;object-fit:cover;border-radius:16px;">
+  </div>
+
+  <section style="background:linear-gradient(135deg,#EAF6FC 0%,#F0F4FF 100%);border:1px solid #DCE1E8;border-radius:16px;padding:56px 48px;margin-bottom:32px;">
+    <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Odoo Module</span>
+    <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Manufacturing</span>
+    <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Quality</span>
+    <h1 style="font-size:48px;font-weight:700;color:#001844;margin:16px 0 12px;line-height:1.15;">Custom Numeric-Tolerance Quality Checks</h1>
+    <p style="margin:0;color:#797F8B;font-size:18px;max-width:760px;line-height:1.7;">A quality check type supporting min/max numeric tolerance with automatic pass/fail &mdash; built for machining and metal fabrication.</p>
+  </section>
+
+  <div style="margin-bottom:32px;padding:28px 32px;border:1px solid #DCE1E8;border-radius:16px;background:#ffffff;display:flex;flex-wrap:wrap;gap:32px;align-items:center;">
+    <div>
+      <h6 style="margin:0 0 10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Edition</h6>
+      <div class="d-flex gap-2 flex-wrap">
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Enterprise</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Community</span>
+      </div>
+    </div>
+    <div>
+      <h6 style="margin:0 0 10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Requires</h6>
+      <div class="d-flex gap-2 flex-wrap">
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Quality app</span>
+      </div>
+    </div>
+  </div>
+
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Overview</h2>
+    <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.75;">Machining and metal fabrication shops live and die by numeric tolerances, but Odoo's core Quality app leaves pass/fail on a measurement to the operator's own judgment. Custom Numeric-Tolerance Quality Checks adds a new "Tolerance Check" quality point type where you define a target value and an acceptable min/max band &mdash; either as a symmetric plus/minus deviation (absolute or percentage) or as a direct range &mdash; and the check that gets generated from it decides pass or fail automatically the moment a measurement is entered. Every check keeps its own frozen snapshot of the tolerance it was checked against, so changing a point's configuration later never rewrites history. Out-of-tolerance measurements raise a standard Quality Alert automatically, and every point builds up a measurement history and a native control-chart view for statistical-process-control style review. It's built for quality engineers and shop-floor operators in discrete manufacturing, and it's fully additive to core Quality &mdash; no existing behavior is overridden, so it works the same in Community and Enterprise.</p>
+  </section>
+
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 24px;font-weight:700;">Highlights</h2>
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;"><i class="fa fa-ruler-combined"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Tolerance Check Point Type</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Define a target value plus a symmetric (&plusmn;) or min/max range tolerance, right on the quality point.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#F1EAFE;color:#8E59FD;font-size:20px;margin-bottom:16px;"><i class="fa fa-bolt"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Automatic Pass/Fail</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">The operator enters a measured value and the check state is decided instantly &mdash; no manual judgment call.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#FDE6F1;color:#FE0C7D;font-size:20px;margin-bottom:16px;"><i class="fa fa-exclamation-triangle"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Out-of-Tolerance Alerts</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">A failed measurement raises a standard Quality Alert pre-filled with measured vs. target/min/max.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;"><i class="fa fa-chart-line"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Measurement History &amp; Control Chart</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Every past measurement on a point, plus a native line-graph control chart for SPC-style review.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#FFF4E0;color:#FBAF33;font-size:20px;margin-bottom:16px;"><i class="fa fa-map-marker-alt"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Multi-Point Checks</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Measure the same dimension at several points on a part using several quality points &mdash; no new model needed.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;"><i class="fa fa-recycle"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Fully Additive to Core Quality</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">No parallel data model and no overridden core behavior &mdash; works the same in Community and Enterprise.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Features</h2>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">01</span>
+      <div><strong style="color:#001844;">Tolerance Check quality point type</strong><br><span style="color:#797F8B;">A new "Tolerance Check" test type on quality points, with a target value and a min/max acceptable tolerance defined as absolute or percentage.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">02</span>
+      <div><strong style="color:#001844;">Symmetric or range tolerance modes</strong><br><span style="color:#797F8B;">Enter a target plus a &plusmn; deviation and let min/max auto-fill, or key a min/max range directly &mdash; both stay independently editable.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">03</span>
+      <div><strong style="color:#001844;">Automatic pass/fail</strong><br><span style="color:#797F8B;">When the operator enters a measured value, the check is marked pass or fail against the configured tolerance immediately &mdash; no manual judgment call needed.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">04</span>
+      <div><strong style="color:#001844;">Out-of-tolerance alert</strong><br><span style="color:#797F8B;">Automatically creates a Quality Alert &mdash; using core Quality's existing alert model, no parallel alert system &mdash; pre-filled with the measured vs. target/min/max values whenever a measurement fails.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">05</span>
+      <div><strong style="color:#001844;">Measurement history &amp; control chart</strong><br><span style="color:#797F8B;">A per-point history of past measurements for statistical-process-control style review, plus a simple control-chart style graph &mdash; no external charting library required.</span></div>
+    </div>
+    <div style="padding:14px 0;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">06</span>
+      <div><strong style="color:#001844;">Multi-point tolerance checks</strong><br><span style="color:#797F8B;">Measure the same dimension at several points on a part &mdash; supported the same way core Quality already supports multiple quality points, with no new model.</span></div>
+    </div>
+  </section>
+
+  <section style="margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Screenshots</h2>
+    <div style="margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Tolerance Check Form</h5>
+      </div>
+      <img src="assets/main_screenshot.png" class="img-fluid" alt="Tolerance check form with target, min/max, measured value, pass/fail banner, measurement history and control chart" style="width:100%;height:auto;object-fit:contain;">
+      <div style="padding:16px 20px;font-size:14px;color:#797F8B;">Target, minimum, maximum and measured value with unit, an instant pass/fail banner, the point's measurement history, and a control-chart view of past measurements.</div>
+    </div>
+  </section>
+
+  <section style="background:#F7F9FC;border:1px solid #DCE1E8;border-radius:16px;padding:56px 48px;margin-bottom:28px;">
+    <div class="row d-flex align-items-center g-4">
+      <div class="col col-12 col-lg-6">
+        <h4 style="margin:0;font-size:32px;line-height:1.25;color:#001844;font-weight:700;">Tolerance is frozen at check creation, not looked up live</h4>
+        <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:560px;">Each check stores its own snapshot of the target, minimum, maximum and unit at the moment it was created, instead of reading them live from the quality point. Retune a point's tolerance next quarter and every check made under the old tolerance still shows exactly what it was judged against &mdash; audit history that can't be rewritten after the fact.</p>
+        <ul style="margin-top:1rem;color:#797F8B;padding-left:1.1rem;">
+          <li>Immune to later edits of the point's tolerance configuration</li>
+          <li>Safe to hand to an auditor months after the measurement was taken</li>
+          <li>No extra model &mdash; plain fields on the existing quality.check record</li>
+        </ul>
+      </div>
+      <div class="col col-12 col-lg-6">
+        <img class="img-fluid" src="assets/main_screenshot.png" alt="Frozen tolerance snapshot on a quality check" style="width:100%;border-radius:16px;object-fit:cover;">
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#F7F9FC;border:1px solid #DCE1E8;border-radius:16px;padding:56px 48px;margin-bottom:28px;">
+    <div class="row d-flex align-items-center g-4">
+      <div class="col col-12 col-lg-6 order-2 order-lg-1">
+        <img class="img-fluid" src="assets/main_screenshot.png" alt="Native control chart graph view" style="width:100%;border-radius:16px;object-fit:cover;">
+      </div>
+      <div class="col col-12 col-lg-6 order-1 order-lg-2">
+        <h4 style="margin:0;font-size:32px;line-height:1.25;color:#001844;font-weight:700;">Control chart on Odoo's own graph view</h4>
+        <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:560px;">The control chart is a native Odoo line-graph view over quality.check, filtered to the current point &mdash; not a bundled charting library or custom widget to keep patched. Open it straight from the check form to see every past measurement on that point plotted over time.</p>
+        <ul style="margin-top:1rem;color:#797F8B;padding-left:1.1rem;">
+          <li>Zero external JS dependencies to install or maintain</li>
+          <li>Renders anywhere the standard Odoo web client does</li>
+          <li>One click from the check that failed straight to its history</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#ECF0F1;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:28px;color:#001844;margin:0 0 24px;font-weight:700;text-align:center;">Why Choose ERP23</h2>
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-award" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">Silver Partner</span></h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Official Odoo Silver Partner with certified expertise</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-globe" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">30+</span> Countries Served</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Global reach with clients across 30+ countries</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-check-double" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">200+</span> Projects Completed</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Proven Odoo delivery across diverse business requirements</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-industry" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">15+</span> Industries Served</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Specialized Odoo expertise across retail, manufacturing, and services</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-certificate" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">7+</span> Certifications</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Team certified in 7+ specialized Odoo domains</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-user-clock" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">10+</span> Years Experience</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Nearly a decade of specialized Odoo expertise</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#001844;border-radius:16px;padding:40px;margin-bottom:12px;text-align:center;">
+    <h2 style="font-size:28px;color:#00A0DB;margin:0 0 16px;font-weight:700;">Contact &amp; Support</h2>
+    <p style="margin:0 0 8px;color:#DCE1E8;font-size:20px;font-weight:800;letter-spacing:0.5px;">ERP23</p>
+    <p style="margin:0 0 8px;color:#DCE1E8;font-size:16px;line-height:1.6;">Developed and maintained by ERP23.</p>
+    <p style="margin:0 0 4px;color:#DCE1E8;">Website: <a href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer" style="color:#00A0DB;text-decoration:none;font-weight:600;">https://www.erp-23.com/</a></p>
+    <p style="margin:0;color:#DCE1E8;">Email: <a href="mailto:erp23@brainstation-23.com" style="color:#00A0DB;text-decoration:none;font-weight:600;">erp23@brainstation-23.com</a></p>
+  </section>
+
+</div>
+</body>
+</html>
