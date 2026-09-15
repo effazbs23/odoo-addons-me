@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="mrp_variant_bom_manager.VariantMatrix">
+    <div class="o_bom_variant_matrix">
+        <t t-if="state.loading">
+            <p>Loading variant matrix…</p>
+        </t>
+        <t t-elif="!state.matrix or !state.matrix.variants.length">
+            <p class="text-muted">This product has no variants to configure.</p>
+        </t>
+        <t t-else="">
+            <h4 t-esc="state.matrix.product_tmpl_name"/>
+
+            <div t-if="state.notExact" class="alert alert-warning" role="alert">
+                That on/off combination cannot be expressed as a single attribute-value
+                filter on this BOM line, so the previous setting was kept. Consider
+                splitting the line into two BOM lines instead.
+            </div>
+            <div t-if="state.matrix.warnings.length" class="alert alert-danger" role="alert">
+                <div t-foreach="state.matrix.warnings" t-as="warning" t-key="warning.variant_id">
+                    <t t-esc="warning.message"/>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-2 mt-2">
+                <div class="text-muted">
+                    Select rows and columns, then Bulk Apply/Remove.
+                </div>
+                <div>
+                    <button class="btn btn-primary btn-sm me-2" t-on-click="() => this.bulkToggle(true)">
+                        Bulk Apply
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" t-on-click="() => this.bulkToggle(false)">
+                        Bulk Remove
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm o_bom_variant_matrix_table">
+                    <thead>
+                        <tr>
+                            <th/>
+                            <th>Component</th>
+                            <th>Internal Reference</th>
+                            <th>Quantity</th>
+                            <t t-foreach="state.matrix.variants" t-as="variant" t-key="variant.id">
+                                <th class="text-center">
+                                    <input type="checkbox"
+                                           t-att-checked="isVariantSelected(variant.id)"
+                                           t-on-change="() => this.toggleVariantSelect(variant.id)"/>
+                                    <div t-esc="variant.name"/>
+                                </th>
+                            </t>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="state.matrix.rows" t-as="row" t-key="row.line_id">
+                            <tr>
+                                <td>
+                                    <input type="checkbox"
+                                           t-att-checked="isLineSelected(row.line_id)"
+                                           t-on-change="() => this.toggleLineSelect(row.line_id)"/>
+                                </td>
+                                <td t-esc="row.name"/>
+                                <td t-esc="row.code"/>
+                                <td t-esc="row.qty"/>
+                                <t t-foreach="state.matrix.variants" t-as="variant" t-key="variant.id">
+                                    <td class="text-center">
+                                        <input type="checkbox"
+                                               t-att-checked="row.cells[variant.id]"
+                                               t-on-change="() => this.toggleCell(row.line_id, variant.id, row.cells[variant.id])"/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="o_bom_variant_preview mt-4">
+                <h5>Variant BOM Preview</h5>
+                <select class="form-select form-select-sm w-auto d-inline-block" t-on-change="onPreviewVariantChange">
+                    <t t-foreach="state.matrix.variants" t-as="variant" t-key="variant.id">
+                        <option t-att-value="variant.id" t-att-selected="variant.id === state.previewVariantId">
+                            <t t-esc="variant.name"/>
+                        </option>
+                    </t>
+                </select>
+                <table t-if="state.preview" class="table table-sm mt-2">
+                    <thead>
+                        <tr><th>Component</th><th>Internal Reference</th><th>Quantity</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="state.preview.rows" t-as="preview_row" t-key="preview_row_index">
+                            <td t-esc="preview_row.name"/>
+                            <td t-esc="preview_row.code"/>
+                            <td t-esc="preview_row.qty"/>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="o_bom_copy_variant mt-4">
+                <h5>Copy BOM Configuration to Another Variant</h5>
+                <div class="d-flex gap-2 align-items-center flex-wrap">
+                    <select class="form-select form-select-sm w-auto" t-on-change="onCopySourceChange">
+                        <option value="">From variant…</option>
+                        <t t-foreach="state.matrix.variants" t-as="variant" t-key="variant.id">
+                            <option t-att-value="variant.id"><t t-esc="variant.name"/></option>
+                        </t>
+                    </select>
+                    <select class="form-select form-select-sm w-auto" t-on-change="onCopyTargetChange">
+                        <option value="">To variant…</option>
+                        <t t-foreach="state.matrix.variants" t-as="variant" t-key="variant.id">
+                            <option t-att-value="variant.id"><t t-esc="variant.name"/></option>
+                        </t>
+                    </select>
+                    <button class="btn btn-outline-secondary btn-sm" t-on-click="copyVariant">Copy</button>
+                </div>
+            </div>
+        </t>
+    </div>
+</t>
+
+</templates>

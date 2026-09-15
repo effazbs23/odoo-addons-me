@@ -1,0 +1,19 @@
+.o_bom_variant_matrix {
+    padding: 8px 4px;
+
+    .o_bom_variant_matrix_table {
+        th, td {
+            vertical-align: middle;
+        }
+        thead th {
+            background-color: #F7F9FC;
+            font-weight: 600;
+        }
+    }
+
+    .o_bom_variant_preview,
+    .o_bom_copy_variant {
+        border-top: 1px solid #DCE1E8;
+        padding-top: 16px;
+    }
+}

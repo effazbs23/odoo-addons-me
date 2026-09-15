@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_bom_variant_matrix_wizard_form" model="ir.ui.view">
+        <field name="name">mrp.bom.variant.matrix.wizard.form</field>
+        <field name="model">mrp.bom.variant.matrix.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Variant-Aware BOM Manager" class="o_bom_variant_matrix_form">
+                <field name="bom_id" widget="mrp_bom_variant_matrix" nolabel="1"/>
+                <footer>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mrp_bom_variant_matrix_wizard" model="ir.actions.act_window">
+        <field name="name">Variant Matrix</field>
+        <field name="res_model">mrp.bom.variant.matrix.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_mrp_bom_variant_matrix_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>
