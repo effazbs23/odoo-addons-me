@@ -1,6 +1,6 @@
 {
     'name': 'Variant-Aware BOM Manager',
-    'version': '17.0.1.0.0',
+    'version': '19.0.1.0.0',
     'category': 'Manufacturing/Manufacturing',
     'summary': 'Visual matrix for configuring which BOM lines apply to '
                'which product variants.',
