@@ -39,6 +39,7 @@ does not replace the landed cost accounting flow itself.
         'views/landed_cost_allocation_rule_views.xml',
         'views/stock_landed_cost_views.xml',
     ],
+    'icon': '/landed_cost_auto_allocator/static/description/icon.png',
     'images': [
         'static/description/assets/main_screenshot.png',
         'static/description/banner.png',
