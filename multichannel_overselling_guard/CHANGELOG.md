@@ -146,3 +146,38 @@ Initial release.
   `sale.order`/`pos.order`.
 - **Pricing**: left as TBD; run the `erp23-odoo-pricing-advisor` skill
   before listing on the Apps Store.
+
+## 19.0.1.0.0
+
+Ported to Odoo 19. Verified against the real `odoo/odoo` 19.0 source tree
+(a sparse clone of `github.com/odoo/odoo` at the `19.0` branch), including
+`odoo/addons/base` for framework-level models (a separate location from
+the top-level `addons/` directory in this repo layout). No functional
+code changes were needed — the following previously-unverified
+assumptions are all confirmed correct:
+
+- `pos.order.config_id` → `pos.config.picking_type_id` →
+  `stock.picking.type.warehouse_id` chain (used to resolve a POS order's
+  warehouse).
+- `product.product.qty_available` / `free_qty`, `res.users.share` (the
+  B2B-channel-detection heuristic), `product.template.categ_id`,
+  `stock.warehouse.view_location_id`, and `stock.quant.quantity` — all
+  used directly in the `multichannel.sellable.report` SQL view.
+- `product.product_category_form_view` (with its `parent_id` field as
+  the xpath anchor) and `product.product_category_action_form` — both
+  confirmed against `addons/product/views/product_category_views.xml`.
+- `point_of_sale`, `website_sale`, `sale`, `stock_landed_costs` all
+  confirmed present in Odoo Community 19.0 (this module's own
+  CE-compatibility claim was correct, unlike two sibling modules in this
+  batch that incorrectly claimed CE support for Enterprise-only
+  dependencies — see `quality_tolerance_checks` and
+  `mrp_intercompany_wo_sync`).
+- No occurrences of the `mrp.workorder`/`mrp.production` `date_planned_*`
+  → `date_*` rename or the `mrp.production.lot_producing_id` →
+  `lot_producing_ids` rename found in this module's code (it doesn't
+  touch either field), so neither applies here.
+
+Everything else from 17.0.1.0.0 above — the lack of live POS/website JS
+hooks, the sync-cadence approximation, the aggregate (not
+per-channel-attributed) "Sellable Now" figure — remains unchanged and
+still applies in 19.0.

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- UNVERIFIED core view external ID: this environment has no vendored
-         copy of the core `product` module to confirm against. Based on
-         standard Odoo 17 Community convention (product.product_category_form_view).
-         Verify against the target instance and adjust the xpath if it differs. -->
+    <!-- product.product_category_form_view and its `parent_id` field
+         verified against the real odoo/odoo 19.0 source
+         (addons/product/views/product_category_views.xml). -->
     <record id="view_product_category_form_inherit_multichannel" model="ir.ui.view">
         <field name="name">product.category.form.inherit.multichannel.overselling.guard</field>
         <field name="model">product.category</field>

@@ -40,9 +40,8 @@
               action="action_multichannel_stock_buffer"
               sequence="10"/>
 
-    <!-- UNVERIFIED core action external ID: no vendored `product` module in
-         this environment to confirm against. Based on standard Odoo 17
-         Community convention (product.product_category_action_form). -->
+    <!-- product.product_category_action_form verified against the real
+         odoo/odoo 19.0 source (addons/product/views/product_category_views.xml). -->
     <menuitem id="menu_product_category_config"
               name="Product Categories"
               parent="menu_multichannel_overselling_guard_configuration"
