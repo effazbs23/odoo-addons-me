@@ -48,3 +48,34 @@ Initial release.
   card layout instead of `<img>` tags so the section could stay in rather
   than be dropped. Swap in the real badge art if/when it's added to the
   catalog.
+
+## 19.0.1.0.0
+
+Ported to Odoo 19. Verified against the real `odoo/odoo` 19.0 source tree
+(a sparse clone of `github.com/odoo/odoo` at the `19.0` branch) rather
+than guessing:
+
+- **`mrp.production.lot_producing_id` no longer exists**: Odoo 19's
+  `mrp.production` tracks produced lots/serials via a many2many
+  `lot_producing_ids` (multiple serials can be produced per order), not a
+  singular `lot_producing_id` many2one. `_build_backward_lines`'s search
+  domain was updated from `('lot_producing_id', '=', lot.id)` to
+  `('lot_producing_ids', 'in', lot.id)`. **This was a real bug with no
+  test coverage** — added `test_backward_trace_manufacturing` to close
+  that gap and catch a regression if this changes again.
+- **Confirmed correct, unchanged**: `stock.view_production_lot_form`
+  (previously flagged as an unverified assumption — now confirmed against
+  `addons/stock/views/stock_lot_views.xml`), `stock.move.sale_line_id`,
+  `stock.picking.sale_id`, `stock.move_line.picking_id...purchase_line_id`
+  chain (`addons/purchase_stock/models/stock_move.py`), and
+  `mrp.production.date_finished`/`qty_produced`/`move_raw_ids`. The
+  `stock.move.line.qty_done` vs `quantity` defensive check
+  (`'qty_done' in ml._fields`) was already forward-compatible: `qty_done`
+  is fully gone in 19.0, and the code already falls through to
+  `.quantity` correctly.
+- **`stock.menu_stock_root` confirmed to exist** as the Inventory app's
+  root menu (referenced as a parent by several core menu items in
+  `addons/stock/views/stock_menu_views.xml`); the menu-placement deviation
+  noted in 17.0.1.0.0 above still applies (placed at the app root rather
+  than nested in the exact "Reporting" submenu), but the anchor menu
+  itself is verified real.

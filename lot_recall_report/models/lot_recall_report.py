@@ -194,7 +194,7 @@ class LotRecallReport(models.Model):
         lines += list(grouped.values())
 
         productions = self.env['mrp.production'].search([
-            ('lot_producing_id', '=', lot.id),
+            ('lot_producing_ids', 'in', lot.id),
             ('state', '=', 'done'),
         ])
         for production in productions:

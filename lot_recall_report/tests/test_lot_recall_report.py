@@ -119,6 +119,29 @@ class TestLotRecallReport(TransactionCase):
         report.action_generate()
         self.assertEqual(len(report.recall_line_ids), first_count)
 
+    def test_backward_trace_manufacturing(self):
+        # Regression test: mrp.production tracks produced lots via the
+        # many2many `lot_producing_ids` (not a singular `lot_producing_id`,
+        # which does not exist on this Odoo version) - see CHANGELOG.md.
+        production = self.env['mrp.production'].create({
+            'product_id': self.product.id,
+            'product_uom_id': self.product.uom_id.id,
+            'product_qty': 8.0,
+            'lot_producing_ids': [(6, 0, self.lot.ids)],
+        })
+        production.write({'state': 'done', 'qty_producing': 8.0})
+
+        report = self.env['lot.recall.report'].create({
+            'lot_ids': [(6, 0, self.lot.ids)],
+            'direction': 'backward',
+        })
+        report.action_generate()
+
+        manufacturing_lines = report.backward_line_ids.filtered(
+            lambda l: l.source_type == 'manufacturing' and l.production_id)
+        self.assertEqual(len(manufacturing_lines), 1)
+        self.assertEqual(manufacturing_lines.production_id, production)
+
     def test_stock_lot_smart_button_creates_report(self):
         action = self.lot.action_generate_recall_report()
         report = self.env['lot.recall.report'].browse(action['res_id'])
