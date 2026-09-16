@@ -1,6 +1,6 @@
 {
     'name': 'Custom Numeric-Tolerance Quality Checks',
-    'version': '17.0.1.0.0',
+    'version': '19.0.1.0.0',
     'category': 'Manufacturing/Quality',
     'summary': 'Min/max numeric tolerance quality check type with automatic pass/fail.',
     'description': """
