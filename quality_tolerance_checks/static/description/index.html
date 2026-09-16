@@ -27,7 +27,7 @@
       <h6 style="margin:0 0 10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Edition</h6>
       <div class="d-flex gap-2 flex-wrap">
         <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Enterprise</span>
-        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Community</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#FCEFEF;color:#C0392B;border:1px solid #F3D3D3;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-times-circle"></i> Community (not supported)</span>
       </div>
     </div>
     <div>
@@ -40,7 +40,8 @@
 
   <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
     <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Overview</h2>
-    <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.75;">Machining and metal fabrication shops live and die by numeric tolerances, but Odoo's core Quality app leaves pass/fail on a measurement to the operator's own judgment. Custom Numeric-Tolerance Quality Checks adds a new "Tolerance Check" quality point type where you define a target value and an acceptable min/max band &mdash; either as a symmetric plus/minus deviation (absolute or percentage) or as a direct range &mdash; and the check that gets generated from it decides pass or fail automatically the moment a measurement is entered. Every check keeps its own frozen snapshot of the tolerance it was checked against, so changing a point's configuration later never rewrites history. Out-of-tolerance measurements raise a standard Quality Alert automatically, and every point builds up a measurement history and a native control-chart view for statistical-process-control style review. It's built for quality engineers and shop-floor operators in discrete manufacturing, and it's fully additive to core Quality &mdash; no existing behavior is overridden, so it works the same in Community and Enterprise.</p>
+    <p style="margin:0 0 16px;color:#797F8B;font-size:16px;line-height:1.75;"><strong style="color:#001844;">Requires Odoo Enterprise:</strong> this module depends on the Quality app (<code>quality</code>), which ships only with Odoo Enterprise and is not part of Odoo Community.</p>
+    <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.75;">Machining and metal fabrication shops live and die by numeric tolerances, but Odoo's core Quality app leaves pass/fail on a measurement to the operator's own judgment. Custom Numeric-Tolerance Quality Checks adds a new "Tolerance Check" quality point type where you define a target value and an acceptable min/max band &mdash; either as a symmetric plus/minus deviation (absolute or percentage) or as a direct range &mdash; and the check that gets generated from it decides pass or fail automatically the moment a measurement is entered. Every check keeps its own frozen snapshot of the tolerance it was checked against, so changing a point's configuration later never rewrites history. Out-of-tolerance measurements raise a standard Quality Alert automatically, and every point builds up a measurement history and a native control-chart view for statistical-process-control style review. It's built for quality engineers and shop-floor operators in discrete manufacturing, and it's fully additive to core Quality &mdash; no existing behavior is overridden.</p>
   </section>
 
   <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
@@ -85,7 +86,7 @@
         <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
           <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;"><i class="fa fa-recycle"></i></span>
           <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Fully Additive to Core Quality</h5>
-          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">No parallel data model and no overridden core behavior &mdash; works the same in Community and Enterprise.</p>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">No parallel data model and no overridden core behavior &mdash; purely additive to the Quality app it depends on.</p>
         </div>
       </div>
     </div>

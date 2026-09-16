@@ -79,3 +79,32 @@ Initial release.
   `mrp_variant_bom_manager`.
 - **Pricing**: left as TBD; run the `erp23-odoo-pricing-advisor` skill
   before listing on the Apps Store.
+
+## 19.0.1.0.0
+
+Ported to Odoo 19. While verifying core assumptions against the real
+`odoo/odoo` 19.0 source tree (a sparse clone of `github.com/odoo/odoo` at
+the `19.0` branch), this surfaced a pre-existing correctness issue
+unrelated to the version bump:
+
+- **Confirmed Enterprise-only dependency**: the `quality` app (Quality
+  Control) does not exist anywhere in the public `odoo/odoo` (Community)
+  repository — it is Odoo Enterprise-only. This module was previously
+  described as working "the same in Community and Enterprise"; that was
+  wrong in every version, not just 19, and has been corrected throughout
+  (manifest license changed to `OPL-1`, description, and `index.html`'s
+  compatibility strip and Overview/Highlights text now state the
+  Enterprise requirement plainly).
+- **Core `quality` field/method names remain unverified**: since `quality`
+  is Enterprise-only, it is not in the public repository this pass used
+  to verify the other six modules, so none of this module's assumptions
+  about `quality.point`/`quality.check` field names (`test_type`, `norm`,
+  `norm_unit`, `tolerance_min`/`tolerance_max` naming precedent,
+  `quality_state` selection values) or view external ids could be checked
+  against real source. These remain exactly as documented in the
+  17.0.1.0.0 section below — verify against a real Enterprise 19.0
+  instance before installing.
+- **No other Odoo-19-specific code changes were identified or made** in
+  this module, since its own new models/fields don't touch any of the
+  core APIs (`mrp.workorder`/`mrp.production` dates, etc.) that changed
+  between 17 and 19 in the modules that do depend on Community `mrp`.

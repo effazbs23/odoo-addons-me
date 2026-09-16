@@ -21,10 +21,16 @@ pass/fail, common in machining and metal fabrication:
   style review, plus a native line-graph Control Chart.
 * Multi-point tolerance checks are supported the same way core Quality
   supports them: one quality point per measurement point on the part.
+
+IMPORTANT -- Odoo Enterprise only: this module depends on the `quality`
+app (Quality Control), which is part of Odoo Enterprise and is not
+available in Odoo Community (confirmed against the public odoo/odoo
+19.0 source tree, where this addon does not exist). It cannot be
+installed on a Community Edition database.
 """,
     'author': 'ERP23',
     'website': 'https://www.erp-23.com/',
-    'license': 'LGPL-3',
+    'license': 'OPL-1',
     'depends': ['quality'],
     'data': [
         'views/quality_point_views.xml',
