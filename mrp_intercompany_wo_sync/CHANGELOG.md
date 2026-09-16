@@ -155,3 +155,44 @@ SO/PO flows for anyone else on the database.
   `quality_tolerance_checks` and `multichannel_overselling_guard`.
 - **Pricing (App Store listing price)**: left as TBD; run the
   `erp23-odoo-pricing-advisor` skill before listing on the Apps Store.
+
+## 19.0.1.0.0
+
+Ported to Odoo 19. Verified against the real `odoo/odoo` 19.0 source tree
+(a sparse clone of `github.com/odoo/odoo` at the `19.0` branch), which also
+surfaced a pre-existing correctness issue unrelated to the version bump.
+
+- **Confirmed Enterprise-only dependency**: `sale_purchase_inter_company_rules`
+  does not exist anywhere in the public `odoo/odoo` (Community) repository —
+  it is Odoo Enterprise-only. This was previously described as CE-compatible
+  in the manifest/description and index.html; both have been corrected
+  (license changed to `OPL-1`, "Community" badge now shown as explicitly
+  unsupported, and the Overview section states the Enterprise requirement
+  up front). This was true in 17.0 as well, not just 19 — it's a
+  correctness fix uncovered while checking this branch, not a 17-to-19
+  behavior change.
+- **`mrp.production` date fields renamed**: `date_planned_start` /
+  `date_planned_finished` do not exist on `mrp.production` in 19.0 — the
+  real fields are `date_start` / `date_finished` (confirmed in
+  `addons/mrp/models/mrp_production.py`). Updated every reference in
+  `models/mrp_production_intercompany_link.py`, `views/mrp_production_views.xml`,
+  and the tests. `date_deadline` was already correct and unchanged.
+- **`product.product_template_form_view` confirmed correct**: verified
+  against `addons/product/views/product_views.xml` — the base view (not
+  the more specific `product_template_only_form_view`) does define
+  `group[@name='purchase']` exactly as targeted. No change needed; the
+  "unverified" caveat on this xpath has been removed.
+- **`mrp.mrp_production_form_view`, `mrp.menu_mrp_reporting` confirmed
+  correct** against real source; the `//header`/`//notebook` xpaths were
+  already safe (structural elements present on every form view of this
+  kind).
+- **`purchase.order.button_confirm()`, `mrp.production.action_confirm()`,
+  `mrp.bom._bom_find()`, `qty_produced`, `move_raw_ids`** — all confirmed
+  to exist with the assumed names/signatures in 19.0 core `mrp`/`purchase`.
+- **Still unverified** (no source available — `sale_purchase_inter_company_rules`
+  is Enterprise-only and not in the public repo): the PO→SO linking
+  discovery mechanism, `res.company` intercompany configuration fields,
+  and any core hook points on `pos.order`/`sale.order` specific to that
+  module. The defensive, best-effort search/retry approach from the
+  17.0.1.0.0 release is unchanged and still the recommended way to verify
+  this against a real Enterprise 19.0 instance before relying on it.

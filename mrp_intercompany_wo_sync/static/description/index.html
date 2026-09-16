@@ -27,7 +27,7 @@
       <h6 style="margin:0 0 10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Edition</h6>
       <div class="d-flex gap-2 flex-wrap">
         <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Enterprise</span>
-        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Community</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#FCEFEF;color:#C0392B;border:1px solid #F3D3D3;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-times-circle"></i> Community (not supported)</span>
       </div>
     </div>
     <div>
@@ -44,6 +44,7 @@
   <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
     <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Overview</h2>
     <p style="margin:0 0 16px;color:#797F8B;font-size:16px;line-height:1.75;">Multi-company manufacturers routinely split production across legal entities &mdash; one company builds sub-assemblies, another does final assembly &mdash; but core Odoo's intercompany automation stops at the sale/purchase layer: it mirrors a purchase order into a sales order between companies and leaves manufacturing itself untouched. Manufacturing Intercompany Work Order Sync closes that gap. Mark any component as "Produced By Company" a different entity in the same database, and when a manufacturing order needs that component in a quantity stock can't cover, this module raises the intercompany purchase order, lets core `sale_purchase_inter_company_rules` mirror it into a sales order in the producing company, and &mdash; once that order is confirmed and stock still isn't enough &mdash; creates the follow-up manufacturing order there automatically, keeping the origin order's status and progress visible the whole way through.</p>
+    <p style="margin:0 0 16px;color:#797F8B;font-size:16px;line-height:1.75;"><strong style="color:#001844;">Requires Odoo Enterprise:</strong> this module depends on <code>sale_purchase_inter_company_rules</code>, which ships only with Odoo Enterprise and is not part of Odoo Community.</p>
     <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.75;"><strong style="color:#001844;">Important scope note:</strong> this module is built for a <strong>same-database, multi-company Odoo setup</strong> &mdash; the standard way Odoo runs several legal entities on one instance. It works by directly querying and creating `mrp.production`, `sale.order` and `purchase.order` records across those companies inside that one database. It does <strong>not</strong> synchronize manufacturing orders between two separate Odoo instances/databases &mdash; there is no API bridge, webhook, or cross-instance messaging here. If your companies run on separate Odoo databases, this module will not connect them.</p>
   </section>
 

@@ -101,8 +101,8 @@ class TestMrpIntercompanyWoSync(TransactionCase):
             'product_uom_id': self.component.uom_id.id,
             'product_qty': 10.0,
             'company_id': self.company_b.id,
-            'date_planned_start': fields.Datetime.now(),
-            'date_planned_finished': fields.Datetime.now() + timedelta(days=1),
+            'date_start': fields.Datetime.now(),
+            'date_finished': fields.Datetime.now() + timedelta(days=1),
         })
         link = self.env['mrp.production.intercompany.link'].create({
             'parent_production_id': production.id,
@@ -115,7 +115,7 @@ class TestMrpIntercompanyWoSync(TransactionCase):
         })
         self.assertFalse(link.has_due_date_exception)
 
-        child_production.date_planned_finished = fields.Datetime.now() + timedelta(days=5)
+        child_production.date_finished = fields.Datetime.now() + timedelta(days=5)
         self.assertTrue(link.has_due_date_exception)
         self.assertTrue(link.exception_message)
 

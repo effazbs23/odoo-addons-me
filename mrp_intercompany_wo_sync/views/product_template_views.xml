@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- UNVERIFIED core view external ID: no vendored copy of core
-         `product` in this environment to confirm against.
-         `product.product_template_form_view` and the Purchase-tab xpath
-         are based on standard Odoo 17 Community convention. Verify and
-         adjust if the target instance differs. -->
+    <!-- Verified against the real odoo/odoo 19.0 source
+         (addons/product/views/product_views.xml): the base
+         `product.product_template_form_view` (not the more specific
+         `product_template_only_form_view`) defines `group[@name='purchase']`,
+         exactly as targeted below. -->
     <record id="view_product_template_form_intercompany" model="ir.ui.view">
         <field name="name">product.template.form.intercompany.wo.sync</field>
         <field name="model">product.template</field>

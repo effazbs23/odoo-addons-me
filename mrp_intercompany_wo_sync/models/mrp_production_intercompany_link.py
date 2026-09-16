@@ -108,33 +108,33 @@ class MrpProductionIntercompanyLink(models.Model):
                 link.progress_percentage = 0.0
 
     @api.depends(
-        'child_production_id.date_planned_finished',
+        'child_production_id.date_finished',
         'parent_production_id.date_deadline',
-        'parent_production_id.date_planned_start',
+        'parent_production_id.date_start',
         'child_production_id',
     )
     def _compute_due_date_exception(self):
         """Reference "needed by" date on the parent: `date_deadline` (the
         customer/commitment date) when set, since that's the more
         semantically correct "must have this component by" date, falling
-        back to `date_planned_start` (when the parent MO itself is planned
+        back to `date_start` (when the parent MO itself is planned
         to start, i.e. when it would consume the component) when no
         deadline is set. See CHANGELOG.md for this choice.
 
-        `date_planned_finished` on `mrp.production` matches the field name
+        `date_finished` on `mrp.production` matches the field name
         this repo's own `mrp_finite_capacity_scheduler` module already
         assumed for the Odoo 17 target -- kept consistent with that.
         """
         for link in self:
             child = link.child_production_id.sudo()
             parent = link.parent_production_id
-            needed_by = parent.date_deadline or parent.date_planned_start
-            if not child or not child.date_planned_finished or not needed_by:
+            needed_by = parent.date_deadline or parent.date_start
+            if not child or not child.date_finished or not needed_by:
                 link.has_due_date_exception = False
                 link.exception_message = False
                 continue
-            if child.date_planned_finished > needed_by:
-                days_late = max((child.date_planned_finished - needed_by).days, 1)
+            if child.date_finished > needed_by:
+                days_late = max((child.date_finished - needed_by).days, 1)
                 link.has_due_date_exception = True
                 link.exception_message = _(
                     "%(child)s (%(company)s) is forecast to finish %(days)s "

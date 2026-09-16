@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- UNVERIFIED core view external ID / structure: no vendored copy of
-         core `mrp` in this environment to confirm against. `mrp.
-         mrp_production_form_view` and the `header`/`notebook` xpaths below
-         are based on standard Odoo 17 Community convention. Verify and
-         adjust if the target instance differs. -->
+    <!-- `mrp.mrp_production_form_view` verified against the real
+         odoo/odoo 19.0 source (addons/mrp/views/mrp_production_views.xml);
+         the `//header` and `//notebook` xpaths target structural elements
+         present on every Odoo form view of this kind. -->
     <record id="view_mrp_production_form_intercompany" model="ir.ui.view">
         <field name="name">mrp.production.form.intercompany.wo.sync</field>
         <field name="model">mrp.production</field>
@@ -39,7 +38,7 @@
                                 <field name="product_qty" readonly="1"/>
                                 <field name="company_id" readonly="1"/>
                                 <field name="date_deadline" readonly="1"/>
-                                <field name="date_planned_start" readonly="1"/>
+                                <field name="date_start" readonly="1"/>
                             </group>
                         </div>
                         <div class="col-6">

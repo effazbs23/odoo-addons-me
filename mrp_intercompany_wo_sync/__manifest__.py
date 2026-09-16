@@ -31,10 +31,16 @@ manufacturing orders across two separate Odoo instances/databases -- there is
 no API/webhook bridge here, only in-database multi-company automation on top
 of core intercompany sale/purchase rules. Do not install this expecting
 cross-instance sync.
+
+IMPORTANT -- Odoo Enterprise only: this module depends on
+`sale_purchase_inter_company_rules`, which is part of Odoo Enterprise and is
+not available in Odoo Community (confirmed against the public odoo/odoo
+19.0 source tree, where this addon does not exist). It cannot be installed
+on a Community Edition database.
 """,
     'author': 'ERP23',
     'website': 'https://www.erp-23.com/',
-    'license': 'LGPL-3',
+    'license': 'OPL-1',
     'depends': ['mrp', 'sale', 'purchase', 'sale_purchase_inter_company_rules'],
     'data': [
         'security/ir.model.access.csv',
