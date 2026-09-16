@@ -45,6 +45,7 @@ flagged there as a v2 item.
         'views/product_category_views.xml',
         'views/menus.xml',
     ],
+    'icon': '/multichannel_overselling_guard/static/description/icon.png',
     'images': [
         'static/description/assets/main_screenshot.png',
         'static/description/banner.png',
