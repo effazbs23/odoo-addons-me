@@ -46,11 +46,11 @@
 
             <!-- Allocation Preview columns (Weight/Volume/Value) and a
                  details button for the audit-trail formula, added to the
-                 existing valuation_adjustment_lines embedded list. Assumes
-                 the embedded list still uses the <tree> tag in the target
-                 Odoo 17 database (not confirmed against source, see
-                 CHANGELOG.md). -->
-            <xpath expr="//field[@name='valuation_adjustment_lines']/tree" position="inside">
+                 existing valuation_adjustment_lines embedded list, which
+                 uses the <list> tag (Odoo renamed <tree> to <list> for
+                 all view architectures, including core's own, starting
+                 in 17.0). -->
+            <xpath expr="//field[@name='valuation_adjustment_lines']/list" position="inside">
                 <field name="preview_weight" optional="show"/>
                 <field name="preview_volume" optional="show"/>
                 <field name="preview_value" optional="show"/>

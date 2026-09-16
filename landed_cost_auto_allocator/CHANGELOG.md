@@ -150,3 +150,13 @@ Initial release.
   and `quality_tolerance_checks`.
 - **Pricing**: left as TBD; run the `erp23-odoo-pricing-advisor` skill
   before listing on the Apps Store.
+
+### Post-release correction
+
+- **Fixed `<tree>`/`view_mode: tree,form` usage**: Odoo renamed the
+  `<tree>` view architecture tag to `<list>` starting in 17.0 (this
+  applies to every view, including core's own — not just this module's
+  new ones). This module's `landed.cost.allocation.rule` list view/action
+  and the xpath targeting core's `valuation_adjustment_lines` embedded
+  list both still used `<tree>`/`tree,form`, which would have failed view
+  validation at install. Fixed to `<list>`/`list,form` throughout.
