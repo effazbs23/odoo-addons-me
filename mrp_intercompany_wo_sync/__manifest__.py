@@ -1,6 +1,6 @@
 {
     'name': 'Manufacturing Intercompany Work Order Sync',
-    'version': '17.0.1.0.0',
+    'version': '19.0.1.0.0',
     'category': 'Manufacturing/Manufacturing',
     'summary': 'Auto-creates a manufacturing order in another company when a '
                'component is only produced there.',
