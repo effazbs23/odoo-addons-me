@@ -1,6 +1,6 @@
 {
     'name': 'Manufacturing Finite Capacity Scheduler',
-    'version': '17.0.1.0.0',
+    'version': '19.0.1.0.0',
     'category': 'Manufacturing/Manufacturing',
     'summary': 'Drag-and-drop Gantt scheduler that prevents double-booking a '
                'workcenter and reschedules work orders against real capacity.',
