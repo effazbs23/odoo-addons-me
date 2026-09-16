@@ -39,6 +39,7 @@ click:
             'lot_recall_report/static/src/scss/lot_recall_report.scss',
         ],
     },
+    'icon': '/lot_recall_report/static/description/icon.png',
     'images': [
         'static/description/assets/main_screenshot.png',
         'static/description/banner.png',
