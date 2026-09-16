@@ -35,6 +35,7 @@ pass/fail, common in machining and metal fabrication:
             'quality_tolerance_checks/static/src/scss/quality_tolerance_checks.scss',
         ],
     },
+    'icon': '/quality_tolerance_checks/static/description/icon.png',
     'images': [
         'static/description/assets/main_screenshot.png',
         'static/description/banner.png',
