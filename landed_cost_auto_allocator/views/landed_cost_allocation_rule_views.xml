@@ -5,13 +5,13 @@
         <field name="name">landed.cost.allocation.rule.list</field>
         <field name="model">landed.cost.allocation.rule</field>
         <field name="arch" type="xml">
-            <tree string="Landed Cost Allocation Rules">
+            <list string="Landed Cost Allocation Rules">
                 <field name="sequence" widget="handle"/>
                 <field name="vendor_id"/>
                 <field name="product_id"/>
                 <field name="split_method"/>
                 <field name="active" widget="boolean_toggle"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -49,7 +49,7 @@
     <record id="action_landed_cost_allocation_rule" model="ir.actions.act_window">
         <field name="name">Landed Cost Allocation Rules</field>
         <field name="res_model">landed.cost.allocation.rule</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first allocation rule
@@ -62,10 +62,8 @@
         </field>
     </record>
 
-    <!-- Verify this xmlid against the target Odoo 17 database - the core
-         Inventory > Configuration menu is assumed to be
-         `stock.menu_stock_config_settings` (not confirmed against source
-         in this environment, see CHANGELOG.md). -->
+    <!-- stock.menu_stock_config_settings verified against the real
+         odoo/odoo 19.0 source (addons/stock/views/stock_menu_views.xml). -->
     <menuitem id="menu_landed_cost_allocation_rule"
               name="Landed Cost Allocation Rules"
               action="action_landed_cost_allocation_rule"

@@ -160,6 +160,13 @@ was in fact vendored source in this pass, unlike a couple of sibling
 modules whose core dependency is Enterprise-only) turned out correct
 except one real bug:
 
+- **Own new views used `<tree>`/`view_mode: tree,form`**: this
+  module's brand-new `landed.cost.allocation.rule` list view and its
+  action's `view_mode` still used the pre-17 `<tree>` tag/`tree` mode
+  string. Odoo removed `<tree>` as a recognized view architecture root
+  entirely (not just for xpath inheritance matching) starting in 17.0 -
+  this would have failed view validation at install on *any* Odoo version
+  from 17 onward, not just 19. Fixed to `<list>` / `list,form`.
 - **Embedded list tag fixed**: the `valuation_adjustment_lines` one2many
   is rendered with a `<list>` tag in core's form view, not `<tree>` — this
   module's xpath (`//field[@name='valuation_adjustment_lines']/tree`)
