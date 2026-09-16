@@ -37,6 +37,7 @@ field of `mrp.bom.line` — no parallel data model.
             'mrp_variant_bom_manager/static/src/scss/mrp_bom_variant_matrix.scss',
         ],
     },
+    'icon': '/mrp_variant_bom_manager/static/description/icon.png',
     'images': [
         'static/description/assets/main_screenshot.png',
         'static/description/banner.png',
