@@ -1,6 +1,6 @@
 {
     'name': 'Overselling Guard for Multi-Channel Retail',
-    'version': '17.0.1.0.0',
+    'version': '19.0.1.0.0',
     'category': 'Inventory/Inventory',
     'summary': 'Real-time stock reservation checks between POS, eCommerce, and B2B sales.',
     'description': """
