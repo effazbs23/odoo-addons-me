@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- UNVERIFIED core view external ID: no vendored copy of core
+         `product` in this environment to confirm against.
+         `product.product_template_form_view` and the Purchase-tab xpath
+         are based on standard Odoo 17 Community convention. Verify and
+         adjust if the target instance differs. -->
+    <record id="view_product_template_form_intercompany" model="ir.ui.view">
+        <field name="name">product.template.form.intercompany.wo.sync</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <group name="purchase" position="inside">
+                <field name="intercompany_manufacturer_id"/>
+            </group>
+        </field>
+    </record>
+
+</odoo>

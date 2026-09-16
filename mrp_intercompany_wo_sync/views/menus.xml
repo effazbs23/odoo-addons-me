@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- UNVERIFIED core menu external ID: no vendored copy of core `mrp` in
+         this environment to confirm against. `mrp.menu_mrp_reporting` is
+         based on standard Odoo 17 Community convention (Manufacturing >
+         Reporting). Verify and adjust the parent if the target instance
+         names it differently. -->
+    <menuitem id="menu_mrp_production_intercompany_link"
+              name="Intercompany Supply Links"
+              parent="mrp.menu_mrp_reporting"
+              action="action_mrp_production_intercompany_link"
+              sequence="50"/>
+
+</odoo>

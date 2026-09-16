@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_sync_intercompany_links" model="ir.cron">
+        <field name="name">Manufacturing Intercompany WO Sync: Sync Links</field>
+        <field name="model_id" ref="model_mrp_production_intercompany_link"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_sync_intercompany_links()</field>
+        <field name="interval_number">20</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

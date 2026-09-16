@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Manufacturing Intercompany Work Order Sync</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body style="margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#F7F9FC;color:#001844;line-height:1.6;">
+<div style="max-width:1100px;margin:0 auto;padding:40px 20px 80px;">
+
+  <div style="margin-bottom:32px;">
+    <img src="assets/main_screenshot.png" class="img-fluid" alt="Manufacturing Intercompany Work Order Sync main screenshot" style="width:100%;max-height:340px;object-fit:cover;border-radius:16px;">
+  </div>
+
+  <section style="background:linear-gradient(135deg,#EAF6FC 0%,#F0F4FF 100%);border:1px solid #DCE1E8;border-radius:16px;padding:56px 48px;margin-bottom:32px;">
+    <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Odoo Module</span>
+    <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Manufacturing</span>
+    <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Multi-Company</span>
+    <h1 style="font-size:48px;font-weight:700;color:#001844;margin:16px 0 12px;line-height:1.15;">Manufacturing Intercompany Work Order Sync</h1>
+    <p style="margin:0;color:#797F8B;font-size:18px;max-width:760px;line-height:1.7;">Auto-creates a manufacturing order in Company B when Company A's MO needs a component only Company B produces &mdash; beyond generic intercompany transfers.</p>
+  </section>
+
+  <div style="margin-bottom:32px;padding:28px 32px;border:1px solid #DCE1E8;border-radius:16px;background:#ffffff;display:flex;flex-wrap:wrap;gap:32px;align-items:center;">
+    <div>
+      <h6 style="margin:0 0 10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Edition</h6>
+      <div class="d-flex gap-2 flex-wrap">
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Enterprise</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Community</span>
+      </div>
+    </div>
+    <div>
+      <h6 style="margin:0 0 10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#00A0DB;">Requires</h6>
+      <div class="d-flex gap-2 flex-wrap">
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Manufacturing</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Sales</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Purchase</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#EAF9F0;color:#1E9E5A;border:1px solid #C8ECD7;border-radius:8px;font-size:13px;font-weight:600;"><i class="fa fa-check-circle"></i> Intercompany Rules</span>
+      </div>
+    </div>
+  </div>
+
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Overview</h2>
+    <p style="margin:0 0 16px;color:#797F8B;font-size:16px;line-height:1.75;">Multi-company manufacturers routinely split production across legal entities &mdash; one company builds sub-assemblies, another does final assembly &mdash; but core Odoo's intercompany automation stops at the sale/purchase layer: it mirrors a purchase order into a sales order between companies and leaves manufacturing itself untouched. Manufacturing Intercompany Work Order Sync closes that gap. Mark any component as "Produced By Company" a different entity in the same database, and when a manufacturing order needs that component in a quantity stock can't cover, this module raises the intercompany purchase order, lets core `sale_purchase_inter_company_rules` mirror it into a sales order in the producing company, and &mdash; once that order is confirmed and stock still isn't enough &mdash; creates the follow-up manufacturing order there automatically, keeping the origin order's status and progress visible the whole way through.</p>
+    <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.75;"><strong style="color:#001844;">Important scope note:</strong> this module is built for a <strong>same-database, multi-company Odoo setup</strong> &mdash; the standard way Odoo runs several legal entities on one instance. It works by directly querying and creating `mrp.production`, `sale.order` and `purchase.order` records across those companies inside that one database. It does <strong>not</strong> synchronize manufacturing orders between two separate Odoo instances/databases &mdash; there is no API bridge, webhook, or cross-instance messaging here. If your companies run on separate Odoo databases, this module will not connect them.</p>
+  </section>
+
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 24px;font-weight:700;">Highlights</h2>
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;"><i class="fa fa-industry"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Automatic Child MO Creation</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">A component shortage triggers the intercompany PO/SO and, when needed, a manufacturing order in the producing company &mdash; no manual follow-up.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#F1EAFE;color:#8E59FD;font-size:20px;margin-bottom:16px;"><i class="fa fa-tachometer-alt"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Live Status Sync</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">"Waiting on Company B &mdash; 60% complete" replaces a generic stock shortage message on the origin MO.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;"><i class="fa fa-hand-pointer"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Manual Retry Button</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">"Check Intercompany Supply" lets a user trigger or retry the sync explicitly if the automatic hook didn't fire.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#FFF4E0;color:#FBAF33;font-size:20px;margin-bottom:16px;"><i class="fa fa-exclamation-triangle"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Due-Date Exception Alerts</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">A clear warning surfaces when Company B's MO is forecast to finish later than the parent order needs it.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#FDE6F1;color:#FE0C7D;font-size:20px;margin-bottom:16px;"><i class="fa fa-sync-alt"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Scheduled Background Sync</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">A cron keeps finding mirrored sales orders, creating child MOs, and refreshing status/progress on its own.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+          <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;"><i class="fa fa-layer-group"></i></span>
+          <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Builds On Core, Not Around It</h5>
+          <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">The intercompany SO/PO mirroring and costing stay on core `sale_purchase_inter_company_rules` &mdash; this module only adds the MRP layer on top.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Features</h2>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">01</span>
+      <div><strong style="color:#001844;">Per-product "Produced By Company" mapping</strong><br><span style="color:#797F8B;">Mark any component as manufactured by a different company within the same multi-company database.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">02</span>
+      <div><strong style="color:#001844;">Automatic child MO creation</strong><br><span style="color:#797F8B;">When a manufacturing order needs a component only another company produces and stock can't cover it, this module raises the intercompany PO (mirrored into an SO by core `sale_purchase_inter_company_rules`) and, once confirmed, a manufacturing order in that company.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">03</span>
+      <div><strong style="color:#001844;">Live status sync on the parent MO</strong><br><span style="color:#797F8B;">A status banner and smart panel show the dependent MO's state and progress (e.g. "Waiting on Company B &mdash; 60% complete") instead of a generic stock shortage.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">04</span>
+      <div><strong style="color:#001844;">Manual "Check Intercompany Supply" button</strong><br><span style="color:#797F8B;">Retry or trigger the sync explicitly if the automatic hook on MO confirmation didn't fire, or needs re-running.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">05</span>
+      <div><strong style="color:#001844;">Due-date exception alerts</strong><br><span style="color:#797F8B;">A clear warning on the parent MO when the supplying company's manufacturing order is forecast to finish later than needed, instead of a silent stock-availability failure.</span></div>
+    </div>
+    <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">06</span>
+      <div><strong style="color:#001844;">Scheduled background sync</strong><br><span style="color:#797F8B;">A cron finds the mirrored sales order, creates the child manufacturing order once it's needed, and keeps status/progress fresh even between confirmations.</span></div>
+    </div>
+    <div style="padding:14px 0;display:flex;gap:16px;align-items:flex-start;">
+      <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">07</span>
+      <div><strong style="color:#001844;">Intercompany costing stays on core rules</strong><br><span style="color:#797F8B;">No parallel costing/pricing system &mdash; the auto-created PO line reuses vendor pricing (`product.supplierinfo`) or standard cost, consistent with standard Odoo intercompany accounting.</span></div>
+    </div>
+  </section>
+
+  <section style="margin-bottom:28px;">
+    <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Screenshots</h2>
+    <div style="margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+      <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+        <h5 style="color:#001844;margin:0;font-weight:600;">Intercompany Work Order Sync Dashboard</h5>
+      </div>
+      <img src="assets/main_screenshot.png" class="img-fluid" alt="Company A / Company B side-by-side manufacturing order cards, SO to PO to Transfer to MO pipeline, intercompany cost breakdown, and a due-date exception alert" style="width:100%;height:auto;object-fit:contain;">
+      <div style="padding:16px 20px;font-size:14px;color:#797F8B;">The parent (Company A) and child (Company B) manufacturing orders side by side with live progress, the Sales Order &rarr; Purchase Order &rarr; Transfer &rarr; Manufacturing Order pipeline, an intercompany cost breakdown, and a due-date exception card.</div>
+    </div>
+  </section>
+
+  <section style="background:#F7F9FC;border:1px solid #DCE1E8;border-radius:16px;padding:56px 48px;margin-bottom:28px;">
+    <div class="row d-flex align-items-center g-4">
+      <div class="col col-12 col-lg-6">
+        <h4 style="margin:0;font-size:32px;line-height:1.25;color:#001844;font-weight:700;">The manufacturing layer core Odoo doesn't cover</h4>
+        <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:560px;">Core `sale_purchase_inter_company_rules` already automates the intercompany sale/purchase mirroring &mdash; it just stops there. This module doesn't reinvent that mechanism; it watches for the one gap it leaves open: a component only another company can actually manufacture. When that happens, it raises the same intercompany PO core would expect, lets core mirror it into an SO, and only then adds the missing piece &mdash; a manufacturing order in the producing company, linked back so its status is never a mystery.</p>
+        <ul style="margin-top:1rem;color:#797F8B;padding-left:1.1rem;">
+          <li>No parallel SO/PO mirroring logic &mdash; core `sale_purchase_inter_company_rules` still owns that step</li>
+          <li>No parallel costing/pricing system &mdash; vendor pricing and standard cost flow through as usual</li>
+          <li>One well-tested method, `action_create_intercompany_supply()`, drives both the automatic and manual paths</li>
+        </ul>
+      </div>
+      <div class="col col-12 col-lg-6">
+        <img class="img-fluid" src="assets/main_screenshot.png" alt="Sales Order to Purchase Order to Transfer to Manufacturing Order pipeline row" style="width:100%;border-radius:16px;object-fit:cover;">
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#F7F9FC;border:1px solid #DCE1E8;border-radius:16px;padding:56px 48px;margin-bottom:28px;">
+    <div class="row d-flex align-items-center g-4">
+      <div class="col col-12 col-lg-6 order-lg-2">
+        <h4 style="margin:0;font-size:32px;line-height:1.25;color:#001844;font-weight:700;">Never a silent shortage, never a blocked confirmation</h4>
+        <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:560px;">A plain stock shortage message tells a planner nothing about why a component is missing or when it's coming. This module replaces that with a live "Waiting on Company B &mdash; 60% complete" status and a due-date exception the moment the supplying company's own schedule slips. And because intercompany orchestration is defense-in-depth, not a gatekeeper, the automatic check runs after the MO's own confirmation succeeds and is wrapped so it can never block or fail that confirmation &mdash; a manual "Check Intercompany Supply" button is always there to retry.</p>
+        <ul style="margin-top:1rem;color:#797F8B;padding-left:1.1rem;">
+          <li>Automatic hook on MO confirmation, with a manual retry button as backup</li>
+          <li>A warning banner with the exact day count and a direct link to the child MO</li>
+          <li>An intercompany orchestration failure never blocks the MO's own confirmation</li>
+        </ul>
+      </div>
+      <div class="col col-12 col-lg-6 order-lg-1">
+        <img class="img-fluid" src="assets/main_screenshot.png" alt="Due-date exception alert with View Details action" style="width:100%;border-radius:16px;object-fit:cover;">
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#ECF0F1;border-radius:16px;padding:40px;margin-bottom:28px;">
+    <h2 style="font-size:28px;color:#001844;margin:0 0 24px;font-weight:700;text-align:center;">Why Choose ERP23</h2>
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-award" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">Silver Partner</span></h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Official Odoo Silver Partner with certified expertise</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-globe" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">30+</span> Countries Served</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Global reach with clients across 30+ countries</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-check-double" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">200+</span> Projects Completed</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Proven Odoo delivery across diverse business requirements</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-industry" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">15+</span> Industries Served</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Specialized Odoo expertise across retail, manufacturing, and services</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-certificate" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">7+</span> Certifications</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Team certified in 7+ specialized Odoo domains</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+          <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa fa-user-clock" style="font-size:44px;color:#00A0DB;"></i>
+          </div>
+          <div style="padding:24px 24px 28px;">
+            <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">10+</span> Years Experience</h5>
+            <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Nearly a decade of specialized Odoo expertise</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#001844;border-radius:16px;padding:40px;margin-bottom:12px;text-align:center;">
+    <h2 style="font-size:28px;color:#00A0DB;margin:0 0 16px;font-weight:700;">Contact &amp; Support</h2>
+    <p style="margin:0 0 8px;color:#DCE1E8;font-size:20px;font-weight:800;letter-spacing:0.5px;">ERP23</p>
+    <p style="margin:0 0 8px;color:#DCE1E8;font-size:16px;line-height:1.6;">Developed and maintained by ERP23.</p>
+    <p style="margin:0 0 4px;color:#DCE1E8;">Website: <a href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer" style="color:#00A0DB;text-decoration:none;font-weight:600;">https://www.erp-23.com/</a></p>
+    <p style="margin:0;color:#DCE1E8;">Email: <a href="mailto:erp23@brainstation-23.com" style="color:#00A0DB;text-decoration:none;font-weight:600;">erp23@brainstation-23.com</a></p>
+  </section>
+
+</div>
+</body>
+</html>
