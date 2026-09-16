@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="module_category_amc_management" model="ir.module.category">
+        <field name="name">AMC Management</field>
+        <field name="description">Manage annual maintenance contracts, their service periods and provisioning.</field>
+        <field name="sequence">18</field>
+    </record>
+
+    <!-- The groups hang off a privilege rather than straight off the module category:
+         res.groups.category_id was replaced by res.groups.privilege_id, and the
+         privilege is what carries the category the user form groups its selections by. -->
+    <record id="res_groups_privilege_amc" model="res.groups.privilege">
+        <field name="name">AMC Management</field>
+        <field name="category_id" ref="module_category_amc_management"/>
+        <field name="sequence">18</field>
+    </record>
+
+    <record id="group_amc_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="res_groups_privilege_amc"/>
+        <field name="comment">Follow up contracts and close service periods.</field>
+    </record>
+
+    <record id="group_amc_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="sequence">20</field>
+        <field name="privilege_id" ref="res_groups_privilege_amc"/>
+        <field name="implied_ids" eval="[(4, ref('group_amc_user'))]"/>
+        <field name="comment">Configure sites, terminate contracts and reset them to draft.</field>
+    </record>
+
+    <!-- Purchase managers drive the AMC order, so they get the contracts with it. -->
+    <record id="purchase.group_purchase_manager" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('amc_management.group_amc_manager'))]"/>
+    </record>
+
+    <record id="amc_contract_company_rule" model="ir.rule">
+        <field name="name">AMC Contract: multi-company</field>
+        <field name="model_id" ref="model_amc_contract"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="amc_site_company_rule" model="ir.rule">
+        <field name="name">AMC Site: multi-company</field>
+        <field name="model_id" ref="model_amc_site"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+</odoo>

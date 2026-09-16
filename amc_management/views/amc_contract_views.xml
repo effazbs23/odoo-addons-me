@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_amc_contract_form" model="ir.ui.view">
+        <field name="name">amc.contract.form</field>
+        <field name="model">amc.contract</field>
+        <field name="arch" type="xml">
+            <form string="Annual Maintenance Contract" create="false">
+                <header>
+                    <button name="action_activate_parent_amc" type="object" class="btn-primary"
+                            string="Activate"
+                            invisible="state != 'draft' or parent_amc_id"/>
+                    <button name="action_activate_child_amc" type="object" class="btn-primary"
+                            string="Activate"
+                            invisible="state != 'draft' or not parent_amc_id"/>
+                    <button name="action_send_for_validation" type="object" class="btn-primary"
+                            string="Send For Validation"
+                            invisible="not parent_amc_id or state != 'in_progress'"/>
+                    <button name="action_mark_done" type="object" class="btn-primary"
+                            string="Mark as Done"
+                            invisible="state != 'validation_pending' or not parent_amc_id"/>
+                    <button name="action_mark_partially_serviced" type="object" class="btn-secondary"
+                            string="Mark as Partially Serviced"
+                            invisible="state != 'validation_pending' or not parent_amc_id"/>
+                    <button name="action_mark_expired" type="object" class="btn-secondary"
+                            string="Mark as Expired"
+                            invisible="state != 'validation_pending' or not parent_amc_id"/>
+                    <button name="action_create_vendor_bill" type="object" class="btn-primary"
+                            string="Create Vendor Bill"
+                            groups="amc_management.group_amc_manager"
+                            invisible="parent_amc_id or not is_signed or state in ['draft', 'terminated']"/>
+                    <button name="action_close" type="object" class="btn-secondary"
+                            string="Close"
+                            confirm="Are you sure you want to close this AMC?"
+                            invisible="parent_amc_id or state != 'in_progress'"/>
+                    <button name="action_terminate" type="object" class="btn-secondary"
+                            string="Terminate"
+                            groups="amc_management.group_amc_manager"
+                            confirm="Are you sure you want to terminate this AMC? Every live service period is terminated with it."
+                            invisible="parent_amc_id or state in ['draft', 'terminated']"/>
+                    <button name="action_reset_to_draft" type="object" class="btn-secondary"
+                            string="Reset to Draft"
+                            groups="amc_management.group_amc_manager"
+                            confirm="Are you sure you want to reset this AMC to draft?"
+                            invisible="state == 'draft' or parent_amc_id"/>
+                    <button name="action_reset_expired_to_draft" type="object" class="btn-secondary"
+                            string="Reset to Draft"
+                            groups="base.group_system"
+                            confirm="This will restore the service period to Draft and clear the expiry information. Continue?"
+                            invisible="state != 'expired' or not parent_amc_id"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,in_progress,validation_pending,closed"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Signed" bg_color="text-bg-success"
+                            invisible="not is_signed or parent_amc_id"/>
+                    <field name="is_signed" invisible="1"/>
+                    <field name="is_frozen" invisible="1"/>
+                    <field name="has_signed_contract" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <div class="oe_button_box" name="button_box" invisible="state == 'draft'">
+                        <button class="oe_stat_button" type="object" name="action_view_child_amc"
+                                icon="fa-calendar" invisible="parent_amc_id">
+                            <field name="cnt_child_amc" string="Periods" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_service_reports"
+                                icon="fa-file-text-o" invisible="parent_amc_id">
+                            <field name="service_report_count" string="Service Reports" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_vendor_bills"
+                                icon="fa-pencil-square-o" groups="account.group_account_readonly">
+                            <field name="bill_count" string="Vendor Bills" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_payments"
+                                icon="fa-money" groups="account.group_account_readonly">
+                            <field name="payment_count" string="Payments" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_provision_moves"
+                                icon="fa-book" groups="account.group_account_readonly">
+                            <field name="provision_move_count" string="Provisions" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_purchase_orders"
+                                icon="fa-shopping-cart">
+                            <field name="purchase_order_count" string="Purchase Orders" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_signed_contract"
+                                icon="fa-file-pdf-o" string="Signed Contract"
+                                invisible="parent_amc_id or not has_signed_contract"/>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="amc_ref" readonly="1"/>
+                            <field name="parent_amc_id" readonly="1" invisible="not parent_amc_id"/>
+                            <field name="site_id" readonly="1"/>
+                            <field name="site_code" readonly="1" invisible="not site_code"/>
+                            <field name="contractor_id" readonly="1"/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="product_categ_id" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amc_charge_annum" readonly="1" invisible="parent_amc_id"/>
+                            <field name="frequency_number" readonly="1" invisible="parent_amc_id"/>
+                            <field name="amc_period_amount" readonly="1" invisible="not parent_amc_id"/>
+                            <field name="payment_term_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="start_date" readonly="1"/>
+                            <field name="end_date" readonly="1"/>
+                            <field name="service_days" readonly="1" invisible="not parent_amc_id"/>
+                            <field name="expiry_time" readonly="1"/>
+                            <field name="signed_date" invisible="parent_amc_id or not is_signed"/>
+                            <field name="period_seq" readonly="1" invisible="not parent_amc_id"/>
+                            <field name="completed_date" readonly="1" invisible="not parent_amc_id"/>
+                            <field name="completed_by_id" readonly="1"
+                                   invisible="not parent_amc_id or not completed_by_id"/>
+                            <field name="po_id" readonly="1"/>
+                            <field name="po_total" readonly="1"/>
+                            <field name="amount_paid" readonly="1" invisible="parent_amc_id"
+                                   groups="account.group_account_readonly"/>
+                            <field name="amount_outstanding" readonly="1" invisible="parent_amc_id"
+                                   groups="account.group_account_readonly"/>
+                        </group>
+                    </group>
+                    <group invisible="not parent_amc_id">
+                        <group string="Service">
+                            <field name="days_serviced" readonly="1"
+                                   invisible="state not in ['closed', 'partially_serviced', 'expired']"/>
+                            <field name="days_not_serviced" readonly="1"
+                                   invisible="state not in ['partially_serviced', 'expired']"/>
+                            <field name="expiry_reason" readonly="1" invisible="state != 'expired'"/>
+                            <field name="expired_by_id" readonly="1" invisible="state != 'expired'"/>
+                            <field name="expired_date" readonly="1" invisible="state != 'expired'"/>
+                        </group>
+                        <group string="Payment" groups="account.group_account_readonly">
+                            <field name="payment_status" widget="badge"
+                                   decoration-success="payment_status == 'paid'"
+                                   decoration-info="payment_status == 'advance_paid'"
+                                   decoration-warning="payment_status == 'not_paid'"/>
+                            <field name="finance_state" widget="badge"/>
+                            <field name="vendor_bill_id"/>
+                            <field name="payment_reference"/>
+                        </group>
+                    </group>
+                    <!-- The signed AMC contract is uploaded on the purchase order; the
+                         Signed Contract stat button above opens it from here. -->
+                    <group string="Attachments" invisible="not parent_amc_id">
+                        <group>
+                            <field name="service_report" filename="service_report_filename"
+                                   readonly="is_frozen"/>
+                            <field name="service_report_filename" invisible="1"/>
+                            <field name="other_attachment_ids" widget="many2many_binary"
+                                   readonly="is_frozen"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Service Periods" name="periods" invisible="parent_amc_id">
+                            <field name="child_amc_ids" readonly="1">
+                                <list default_order="period_seq">
+                                    <field name="period_seq" string="#"/>
+                                    <field name="amc_ref"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="service_days"/>
+                                    <field name="days_serviced" optional="show"/>
+                                    <field name="days_not_serviced" optional="show"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="amc_period_amount" sum="Total"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state == 'closed'"
+                                           decoration-warning="state == 'partially_serviced'"
+                                           decoration-danger="state == 'expired'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Purchase History" name="purchase_history">
+                            <field name="all_purchase_line_ids" readonly="1"
+                                   options="{'no_create': True}">
+                                <list string="Purchase History" create="false" delete="false" edit="false">
+                                    <field name="order_id"/>
+                                    <field name="date_order"/>
+                                    <field name="product_id"/>
+                                    <field name="name" string="Description"/>
+                                    <field name="product_qty"/>
+                                    <field name="product_uom_id" optional="hide"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal" sum="Total"/>
+                                    <field name="state" widget="badge" optional="show"/>
+                                    <field name="amc_id" string="AMC" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_amc_contract_list" model="ir.ui.view">
+        <field name="name">amc.contract.list</field>
+        <field name="model">amc.contract</field>
+        <field name="arch" type="xml">
+            <list string="Annual Maintenance Contracts" create="false"
+                  default_order="period_seq desc, id desc"
+                  decoration-muted="state == 'terminated'"
+                  decoration-danger="state == 'expired'">
+                <field name="amc_ref"/>
+                <field name="name"/>
+                <field name="site_id" optional="show"/>
+                <field name="site_code" optional="hide"/>
+                <field name="contractor_id"/>
+                <field name="product_categ_id" optional="hide"/>
+                <field name="po_id" optional="show"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="amc_charge_annum" sum="Total"
+                       column_invisible="context.get('amc_period_list')"/>
+                <field name="amc_period_amount" sum="Total"
+                       column_invisible="not context.get('amc_period_list')"/>
+                <field name="amount_paid" sum="Total Paid" optional="hide"
+                       groups="account.group_account_readonly"/>
+                <field name="amount_outstanding" sum="Total Outstanding" optional="hide"
+                       groups="account.group_account_readonly"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="service_days" optional="hide"/>
+                <field name="days_serviced" optional="hide"
+                       column_invisible="not context.get('amc_period_list')"/>
+                <field name="days_not_serviced" optional="hide"
+                       column_invisible="not context.get('amc_period_list')"/>
+                <field name="expiry_time" optional="show"/>
+                <field name="payment_status" widget="badge" optional="hide"
+                       groups="account.group_account_readonly"
+                       decoration-success="payment_status == 'paid'"
+                       decoration-info="payment_status == 'advance_paid'"
+                       decoration-warning="payment_status == 'not_paid'"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'closed'"
+                       decoration-warning="state == 'partially_serviced'"
+                       decoration-danger="state == 'expired'"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_amc_contract_search" model="ir.ui.view">
+        <field name="name">amc.contract.search</field>
+        <field name="model">amc.contract</field>
+        <field name="arch" type="xml">
+            <search string="Annual Maintenance Contracts">
+                <field name="name"/>
+                <field name="amc_ref"/>
+                <field name="site_id"/>
+                <field name="po_id"/>
+                <field name="contractor_id"/>
+                <field name="product_categ_id"/>
+                <filter string="Draft" name="state_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="In Progress" name="state_in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Validation Pending" name="state_validation_pending"
+                        domain="[('state', '=', 'validation_pending')]"/>
+                <filter string="Done" name="state_closed" domain="[('state', '=', 'closed')]"/>
+                <filter string="Partially Serviced" name="state_partially_serviced"
+                        domain="[('state', '=', 'partially_serviced')]"/>
+                <filter string="Expired" name="state_expired" domain="[('state', '=', 'expired')]"/>
+                <separator/>
+                <filter string="Signed" name="signed" domain="[('is_signed', '=', True)]"/>
+                <filter string="Expiring in 30 Days" name="expiring_soon"
+                        domain="[('expiry_time', '&gt;=', 0), ('expiry_time', '&lt;=', 30)]"/>
+                <separator/>
+                <filter string="Not Paid" name="payment_not_paid" domain="[('payment_status', '=', 'not_paid')]"/>
+                <filter string="Advance Paid" name="payment_advance" domain="[('payment_status', '=', 'advance_paid')]"/>
+                <filter string="Paid" name="payment_paid" domain="[('payment_status', '=', 'paid')]"/>
+                <separator/>
+                <filter name="filter_start_date" date="start_date"/>
+                <filter name="filter_end_date" date="end_date"/>
+                <group>
+                    <filter string="Contractor" name="group_by_contractor" context="{'group_by': 'contractor_id'}"/>
+                    <filter string="Site" name="group_by_site" context="{'group_by': 'site_id'}"/>
+                    <filter string="Product Category" name="group_by_categ" context="{'group_by': 'product_categ_id'}"/>
+                    <filter string="Purchase Order" name="group_by_po" context="{'group_by': 'po_id'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Cards for the Service Reports stat button. The records are ir.attachment rows
+         sitting behind the service_report binary field of each period, so res_name
+         resolves to the period's display name. -->
+    <record id="view_amc_service_report_kanban" model="ir.ui.view">
+        <field name="name">amc.service.report.kanban</field>
+        <field name="model">ir.attachment</field>
+        <field name="arch" type="xml">
+            <kanban create="false" edit="false" delete="false" class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="res_name"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex align-items-start">
+                            <i class="fa fa-file-text-o fa-2x text-muted me-3" title="Service Report"/>
+                            <div class="flex-grow-1">
+                                <strong><field name="res_name"/></strong>
+                                <div class="text-muted small text-truncate"><field name="name"/></div>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-end">
+                            <a class="btn btn-sm btn-primary" role="button"
+                               t-attf-href="/web/content/#{record.id.raw_value}?download=true">
+                                <i class="fa fa-download me-1"/>Download
+                            </a>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_amc_contract" model="ir.actions.act_window">
+        <field name="name">AMC Contracts</field>
+        <field name="res_model">amc.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('parent_amc_id', '=', False)]</field>
+        <field name="context">{'search_default_state_draft': 1, 'search_default_state_in_progress': 1}</field>
+    </record>
+
+    <record id="action_amc_service_period" model="ir.actions.act_window">
+        <field name="name">Service Periods</field>
+        <field name="res_model">amc.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('parent_amc_id', '!=', False)]</field>
+        <field name="context">{'search_default_state_in_progress': 1, 'search_default_state_validation_pending': 1, 'amc_period_list': 1}</field>
+    </record>
+
+</odoo>

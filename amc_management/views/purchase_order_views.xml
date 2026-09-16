@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_purchase_order_form_inherit_amc" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.amc</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//header" position="inside">
+                <button name="action_mark_as_signed" type="object" string="Mark as Signed"
+                        class="btn-primary"
+                        groups="amc_management.group_amc_manager"
+                        confirm="Marking the AMC as signed generates its monthly provision journal entries in draft. Continue?"
+                        invisible="not is_amc_order or state != 'purchase' or amc_is_signed"/>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="action_view_amc"
+                        icon="fa-file-text-o" invisible="not amc_count">
+                    <field name="amc_count" string="AMC Contracts" widget="statinfo"/>
+                </button>
+                <button class="oe_stat_button" type="object" name="action_view_amc_provisions"
+                        icon="fa-book" groups="account.group_account_readonly"
+                        invisible="not amc_provision_move_count">
+                    <field name="amc_provision_move_count" string="AMC Provisions" widget="statinfo"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="before">
+                <field name="amc_is_signed" invisible="1"/>
+                <field name="is_amc_order" widget="boolean_toggle"
+                       readonly="state in ['purchase', 'cancel']"/>
+            </xpath>
+
+            <!-- Contract terms sit with the order's own dates rather than in a tab, so
+                 they are filled in before the lines are entered. -->
+            <xpath expr="//div[@name='date_planned_div']" position="after">
+                <field name="amc_site_id" invisible="not is_amc_order"
+                       required="is_amc_order"
+                       readonly="state in ['purchase', 'cancel']"
+                       options="{'no_quick_create': True}"/>
+                <field name="amc_start_date" invisible="not is_amc_order"
+                       required="is_amc_order"
+                       readonly="state in ['purchase', 'cancel']"/>
+                <field name="amc_duration_months" invisible="not is_amc_order"
+                       readonly="state in ['purchase', 'cancel']"/>
+                <field name="amc_end_date" invisible="not is_amc_order"
+                       required="is_amc_order"
+                       readonly="state in ['purchase', 'cancel']"/>
+                <field name="amc_frequency_number" invisible="not is_amc_order"
+                       required="is_amc_order"
+                       readonly="state in ['purchase', 'cancel']"/>
+                <field name="amc_signed_contract" filename="amc_signed_contract_filename"
+                       invisible="not is_amc_order or state != 'purchase'"/>
+                <field name="amc_signed_contract_filename" invisible="1"/>
+            </xpath>
+
+            <!-- An AMC is bought as a service delivered over time, so the line products
+                 are restricted rather than merely validated after the fact. The base
+                 domain is concatenated rather than replaced, so purchase_ok and the
+                 company filter keep applying. -->
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_id']"
+                   position="attributes">
+                <attribute name="domain">[('purchase_ok', '=', True), '|', ('company_id', '=', False), ('company_id', 'parent_of', parent.company_id)] + (parent.is_amc_order and [('type', '=', 'service')] or [])</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_qty']"
+                   position="before">
+                <field name="is_amc_order" column_invisible="1"/>
+                <field name="amc_site_id" column_invisible="not parent.is_amc_order"
+                       optional="show" options="{'no_quick_create': True}"/>
+                <field name="amc_id" column_invisible="not parent.is_amc_order"
+                       optional="hide" readonly="1"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_purchase_order_list_inherit_amc" model="ir.ui.view">
+        <field name="name">purchase.order.list.inherit.amc</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="is_amc_order" optional="hide"/>
+                <field name="amc_site_id" optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_search_inherit_amc" model="ir.ui.view">
+        <field name="name">purchase.order.search.inherit.amc</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="arch" type="xml">
+            <filter name="draft_rfqs" position="before">
+                <filter string="AMC Orders" name="amc_orders" domain="[('is_amc_order', '=', True)]"/>
+                <separator/>
+            </filter>
+        </field>
+    </record>
+
+    <record id="action_amc_purchase_order" model="ir.actions.act_window">
+        <field name="name">AMC Orders</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_amc_order', '=', True)]</field>
+        <field name="context">{'default_is_amc_order': True}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="report_amc_schedule" model="ir.actions.report">
+        <field name="name">AMC Schedule Report</field>
+        <field name="model">amc.contract</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">amc_management.report_amc_schedule</field>
+        <field name="report_file">amc_management.report_amc_schedule</field>
+    </record>
+
+</odoo>

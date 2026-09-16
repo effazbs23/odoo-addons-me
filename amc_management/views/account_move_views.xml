@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- AMC provision entries are plain account.move records tagged with
+         amc_provision_type; these views simply surface them as their own list. -->
+
+    <record id="view_amc_provision_move_list" model="ir.ui.view">
+        <field name="name">account.move.amc.provision.list</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <list string="AMC Provision Entries" create="false" default_order="amc_provision_month, id">
+                <field name="amc_provision_month_name" string="Month"/>
+                <field name="name" string="Entry"/>
+                <field name="ref" string="Reference"/>
+                <field name="amc_id"/>
+                <field name="amc_contract_ids" widget="many2many_tags" optional="hide"/>
+                <field name="amc_site_id" optional="show"/>
+                <field name="amc_po_id"/>
+                <field name="partner_id" string="Vendor" optional="show"/>
+                <field name="amc_service_period_id" optional="hide"/>
+                <field name="date" string="Accounting Date"/>
+                <field name="company_currency_id" column_invisible="1"/>
+                <field name="amc_provision_amount" sum="Total"/>
+                <field name="amc_provision_type" widget="badge"
+                       decoration-info="amc_provision_type == 'catchup'"
+                       decoration-warning="amc_provision_type == 'reversal'"/>
+                <field name="journal_id" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'posted'"
+                       decoration-muted="state == 'cancel'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_amc_provision_move_search" model="ir.ui.view">
+        <field name="name">account.move.amc.provision.search</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <search string="AMC Provision Entries">
+                <field name="name"/>
+                <field name="ref"/>
+                <field name="amc_id"/>
+                <field name="amc_po_id"/>
+                <field name="amc_site_id"/>
+                <field name="partner_id" string="Vendor"/>
+                <field name="amc_provision_month"/>
+                <filter string="Regular" name="amc_type_regular" domain="[('amc_provision_type', '=', 'regular')]"/>
+                <filter string="Catch-Up" name="amc_type_catchup" domain="[('amc_provision_type', '=', 'catchup')]"/>
+                <filter string="Reversal" name="amc_type_reversal" domain="[('amc_provision_type', '=', 'reversal')]"/>
+                <separator/>
+                <filter string="Draft" name="amc_state_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Posted" name="amc_state_posted" domain="[('state', '=', 'posted')]"/>
+                <separator/>
+                <filter name="amc_filter_month" date="amc_provision_month"/>
+                <group>
+                    <filter string="Contract" name="amc_group_by_contract" context="{'group_by': 'amc_id'}"/>
+                    <filter string="Site" name="amc_group_by_site" context="{'group_by': 'amc_site_id'}"/>
+                    <filter string="Vendor" name="amc_group_by_vendor" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Purchase Order" name="amc_group_by_po" context="{'group_by': 'amc_po_id'}"/>
+                    <filter string="Month" name="amc_group_by_month" context="{'group_by': 'amc_provision_month:month'}"/>
+                    <filter string="Type" name="amc_group_by_type" context="{'group_by': 'amc_provision_type'}"/>
+                    <filter string="Status" name="amc_group_by_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Surface the AMC tags on the standard journal entry form -->
+    <record id="view_move_form_inherit_amc" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.amc</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object"
+                        name="action_view_amc_service_reports" icon="fa-file-text-o"
+                        invisible="not amc_service_report_count">
+                    <field name="amc_service_report_count" string="Service Reports" widget="statinfo"/>
+                </button>
+            </xpath>
+            <!-- A dedicated page keeps the AMC block off every non-AMC invoice form,
+                 and anchors on a stable named node rather than "first group in sheet". -->
+            <xpath expr="//notebook/page[@id='aml_tab']" position="after">
+                <page id="amc_tab" string="AMC" name="amc_tab"
+                      invisible="not amc_provision_type and not amc_id">
+                    <group>
+                        <group>
+                            <field name="amc_id" readonly="1"/>
+                            <field name="amc_contract_ids" widget="many2many_tags" readonly="1"
+                                   invisible="not amc_provision_type"/>
+                            <field name="amc_site_id" readonly="1"/>
+                            <field name="amc_po_id" readonly="1"/>
+                            <field name="amc_service_period_id" readonly="1"
+                                   invisible="amc_provision_type != 'reversal'"/>
+                        </group>
+                        <group>
+                            <field name="amc_provision_type" readonly="1" invisible="not amc_provision_type"/>
+                            <field name="amc_provision_month" readonly="1" invisible="not amc_provision_type"/>
+                            <field name="amc_milestone_label" readonly="1" invisible="not amc_milestone_number"/>
+                            <field name="amc_quarter_id" readonly="1" invisible="not amc_quarter_id"/>
+                            <field name="amc_is_advance" readonly="1" invisible="not amc_milestone_number"/>
+                            <field name="amc_milestone_number" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Service Periods" invisible="not amc_period_ids">
+                        <field name="amc_period_ids" nolabel="1" colspan="2"
+                               widget="many2many_tags" readonly="1"/>
+                    </group>
+                    <group string="Remarks" invisible="not amc_remarks">
+                        <field name="amc_remarks" nolabel="1" colspan="2" readonly="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_amc_provision_move" model="ir.actions.act_window">
+        <field name="name">AMC Provision Entries</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('amc_provision_type', '!=', False)]</field>
+        <field name="context">{'create': False, 'search_default_amc_group_by_contract': 1}</field>
+        <field name="search_view_id" ref="view_amc_provision_move_search"/>
+    </record>
+
+    <record id="action_amc_provision_move_list_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_amc_provision_move_list"/>
+        <field name="act_window_id" ref="action_amc_provision_move"/>
+    </record>
+
+</odoo>

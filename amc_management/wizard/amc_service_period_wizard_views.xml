@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_amc_mark_done_wizard_form" model="ir.ui.view">
+        <field name="name">amc.mark.done.wizard.form</field>
+        <field name="model">amc.mark.done.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Mark Service Period as Done">
+                <group>
+                    <group>
+                        <field name="service_period_id"/>
+                        <field name="amc_id"/>
+                        <field name="site_id"/>
+                    </group>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="total_days"/>
+                    </group>
+                </group>
+                <group string="Service Report (mandatory)">
+                    <field name="service_report" filename="service_report_filename" required="1"/>
+                    <field name="service_report_filename" invisible="1"/>
+                    <field name="other_attachment_ids" widget="many2many_binary"
+                           string="Supporting Documents"/>
+                </group>
+                <group string="Remarks">
+                    <field name="remarks" nolabel="1" colspan="2"
+                           placeholder="Optional notes for the chatter..."/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_amc_partial_service_wizard_form" model="ir.ui.view">
+        <field name="name">amc.partial.service.wizard.form</field>
+        <field name="model">amc.partial.service.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Mark as Partially Serviced">
+                <div class="alert alert-warning" role="alert">
+                    Confirming freezes this service period. A draft reversal journal entry
+                    will be created for the non-serviced days.
+                </div>
+                <group>
+                    <group>
+                        <field name="service_period_id"/>
+                        <field name="amc_id"/>
+                        <field name="site_id"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="total_days"/>
+                    </group>
+                </group>
+                <group>
+                    <group>
+                        <field name="days_serviced" required="1"/>
+                        <field name="days_not_serviced"/>
+                    </group>
+                    <group>
+                        <field name="reversal_amount"/>
+                    </group>
+                </group>
+                <group string="Service Report (mandatory)">
+                    <field name="service_report" filename="service_report_filename" required="1"/>
+                    <field name="service_report_filename" invisible="1"/>
+                    <field name="other_attachment_ids" widget="many2many_binary"
+                           string="Supporting Documents"/>
+                </group>
+                <group string="Remarks">
+                    <field name="remarks" nolabel="1" colspan="2"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            class="btn-primary" data-hotkey="q"
+                            confirm="This will freeze the service period and create a draft reversal entry. Continue?"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_amc_expire_period_wizard_form" model="ir.ui.view">
+        <field name="name">amc.expire.period.wizard.form</field>
+        <field name="model">amc.expire.period.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Expire Service Period">
+                <div class="alert alert-warning" role="alert">
+                    The period will be marked as Expired. Existing financials are preserved;
+                    a full draft reversal journal entry will be created for the period.
+                </div>
+                <group>
+                    <group>
+                        <field name="service_period_id"/>
+                        <field name="amc_id"/>
+                        <field name="site_id"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="total_days"/>
+                        <field name="reversal_amount"/>
+                    </group>
+                </group>
+                <group string="Reason for Expiry (mandatory)">
+                    <field name="reason" nolabel="1" colspan="2" required="1"
+                           placeholder="Explain why this service period is being expired..."/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Confirm Expiry" type="object"
+                            class="btn-danger" data-hotkey="q"
+                            confirm="This will expire the service period and create a draft reversal entry. Continue?"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>
