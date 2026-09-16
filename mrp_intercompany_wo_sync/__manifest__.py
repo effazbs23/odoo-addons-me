@@ -44,6 +44,7 @@ cross-instance sync.
         'views/product_template_views.xml',
         'views/menus.xml',
     ],
+    'icon': '/mrp_intercompany_wo_sync/static/description/icon.png',
     'images': [
         'static/description/assets/main_screenshot.png',
         'static/description/banner.png',
