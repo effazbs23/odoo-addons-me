@@ -1,6 +1,6 @@
 {
     'name': 'Lot Recall Report',
-    'version': '17.0.1.0.0',
+    'version': '19.0.1.0.0',
     'category': 'Inventory/Inventory',
     'summary': 'One-click recall report tracing a lot/serial number to every '
                'customer, order, and shipment it touched.',
