@@ -35,6 +35,7 @@ provided by the Enterprise `web_gantt` module.
             'mrp_finite_capacity_scheduler/static/src/scss/mrp_finite_capacity_scheduler.scss',
         ],
     },
+    'icon': '/mrp_finite_capacity_scheduler/static/description/icon.png',
     'images': [
         'static/description/assets/main_screenshot.png',
         'static/description/banner.png',
