@@ -1,6 +1,6 @@
 {
     'name': 'Landed Cost Auto-Allocator',
-    'version': '17.0.1.0.0',
+    'version': '19.0.1.0.0',
     'category': 'Inventory/Inventory',
     'summary': "Automatically splits freight/duty/customs charges across a "
                "purchase order's lines by weight, volume, or value.",
