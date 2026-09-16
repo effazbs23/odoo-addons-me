@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ============================================================
+             Accounts. Codes are deliberately unusual so they do not clash
+             with whichever chart of accounts the database was set up with.
+             ============================================================ -->
+        <record id="demo_account_pdc_holding" model="account.account">
+            <field name="name">Cheques Received - Post Dated</field>
+            <field name="code">109910</field>
+            <field name="account_type">asset_current</field>
+            <field name="reconcile" eval="True"/>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+        </record>
+
+        <record id="demo_account_bank_charge" model="account.account">
+            <field name="name">Bank Charges - Returned Cheques</field>
+            <field name="code">659910</field>
+            <field name="account_type">expense</field>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+        </record>
+
+        <record id="demo_account_charge_recovery" model="account.account">
+            <field name="name">Bank Charge Recovery</field>
+            <field name="code">759910</field>
+            <field name="account_type">income_other</field>
+            <field name="company_ids" eval="[(4, ref('base.main_company'))]"/>
+        </record>
+
+        <!-- ============================================================
+             Journals
+             ============================================================ -->
+        <record id="demo_journal_pdc_operations" model="account.journal">
+            <field name="name">PDC Operations</field>
+            <field name="code">PDCOP</field>
+            <field name="type">general</field>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <record id="demo_journal_pdc" model="account.journal">
+            <field name="name">Post Dated Cheques</field>
+            <field name="code">PDC</field>
+            <field name="type">bank</field>
+            <field name="is_pdc" eval="True"/>
+            <field name="pdc_account_id" ref="demo_account_pdc_holding"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <!-- ============================================================
+             Cheques, one per state so the flow is visible out of the box
+             ============================================================ -->
+        <record id="demo_pdc_payment_registered" model="account.payment">
+            <field name="payment_type">inbound</field>
+            <field name="partner_type">customer</field>
+            <field name="partner_id" ref="base.res_partner_2"/>
+            <field name="journal_id" ref="demo_journal_pdc"/>
+            <field name="amount">4500.00</field>
+            <field name="cheque_number">100231</field>
+            <field name="memo">Cheque 100231</field>
+        </record>
+
+        <record id="demo_pdc_payment_cleared" model="account.payment">
+            <field name="payment_type">inbound</field>
+            <field name="partner_type">customer</field>
+            <field name="partner_id" ref="base.res_partner_12"/>
+            <field name="journal_id" ref="demo_journal_pdc"/>
+            <field name="amount">2750.00</field>
+            <field name="cheque_number">100232</field>
+            <field name="memo">Cheque 100232</field>
+        </record>
+
+        <record id="demo_pdc_payment_bounced" model="account.payment">
+            <field name="payment_type">inbound</field>
+            <field name="partner_type">customer</field>
+            <field name="partner_id" ref="base.res_partner_3"/>
+            <field name="journal_id" ref="demo_journal_pdc"/>
+            <field name="amount">6200.00</field>
+            <field name="cheque_number">100233</field>
+            <field name="memo">Cheque 100233</field>
+        </record>
+
+        <record id="demo_pdc_payment_redeposited" model="account.payment">
+            <field name="payment_type">inbound</field>
+            <field name="partner_type">customer</field>
+            <field name="partner_id" ref="base.res_partner_4"/>
+            <field name="journal_id" ref="demo_journal_pdc"/>
+            <field name="amount">1800.00</field>
+            <field name="cheque_number">100234</field>
+            <field name="memo">Cheque 100234</field>
+        </record>
+
+        <!-- Dates are set from Python so the demo data stays sensible whenever
+             the database is created, instead of drifting into the past. -->
+        <function model="account.payment" name="_pdc_demo_setup"/>
+
+    </data>
+</odoo>

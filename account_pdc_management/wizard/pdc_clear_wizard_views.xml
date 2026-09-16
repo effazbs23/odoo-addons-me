@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_pdc_clear_wizard_form" model="ir.ui.view">
+        <field name="name">pdc.clear.wizard.form</field>
+        <field name="model">pdc.clear.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Clear Cheque">
+                <p class="text-muted">
+                    The cheque value moves out of the PDC holding account and into the bank
+                    account you pick below.
+                </p>
+                <group>
+                    <group>
+                        <field name="payment_id" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="partner_id" readonly="1"/>
+                        <field name="cheque_number" readonly="1"/>
+                        <field name="amount" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="clearing_date"/>
+                        <field name="bank_journal_id" options="{'no_create': True}"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object" string="Clear Cheque"
+                            class="btn-primary" data-hotkey="q"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"
+                            data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

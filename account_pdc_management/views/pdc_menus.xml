@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_pdc_root"
+              name="PDC Management"
+              web_icon="account_pdc_management,static/description/icon.png"
+              sequence="52"
+              groups="account.group_account_invoice,account.group_account_readonly"/>
+
+    <menuitem id="menu_pdc_operations"
+              name="Cheques"
+              parent="menu_pdc_root"
+              sequence="10"/>
+
+    <menuitem id="menu_pdc_payments"
+              name="Post Dated Cheques"
+              parent="menu_pdc_operations"
+              action="action_pdc_payments"
+              sequence="10"/>
+
+    <menuitem id="menu_pdc_bounced"
+              name="Bounced Cheques"
+              parent="menu_pdc_operations"
+              action="action_pdc_bounced_cheques"
+              sequence="20"/>
+
+    <menuitem id="menu_pdc_recovery"
+              name="Bank Charge Recovery"
+              parent="menu_pdc_operations"
+              action="action_pdc_bank_recovery"
+              sequence="30"/>
+
+    <menuitem id="menu_pdc_entries"
+              name="PDC Journal Entries"
+              parent="menu_pdc_operations"
+              action="action_pdc_entries"
+              sequence="40"/>
+
+    <menuitem id="menu_pdc_configuration"
+              name="Configuration"
+              parent="menu_pdc_root"
+              sequence="90"
+              groups="account.group_account_manager"/>
+
+    <menuitem id="menu_pdc_journals"
+              name="PDC Journals"
+              parent="menu_pdc_configuration"
+              action="action_pdc_journals"
+              sequence="10"/>
+
+    <menuitem id="menu_pdc_settings"
+              name="Settings"
+              parent="menu_pdc_configuration"
+              action="action_pdc_config_settings"
+              sequence="20"/>
+
+</odoo>

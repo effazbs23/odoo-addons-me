@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_payment_form_pdc" model="ir.ui.view">
+        <field name="name">account.payment.form.pdc</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+
+            <header position="inside">
+                <field name="is_pdc" invisible="1"/>
+                <field name="pdc_second_bounce_move_id" invisible="1"/>
+                <button name="action_pdc_clear" type="object" string="Clear Cheque"
+                        class="btn-primary"
+                        invisible="not is_pdc or pdc_state not in ('registered', 'redeposited')"/>
+                <button name="action_pdc_bounce" type="object" string="Bounce Cheque"
+                        class="btn-danger"
+                        invisible="not is_pdc or pdc_state not in ('registered', 'cleared', 'redeposited')"/>
+                <button name="action_pdc_redeposit" type="object" string="Redeposit"
+                        class="btn-secondary"
+                        invisible="not is_pdc or pdc_state != 'bounced' or pdc_second_bounce_move_id"/>
+                <button name="action_pdc_bank_recovery" type="object"
+                        string="Recover Bank Charge" class="btn-secondary"
+                        invisible="not is_pdc or pdc_state != 'bounced'"/>
+            </header>
+
+            <div name="button_box" position="inside">
+                <button name="action_view_pdc_entries" type="object" class="oe_stat_button"
+                        icon="fa-book" invisible="not is_pdc or pdc_entry_count == 0">
+                    <field name="pdc_entry_count" widget="statinfo" string="PDC Entries"/>
+                </button>
+                <button name="action_view_bank_recoveries" type="object" class="oe_stat_button"
+                        icon="fa-university" invisible="not is_pdc or bank_recovery_count == 0">
+                    <field name="bank_recovery_count" widget="statinfo" string="Bank Recoveries"/>
+                </button>
+            </div>
+
+            <xpath expr="//group[@name='group2']" position="inside">
+                <!-- Kept as a badge rather than a second statusbar: the header
+                     already carries the payment's own state and two status bars
+                     side by side read as one broken widget. -->
+                <field name="pdc_state" invisible="not is_pdc" widget="badge"
+                       decoration-success="pdc_state == 'cleared'"
+                       decoration-danger="pdc_state == 'bounced'"
+                       decoration-warning="pdc_state in ('registered', 'redeposited')"/>
+                <field name="cheque_number" invisible="not is_pdc" required="is_pdc"/>
+                <field name="cheque_date" invisible="not is_pdc" required="is_pdc"/>
+                <field name="cheque_bank_id" invisible="not is_pdc"/>
+            </xpath>
+
+            <xpath expr="//notebook[@name='payment_notebook']" position="inside">
+                <page string="Cheque History" name="pdc_history"
+                      invisible="not is_pdc or pdc_state in ('draft', 'registered')">
+                    <group>
+                        <group string="Clearing" invisible="not pdc_clearing_move_id">
+                            <field name="pdc_cleared_date"/>
+                            <field name="pdc_bank_journal_id"/>
+                            <field name="pdc_clearing_move_id"/>
+                        </group>
+                        <group string="Bounce" invisible="not pdc_bounce_move_id">
+                            <field name="pdc_bounce_date"/>
+                            <field name="pdc_bounce_move_id"/>
+                            <field name="pdc_bounce_count"/>
+                            <field name="pdc_bounce_reason"/>
+                        </group>
+                        <group string="Redeposit" invisible="not pdc_redeposit_move_id">
+                            <field name="pdc_redeposit_move_id"/>
+                        </group>
+                        <group string="Second Bounce" invisible="not pdc_second_bounce_move_id">
+                            <field name="pdc_second_bounce_date"/>
+                            <field name="pdc_second_bounce_move_id"/>
+                            <field name="pdc_second_bounce_reason"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_payment_tree_pdc" model="ir.ui.view">
+        <field name="name">account.payment.list.pdc</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_tree"/>
+        <field name="arch" type="xml">
+            <field name="journal_id" position="after">
+                <field name="cheque_number" optional="show"/>
+                <field name="cheque_date" optional="show"/>
+                <field name="pdc_state" optional="show" widget="badge"
+                       decoration-success="pdc_state == 'cleared'"
+                       decoration-danger="pdc_state == 'bounced'"
+                       decoration-warning="pdc_state in ('registered', 'redeposited')"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_account_payment_search_pdc" model="ir.ui.view">
+        <field name="name">account.payment.search.pdc</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_search"/>
+        <field name="arch" type="xml">
+            <field name="journal_id" position="after">
+                <field name="cheque_number"/>
+            </field>
+            <filter name="date" position="before">
+                <filter name="pdc_registered" string="Registered"
+                        domain="[('pdc_state', '=', 'registered')]"/>
+                <filter name="pdc_cleared" string="Cleared"
+                        domain="[('pdc_state', '=', 'cleared')]"/>
+                <filter name="pdc_bounced" string="Bounced"
+                        domain="[('pdc_state', '=', 'bounced')]"/>
+                <filter name="pdc_due" string="Due for Clearing"
+                        domain="[('pdc_state', '=', 'registered'), ('cheque_date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="group_pdc_state" string="Cheque Status" context="{'group_by': 'pdc_state'}"/>
+                <filter name="group_cheque_date" string="Cheque Date" context="{'group_by': 'cheque_date'}"/>
+            </filter>
+        </field>
+    </record>
+
+    <record id="action_pdc_payments" model="ir.actions.act_window">
+        <field name="name">Post Dated Cheques</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('is_pdc', '=', True)]</field>
+        <field name="context">{'search_default_pdc_registered': 1}</field>
+    </record>
+
+    <record id="action_pdc_bounced_cheques" model="ir.actions.act_window">
+        <field name="name">Bounced Cheques</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_pdc', '=', True), ('pdc_state', '=', 'bounced')]</field>
+    </record>
+
+</odoo>

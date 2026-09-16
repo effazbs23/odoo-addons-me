@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_pdc_recovery_waiver_wizard_form" model="ir.ui.view">
+        <field name="name">pdc.recovery.waiver.wizard.form</field>
+        <field name="model">pdc.recovery.waiver.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Waive Bank Charge">
+                <p class="text-muted">
+                    Waiving lowers what the partner is billed. It never raises it: the
+                    recovery invoice stays capped at the fee the bank charged.
+                </p>
+                <group>
+                    <field name="recovery_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="charge_amount" readonly="1"/>
+                    <field name="waiver_amount"/>
+                    <field name="waiver_reason" placeholder="Why is part of the fee absorbed?"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object" string="Apply Waiver"
+                            class="btn-primary" data-hotkey="q"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"
+                            data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pdc_recovery_waiver_wizard" model="ir.actions.act_window">
+        <field name="name">Waive Bank Charge</field>
+        <field name="res_model">pdc.recovery.waiver.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" eval="False"/>
+    </record>
+
+</odoo>
