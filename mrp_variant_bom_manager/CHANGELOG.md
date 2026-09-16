@@ -52,3 +52,26 @@ Initial release.
   key was left unset.
 - **Pricing**: left as TBD; run the `erp23-odoo-pricing-advisor` skill
   before listing on the Apps Store.
+
+## 19.0.1.0.0
+
+Ported to Odoo 19. Verified against the real `odoo/odoo` 19.0 source tree
+(a sparse clone of `github.com/odoo/odoo` at the `19.0` branch) — no code
+changes were needed:
+
+- **`mrp.bom.line.bom_product_template_attribute_value_ids` confirmed
+  unchanged** (`addons/mrp/models/mrp_bom.py`) — the per-cell-independence
+  limitation documented above still applies exactly as described.
+- **`mrp.bom.explode(product, quantity, ...)` confirmed unchanged**,
+  including the `(bom_line, {'qty': ..., ...})` tuple shape returned in
+  `lines_done` that `action_preview_variant` relies on.
+  `mrp.mrp_bom_form_view` also confirmed to exist with a `//sheet`
+  element, so the button-placement xpath is safe (the *exact* button
+  layout inside the sheet still wasn't checked, since the placement here
+  doesn't depend on it).
+- **Not verified this pass** (no live browser/frontend available, same as
+  17.0.1.0.0): the OWL matrix widget's field-registration API and
+  relational-field-value shape. Odoo 18/19 did not publicly document a
+  breaking change to `registry.category("fields")` registration between
+  17 and 19, but this was not confirmed by inspecting frontend source —
+  test in a real browser before relying on it.
