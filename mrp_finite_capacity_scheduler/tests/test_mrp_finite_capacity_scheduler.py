@@ -33,8 +33,8 @@ class TestMrpFiniteCapacityScheduler(TransactionCase):
             'production_id': production.id,
             'workcenter_id': workcenter.id,
             'product_uom_id': self.product.uom_id.id,
-            'date_planned_start': start,
-            'date_planned_finished': finish,
+            'date_start': start,
+            'date_finished': finish,
         })
 
     def test_overlapping_workorders_flagged(self):
@@ -100,6 +100,6 @@ class TestMrpFiniteCapacityScheduler(TransactionCase):
         })
         wizard.action_auto_schedule()
 
-        self.assertTrue(unscheduled.date_planned_start)
+        self.assertTrue(unscheduled.date_start)
         self.assertGreaterEqual(
-            unscheduled.date_planned_start, existing.date_planned_finished)
+            unscheduled.date_start, existing.date_finished)

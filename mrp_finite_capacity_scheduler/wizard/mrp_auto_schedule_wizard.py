@@ -17,7 +17,7 @@ class MrpAutoScheduleWizard(models.TransientModel):
         return self.env['mrp.workorder'].search([
             ('state', 'in', ('pending', 'ready', 'waiting')),
             ('workcenter_id', '!=', False),
-            ('date_planned_start', '=', False),
+            ('date_start', '=', False),
         ])
 
     def action_auto_schedule(self):
@@ -42,11 +42,11 @@ class MrpAutoScheduleWizard(models.TransientModel):
                 conflict = self._find_next_conflict(workcenter, workorder, start, start + duration)
                 if not conflict:
                     break
-                start = conflict.date_planned_finished
+                start = conflict.date_finished
             finish = start + duration
             workorder.write({
-                'date_planned_start': start,
-                'date_planned_finished': finish,
+                'date_start': start,
+                'date_finished': finish,
             })
             next_free_slot[workcenter.id] = finish
         return {'type': 'ir.actions.act_window_close'}
@@ -56,6 +56,6 @@ class MrpAutoScheduleWizard(models.TransientModel):
             ('workcenter_id', '=', workcenter.id),
             ('id', '!=', workorder.id),
             ('state', 'not in', ('done', 'cancel')),
-            ('date_planned_start', '<', finish),
-            ('date_planned_finished', '>', start),
-        ], order='date_planned_finished', limit=1)
+            ('date_start', '<', finish),
+            ('date_finished', '>', start),
+        ], order='date_finished', limit=1)

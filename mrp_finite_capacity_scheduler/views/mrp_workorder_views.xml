@@ -5,8 +5,8 @@
         <field name="model">mrp.workorder</field>
         <field name="arch" type="xml">
             <gantt string="Finite Capacity Scheduler"
-                   date_start="date_planned_start"
-                   date_stop="date_planned_finished"
+                   date_start="date_start"
+                   date_stop="date_finished"
                    default_group_by="workcenter_id"
                    color="has_conflict"
                    precision="{'day': 'hour:half', 'week': 'day:half', 'month': 'day'}"
@@ -46,8 +46,8 @@
                 <field name="production_id"/>
                 <field name="name"/>
                 <field name="workcenter_id"/>
-                <field name="date_planned_start"/>
-                <field name="date_planned_finished"/>
+                <field name="date_start"/>
+                <field name="date_finished"/>
                 <field name="duration_expected"/>
                 <field name="state" widget="badge"/>
                 <field name="has_conflict" widget="boolean_toggle" readonly="1"/>
@@ -67,7 +67,7 @@
                 <field name="production_id"/>
                 <field name="workcenter_id"/>
                 <filter string="Unscheduled" name="filter_unscheduled"
-                        domain="[('date_planned_start', '=', False)]"/>
+                        domain="[('date_start', '=', False)]"/>
                 <filter string="In Conflict" name="filter_conflict"
                         domain="[('has_conflict', '=', True)]"/>
                 <filter string="At Risk" name="filter_at_risk"

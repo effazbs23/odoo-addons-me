@@ -134,7 +134,7 @@
     <div class="row d-flex align-items-center g-4">
       <div class="col col-12 col-lg-6">
         <h4 style="margin:0;font-size:32px;line-height:1.25;color:#001844;font-weight:700;">Reads and writes core MRP fields &mdash; nothing to migrate later</h4>
-        <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:560px;">The scheduler doesn't introduce a parallel planning model. It works directly against the same <code>date_planned_start</code>/<code>date_planned_finished</code> fields core Manufacturing already uses, so every existing report, kanban view, and automation keeps working exactly as before &mdash; you get finite-capacity scheduling without adopting a second system of record.</p>
+        <p style="margin:16px 0 0;color:#797F8B;font-size:16px;line-height:1.75;max-width:560px;">The scheduler doesn't introduce a parallel planning model. It works directly against the same <code>date_start</code>/<code>date_finished</code> fields core Manufacturing already uses, so every existing report, kanban view, and automation keeps working exactly as before &mdash; you get finite-capacity scheduling without adopting a second system of record.</p>
         <ul style="margin-top:1rem;color:#797F8B;padding-left:1.1rem;">
           <li>No new planning fields to reconcile with core MRP</li>
           <li>Existing workcenter capacity calendars are reused, not duplicated</li>

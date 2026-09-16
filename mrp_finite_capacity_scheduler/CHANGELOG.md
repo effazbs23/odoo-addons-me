@@ -44,3 +44,42 @@ Initial release.
   key was left unset.
 - **Pricing**: left as TBD; run the `erp23-odoo-pricing-advisor` skill
   before listing on the Apps Store.
+
+## 19.0.1.0.0
+
+Ported to Odoo 19. Verified against the real `odoo/odoo` 19.0 source tree
+(a sparse clone of `github.com/odoo/odoo` at the `19.0` branch) rather than
+guessing — the following were corrected as a result:
+
+- **`mrp.workorder` date fields renamed**: `date_planned_start` /
+  `date_planned_finished` do not exist on `mrp.workorder` in 19.0 — the
+  real fields are `date_start` / `date_finished`. Every reference across
+  `models/mrp_workorder.py`, `models/mrp_workcenter.py`,
+  `wizard/mrp_auto_schedule_wizard.py`, `views/mrp_workorder_views.xml`
+  (including the `<gantt date_start=".." date_stop="..">` attributes,
+  which are unrelated fixed attribute names on the `<gantt>` tag itself —
+  only the field names they point to changed), the tests, and the
+  `index.html` copy have been updated. **This means the 17.0.1.0.0
+  release above targets Odoo 17's actual field names for this model; if
+  installing on 17.0/18.0 specifically, double-check whether those
+  versions already use `date_start`/`date_finished` too — Odoo renamed
+  this at some point between 17 and 19 and the exact version boundary
+  was not pinned down in this pass.**
+- **`resource.calendar.attendance` has no `date_from`/`date_to` fields**:
+  `_compute_capacity_per_day` incorrectly filtered attendance lines on
+  `date_from`/`date_to` (those fields belong to `resource.calendar.leaves`,
+  a different model, not the weekly recurring attendance lines). This
+  would have raised an `AttributeError` in any Odoo version, not just 19 —
+  it's a genuine bug fix, not a version-porting change. Replaced with a
+  filter on `display_type` (excludes the section/separator rows the
+  attendance list widget can contain), which is the correct, existing
+  field on this model.
+- **`mrp.menu_mrp_planning` does not exist**: the real external id for
+  Manufacturing's "Planning" root menu is `mrp.mrp_planning_menu_root`.
+  Fixed in `views/menus.xml`. (`mrp.mrp_workcenter_view` was verified
+  correct and left unchanged.)
+- Not independently verified this pass (no source available — `web_gantt`
+  is an Enterprise-only module not in the public `odoo/odoo` repo): the
+  `<gantt>` view's own attributes (`default_group_by`, `color`,
+  `precision`, `default_scale`) are assumed unchanged from 17 to 19.
+  Verify against a real Enterprise 19.0 instance before install.

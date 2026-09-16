@@ -23,14 +23,14 @@ class MrpWorkorder(models.Model):
         ('high_risk', 'High Risk'),
     ], compute='_compute_due_risk', store=True, string='Due-Date Risk')
 
-    @api.depends('workcenter_id', 'date_planned_start', 'date_planned_finished', 'state')
+    @api.depends('workcenter_id', 'date_start', 'date_finished', 'state')
     def _compute_has_conflict(self):
         for workorder in self:
             workorder.has_conflict = False
         by_workcenter = {}
         for workorder in self:
-            if (workorder.workcenter_id and workorder.date_planned_start
-                    and workorder.date_planned_finished
+            if (workorder.workcenter_id and workorder.date_start
+                    and workorder.date_finished
                     and workorder.state not in ('done', 'cancel')):
                 by_workcenter.setdefault(workorder.workcenter_id.id, []).append(workorder)
 
@@ -38,25 +38,25 @@ class MrpWorkorder(models.Model):
             others = self.env['mrp.workorder'].search([
                 ('workcenter_id', '=', workcenter_id),
                 ('state', 'not in', ('done', 'cancel')),
-                ('date_planned_start', '!=', False),
-                ('date_planned_finished', '!=', False),
+                ('date_start', '!=', False),
+                ('date_finished', '!=', False),
             ])
             capacity = self.env['mrp.workcenter'].browse(workcenter_id).capacity or 1
             for workorder in workorders:
                 overlapping = others.filtered(
                     lambda o: o.id != workorder.id
-                    and o.date_planned_start < workorder.date_planned_finished
-                    and o.date_planned_finished > workorder.date_planned_start
+                    and o.date_start < workorder.date_finished
+                    and o.date_finished > workorder.date_start
                 )
                 # Concurrently overlapping work orders (including itself)
                 # beyond the workcenter's parallel capacity is a conflict.
                 workorder.has_conflict = (len(overlapping) + 1) > capacity
 
-    @api.depends('date_planned_finished', 'production_id.date_deadline', 'state')
+    @api.depends('date_finished', 'production_id.date_deadline', 'state')
     def _compute_due_risk(self):
         for workorder in self:
             deadline = workorder.production_id.date_deadline
-            finished = workorder.date_planned_finished
+            finished = workorder.date_finished
             if workorder.state in ('done', 'cancel'):
                 workorder.due_risk = 'on_track'
             elif not deadline or not finished:

@@ -20,7 +20,7 @@ class MrpWorkcenter(models.Model):
             hours_per_day = 0.0
             if calendar:
                 attendances = calendar.attendance_ids.filtered(
-                    lambda att: not att.date_from and not att.date_to)
+                    lambda att: not att.display_type)
                 per_day = {}
                 for attendance in attendances:
                     per_day.setdefault(attendance.dayofweek, 0.0)
@@ -42,14 +42,14 @@ class MrpWorkcenter(models.Model):
         for workcenter in self:
             workorders = Workorder.search([
                 ('workcenter_id', '=', workcenter.id),
-                ('date_planned_start', '<', week_end),
-                ('date_planned_finished', '>', week_start),
+                ('date_start', '<', week_end),
+                ('date_finished', '>', week_start),
                 ('state', 'not in', ('cancel',)),
             ])
             scheduled_hours = 0.0
             for wo in workorders:
-                start = max(wo.date_planned_start, week_start)
-                stop = min(wo.date_planned_finished, week_end)
+                start = max(wo.date_start, week_start)
+                stop = min(wo.date_finished, week_end)
                 if stop > start:
                     scheduled_hours += (stop - start).total_seconds() / 3600.0
             available_hours = workcenter.capacity_per_day * 7
