@@ -150,3 +150,42 @@ Initial release.
   and `quality_tolerance_checks`.
 - **Pricing**: left as TBD; run the `erp23-odoo-pricing-advisor` skill
   before listing on the Apps Store.
+
+## 19.0.1.0.0
+
+Ported to Odoo 19. Verified against the real `odoo/odoo` 19.0 source tree
+(a sparse clone of `github.com/odoo/odoo` at the `19.0` branch) — every
+field/method name this module assumed for core `stock_landed_costs` (which
+was in fact vendored source in this pass, unlike a couple of sibling
+modules whose core dependency is Enterprise-only) turned out correct
+except one real bug:
+
+- **Embedded list tag fixed**: the `valuation_adjustment_lines` one2many
+  is rendered with a `<list>` tag in core's form view, not `<tree>` — this
+  module's xpath (`//field[@name='valuation_adjustment_lines']/tree`)
+  would have failed to match at install, breaking the whole view
+  inheritance. Fixed to target `<list>`.
+- **Removed redundant preview fields**: core's `stock.valuation.adjustment.lines`
+  already has `weight` and `volume` fields (populated by
+  `compute_landed_cost()`, `optional="hide"` in the default list) and an
+  already-visible `former_cost`. The `preview_weight`/`preview_volume`/
+  `preview_value` computed fields this module added were duplicating that
+  data via a separate, independently-computed formula
+  (`product.weight * quantity`) instead of just showing what core already
+  stores — removed them, and the view now simply flips `weight`/`volume`
+  to `optional="show"` via two small xpath attribute changes instead of
+  adding new field nodes. `former_cost` needed no change (already
+  visible). This is a simplification, not a version-porting fix — it
+  would have applied equally to the 17.0.1.0.0 release.
+- **Confirmed correct, unchanged**: `split_method` (and its five values),
+  `stock.valuation.adjustment.lines`' `cost_line_id`/`quantity`/
+  `additional_landed_cost` fields, `stock.landed.cost.compute_landed_cost()`,
+  `stock.picking.move_ids`, `product.type` (`consu`/`service`/`combo`,
+  confirming the `!= 'service'` filter in `_get_relevant_moves` is still
+  correct), and `stock_landed_costs.view_stock_landed_cost_form`.
+- Also noted for future reference: `product.template.split_method_landed_cost`
+  exists in core (a per-product default split method) — this module's own
+  `landed.cost.allocation.rule` model overlaps with it somewhat. Not
+  changed in this pass since it works correctly as-is, but a future
+  version could read this core field as an additional fallback layer
+  before falling back to `equal`.

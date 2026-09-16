@@ -23,9 +23,9 @@
         </field>
     </record>
 
-    <!-- Verify this xmlid against the target Odoo 17 database - assumed to
-         be `stock_landed_costs.view_stock_landed_cost_form` (not confirmed
-         against source in this environment, see CHANGELOG.md). -->
+    <!-- stock_landed_costs.view_stock_landed_cost_form verified against
+         the real odoo/odoo 19.0 source
+         (addons/stock_landed_costs/views/stock_landed_cost_views.xml). -->
     <record id="view_stock_landed_cost_form_auto_allocate" model="ir.ui.view">
         <field name="name">stock.landed.cost.form.auto.allocate</field>
         <field name="model">stock.landed.cost</field>
@@ -44,16 +44,23 @@
                         help="Suggest an allocation method per cost line from matching rule templates, check for missing weight/volume data, then compute the split."/>
             </xpath>
 
-            <!-- Allocation Preview columns (Weight/Volume/Value) and a
-                 details button for the audit-trail formula, added to the
-                 existing valuation_adjustment_lines embedded list. Assumes
-                 the embedded list still uses the <tree> tag in the target
-                 Odoo 17 database (not confirmed against source, see
-                 CHANGELOG.md). -->
-            <xpath expr="//field[@name='valuation_adjustment_lines']/tree" position="inside">
-                <field name="preview_weight" optional="show"/>
-                <field name="preview_volume" optional="show"/>
-                <field name="preview_value" optional="show"/>
+            <!-- Allocation Preview: core's own valuation_adjustment_lines
+                 list already has `weight`/`volume` columns (hidden by
+                 default, `optional="hide"`) and a visible `former_cost` -
+                 verified against real source. Just show weight/volume by
+                 default instead of adding duplicate field nodes, and add
+                 a details button for the audit-trail formula. Uses the
+                 <list> tag (core renamed <tree> to <list> for embedded
+                 one2many views). -->
+            <xpath expr="//field[@name='valuation_adjustment_lines']/list/field[@name='weight']"
+                   position="attributes">
+                <attribute name="optional">show</attribute>
+            </xpath>
+            <xpath expr="//field[@name='valuation_adjustment_lines']/list/field[@name='volume']"
+                   position="attributes">
+                <attribute name="optional">show</attribute>
+            </xpath>
+            <xpath expr="//field[@name='valuation_adjustment_lines']/list" position="inside">
                 <button name="action_view_allocation_breakdown" type="object"
                         string="Details" icon="fa-info-circle"
                         title="View the allocation formula for this line"/>

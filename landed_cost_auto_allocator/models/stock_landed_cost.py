@@ -150,30 +150,6 @@ class StockValuationAdjustmentLines(models.Model):
         string='Allocation Breakdown', copy=False,
         help="Human-readable formula showing exactly how this line's "
              "share of the cost was calculated. Populated by Auto-Allocate.")
-    preview_weight = fields.Float(
-        string='Weight (kg)', compute='_compute_allocation_preview_fields',
-        digits='Stock Weight',
-        help="Total weight of this move's quantity, for the Allocation "
-             "Preview panel.")
-    preview_volume = fields.Float(
-        string='Volume (m3)', compute='_compute_allocation_preview_fields',
-        digits='Volume',
-        help="Total volume of this move's quantity, for the Allocation "
-             "Preview panel.")
-    preview_value = fields.Float(
-        string='Value', compute='_compute_allocation_preview_fields',
-        digits='Product Price',
-        help="Value of this move's quantity before the landed cost is "
-             "added, for the Allocation Preview panel.")
-
-    @api.depends('move_id', 'move_id.product_id', 'quantity', 'former_cost')
-    def _compute_allocation_preview_fields(self):
-        for line in self:
-            product = line.move_id.product_id if line.move_id else line.product_id
-            qty = line.quantity or 0.0
-            line.preview_weight = (product.weight or 0.0) * qty if product else 0.0
-            line.preview_volume = (product.volume or 0.0) * qty if product else 0.0
-            line.preview_value = line.former_cost or 0.0
 
     def action_view_allocation_breakdown(self):
         """Open a small read-only popup showing this line's audit-trail
