@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="bs_supply_chain_bottleneck_dashboard.BsSupplyDashboard">
+        <div class="o_action_manager p-4 bg-100 h-100 overflow-auto">
+            <h1 class="mb-1">Supplier Performance</h1>
+            <p class="text-muted mb-4">Fulfillment Delay Variance (Average Days Late)</p>
+            <div t-if="state.loading" class="text-center p-5"><span class="spinner-border spinner-border-sm"/> Analyzing delivery history...</div>
+            <t t-else="">
+                <div class="row row-cols-1 row-cols-md-3 g-3 mb-4">
+                    <div class="col">
+                        <div class="card p-3 shadow-sm border-0">
+                            <h6 class="text-muted mb-1">Total Suppliers</h6>
+                            <h3 class="mb-0" t-esc="state.totalSuppliers"/>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card p-3 shadow-sm border-0">
+                            <h6 class="text-muted mb-1">Avg. Delay</h6>
+                            <h3 class="mb-0"><t t-esc="state.avgDelay"/> Days</h3>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card p-3 shadow-sm border-0">
+                            <h6 class="text-muted mb-1">Late Deliveries</h6>
+                            <h3 class="mb-0"><t t-esc="state.latePct"/>%</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow-sm border-0 p-3">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Vendor</th>
+                                <th>Fulfillment Delay Variance</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="state.vendors" t-as="vendor" t-key="vendor.id">
+                                <td t-esc="vendor_index + 1"/>
+                                <td><t t-esc="vendor.name"/></td>
+                                <td><t t-esc="vendor.bs_vendor_delay_index"/> Days</td>
+                                <td>
+                                    <span t-attf-class="badge rounded-pill p-2 {{this.statusClass(vendor.bs_vendor_delay_index)}}">
+                                        <t t-esc="vendor.bs_vendor_delay_index"/> Days Late
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

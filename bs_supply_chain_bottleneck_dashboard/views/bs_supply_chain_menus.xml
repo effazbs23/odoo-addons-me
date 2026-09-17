@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="bs_supply_chain_menu_root"
+              name="Supply Chain Dashboard"
+              web_icon="bs_supply_chain_bottleneck_dashboard,static/description/icon.png"
+              sequence="82"/>
+
+    <record id="bs_supply_chain_action" model="ir.actions.client">
+        <field name="name">Supply Chain Dashboard</field>
+        <field name="tag">bs_supply_chain_bottleneck_dashboard_action</field>
+    </record>
+
+    <menuitem id="bs_supply_chain_dashboard_menu"
+              name="Bottleneck Analysis"
+              parent="bs_supply_chain_menu_root"
+              action="bs_supply_chain_action"
+              sequence="10"/>
+</odoo>
