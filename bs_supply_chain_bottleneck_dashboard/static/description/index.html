@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supply Chain Lead Time &amp; Bottleneck Dashboard</title>
+</head>
+<body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#F7F9FC;color:#001844;line-height:1.6;">
+  <div style="max-width:1200px;margin:0 auto;padding:40px 20px 80px;">
+
+    <!-- 1. Compatibility Header -->
+    <div style="border:1px solid #DCE1E8;border-radius:16px;padding:20px 16px;margin-bottom:20px;box-sizing:border-box;text-align:center;">
+      <div style="display:inline-block;width:100%;max-width:180px;vertical-align:middle;padding:8px;box-sizing:border-box;">
+        <img src="./assets/logo.png" alt="Supply Chain Lead Time &amp; Bottleneck Dashboard logo" style="max-height:48px;max-width:100%;width:auto;height:auto;">
+      </div>
+      <div style="display:inline-block;width:100%;max-width:320px;vertical-align:middle;text-align:left;padding:8px;box-sizing:border-box;">
+        <p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#00A0DB;">Supports</p>
+        <span style="display:inline-block;margin:0 6px 6px 0;padding:7px 12px;color:#001844;border:1.5px solid #00A0DB;border-radius:8px;font-size:12px;font-weight:600;"><img src="./assets/check-circle.svg" alt="Supported" style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px;">Enterprise</span>
+        <span style="display:inline-block;margin:0 6px 6px 0;padding:7px 12px;color:#001844;border:1.5px solid #00A0DB;border-radius:8px;font-size:12px;font-weight:600;"><img src="./assets/check-circle.svg" alt="Supported" style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px;">Community</span>
+      </div>
+    </div>
+
+    <!-- 2. Banner -->
+    <div style="margin-top:3rem;margin-bottom:3rem;">
+      <img src="./assets/main_screenshot.png" alt="Supply Chain Lead Time &amp; Bottleneck Dashboard main screenshot" style="display:block;width:100%;height:auto;border-radius:10px;">
+    </div>
+
+    <!-- 3. Hero -->
+    <section style="border:1px solid #DCE1E8;border-radius:16px;padding:60px 48px;margin-bottom:20px;">
+      <span style="display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1.5px solid #00A0DB;color:#00668E;padding:8px 14px;margin:0 8px 12px 0;">Odoo Module</span>
+      <span style="display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1.5px solid #00A0DB;color:#00668E;padding:8px 14px;margin:0 8px 12px 0;">Inventory</span>
+      <h1 style="font-size:48px;font-weight:700;color:#001844;margin:16px 0 12px;line-height:1.2;">Supply Chain Lead Time &amp; Bottleneck Dashboard</h1>
+      <p style="margin:0;color:#797F8B;font-size:18px;max-width:800px;line-height:1.7;">Measure vendor delivery precision, identify lead time slippage, and eliminate supply chain bottlenecks before they impact operations.</p>
+    </section>
+
+    <!-- 4. Feature overview -->
+    <section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;">
+      <h2 style="font-size:32px;color:#001844;margin:0 0 8px;font-weight:700;">Feature overview</h2>
+      <p style="margin:0 0 28px;color:#797F8B;font-size:16px;line-height:1.7;">Benchmark vendor delivery precision by comparing planned purchase commitments against actual warehouse receipts in an interactive bottleneck dashboard.</p>
+      <div>
+        <div style="display:inline-block;vertical-align:top;width:29%;min-width:250px;margin:0 1.5% 20px 0;">
+          <h3 style="font-size:20px;color:#001844;margin:0 0 14px;font-weight:700;">Vendor Precision Tracking</h3>
+          <ul style="margin:0;padding:0 0 0 18px;color:#797F8B;font-size:15px;line-height:1.9;">
+            <li>Dynamic fulfillment delay index computed on res.partner supplier records</li>
+            <li>Compares PO scheduled date (date_planned) against receipt date (date_done)</li>
+            <li>Positive slippage tracking isolating late deliveries from on-time receipts</li>
+            <li>Historical delivery variance averaged across all completed stock pickings</li>
+            <li>Concrete day-count deviations highlighting chronic fulfillment delays</li>
+          </ul>
+        </div>
+        <div style="display:inline-block;vertical-align:top;width:29%;min-width:250px;margin:0 1.5% 20px 1.5%;">
+          <h3 style="font-size:20px;color:#001844;margin:0 0 14px;font-weight:700;">Bottleneck Ranking Matrix</h3>
+          <ul style="margin:0;padding:0 0 0 18px;color:#797F8B;font-size:15px;line-height:1.9;">
+            <li>Interactive OWL dashboard ranking vendors by fulfillment latency descending</li>
+            <li>Top-worst sorting ensuring high-risk suppliers receive immediate triage</li>
+            <li>Visual dual-tier badges: Red for critical (&gt; 3 days), Yellow for minor (&le; 3 days)</li>
+            <li>Clean, responsive table layout with partner contact identification</li>
+            <li>Actionable insights for procurement teams to enforce SLAs and terms</li>
+          </ul>
+        </div>
+        <div style="display:inline-block;vertical-align:top;width:29%;min-width:250px;margin:0 0 20px 1.5%;">
+          <h3 style="font-size:20px;color:#001844;margin:0 0 14px;font-weight:700;">Native Logistics Ecosystem</h3>
+          <ul style="margin:0;padding:0 0 0 18px;color:#797F8B;font-size:15px;line-height:1.9;">
+            <li>Hooks seamlessly into standard Odoo Purchase and Inventory applications</li>
+            <li>Zero disruption to daily RFQs, Purchase Orders, and warehouse receipts</li>
+            <li>Dedicated Supply Chain Dashboard top-level menu with sub-action</li>
+            <li>Asynchronous background calculation with interactive loading feedback</li>
+            <li>Lightweight and extensible architecture for Community and Enterprise</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 style="font-size:32px;color:#001844;margin:36px 0 20px;font-weight:700;">What's included</h2>
+      <div style="border:1px solid #DCE1E8;border-radius:16px;padding:28px 32px;">
+        <div style="display:inline-block;vertical-align:top;width:47%;min-width:280px;margin:0 1.5% 0 0;">
+          <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">High-performance OWL Supply Chain Bottleneck Analysis dashboard UI</p>
+          <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Automated PO planned date vs. stock receipt completion date comparison engine</p>
+          <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Computed supplier delivery delay index on partner records (bs_vendor_delay_index)</p>
+          <p style="margin:0;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Descending supplier ranking prioritizing critical lead time slippages</p>
+        </div>
+        <div style="display:inline-block;vertical-align:top;width:47%;min-width:280px;margin:0 0 0 1.5%;">
+          <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Dual-tier visual severity badges (Red for &gt;3 days late, Yellow for &le;3 days)</p>
+          <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Top-level Supply Chain Dashboard application menu and sub-action</p>
+          <p style="margin:0 0 14px;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Asynchronous data fetcher with real-time analysis loading animation</p>
+          <p style="margin:0;color:#001844;font-size:15px;line-height:1.6;"><img src="./assets/check-blue.svg" alt="" style="width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:8px;">Native compatibility with Odoo Purchase and Stock management modules</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Dependencies -->
+    <section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;margin-bottom:15px;">
+      <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Dependencies</h2>
+      <span style="display:inline-block;border:1.5px solid #00A0DB;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;font-weight:600;">purchase</span>
+      <span style="display:inline-block;border:1.5px solid #00A0DB;border-radius:8px;padding:10px 16px;margin:6px 8px 6px 0;font-size:13px;color:#00668E;font-weight:600;">stock</span>
+    </section>
+
+    <!-- 6. Screenshots -->
+    <section style="margin-top:28px;margin-bottom:40px;">
+      <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Screenshots</h2>
+
+      <div style="display:block;width:100%;margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;">
+        <div style="padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+          <h5 style="color:#001844;margin:0;font-weight:600;">Bottleneck Analysis Overview</h5>
+        </div>
+        <img src="./assets/supply_chain.png" alt="Supply Chain Lead Time &amp; Bottleneck Dashboard showing supplier delivery delay ranking and severity badges" style="display:block;width:100%;height:auto;object-fit:contain;">
+      </div>
+    </section>
+
+    <!-- 7. Our Services -->
+    <section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;">
+      <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Our Services</h2>
+      <div style="font-size:0;">
+        <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+          <img src="./assets/svc-gear.svg" alt="Odoo Customization" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Customization</h6>
+        </div>
+        <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+          <img src="./assets/svc-wrench.svg" alt="Odoo Implementation" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Implementation</h6>
+        </div>
+        <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+          <img src="./assets/svc-life-ring.svg" alt="Odoo Support" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Support</h6>
+        </div>
+        <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+          <img src="./assets/svc-arrows-repeat.svg" alt="Odoo Migration" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Migration</h6>
+        </div>
+        <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+          <img src="./assets/svc-puzzle.svg" alt="Odoo Integration" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Integration</h6>
+        </div>
+        <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+          <img src="./assets/svc-consultancy.svg" alt="Odoo Consultancy" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Consultancy</h6>
+        </div>
+        <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+          <img src="./assets/svc-licencing.svg" alt="Odoo Licensing" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Odoo Licensing</h6>
+        </div>
+        <div style="display:inline-block;vertical-align:top;width:24%;margin:0 0.5% 16px 0.5%;border:1px solid #DCE1E8;border-radius:12px;padding:28px 10px;text-align:center;box-sizing:border-box;font-size:16px;">
+          <img src="./assets/svc-hire-odoo.svg" alt="Hire Odoo Developer" style="width:56px;height:56px;display:block;margin:0 auto 16px;">
+          <h6 style="margin:0;color:#001844;font-size:16px;font-weight:700;line-height:1.4;">Hire Odoo Developer</h6>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Why Choose ERP23 -->
+    <div style="border:1px solid #DCE1E8;border-radius:16px;padding:24px 12px;margin-top:28px;margin-bottom:20px;box-sizing:border-box;">
+      <h2 style="font-size:24px;color:#001844;margin:0 0 6px;font-weight:700;text-align:center;line-height:1.3;">Why Choose ERP23</h2>
+      <div style="text-align:center;font-size:0;">
+        <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+            <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+              <img src="./assets/silver-partner.webp" alt="Silver Partner" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+            </div>
+            <div style="padding:18px 18px 22px;">
+              <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">Silver</span> Partner</h5>
+              <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Official Odoo Silver Partner with certified expertise.</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+            <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+              <img src="./assets/countries-served.webp" alt="30+ Countries Served" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+            </div>
+            <div style="padding:18px 18px 22px;">
+              <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">30+</span> Countries Served</h5>
+              <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Global reach with clients across 30+ countries worldwide.</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+            <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+              <img src="./assets/projects-completed.webp" alt="200+ Projects Completed" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+            </div>
+            <div style="padding:18px 18px 22px;">
+              <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">200+</span> Projects Completed</h5>
+              <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Proven Odoo delivery across diverse business requirements.</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+            <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+              <img src="./assets/industries-served.webp" alt="15+ Industries Served" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+            </div>
+            <div style="padding:18px 18px 22px;">
+              <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">15+</span> Industries Served</h5>
+              <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Specialized Odoo expertise across retail, manufacturing, and services.</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+            <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+              <img src="./assets/certifications.webp" alt="7+ Certifications" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+            </div>
+            <div style="padding:18px 18px 22px;">
+              <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">7+</span> Certifications</h5>
+              <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Certified professionals across specialized Odoo domains.</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:inline-block;width:100%;max-width:340px;vertical-align:top;padding:6px;box-sizing:border-box;font-size:16px;text-align:left;">
+          <div style="border:1px solid #DCE1E8;border-radius:12px;overflow:hidden;min-height:250px;box-sizing:border-box;">
+            <div style="border-bottom:1px solid #DCE1E8;padding:24px 16px;text-align:center;min-height:100px;box-sizing:border-box;">
+              <img src="./assets/years-experience.webp" alt="10+ Years Experience" style="max-height:64px;max-width:100%;width:auto;height:auto;display:inline-block;">
+            </div>
+            <div style="padding:18px 18px 22px;">
+              <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;line-height:1.3;color:#001844;"><span style="color:#00A0DB;">10+</span> Years Experience</h5>
+              <p style="margin:0;color:#797F8B;font-size:13px;line-height:1.5;">Over a decade of enterprise software engineering expertise.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Support & Company -->
+    <section style="border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-top:28px;text-align:center;">
+      <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Support &amp; Company</h2>
+      <img src="./assets/erp23.png" alt="ERP23 logo" style="max-height:48px;width:auto;margin-bottom:16px;">
+      <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.6;">Developed and maintained by ERP23.</p>
+      <p style="margin:8px 0 0;">Website: <a href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer" style="color:#00A0DB;text-decoration:none;font-weight:600;">https://www.erp-23.com/</a></p>
+      <p style="margin:0;">Email: <a href="mailto:erp23@brainstation-23.com" style="color:#00A0DB;text-decoration:none;font-weight:600;">erp23@brainstation-23.com</a></p>
+    </section>
+
+  </div>
+</body>
+</html>
