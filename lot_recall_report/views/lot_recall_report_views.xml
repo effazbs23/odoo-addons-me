@@ -40,19 +40,21 @@
             <form string="Lot Recall Report" class="o_recall_report_form">
                 <header>
                     <button name="action_generate" type="object" string="Generate Recall Report"
-                            class="btn-primary" icon="fa-refresh"/>
+                            class="btn-primary" icon="fa-file-text-o"/>
                     <button name="%(action_report_lot_recall_pdf)d" type="action" string="Export PDF"
-                            icon="fa-file-pdf-o" invisible="state != 'generated'"/>
+                            class="btn-secondary" icon="fa-file-pdf-o" invisible="state != 'generated'"/>
                     <button name="action_export_xlsx" type="object" string="Export XLSX"
-                            icon="fa-file-excel-o" invisible="state != 'generated'"/>
+                            class="btn-secondary" icon="fa-file-excel-o" invisible="state != 'generated'"/>
                     <button name="action_view_recall_log" type="object" string="Recall Log"
-                            icon="fa-list-alt"/>
+                            class="btn-secondary" icon="fa-list-alt"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,generated"/>
                 </header>
                 <sheet>
-                    <div class="oe_title">
-                        <span class="o_form_label text-muted">Lot Recall Report</span>
-                        <h1><field name="name" readonly="1"/></h1>
+                    <div class="oe_title o_recall_title">
+                        <h1 class="mb-1">Lot Recall Report</h1>
+                        <div class="text-muted">
+                            Reference: <field name="name" readonly="1" class="fw-bold"/>
+                        </div>
                     </div>
                     <group>
                         <group>
@@ -67,16 +69,18 @@
                         </group>
                     </group>
 
-                    <div class="alert alert-info d-flex align-items-center mt-2" role="alert"
+                    <div class="alert alert-info d-flex align-items-center mt-3 p-3 rounded-3" role="alert"
                          invisible="state == 'generated'">
-                        <i class="fa fa-info-circle fa-lg me-2"/>
+                        <span class="o_recall_alert_icon o_recall_alert_icon_info me-3">
+                            <i class="fa fa-info"/>
+                        </span>
                         <span>Use this tool to analyze the impact of this lot/serial across your
                             supply chain and generate an official recall report.</span>
                     </div>
 
                     <div class="row o_recall_dashboard mt-3" invisible="state != 'generated'">
                         <div class="col-12 col-lg-6 mb-3">
-                            <div class="o_recall_card border rounded-3 p-3 h-100">
+                            <div class="o_recall_card o_recall_card_forward rounded-4 p-4 h-100">
                                 <div class="d-flex justify-content-between align-items-start flex-wrap">
                                     <div class="d-flex align-items-start">
                                         <div class="o_recall_icon o_recall_icon_forward">
@@ -88,15 +92,20 @@
                                                 (Customers, Sales Orders, Deliveries)</span>
                                         </div>
                                     </div>
-                                    <div class="o_recall_stat o_recall_stat_danger text-end">
-                                        <span class="d-block small text-muted">Affected Quantity</span>
-                                        <field name="forward_quantity" readonly="1" class="fw-bold fs-4"/>
+                                    <div class="o_recall_stat o_recall_stat_danger d-flex align-items-center">
+                                        <span class="o_recall_stat_icon"><i class="fa fa-users"/></span>
+                                        <div class="ms-2">
+                                            <span class="d-block small text-muted">Affected Quantity</span>
+                                            <div class="o_recall_stat_value">
+                                                <field name="forward_quantity" readonly="1"/> Units
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row mt-3 g-2">
+                                <div class="row mt-4 g-2">
                                     <div class="col-4">
                                         <div class="o_recall_metric">
-                                            <i class="fa fa-users"/>
+                                            <span class="o_recall_metric_icon"><i class="fa fa-users"/></span>
                                             <div>
                                                 <field name="forward_customer_count" readonly="1" class="fw-bold d-block"/>
                                                 <span class="text-muted small">Customers received this lot</span>
@@ -105,7 +114,7 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="o_recall_metric">
-                                            <i class="fa fa-file-text-o"/>
+                                            <span class="o_recall_metric_icon"><i class="fa fa-file-text-o"/></span>
                                             <div>
                                                 <field name="forward_sale_order_count" readonly="1" class="fw-bold d-block"/>
                                                 <span class="text-muted small">Sales orders including this lot</span>
@@ -114,7 +123,7 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="o_recall_metric">
-                                            <i class="fa fa-truck"/>
+                                            <span class="o_recall_metric_icon"><i class="fa fa-truck"/></span>
                                             <div>
                                                 <field name="forward_delivery_count" readonly="1" class="fw-bold d-block"/>
                                                 <span class="text-muted small">Deliveries completed with this lot</span>
@@ -122,9 +131,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <h6 class="mt-3">Customer Deliveries</h6>
+                                <h6 class="mt-4 mb-2">Customer Deliveries (Top 5)</h6>
                                 <field name="forward_line_ids" readonly="1" nolabel="1">
-                                    <list create="false" edit="false" delete="false">
+                                    <list create="false" edit="false" delete="false" limit="5" class="o_recall_table">
                                         <field name="partner_id" string="Customer"/>
                                         <field name="sale_order_id" string="Sales Order"/>
                                         <field name="delivery_id" string="Delivery"/>
@@ -137,7 +146,7 @@
                         </div>
 
                         <div class="col-12 col-lg-6 mb-3">
-                            <div class="o_recall_card border rounded-3 p-3 h-100">
+                            <div class="o_recall_card o_recall_card_backward rounded-4 p-4 h-100">
                                 <div class="d-flex justify-content-between align-items-start flex-wrap">
                                     <div class="d-flex align-items-start">
                                         <div class="o_recall_icon o_recall_icon_backward">
@@ -149,15 +158,20 @@
                                                 (Vendors, Purchase Orders, Manufacturing)</span>
                                         </div>
                                     </div>
-                                    <div class="o_recall_stat o_recall_stat_primary text-end">
-                                        <span class="d-block small text-muted">Affected Quantity</span>
-                                        <field name="backward_quantity" readonly="1" class="fw-bold fs-4"/>
+                                    <div class="o_recall_stat o_recall_stat_primary d-flex align-items-center">
+                                        <span class="o_recall_stat_icon"><i class="fa fa-cog"/></span>
+                                        <div class="ms-2">
+                                            <span class="d-block small text-muted">Affected Quantity</span>
+                                            <div class="o_recall_stat_value">
+                                                <field name="backward_quantity" readonly="1"/> Units
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row mt-3 g-2">
+                                <div class="row mt-4 g-2">
                                     <div class="col-4">
                                         <div class="o_recall_metric">
-                                            <i class="fa fa-truck"/>
+                                            <span class="o_recall_metric_icon"><i class="fa fa-truck"/></span>
                                             <div>
                                                 <field name="backward_vendor_count" readonly="1" class="fw-bold d-block"/>
                                                 <span class="text-muted small">Vendor(s) supplied this lot</span>
@@ -166,7 +180,7 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="o_recall_metric">
-                                            <i class="fa fa-file-text-o"/>
+                                            <span class="o_recall_metric_icon"><i class="fa fa-file-text-o"/></span>
                                             <div>
                                                 <field name="backward_purchase_order_count" readonly="1" class="fw-bold d-block"/>
                                                 <span class="text-muted small">Purchase orders for this lot</span>
@@ -175,7 +189,7 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="o_recall_metric">
-                                            <i class="fa fa-industry"/>
+                                            <span class="o_recall_metric_icon"><i class="fa fa-industry"/></span>
                                             <div>
                                                 <field name="backward_production_count" readonly="1" class="fw-bold d-block"/>
                                                 <span class="text-muted small">Manufacturing orders produced this lot</span>
@@ -183,9 +197,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <h6 class="mt-3">Origin</h6>
+                                <h6 class="mt-4 mb-2">Origin (Top 5)</h6>
                                 <field name="backward_line_ids" readonly="1" nolabel="1">
-                                    <list create="false" edit="false" delete="false">
+                                    <list create="false" edit="false" delete="false" limit="5" class="o_recall_table">
                                         <field name="source_type" string="Type"/>
                                         <field name="purchase_order_id" string="Purchase Order"/>
                                         <field name="production_id" string="Manufacturing Order"/>
@@ -199,15 +213,19 @@
                         </div>
                     </div>
 
-                    <div class="alert alert-success d-flex align-items-center mt-2"
+                    <div class="alert alert-success d-flex align-items-center mt-3 p-3 rounded-3"
                          invisible="state != 'generated' or not fully_traceable">
-                        <i class="fa fa-check-circle fa-lg me-2"/>
+                        <span class="o_recall_alert_icon o_recall_alert_icon_success me-3">
+                            <i class="fa fa-check"/>
+                        </span>
                         <span>This lot is fully traceable: all upstream and downstream movements have
                             been identified.</span>
                     </div>
-                    <div class="alert alert-warning d-flex align-items-center mt-2"
+                    <div class="alert alert-warning d-flex align-items-center mt-3 p-3 rounded-3"
                          invisible="state != 'generated' or fully_traceable">
-                        <i class="fa fa-exclamation-triangle fa-lg me-2"/>
+                        <span class="o_recall_alert_icon o_recall_alert_icon_warning me-3">
+                            <i class="fa fa-exclamation-triangle"/>
+                        </span>
                         <span>No movements were found for one or more of the selected directions.
                             Review the lot's stock moves before relying on this report.</span>
                     </div>
