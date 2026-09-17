@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="bs_sys_security_dashboard.BsSecurityDashboard">
+        <div class="o_action_manager p-4 bg-100 h-100 overflow-auto">
+            <h1 class="mb-1">Session Monitor</h1>
+            <p class="text-muted mb-4">Monitor active user sessions and terminate suspicious access.</p>
+            <div class="card shadow-sm border-0 p-3">
+                <div t-if="state.loading" class="text-center p-5"><span class="spinner-border spinner-border-sm"/> Loading...</div>
+                <table t-else="" class="table table-hover">
+                    <thead>
+                        <tr><th>User</th><th>IP Address</th><th>Last Activity</th><th class="text-end">Actions</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="state.sessions" t-as="session" t-key="session.id">
+                            <td><t t-esc="session.user_id[1]"/></td>
+                            <td><code><t t-esc="session.ip_address"/></code></td>
+                            <td><t t-esc="session.last_activity"/></td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-danger" t-on-click="() => this.killSession(session.session_id)">Terminate</button>
+                            </td>
+                        </tr>
+                        <tr t-if="!state.sessions.length">
+                            <td colspan="4" class="text-center text-muted p-4">No active sessions.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </t>
+</templates>

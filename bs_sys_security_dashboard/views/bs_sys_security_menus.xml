@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="bs_sys_security_menu_root"
+              name="Security Command Center"
+              web_icon="bs_sys_security_dashboard,static/description/icon.png"
+              sequence="90"/>
+
+    <record id="bs_sys_security_action" model="ir.actions.client">
+        <field name="name">Security Dashboard</field>
+        <field name="tag">bs_sys_security_dashboard_action</field>
+    </record>
+
+    <menuitem id="bs_sys_security_dashboard_menu"
+              name="Session Monitor"
+              parent="bs_sys_security_menu_root"
+              action="bs_sys_security_action"
+              sequence="10"/>
+</odoo>
