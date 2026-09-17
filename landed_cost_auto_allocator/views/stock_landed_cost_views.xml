@@ -32,6 +32,13 @@
         <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
         <field name="arch" type="xml">
 
+            <!-- UI-polish pass (ui.png): scope class for this module's SCSS
+                 overrides (colors, cards) to just this form, so nothing here
+                 leaks onto unrelated screens. -->
+            <xpath expr="//form[@string='Landed Costs']" position="attributes">
+                <attribute name="class">o_landed_cost_auto_allocate_form</attribute>
+            </xpath>
+
             <!-- Auto-Allocate button, next to core's Compute/Validate
                  buttons, visible only while the record is still editable
                  (draft). Appended inside the existing <header> rather than
@@ -42,6 +49,57 @@
                         string="Auto-Allocate" class="btn-primary"
                         invisible="state != 'draft'"
                         help="Suggest an allocation method per cost line from matching rule templates, check for missing weight/volume data, then compute the split."/>
+            </xpath>
+
+            <!-- ui.png colors the per-line Allocation Method pill by
+                 method (By Weight/By Value/By Quantity). `split_method`
+                 stays the plain, fully-editable core selection field
+                 (editable="bottom" list) - only text-color decorations are
+                 added (standard list-view feature), then SCSS turns the
+                 decorated text into a pill. No badge widget: a selection
+                 field rendered as widget="badge" would not reliably stay
+                 inline-editable in an editable="bottom" list, and a working
+                 dropdown matters more than a pixel-perfect pill. -->
+            <xpath expr="//field[@name='cost_lines']/list/field[@name='split_method']"
+                   position="attributes">
+                <attribute name="decoration-info">split_method == 'by_weight'</attribute>
+                <attribute name="decoration-primary">split_method == 'by_current_cost_price'</attribute>
+                <attribute name="decoration-success">split_method == 'by_quantity'</attribute>
+            </xpath>
+
+            <!-- Total Landed Cost summary card (ui.png): a two-column row,
+                 Landed Cost Lines on the left (~2/3), a green total card on
+                 the right (~1/3) with the big amount_total and a per-line
+                 name/price_unit breakdown, both already-existing fields -
+                 no new field, no business logic. `$0` re-inserts the
+                 original, untouched `cost_lines` field (with the
+                 decorations just added above) in its new wrapper. -->
+            <xpath expr="//field[@name='cost_lines']" position="replace">
+                <div class="row o_landed_cost_split_row">
+                    <div class="col-12 col-lg-8 o_landed_cost_lines_col">$0</div>
+                    <div class="col-12 col-lg-4 o_landed_cost_total_col">
+                        <div class="o_landed_cost_total_card">
+                            <div class="o_landed_cost_total_card_title">Total Landed Cost</div>
+                            <div class="o_landed_cost_total_card_amount">
+                                <field name="currency_id" invisible="1"/>
+                                <field name="amount_total" widget="monetary" nolabel="1"/>
+                            </div>
+                            <field name="cost_lines" nolabel="1"
+                                   class="o_landed_cost_total_breakdown"
+                                   options="{'no_open': True}">
+                                <list create="0" delete="0">
+                                    <field name="name"/>
+                                    <field name="price_unit" widget="monetary"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                            <div class="o_landed_cost_total_card_footer">
+                                <span class="o_landed_cost_total_card_footer_label">Total</span>
+                                <field name="amount_total" widget="monetary" nolabel="1"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </xpath>
 
             <!-- Allocation Preview: core's own valuation_adjustment_lines
@@ -60,10 +118,50 @@
                    position="attributes">
                 <attribute name="optional">show</attribute>
             </xpath>
+            <xpath expr="//field[@name='valuation_adjustment_lines']/list/field[@name='additional_landed_cost']"
+                   position="attributes">
+                <attribute name="sum">Total</attribute>
+            </xpath>
             <xpath expr="//field[@name='valuation_adjustment_lines']/list" position="inside">
                 <button name="action_view_allocation_breakdown" type="object"
                         string="Details" icon="fa-info-circle"
                         title="View the allocation formula for this line"/>
+            </xpath>
+
+            <!-- ui.png: Allocation Preview + Audit Trail as two cards side
+                 by side. The full, editable valuation_adjustment_lines list
+                 above (with its Details button) becomes the left "Allocation
+                 Preview" card via `$0`. The right "Audit Trail" card
+                 re-displays the same records read-only, trimmed to
+                 Step (cost line) / Product / Amount plus the same Details
+                 button that opens the stored formula - no new fields. -->
+            <xpath expr="//field[@name='valuation_adjustment_lines']" position="replace">
+                <div class="row o_landed_cost_valuation_row">
+                    <div class="col-12 col-lg-7 o_landed_cost_preview_col">
+                        <div class="o_landed_cost_panel_card">
+                            <div class="o_landed_cost_panel_header">Allocation Preview</div>
+                            <div class="o_landed_cost_panel_body">$0</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-5 o_landed_cost_audit_col">
+                        <div class="o_landed_cost_panel_card">
+                            <div class="o_landed_cost_panel_header">Audit Trail</div>
+                            <field name="valuation_adjustment_lines" nolabel="1" readonly="1"
+                                   class="o_landed_cost_audit_list"
+                                   options="{'no_open': True}">
+                                <list create="0" delete="0">
+                                    <field name="cost_line_id" readonly="1"/>
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="additional_landed_cost" readonly="1"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <button name="action_view_allocation_breakdown" type="object"
+                                            string="Details" icon="fa-info-circle"
+                                            title="View the allocation formula for this line"/>
+                                </list>
+                            </field>
+                        </div>
+                    </div>
+                </div>
             </xpath>
 
         </field>

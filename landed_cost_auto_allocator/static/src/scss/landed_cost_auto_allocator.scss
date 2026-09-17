@@ -1,0 +1,159 @@
+// UI polish for the stock.landed.cost form (ui.png mockup): the
+// Auto-Allocate button color, the Total Landed Cost summary card, the
+// Allocation Method pills on the cost lines list, and the Allocation
+// Preview / Audit Trail panels. Everything is scoped under
+// `.o_landed_cost_auto_allocate_form` (added to the form's `class` in
+// views/stock_landed_cost_views.xml) so it never leaks onto other screens.
+//
+// Violet token matches the rest of the ERP23 module family
+// (see lot_recall_report's static/src/scss/lot_recall_report.scss).
+$o-landed-cost-violet: #7c3aed;
+$o-landed-cost-violet-dark: #6d28d9;
+$o-landed-cost-green: #059669;
+$o-landed-cost-blue: #2563eb;
+
+.o_landed_cost_auto_allocate_form {
+
+    // ---- Auto-Allocate primary button ----
+    .btn-primary {
+        background-color: $o-landed-cost-violet;
+        border-color: $o-landed-cost-violet;
+
+        &:hover,
+        &:focus {
+            background-color: $o-landed-cost-violet-dark;
+            border-color: $o-landed-cost-violet-dark;
+        }
+    }
+
+    // ---- Total Landed Cost summary card ----
+    .o_landed_cost_total_col {
+        margin-bottom: 16px;
+    }
+
+    .o_landed_cost_total_card {
+        height: 100%;
+        background-color: rgba(5, 150, 105, 0.06);
+        border: 1px solid rgba(5, 150, 105, 0.25);
+        border-radius: 12px;
+        padding: 16px 20px;
+    }
+
+    .o_landed_cost_total_card_title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: $o-landed-cost-green;
+        margin-bottom: 6px;
+    }
+
+    .o_landed_cost_total_card_amount {
+        font-size: 1.9rem;
+        font-weight: 700;
+        color: $o-landed-cost-green;
+        margin-bottom: 12px;
+
+        .o_field_widget {
+            display: inline-block;
+        }
+    }
+
+    .o_landed_cost_total_breakdown {
+        .o_list_renderer {
+            border: none;
+        }
+
+        thead {
+            display: none;
+        }
+
+        td,
+        th {
+            border: none !important;
+            padding: 3px 0 !important;
+            background-color: transparent !important;
+        }
+    }
+
+    .o_landed_cost_total_card_footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(5, 150, 105, 0.35);
+        font-weight: 700;
+        color: $o-landed-cost-green;
+        font-size: 1.05rem;
+
+        .o_field_widget {
+            display: inline-block;
+        }
+    }
+
+    // ---- Landed Cost Lines: colored Allocation Method pills ----
+    .o_landed_cost_lines_col {
+        margin-bottom: 16px;
+
+        .o_data_row {
+            .text-info,
+            .text-success,
+            .text-primary {
+                display: inline-block;
+                padding: 2px 10px;
+                border-radius: 10px;
+                font-weight: 600;
+            }
+
+            .text-info {
+                background-color: rgba(37, 99, 235, 0.12);
+                color: $o-landed-cost-blue !important;
+            }
+
+            .text-success {
+                background-color: rgba(5, 150, 105, 0.12);
+                color: $o-landed-cost-green !important;
+            }
+
+            .text-primary {
+                background-color: rgba(124, 58, 237, 0.12);
+                color: $o-landed-cost-violet !important;
+            }
+        }
+    }
+
+    // ---- Allocation Preview / Audit Trail cards ----
+    .o_landed_cost_valuation_row {
+        margin-top: 4px;
+    }
+
+    .o_landed_cost_preview_col,
+    .o_landed_cost_audit_col {
+        margin-bottom: 16px;
+    }
+
+    .o_landed_cost_panel_card {
+        height: 100%;
+        border: 1px solid var(--o-gray-300, #dee2e6);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .o_landed_cost_panel_header {
+        font-weight: 600;
+        padding: 10px 16px;
+        background-color: rgba(124, 58, 237, 0.06);
+        border-bottom: 1px solid var(--o-gray-300, #dee2e6);
+    }
+
+    .o_landed_cost_panel_card .o_list_renderer {
+        border: none;
+    }
+
+    .o_landed_cost_panel_card table.o_list_table {
+        margin-bottom: 0;
+    }
+
+    .o_landed_cost_audit_list .o_data_row:last-child td {
+        font-weight: 600;
+    }
+}

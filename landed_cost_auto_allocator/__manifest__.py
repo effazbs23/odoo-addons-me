@@ -1,6 +1,6 @@
 {
     'name': 'Landed Cost Auto-Allocator',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.0.1',
     'category': 'Inventory/Inventory',
     'summary': "Automatically splits freight/duty/customs charges across a "
                "purchase order's lines by weight, volume, or value.",
@@ -39,6 +39,11 @@ does not replace the landed cost accounting flow itself.
         'views/landed_cost_allocation_rule_views.xml',
         'views/stock_landed_cost_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'landed_cost_auto_allocator/static/src/scss/landed_cost_auto_allocator.scss',
+        ],
+    },
     'icon': '/landed_cost_auto_allocator/static/description/icon.png',
     'images': [
         'static/description/assets/main_screenshot.png',

@@ -196,3 +196,24 @@ except one real bug:
   changed in this pass since it works correctly as-is, but a future
   version could read this core field as an additional fallback layer
   before falling back to `equal`.
+
+## 19.0.1.0.1
+
+UI-polish pass to match `ui.png` — display only, no model/business logic
+changes:
+
+- Added `static/src/scss/landed_cost_auto_allocator.scss` (registered in
+  `web.assets_backend`, same pattern as `lot_recall_report`) with the
+  shared ERP23 violet token (`#7c3aed`) for the Auto-Allocate button.
+- Added a "Total Landed Cost" summary card next to the Landed Cost Lines
+  list (`cost_lines`), showing `amount_total` and a read-only per-line
+  `name`/`price_unit` breakdown — all existing fields, no new field.
+- Colored the `split_method` pill on each cost line by decoration
+  (blue/violet/green for weight/value/quantity) instead of a `badge`
+  widget, to keep the column reliably inline-editable in the
+  `editable="bottom"` list.
+- Split the Valuation Adjustments list into an "Allocation Preview" card
+  (the existing, fully editable list) and a read-only "Audit Trail" card
+  next to it (same records, `cost_line_id`/`product_id`/
+  `additional_landed_cost` plus the existing "Details" button) - purely
+  a second, read-only rendering of the same one2many, no new fields.
