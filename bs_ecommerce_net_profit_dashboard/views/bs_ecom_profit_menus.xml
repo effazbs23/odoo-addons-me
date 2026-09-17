@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="bs_ecom_profit_menu_root"
+              name="Net Profit Dashboard"
+              web_icon="bs_ecommerce_net_profit_dashboard,static/description/icon.png"
+              sequence="80"/>
+
+    <record id="bs_ecom_profit_action" model="ir.actions.client">
+        <field name="name">Profit Dashboard</field>
+        <field name="tag">bs_ecommerce_net_profit_dashboard_action</field>
+    </record>
+
+    <menuitem id="bs_ecom_profit_dashboard_menu"
+              name="Profitability Overview"
+              parent="bs_ecom_profit_menu_root"
+              action="bs_ecom_profit_action"
+              sequence="10"/>
+</odoo>
