@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="bs_hr_burnout_menu_root"
+              name="Burnout Risk Dashboard"
+              web_icon="bs_hr_burnout_dashboard,static/description/icon.png"
+              sequence="85"/>
+
+    <record id="bs_hr_burnout_action" model="ir.actions.client">
+        <field name="name">Burnout Dashboard</field>
+        <field name="tag">bs_hr_burnout_dashboard_action</field>
+    </record>
+
+    <menuitem id="bs_hr_burnout_dashboard_menu"
+              name="Retention Risk Monitor"
+              parent="bs_hr_burnout_menu_root"
+              action="bs_hr_burnout_action"
+              sequence="10"/>
+</odoo>
