@@ -4,7 +4,44 @@
     <!-- `mrp.mrp_production_form_view` verified against the real
          odoo/odoo 19.0 source (addons/mrp/views/mrp_production_views.xml);
          the `//header` and `//notebook` xpaths target structural elements
-         present on every Odoo form view of this kind. -->
+         present on every Odoo form view of this kind.
+
+         UI-POLISH PASS NOTES (this file only; no model/business logic
+         changed here except the one Html display field documented in
+         models/mrp_production_intercompany_link.py):
+
+         * Progress ring: Odoo has no stock circular-progress widget, and a
+           conic-gradient() angle that tracks `progress_percentage` exactly
+           cannot be bound from plain view XML without JS. This uses the
+           "bounded set of CSS classes per 10%-bucket" approach instead: 11
+           fixed ring classes (see the SCSS file), one of which is shown per
+           record via plain `invisible=""` comparisons on
+           `progress_percentage`. No JS/OWL widget involved.
+         * The "Company A" / "Company B" cards, the pipeline and the cost /
+           due-date-exception cards are all rendered PER intercompany link
+           (via a `<kanban>` sub-view on `intercompany_link_ids`, a standard
+           Odoo view type, not a custom widget) instead of once for the
+           whole order, because the only place `progress_percentage`,
+           `purchase_order_id`, `sale_order_id`, `child_production_id` and
+           the cost/exception fields live is on the link record itself.
+           Every field referenced below (`record.<field>`) is an existing
+           field of `mrp.production.intercompany.link`; no cross-model
+           dotted access, no new fields besides the one documented Html
+           field used for the cost card.
+         * The "Company A" card therefore shows the *component* being
+           requested (`product_id`/`product_qty`, the link's own fields),
+           not the parent order's own finished-good product/quantity;
+           showing those would need a new field or an unsupported dotted
+           path into `parent_production_id`. Labelled "Component" rather
+           than "Product" to stay honest about what is actually shown.
+         * The Pipeline shows this module's real chronological order
+           (Purchase Order raised by Company A -> mirrored Sales Order
+           confirmed in Company B -> child Manufacturing Order), not the
+           reference mockup's "Sales Order first" ordering, since this
+           module never creates/tracks an originating customer sales order
+           or a stock transfer; there is no field to source a "Transfer"
+           step from, so it is intentionally left out rather than
+           fabricated. -->
     <record id="view_mrp_production_form_intercompany" model="ir.ui.view">
         <field name="name">mrp.production.form.intercompany.wo.sync</field>
         <field name="model">mrp.production</field>
@@ -21,60 +58,239 @@
             <xpath expr="//notebook" position="inside">
                 <page string="Intercompany Supply" name="intercompany_supply"
                       invisible="not intercompany_link_ids and not as_child_intercompany_link_id">
-                    <div class="alert alert-info" role="alert"
-                         invisible="not intercompany_status_display">
-                        <field name="intercompany_status_display" nolabel="1" readonly="1"/>
-                    </div>
-                    <div class="alert alert-warning" role="alert"
-                         invisible="not has_intercompany_due_date_exception">
-                        <strong><i class="fa fa-exclamation-triangle"/> Due-Date Exception</strong>
-                        <field name="intercompany_exception_message" nolabel="1" readonly="1"/>
-                    </div>
-                    <div class="row" invisible="not intercompany_link_ids">
-                        <div class="col-6">
-                            <group string="Company A - Parent Manufacturing Order">
-                                <field name="name" readonly="1"/>
-                                <field name="product_id" readonly="1"/>
-                                <field name="product_qty" readonly="1"/>
-                                <field name="company_id" readonly="1"/>
-                                <field name="date_deadline" readonly="1"/>
-                                <field name="date_start" readonly="1"/>
-                            </group>
+                    <div class="o_intercompany_wo_sync">
+                        <div class="alert alert-info" role="alert"
+                             invisible="not intercompany_status_display">
+                            <field name="intercompany_status_display" nolabel="1" readonly="1"/>
                         </div>
-                        <div class="col-6">
-                            <group string="Pipeline">
-                                <p class="text-muted">
-                                    Sales Order &#8594; Purchase Order &#8594; Child Manufacturing Order.
-                                    See the table below for each component's reference and status.
-                                </p>
-                            </group>
+
+                        <div invisible="not as_child_intercompany_link_id" class="mb-3">
+                            <div class="o_intercompany_card">
+                                <div class="o_intercompany_card_header">
+                                    <span class="o_intercompany_icon"><i class="fa fa-industry"/></span>
+                                    <div>
+                                        <span class="o_intercompany_card_title">Company B - Supplied Via</span>
+                                        <div class="text-muted small">This order exists to supply another company's manufacturing order</div>
+                                    </div>
+                                </div>
+                                <field name="as_child_intercompany_link_id" readonly="1" nolabel="1" string="Intercompany Link"/>
+                            </div>
                         </div>
+
+                        <field name="intercompany_link_ids" readonly="1" invisible="not intercompany_link_ids">
+                            <kanban create="false" delete="false" group_create="false" class="o_intercompany_kanban">
+                                <field name="parent_production_id"/>
+                                <field name="parent_company_id"/>
+                                <field name="product_id"/>
+                                <field name="product_qty"/>
+                                <field name="child_production_id"/>
+                                <field name="child_company_id"/>
+                                <field name="purchase_order_id"/>
+                                <field name="sale_order_id"/>
+                                <field name="state"/>
+                                <field name="progress_percentage" digits="[16,0]"/>
+                                <field name="has_due_date_exception"/>
+                                <field name="exception_message"/>
+                                <field name="cost_breakdown_html"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div class="o_intercompany_dashboard_card mb-3">
+
+                                            <!-- Company A / connector / Company B -->
+                                            <div class="row g-2">
+                                                <div class="col-12 col-lg-5">
+                                                    <div class="o_intercompany_card">
+                                                        <div class="o_intercompany_card_header">
+                                                            <span class="o_intercompany_icon"><i class="fa fa-industry"/></span>
+                                                            <div>
+                                                                <span class="o_intercompany_card_title">Company A</span>
+                                                                <div class="text-muted small">Parent Manufacturing Order</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="o_intercompany_field_row">
+                                                            <span class="o_intercompany_field_label">MO Reference</span>
+                                                            <span class="o_intercompany_field_value" t-esc="record.parent_production_id.value"/>
+                                                        </div>
+                                                        <div class="o_intercompany_field_row">
+                                                            <span class="o_intercompany_field_label">Component</span>
+                                                            <span class="o_intercompany_field_value" t-esc="record.product_id.value"/>
+                                                        </div>
+                                                        <div class="o_intercompany_field_row">
+                                                            <span class="o_intercompany_field_label">Quantity</span>
+                                                            <span class="o_intercompany_field_value"><t t-esc="record.product_qty.value"/> Units</span>
+                                                        </div>
+                                                        <div class="o_intercompany_field_row">
+                                                            <span class="o_intercompany_field_label">Company</span>
+                                                            <span class="o_intercompany_field_value" t-esc="record.parent_company_id.value"/>
+                                                        </div>
+
+                                                        <div class="o_progress_ring_wrap">
+                                                            <div class="o_progress_ring o_progress_ring_0" t-if="record.progress_percentage.raw_value &lt; 5"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_10" t-if="record.progress_percentage.raw_value &gt;= 5 and record.progress_percentage.raw_value &lt; 15"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_20" t-if="record.progress_percentage.raw_value &gt;= 15 and record.progress_percentage.raw_value &lt; 25"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_30" t-if="record.progress_percentage.raw_value &gt;= 25 and record.progress_percentage.raw_value &lt; 35"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_40" t-if="record.progress_percentage.raw_value &gt;= 35 and record.progress_percentage.raw_value &lt; 45"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_50" t-if="record.progress_percentage.raw_value &gt;= 45 and record.progress_percentage.raw_value &lt; 55"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_60" t-if="record.progress_percentage.raw_value &gt;= 55 and record.progress_percentage.raw_value &lt; 65"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_70" t-if="record.progress_percentage.raw_value &gt;= 65 and record.progress_percentage.raw_value &lt; 75"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_80" t-if="record.progress_percentage.raw_value &gt;= 75 and record.progress_percentage.raw_value &lt; 85"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_90" t-if="record.progress_percentage.raw_value &gt;= 85 and record.progress_percentage.raw_value &lt; 95"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_100" t-if="record.progress_percentage.raw_value &gt;= 95"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                        </div>
+                                                        <div class="text-center o_progress_ring_caption"><t t-esc="record.progress_percentage.value"/>% Complete</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 col-lg-2 o_intercompany_connector">
+                                                    <div class="o_intercompany_connector_card">
+                                                        <i class="fa fa-arrow-right"/>
+                                                        <div class="small"><strong>Intercompany Work Order Sync</strong></div>
+                                                        <div class="text-muted small">Component supplied from <t t-esc="record.parent_company_id.value"/> to <t t-esc="record.child_company_id.value"/></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 col-lg-5">
+                                                    <div class="o_intercompany_card">
+                                                        <div class="o_intercompany_card_header">
+                                                            <span class="o_intercompany_icon"><i class="fa fa-industry"/></span>
+                                                            <div>
+                                                                <span class="o_intercompany_card_title">Company B</span>
+                                                                <div class="text-muted small">Child Manufacturing Order</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="o_intercompany_field_row">
+                                                            <span class="o_intercompany_field_label">MO Reference</span>
+                                                            <span class="o_intercompany_field_value" t-esc="record.child_production_id.value or 'Not yet created'"/>
+                                                        </div>
+                                                        <div class="o_intercompany_field_row">
+                                                            <span class="o_intercompany_field_label">Component</span>
+                                                            <span class="o_intercompany_field_value" t-esc="record.product_id.value"/>
+                                                        </div>
+                                                        <div class="o_intercompany_field_row">
+                                                            <span class="o_intercompany_field_label">Quantity</span>
+                                                            <span class="o_intercompany_field_value"><t t-esc="record.product_qty.value"/> Units</span>
+                                                        </div>
+                                                        <div class="o_intercompany_field_row">
+                                                            <span class="o_intercompany_field_label">Company</span>
+                                                            <span class="o_intercompany_field_value" t-esc="record.child_company_id.value"/>
+                                                        </div>
+                                                        <div class="o_intercompany_field_row">
+                                                            <span class="o_intercompany_field_label">Status</span>
+                                                            <span class="o_intercompany_field_value" t-esc="record.state.value"/>
+                                                        </div>
+
+                                                        <div class="o_progress_ring_wrap">
+                                                            <div class="o_progress_ring o_progress_ring_0" t-if="record.progress_percentage.raw_value &lt; 5"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_10" t-if="record.progress_percentage.raw_value &gt;= 5 and record.progress_percentage.raw_value &lt; 15"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_20" t-if="record.progress_percentage.raw_value &gt;= 15 and record.progress_percentage.raw_value &lt; 25"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_30" t-if="record.progress_percentage.raw_value &gt;= 25 and record.progress_percentage.raw_value &lt; 35"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_40" t-if="record.progress_percentage.raw_value &gt;= 35 and record.progress_percentage.raw_value &lt; 45"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_50" t-if="record.progress_percentage.raw_value &gt;= 45 and record.progress_percentage.raw_value &lt; 55"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_60" t-if="record.progress_percentage.raw_value &gt;= 55 and record.progress_percentage.raw_value &lt; 65"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_70" t-if="record.progress_percentage.raw_value &gt;= 65 and record.progress_percentage.raw_value &lt; 75"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_80" t-if="record.progress_percentage.raw_value &gt;= 75 and record.progress_percentage.raw_value &lt; 85"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_90" t-if="record.progress_percentage.raw_value &gt;= 85 and record.progress_percentage.raw_value &lt; 95"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                            <div class="o_progress_ring o_progress_ring_100" t-if="record.progress_percentage.raw_value &gt;= 95"><div class="o_progress_ring_hole"><t t-esc="record.progress_percentage.value"/>%</div></div>
+                                                        </div>
+                                                        <div class="text-center o_progress_ring_caption"><t t-esc="record.progress_percentage.value"/>% Complete</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Pipeline: this module's real order is Purchase Order (raised
+                                                 by Company A) -> mirrored Sales Order (confirmed in Company B)
+                                                 -> child Manufacturing Order. No "Transfer" step: this addon
+                                                 tracks no stock.picking reference on the link, so it is left
+                                                 out rather than guessed at. -->
+                                            <div class="o_intercompany_pipeline">
+                                                <div class="o_intercompany_pipeline_step">
+                                                    <span class="o_intercompany_pipeline_icon o_intercompany_pipeline_icon_po"><i class="fa fa-shopping-cart"/></span>
+                                                    <div class="flex-grow-1">
+                                                        <div class="d-flex justify-content-between align-items-start">
+                                                            <strong>Purchase Order</strong>
+                                                            <span t-if="record.state.raw_value == 'failed'" class="o_intercompany_pipeline_badge o_intercompany_pipeline_badge_pending">Failed</span>
+                                                            <span t-elif="record.purchase_order_id.raw_value" class="o_intercompany_pipeline_badge o_intercompany_pipeline_badge_confirmed">Confirmed</span>
+                                                            <span t-else="" class="o_intercompany_pipeline_badge o_intercompany_pipeline_badge_pending">Pending</span>
+                                                        </div>
+                                                        <div class="small" t-esc="record.purchase_order_id.value or 'Not yet created'"/>
+                                                        <div class="text-muted small"><t t-esc="record.child_company_id.value"/> &#8226; <t t-esc="record.product_qty.value"/> Units</div>
+                                                    </div>
+                                                </div>
+                                                <i class="fa fa-long-arrow-right o_intercompany_pipeline_arrow"/>
+                                                <div class="o_intercompany_pipeline_step">
+                                                    <span class="o_intercompany_pipeline_icon o_intercompany_pipeline_icon_so"><i class="fa fa-file-text-o"/></span>
+                                                    <div class="flex-grow-1">
+                                                        <div class="d-flex justify-content-between align-items-start">
+                                                            <strong>Sales Order</strong>
+                                                            <span t-if="record.state.raw_value in ('so_confirmed', 'mo_created', 'done')" class="o_intercompany_pipeline_badge o_intercompany_pipeline_badge_confirmed">Confirmed</span>
+                                                            <span t-else="" class="o_intercompany_pipeline_badge o_intercompany_pipeline_badge_pending">Pending</span>
+                                                        </div>
+                                                        <div class="small" t-esc="record.sale_order_id.value or 'Not yet found'"/>
+                                                        <div class="text-muted small"><t t-esc="record.child_company_id.value"/> &#8226; <t t-esc="record.product_qty.value"/> Units</div>
+                                                    </div>
+                                                </div>
+                                                <i class="fa fa-long-arrow-right o_intercompany_pipeline_arrow"/>
+                                                <div class="o_intercompany_pipeline_step">
+                                                    <span class="o_intercompany_pipeline_icon o_intercompany_pipeline_icon_mo"><i class="fa fa-industry"/></span>
+                                                    <div class="flex-grow-1">
+                                                        <div class="d-flex justify-content-between align-items-start">
+                                                            <strong>Manufacturing Order</strong>
+                                                            <span t-if="record.state.raw_value == 'done'" class="o_intercompany_pipeline_badge o_intercompany_pipeline_badge_done">Done</span>
+                                                            <span t-elif="record.state.raw_value == 'mo_created'" class="o_intercompany_pipeline_badge o_intercompany_pipeline_badge_progress">In Progress</span>
+                                                            <span t-else="" class="o_intercompany_pipeline_badge o_intercompany_pipeline_badge_pending">Pending</span>
+                                                        </div>
+                                                        <div class="small" t-esc="record.child_production_id.value or 'Not yet created'"/>
+                                                        <div class="text-muted small"><t t-esc="record.child_company_id.value"/> &#8226; <t t-esc="record.product_qty.value"/> Units</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Intercompany Cost (approximate; see the field's compute
+                                                 docstring) + Due-Date Exception, side by side -->
+                                            <div class="row g-2">
+                                                <div t-attf-class="col-12 #{record.has_due_date_exception.raw_value and 'col-lg-7' or 'col-lg-12'}">
+                                                    <div class="o_intercompany_cost_card">
+                                                        <div class="o_intercompany_card_header">
+                                                            <span class="o_intercompany_icon"><i class="fa fa-money"/></span>
+                                                            <span class="o_intercompany_card_title">Intercompany Cost</span>
+                                                        </div>
+                                                        <field name="cost_breakdown_html" widget="html" nolabel="1" readonly="1"/>
+                                                        <div class="text-muted small mt-1">
+                                                            Approximate: Component Cost is the intercompany purchase order's
+                                                            total; Processing Cost is a standard-cost estimate for the child
+                                                            order; Logistics is not tracked by this addon and is shown as 0.00.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-5" t-if="record.has_due_date_exception.raw_value">
+                                                    <div class="o_intercompany_exception_card">
+                                                        <div class="o_intercompany_exception_title">
+                                                            <i class="fa fa-exclamation-triangle"/>
+                                                            <span>Due-Date Exception</span>
+                                                        </div>
+                                                        <div class="o_intercompany_exception_message" t-esc="record.exception_message.value"/>
+                                                        <a type="object" name="action_view_child_production"
+                                                           class="btn btn-sm btn-intercompany-exception">View Details</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="text-end mt-1">
+                                                <a t-if="record.child_production_id.raw_value" type="object"
+                                                   name="action_view_child_production" class="btn btn-sm btn-link">
+                                                    <i class="fa fa-external-link"/> View Child MO
+                                                </a>
+                                                <a t-if="record.state.raw_value != 'done'" type="object"
+                                                   name="action_retry" class="btn btn-sm btn-link">
+                                                    <i class="fa fa-refresh"/> Retry
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
                     </div>
-                    <group string="Company B - Supplied Via" invisible="not as_child_intercompany_link_id">
-                        <field name="as_child_intercompany_link_id" readonly="1" string="Intercompany Link"/>
-                    </group>
-                    <field name="intercompany_link_ids" readonly="1" invisible="not intercompany_link_ids">
-                        <list>
-                            <field name="product_id"/>
-                            <field name="product_qty"/>
-                            <field name="child_company_id"/>
-                            <field name="purchase_order_id"/>
-                            <field name="sale_order_id"/>
-                            <field name="child_production_id"/>
-                            <field name="state" widget="badge"
-                                   decoration-danger="state == 'failed'"
-                                   decoration-success="state == 'done'"
-                                   decoration-info="state in ('po_created', 'so_confirmed', 'mo_created')"/>
-                            <field name="progress_percentage" widget="progressbar"/>
-                            <field name="has_due_date_exception" widget="boolean_toggle" readonly="1"/>
-                            <button name="action_view_child_production" type="object"
-                                    string="View Child MO" icon="fa-external-link"
-                                    invisible="not child_production_id"/>
-                            <button name="action_retry" type="object"
-                                    string="Retry" icon="fa-refresh"
-                                    invisible="state == 'done'"/>
-                        </list>
-                    </field>
                 </page>
             </xpath>
         </field>

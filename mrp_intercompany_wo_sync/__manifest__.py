@@ -50,6 +50,11 @@ on a Community Edition database.
         'views/product_template_views.xml',
         'views/menus.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'mrp_intercompany_wo_sync/static/src/scss/mrp_intercompany_wo_sync.scss',
+        ],
+    },
     'icon': '/mrp_intercompany_wo_sync/static/description/icon.png',
     'images': [
         'static/description/assets/main_screenshot.png',

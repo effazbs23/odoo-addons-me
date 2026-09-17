@@ -1,0 +1,257 @@
+// UI for the "Intercompany Supply" notebook page on the manufacturing
+// order form (views/mrp_production_views.xml). Pure CSS/SCSS -- no JS/OWL
+// widget backs any of this, only standard Odoo view elements (kanban
+// records, buttons, fields) styled through these classes.
+//
+// Progress ring choice: Odoo has no stock circular-progress widget, and a
+// single <div> whose conic-gradient() angle tracks progress_percentage
+// exactly cannot be bound from plain view XML without JS. Instead this
+// uses the "bounded set of CSS classes per 10%-bucket" approach: eleven
+// fixed classes (o_progress_ring_0 .. o_progress_ring_100), each a static
+// conic-gradient hard-coded to that bucket's angle. The view picks exactly
+// one of the eleven per record with plain invisible="" comparisons on
+// progress_percentage -- no JS, no dynamically computed inline style.
+.o_intercompany_wo_sync {
+
+    // ---- Company A / Company B cards ------------------------------------
+    .o_intercompany_card {
+        background-color: rgba(59, 130, 246, 0.06);
+        border: 1px solid rgba(59, 130, 246, 0.16);
+        border-radius: 12px;
+        padding: 16px;
+        height: 100%;
+    }
+    .o_intercompany_card_header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    .o_intercompany_icon {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        background-color: rgba(37, 99, 235, 0.16);
+        color: #2563eb;
+    }
+    .o_intercompany_card_title {
+        font-weight: 600;
+        color: #1e3a8a;
+    }
+    .o_intercompany_field_row {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 3px 0;
+        font-size: 0.92em;
+    }
+    .o_intercompany_field_label {
+        color: #64748b;
+    }
+    .o_intercompany_field_value {
+        font-weight: 500;
+        text-align: right;
+    }
+
+    // ---- connector card between the two company cards --------------------
+    .o_intercompany_connector {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+    .o_intercompany_connector_card {
+        background-color: var(--o-view-background-color, #fff);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 10px;
+        padding: 10px 8px;
+        text-align: center;
+        i.fa-arrow-right {
+            color: #2563eb;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+    }
+
+    // ---- progress ring -----------------------------------------------------
+    .o_progress_ring_wrap {
+        display: flex;
+        justify-content: center;
+        margin: 8px 0 2px;
+    }
+    .o_progress_ring {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .o_progress_ring_hole {
+        width: 82px;
+        height: 82px;
+        border-radius: 50%;
+        background-color: var(--o-view-background-color, #fff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25em;
+        font-weight: 700;
+        color: #1e3a8a;
+    }
+    .o_progress_ring_caption {
+        font-size: 0.85em;
+        font-weight: 600;
+        color: #2563eb;
+        margin-bottom: 4px;
+    }
+    $o-ring-fill: #3b82f6;
+    $o-ring-track: #e2e8f0;
+    @each $bucket, $angle in (0: 0deg, 10: 36deg, 20: 72deg, 30: 108deg, 40: 144deg,
+                               50: 180deg, 60: 216deg, 70: 252deg, 80: 288deg,
+                               90: 324deg, 100: 359.9deg) {
+        .o_progress_ring_#{$bucket} {
+            background: conic-gradient($o-ring-fill 0deg $angle, $o-ring-track $angle 360deg);
+        }
+    }
+
+    // ---- pipeline (Purchase Order -> Sales Order -> Manufacturing Order) --
+    .o_intercompany_pipeline {
+        display: flex;
+        align-items: stretch;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin: 12px 0;
+    }
+    .o_intercompany_pipeline_step {
+        flex: 1 1 200px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 10px;
+        padding: 10px 12px;
+        background-color: var(--o-view-background-color, #fff);
+    }
+    .o_intercompany_pipeline_arrow {
+        align-self: center;
+        color: #94a3b8;
+        font-size: 18px;
+        padding: 0 4px;
+    }
+    .o_intercompany_pipeline_icon {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 15px;
+    }
+    .o_intercompany_pipeline_icon_po {
+        background-color: #7c3aed;
+    }
+    .o_intercompany_pipeline_icon_so {
+        background-color: #16a34a;
+    }
+    .o_intercompany_pipeline_icon_mo {
+        background-color: #4f46e5;
+    }
+    .o_intercompany_pipeline_badge {
+        font-size: 0.72em;
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-weight: 600;
+    }
+    .o_intercompany_pipeline_badge_confirmed {
+        background-color: rgba(22, 163, 74, 0.14);
+        color: #16a34a;
+    }
+    .o_intercompany_pipeline_badge_progress {
+        background-color: rgba(79, 70, 229, 0.14);
+        color: #4f46e5;
+    }
+    .o_intercompany_pipeline_badge_done {
+        background-color: rgba(37, 99, 235, 0.14);
+        color: #2563eb;
+    }
+    .o_intercompany_pipeline_badge_pending {
+        background-color: rgba(100, 116, 139, 0.14);
+        color: #64748b;
+    }
+
+    // ---- Intercompany Cost table -------------------------------------------
+    .o_intercompany_cost_card {
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 10px;
+        padding: 14px;
+        height: 100%;
+    }
+    .o_intercompany_cost_table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9em;
+        th, td {
+            padding: 5px 8px;
+            text-align: right;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        th:first-child, td:first-child {
+            text-align: left;
+        }
+        thead th {
+            color: #64748b;
+            font-weight: 600;
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+        .o_intercompany_cost_total td {
+            font-weight: 700;
+            border-top: 2px solid rgba(0, 0, 0, 0.12);
+            border-bottom: none;
+        }
+    }
+
+    // ---- due-date exception alert -------------------------------------------
+    .o_intercompany_exception_card {
+        background-color: rgba(245, 158, 11, 0.10);
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        border-radius: 10px;
+        padding: 14px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .o_intercompany_exception_title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #b45309;
+        font-weight: 700;
+        i {
+            font-size: 16px;
+        }
+    }
+    .o_intercompany_exception_message {
+        color: #92400e;
+        font-size: 0.9em;
+    }
+    .btn-intercompany-exception {
+        align-self: flex-start;
+        background-color: rgba(245, 158, 11, 0.18);
+        border-color: rgba(245, 158, 11, 0.5);
+        color: #92400e;
+        font-weight: 600;
+    }
+    .btn-intercompany-exception:hover {
+        background-color: rgba(245, 158, 11, 0.3);
+        color: #78350f;
+    }
+}

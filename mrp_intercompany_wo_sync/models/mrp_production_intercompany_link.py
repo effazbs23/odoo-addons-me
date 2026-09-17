@@ -1,6 +1,9 @@
 import logging
 
+from markupsafe import Markup, escape
+
 from odoo import _, api, fields, models
+from odoo.tools import format_amount
 
 _logger = logging.getLogger(__name__)
 
@@ -70,6 +73,18 @@ class MrpProductionIntercompanyLink(models.Model):
         store=True)
     status_display = fields.Char(
         string='Status', compute='_compute_status_display')
+
+    # UI-polish addition (views/mrp_production_views.xml "Intercompany Cost"
+    # card): the ONLY new field added for this pass, and purely for display
+    # -- see _compute_cost_breakdown_html() for exactly what it approximates
+    # and why. No stored data, no business logic depends on it.
+    cost_breakdown_html = fields.Html(
+        string='Intercompany Cost Breakdown',
+        compute='_compute_cost_breakdown_html', sanitize=False,
+        help="Approximate, display-only cost split between Company A and "
+             "Company B for this link. Not backed by real landed-cost or "
+             "analytic-accounting entries -- see the compute method's "
+             "docstring for the exact formula and its limitations.")
 
     @api.depends(
         'product_qty',
@@ -171,6 +186,84 @@ class MrpProductionIntercompanyLink(models.Model):
                 link.status_display = _("Supplied by %s -- complete", company_name)
             else:
                 link.status_display = _("Unknown status")
+
+    @api.depends(
+        'purchase_order_id.amount_total',
+        'child_production_id.product_qty',
+        'child_production_id.product_id.standard_price',
+        'parent_company_id.currency_id',
+    )
+    def _compute_cost_breakdown_html(self):
+        """Renders the small "Intercompany Cost" table shown on the parent
+        MO's Intercompany Supply page (views/mrp_production_views.xml).
+
+        IMPORTANT -- this is a display-only APPROXIMATION, not a real
+        landed-cost or analytic-accounting breakdown; this module has no
+        such data model:
+        * "Component Cost" (Company A's column) = this link's
+          `purchase_order_id.amount_total` -- the real amount Company A is
+          invoiced by Company B for the component, when that PO exists.
+        * "Processing Cost" (Company B's column) = `child_production_id.
+          product_id.standard_price * child_production_id.product_qty` --
+          a rough standard-costing estimate of what the manufactured
+          quantity costs Company B, not an actual work-order/analytic time
+          & cost capture (Community `mrp.production` has no such figure to
+          read).
+        * "Logistics" has no backing data anywhere in this addon (no
+          freight/landed-cost is modeled), so it is always shown as 0.00 on
+          both sides -- kept in the table only so its shape matches the
+          reference design, never presented as a real captured cost.
+        All figures are formatted in the requesting company's currency
+        (`parent_company_id.currency_id`) so the table reads as one
+        consistent set of numbers, even though Company A and Company B
+        could in principle use different currencies in a live database.
+        """
+        for link in self:
+            currency = link.parent_company_id.currency_id or self.env.company.currency_id
+            component_cost = 0.0
+            if link.purchase_order_id:
+                component_cost = link.purchase_order_id.sudo().amount_total
+            processing_cost = 0.0
+            child = link.child_production_id.sudo()
+            if child:
+                processing_cost = child.product_id.standard_price * child.product_qty
+            logistics_a = 0.0
+            logistics_b = 0.0
+            total_a = component_cost + logistics_a
+            total_b = processing_cost + logistics_b
+            grand_total = total_a + total_b
+
+            def fmt(amount):
+                return escape(format_amount(self.env, amount, currency))
+
+            rows = [
+                (_("Component Cost"), component_cost, None, component_cost),
+                (_("Processing Cost"), None, processing_cost, processing_cost),
+                (_("Logistics"), logistics_a, logistics_b, logistics_a + logistics_b),
+            ]
+            body = Markup("").join(
+                Markup(
+                    "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"
+                ) % (
+                    escape(label),
+                    fmt(a) if a is not None else Markup("&#8211;"),
+                    fmt(b) if b is not None else Markup("&#8211;"),
+                    fmt(total),
+                )
+                for label, a, b, total in rows
+            )
+            link.cost_breakdown_html = Markup(
+                '<table class="o_intercompany_cost_table">'
+                "<thead><tr><th>%s</th><th>%s</th><th>%s</th><th>%s</th>"
+                "</tr></thead><tbody>%s"
+                '<tr class="o_intercompany_cost_total">'
+                "<td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>"
+                "</tbody></table>"
+            ) % (
+                _("Description"), _("Company A"), _("Company B"), _("Total"),
+                body,
+                _("Total"), fmt(total_a), fmt(total_b), fmt(grand_total),
+            )
 
     def action_view_child_production(self):
         self.ensure_one()
