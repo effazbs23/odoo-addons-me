@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Omnichannel Net Profitability Dashboard — ERP23</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body style="margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:#F7F9FC;color:#001844;line-height:1.6;">
+
+<div style="max-width:1100px;margin:0 auto;padding:40px 20px 80px;">
+
+<!-- Banner -->
+<div style="margin-bottom:32px;">
+  <img src="assets/main_screenshot.png" class="img-fluid" alt="Omnichannel Net Profitability Dashboard main screenshot" style="width:100%;max-height:340px;object-fit:cover;border-radius:16px;">
+</div>
+
+<!-- Hero -->
+<section style="background:linear-gradient(135deg,#EAF6FC 0%,#F0F4FF 100%);border:1px solid #DCE1E8;border-radius:16px;padding:56px 48px;margin-bottom:32px;">
+  <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Odoo Module</span>
+  <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">Sales</span>
+  <span style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-radius:8px;border:1px solid #00A0DB;background:#ffffff;color:#00A0DB;padding:8px 14px;margin:0 8px 12px 0;">E-Commerce</span>
+  <h1 style="font-size:48px;font-weight:700;color:#001844;margin:16px 0 12px;line-height:1.15;">Omnichannel Net Profitability Dashboard</h1>
+  <p style="margin:0;color:#797F8B;font-size:18px;max-width:760px;line-height:1.7;">Consolidate multi-channel e-commerce sales against true COGS, dynamic ad spends, and channel commissions to reveal actual net profitability in real time.</p>
+</section>
+
+<!-- Overview -->
+<section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+  <h2 style="font-size:32px;color:#001844;margin:0 0 16px;font-weight:700;">Overview</h2>
+  <p style="margin:0;color:#797F8B;font-size:16px;line-height:1.75;">The Omnichannel Net Profitability Dashboard gives e-commerce operators a single pane of glass over every sales channel — Shopify, Amazon, WooCommerce, and POS — computing true net margin after COGS, marketplace commissions, advertising spend, and fulfilled shipping costs. Built as an OWL frontend on top of a dedicated abstract engine, it replaces spreadsheet-driven profit reconciliation with live, order-level granularity. Finance teams gain instant visibility into which channels, campaigns, and products actually generate profit — not just revenue.</p>
+</section>
+
+<!-- Highlights -->
+<section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+  <h2 style="font-size:32px;color:#001844;margin:0 0 24px;font-weight:700;">Highlights</h2>
+  <div class="row g-3">
+    <div class="col-md-6 col-lg-4">
+      <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+        <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;">
+          <i class="fa fa-bolt"></i>
+        </span>
+        <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Real-Time Net Margin</h5>
+        <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Live computation of gross revenue, COGS, fees, ad spend, shipping, and net profit across all confirmed orders.</p>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+        <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#FFF4E0;color:#FBAF33;font-size:20px;margin-bottom:16px;">
+          <i class="fa fa-store"></i>
+        </span>
+        <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Multi-Channel Tagging</h5>
+        <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Automatically classifies every sale by channel — Shopify, Amazon, WooCommerce, or POS — for per-channel profit segmentation.</p>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+        <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#F1EAFE;color:#8E59FD;font-size:20px;margin-bottom:16px;">
+          <i class="fa fa-ad"></i>
+        </span>
+        <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Ad Spend Attribution</h5>
+        <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Logs PPC, social, and affiliate ad spend directly on each order for granular customer acquisition cost analysis.</p>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+        <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;">
+          <i class="fa fa-receipt"></i>
+        </span>
+        <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Commission Fee Tracking</h5>
+        <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Captures per-order marketplace and platform commission fees as a dedicated monetary field on the sales order.</p>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+        <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#FDE6F1;color:#FE0C7D;font-size:20px;margin-bottom:16px;">
+          <i class="fa fa-truck"></i>
+        </span>
+        <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">Actual Shipping Costs</h5>
+        <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">Records true fulfilled shipping cost per order, distinct from invoiced freight, for accurate margin calculation.</p>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div style="border:1px solid #DCE1E8;border-radius:12px;padding:28px;height:100%;">
+        <span style="display:inline-flex;width:48px;height:48px;border-radius:10px;align-items:center;justify-content:center;background:#EAF6FC;color:#00A0DB;font-size:20px;margin-bottom:16px;">
+          <i class="fa fa-chart-pie"></i>
+        </span>
+        <h5 style="font-size:18px;color:#001844;margin:0 0 8px;font-weight:700;">KPI Card Dashboard</h5>
+        <p style="margin:0;color:#797F8B;font-size:15px;line-height:1.6;">OWL-based frontend renders three top-line KPI cards: Gross Sales, Drain, and Net Profit with margin percentage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section style="background:#ffffff;border:1px solid #DCE1E8;border-radius:16px;padding:40px;margin-bottom:28px;">
+  <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Features</h2>
+  <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+    <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">01</span>
+    <div><strong style="color:#001844;">Multi-Channel Order Tagging</strong><br><span style="color:#797F8B;">Classifies every sale.order by channel — Shopify, Amazon, WooCommerce, or POS — enabling per-channel profit segmentation.</span></div>
+  </div>
+  <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+    <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">02</span>
+    <div><strong style="color:#001844;">Commission Fee Tracking</strong><br><span style="color:#797F8B;">Captures per-order marketplace and platform commission fees as a dedicated monetary field on the sales order.</span></div>
+  </div>
+  <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+    <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">03</span>
+    <div><strong style="color:#001844;">Marketing Spend Attribution</strong><br><span style="color:#797F8B;">Logs ad spend (PPC, social, affiliates) directly on each order for granular customer acquisition cost analysis.</span></div>
+  </div>
+  <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+    <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">04</span>
+    <div><strong style="color:#001844;">Actual Shipping Cost Logging</strong><br><span style="color:#797F8B;">Records true fulfilled shipping cost per order, distinct from invoiced freight, for accurate margin calculation.</span></div>
+  </div>
+  <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+    <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">05</span>
+    <div><strong style="color:#001844;">Net Margin Engine</strong><br><span style="color:#797F8B;">Abstract model (bs.ecom.profit.engine) computes gross revenue, COGS, total channel fees, ad spend, shipping, net profit, and margin ratio across all confirmed/done orders.</span></div>
+  </div>
+  <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+    <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">06</span>
+    <div><strong style="color:#001844;">KPI Card Dashboard UI</strong><br><span style="color:#797F8B;">OWL-based frontend renders three top-line KPI cards: Gross Sales, Drain (COGS + Fees), and Net Profit with margin percentage.</span></div>
+  </div>
+  <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+    <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">07</span>
+    <div><strong style="color:#001844;">Sale Order Form Extension</strong><br><span style="color:#797F8B;">Inherits the standard sale.order form to inject a "BS Channel Info" group with channel, commissions, ad spend, and shipping fields.</span></div>
+  </div>
+  <div style="padding:14px 0;border-bottom:1px solid #EEF1F5;display:flex;gap:16px;align-items:flex-start;">
+    <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">08</span>
+    <div><strong style="color:#001844;">Top-Level Menu</strong><br><span style="color:#797F8B;">Adds a dedicated "Net Profit Dashboard" application menu with a "Profitability Overview" sub-menu launching the dashboard client action.</span></div>
+  </div>
+  <div style="padding:14px 0;display:flex;gap:16px;align-items:flex-start;">
+    <span style="flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#ECF0F1;color:#00A0DB;font-size:14px;font-weight:800;">09</span>
+    <div><strong style="color:#001844;">Loading State Indicator</strong><br><span style="color:#797F8B;">Displays a spinner with "Calculating..." text while the backend engine aggregates data.</span></div>
+  </div>
+</section>
+
+<!-- Screenshots -->
+<section style="margin-bottom:28px;">
+  <h2 style="font-size:32px;color:#001844;margin:0 0 20px;font-weight:700;">Screenshots</h2>
+  <div style="margin-bottom:20px;border:1px solid #DCE1E8;border-radius:16px;overflow:hidden;background:#ffffff;">
+    <div style="background:#F7F9FC;padding:16px 20px;border-bottom:1px solid #DCE1E8;">
+      <h5 style="color:#001844;margin:0;font-weight:600;">Net Profitability Overview</h5>
+    </div>
+    <img src="assets/net_profit.png" class="img-fluid" alt="Net profitability dashboard showing KPI cards and channel breakdown" style="width:100%;height:auto;object-fit:contain;">
+    <div style="padding:16px 20px;font-size:14px;color:#797F8B;">Real-time KPI cards displaying Gross Sales, Drain, and Net Profit with margin percentage across all channels.</div>
+  </div>
+</section>
+
+<!-- Why Choose ERP23 -->
+<section style="background:#ECF0F1;border-radius:16px;padding:40px;margin-bottom:28px;">
+  <h2 style="font-size:28px;color:#001844;margin:0 0 24px;font-weight:700;text-align:center;">Why Choose ERP23</h2>
+  <div class="row g-4">
+    <div class="col-lg-4 col-md-6">
+      <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+        <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+          <i class="fa fa-certificate" style="font-size:56px;color:#00A0DB;"></i>
+        </div>
+        <div style="padding:24px 24px 28px;">
+          <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">Silver Partner</span></h5>
+          <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Official Odoo Silver Partner with certified expertise</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+        <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+          <i class="fa fa-globe" style="font-size:56px;color:#00A0DB;"></i>
+        </div>
+        <div style="padding:24px 24px 28px;">
+          <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">30+</span> Countries Served</h5>
+          <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Global reach with clients across 30+ countries</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+        <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+          <i class="fa fa-project-diagram" style="font-size:56px;color:#00A0DB;"></i>
+        </div>
+        <div style="padding:24px 24px 28px;">
+          <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">200+</span> Projects Completed</h5>
+          <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Proven Odoo delivery across diverse business requirements</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+        <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+          <i class="fa fa-industry" style="font-size:56px;color:#00A0DB;"></i>
+        </div>
+        <div style="padding:24px 24px 28px;">
+          <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">15+</span> Industries Served</h5>
+          <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Specialized Odoo expertise across retail, manufacturing, and services</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+        <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+          <i class="fa fa-graduation-cap" style="font-size:56px;color:#00A0DB;"></i>
+        </div>
+        <div style="padding:24px 24px 28px;">
+          <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">7+</span> Certifications</h5>
+          <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Team certified in 7+ specialized Odoo domains</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div style="background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,24,68,0.08);overflow:hidden;height:100%;">
+        <div style="background:linear-gradient(180deg,#EAF6FC 0%,#F8FBFE 100%);padding:32px 24px;min-height:130px;display:flex;align-items:center;justify-content:center;">
+          <i class="fa fa-clock" style="font-size:56px;color:#00A0DB;"></i>
+        </div>
+        <div style="padding:24px 24px 28px;">
+          <h5 style="margin:0 0 10px;font-size:20px;font-weight:700;line-height:1.3;"><span style="color:#00A0DB;">10+</span> Years Experience</h5>
+          <p style="margin:0;color:#797F8B;font-size:14px;line-height:1.6;">Nearly a decade of specialized Odoo expertise</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact & Support -->
+<section style="background:#001844;border-radius:16px;padding:40px;margin-bottom:12px;text-align:center;">
+  <h2 style="font-size:28px;color:#00A0DB;margin:0 0 16px;font-weight:700;">Contact &amp; Support</h2>
+  <p style="margin:0 0 8px;color:#DCE1E8;font-size:20px;font-weight:800;letter-spacing:1px;">ERP23</p>
+  <p style="margin:0 0 8px;color:#DCE1E8;font-size:16px;line-height:1.6;">Developed and maintained by ERP23.</p>
+  <p style="margin:0 0 4px;color:#DCE1E8;">Website: <a href="https://www.erp-23.com/" target="_blank" rel="noopener noreferrer" style="color:#00A0DB;text-decoration:none;font-weight:600;">https://www.erp-23.com/</a></p>
+  <p style="margin:0;color:#DCE1E8;">Email: <a href="mailto:erp23@brainstation-23.com" style="color:#00A0DB;text-decoration:none;font-weight:600;">erp23@brainstation-23.com</a></p>
+</section>
+
+</div>
+</body>
+</html>
