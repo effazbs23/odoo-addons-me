@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="bs_hr_burnout_dashboard.BsBurnoutDashboard">
+        <div class="o_action_manager p-4 bg-100 h-100 overflow-auto">
+            <h1 class="mb-1">Burnout Risk Dashboard</h1>
+            <p class="text-muted mb-4">Detect employee burnout early with real-time overtime and overdue task analytics.</p>
+            <div t-if="state.loading" class="text-center p-5"><span class="spinner-border spinner-border-sm"/> Processing profiles...</div>
+            <t t-else="">
+                <div class="row row-cols-1 row-cols-md-3 g-3 mb-4">
+                    <div class="col">
+                        <div class="card p-3 shadow-sm border-0">
+                            <h6 class="text-muted mb-1">Total Overtime (30 Days)</h6>
+                            <h3 class="mb-0"><t t-esc="state.totalOvertime"/>h</h3>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card p-3 shadow-sm border-0">
+                            <h6 class="text-muted mb-1">Overdue Tasks</h6>
+                            <h3 class="mb-0" t-esc="state.overdueTasks"/>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card p-3 shadow-sm border-0">
+                            <h6 class="text-muted mb-1">Avg. Burnout Score</h6>
+                            <h3 class="mb-0" t-esc="state.avgScore"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow-sm border-0 p-3">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Department</th>
+                                <th>Burnout Risk</th>
+                                <th>Overtime (30d)</th>
+                                <th>Overdue Tasks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="state.risks" t-as="emp" t-key="emp.id">
+                                <td><t t-esc="emp.name"/></td>
+                                <td><t t-esc="this.departmentName(emp.department_id)"/></td>
+                                <td>
+                                    <div class="progress" style="height: 20px; min-width: 140px;">
+                                        <div class="progress-bar" t-attf-class="{{this.riskClass(emp.bs_burnout_index)}}" role="progressbar" t-attf-style="width: {{emp.bs_burnout_index}}%;" t-esc="emp.bs_burnout_index + '%'"/>
+                                    </div>
+                                </td>
+                                <td><t t-esc="emp.total_overtime"/>h</td>
+                                <td><t t-esc="emp.bs_overdue_task_count"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>
