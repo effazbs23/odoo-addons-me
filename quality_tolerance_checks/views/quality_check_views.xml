@@ -16,64 +16,93 @@
         <field name="model">quality.check</field>
         <field name="inherit_id" ref="quality.quality_check_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//sheet" position="before">
-                <header>
-                    <button name="action_view_control_chart" type="object"
-                            string="Control Chart" class="btn-secondary"
-                            invisible="test_type != 'tolerance_check'"/>
-                </header>
-            </xpath>
             <xpath expr="//sheet" position="inside">
                 <div class="o_tolerance_checks_wrapper" invisible="test_type != 'tolerance_check'">
                     <group>
                         <group string="Tolerance">
                             <label for="tolerance_target"/>
-                            <div class="o_row">
+                            <div class="o_row o_tolerance_value_row">
                                 <field name="tolerance_target" readonly="1"/>
-                                <field name="tolerance_norm_unit" nolabel="1" readonly="1"/>
+                                <field name="tolerance_norm_unit" nolabel="1" readonly="1"
+                                       class="o_tolerance_unit_label"/>
                             </div>
                             <label for="tolerance_min"/>
-                            <div class="o_row">
+                            <div class="o_row o_tolerance_value_row">
                                 <field name="tolerance_min" readonly="1"/>
-                                <field name="tolerance_norm_unit" nolabel="1" readonly="1"/>
+                                <field name="tolerance_norm_unit" nolabel="1" readonly="1"
+                                       class="o_tolerance_unit_label"/>
                             </div>
                             <label for="tolerance_max"/>
-                            <div class="o_row">
+                            <div class="o_row o_tolerance_value_row">
                                 <field name="tolerance_max" readonly="1"/>
-                                <field name="tolerance_norm_unit" nolabel="1" readonly="1"/>
+                                <field name="tolerance_norm_unit" nolabel="1" readonly="1"
+                                       class="o_tolerance_unit_label"/>
                             </div>
                             <label for="measured_value"/>
-                            <div class="o_row">
+                            <div class="o_row o_tolerance_value_row">
                                 <field name="measured_value"/>
-                                <field name="tolerance_norm_unit" nolabel="1" readonly="1"/>
+                                <field name="tolerance_norm_unit" nolabel="1" readonly="1"
+                                       class="o_tolerance_unit_label"/>
                             </div>
                         </group>
                         <group>
-                            <div class="o_tolerance_result_banner alert alert-success mb-0"
+                            <div class="o_tolerance_result_banner o_tolerance_result_pass alert alert-success mb-0"
                                  role="alert" invisible="quality_state != 'pass'">
-                                <i class="fa fa-check-circle fa-3x" title="Pass"/>
+                                <div class="o_tolerance_result_icon">
+                                    <i class="fa fa-check" title="Pass"/>
+                                </div>
                                 <div class="o_tolerance_result_label">PASS</div>
-                                <div>Measured value is within tolerance limits.</div>
+                                <div class="o_tolerance_result_text">Measured value is within tolerance limits.</div>
                             </div>
-                            <div class="o_tolerance_result_banner alert alert-danger mb-0"
+                            <div class="o_tolerance_result_banner o_tolerance_result_fail alert alert-danger mb-0"
                                  role="alert" invisible="quality_state != 'fail'">
-                                <i class="fa fa-times-circle fa-3x" title="Fail"/>
+                                <div class="o_tolerance_result_icon">
+                                    <i class="fa fa-times" title="Fail"/>
+                                </div>
                                 <div class="o_tolerance_result_label">FAIL</div>
-                                <div>Measured value is out of tolerance limits.</div>
+                                <div class="o_tolerance_result_text">Measured value is out of tolerance limits.</div>
+                            </div>
+                            <div class="o_tolerance_result_banner o_tolerance_result_none alert alert-secondary mb-0"
+                                 role="alert" invisible="quality_state in ('pass', 'fail')">
+                                <div class="o_tolerance_result_icon">
+                                    <i class="fa fa-clock-o" title="Pending"/>
+                                </div>
+                                <div class="o_tolerance_result_label">PENDING</div>
+                                <div class="o_tolerance_result_text">Enter a measured value to evaluate tolerance.</div>
                             </div>
                         </group>
                     </group>
-                    <group string="Measurement History">
-                        <field name="sibling_check_ids" nolabel="1" readonly="1">
-                            <list create="0" edit="0" delete="0" decoration-danger="quality_state == 'fail'">
-                                <field name="create_date" string="Date"/>
-                                <field name="measured_value"/>
-                                <field name="quality_state" widget="badge"
-                                       decoration-success="quality_state == 'pass'"
-                                       decoration-danger="quality_state == 'fail'"/>
-                            </list>
-                        </field>
-                    </group>
+                    <div class="row o_tolerance_history_chart_row">
+                        <div class="col-lg-7 o_tolerance_history_col">
+                            <group string="Measurement History">
+                                <field name="sibling_check_ids" nolabel="1" readonly="1"
+                                       class="o_tolerance_history_list">
+                                    <list create="0" edit="0" delete="0"
+                                          decoration-danger="quality_state == 'fail'">
+                                        <field name="create_date" string="Date"/>
+                                        <field name="measured_value"/>
+                                        <field name="quality_state" string="Result"
+                                               class="o_tolerance_status_cell"
+                                               decoration-success="quality_state == 'pass'"
+                                               decoration-danger="quality_state == 'fail'"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </div>
+                        <div class="col-lg-5 o_tolerance_chart_col">
+                            <group string="Control Chart">
+                                <div class="o_tolerance_chart_panel">
+                                    <p class="text-muted mb-2">
+                                        Trend of measured values for this control point,
+                                        including the target/min/max limits.
+                                    </p>
+                                    <button name="action_view_control_chart" type="object"
+                                            string="Open Control Chart" class="btn-primary"
+                                            icon="fa-line-chart"/>
+                                </div>
+                            </group>
+                        </div>
+                    </div>
                 </div>
             </xpath>
         </field>

@@ -1,29 +1,153 @@
 .o_tolerance_checks_wrapper {
+    // --- Target/Min/Max/Measured Value rows with a trailing unit label ---
+    .o_tolerance_value_row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        > .o_field_widget:first-child {
+            flex: 1 1 auto;
+        }
+
+        .o_tolerance_unit_label {
+            flex: 0 0 auto;
+            padding: 3px 10px;
+            min-width: 36px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background-color: rgba(0, 0, 0, 0.03);
+            color: #6c757d;
+            font-size: 13px;
+            text-align: center;
+        }
+    }
+
+    // --- PASS / FAIL / PENDING result card ---
     .o_tolerance_result_banner {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         text-align: center;
-        padding: 24px 16px;
+        gap: 6px;
         height: 100%;
+        min-height: 220px;
+        padding: 32px 20px;
+        border: 1px solid transparent;
         border-radius: 12px;
 
+        .o_tolerance_result_icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            margin-bottom: 6px;
+            border-radius: 50%;
+
+            .fa {
+                font-size: 30px;
+                color: #fff;
+            }
+        }
+
         .o_tolerance_result_label {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
+            line-height: 1;
             letter-spacing: 1px;
-            margin-top: 8px;
+        }
+
+        .o_tolerance_result_text {
+            font-size: 14px;
+            opacity: 0.85;
         }
     }
 
-    .o_tolerance_result_banner.alert-success {
+    .o_tolerance_result_pass {
         background-color: rgba(40, 167, 69, 0.12);
+        border-color: rgba(40, 167, 69, 0.25);
         color: #1e7e34;
+
+        .o_tolerance_result_icon {
+            background-color: #28a745;
+        }
     }
 
-    .o_tolerance_result_banner.alert-danger {
+    .o_tolerance_result_fail {
         background-color: rgba(220, 53, 69, 0.12);
+        border-color: rgba(220, 53, 69, 0.25);
         color: #bd2130;
+
+        .o_tolerance_result_icon {
+            background-color: #dc3545;
+        }
+    }
+
+    .o_tolerance_result_none {
+        background-color: rgba(108, 117, 125, 0.1);
+        border-color: rgba(108, 117, 125, 0.2);
+        color: #5a6268;
+
+        .o_tolerance_result_icon {
+            background-color: #6c757d;
+        }
+    }
+
+    // --- Measurement History / Control Chart side-by-side layout ---
+    .o_tolerance_history_chart_row {
+        margin-top: 8px;
+
+        .o_tolerance_history_col,
+        .o_tolerance_chart_col {
+            margin-bottom: 8px;
+        }
+    }
+
+    // --- Measurement History list: colored status dot + tinted fail rows ---
+    .o_tolerance_history_list {
+        .o_tolerance_status_cell {
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+
+            &::before {
+                content: "";
+                display: inline-block;
+                width: 8px;
+                height: 8px;
+                margin-right: 6px;
+                border-radius: 50%;
+                background-color: currentColor;
+                vertical-align: middle;
+            }
+        }
+
+        .o_data_row.text-danger {
+            background-color: rgba(220, 53, 69, 0.08);
+
+            // Row-level decoration-danger colors every cell red; restore
+            // the normal text color on the other cells (Date, Measured
+            // Value) and keep red only on the Result cell below.
+            td {
+                color: #212529 !important;
+            }
+
+            .o_tolerance_status_cell {
+                color: #bd2130 !important;
+            }
+        }
+    }
+
+    // --- Control Chart panel ---
+    .o_tolerance_chart_panel {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding: 16px;
+        border: 1px dashed #ced4da;
+        border-radius: 8px;
+        background-color: rgba(0, 0, 0, 0.015);
     }
 }
