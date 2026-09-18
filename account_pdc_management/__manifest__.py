@@ -24,8 +24,8 @@ payment. No contract, no subscription, no third party module required.
 Everything is posted as ordinary journal entries, so the general ledger, the
 partner ledger and the aged reports all stay correct.
 """,
-    'author': 'Brain Station 23',
-    'website': 'https://www.brainstation-23.com',
+    'author': 'ERP23',
+    'website': 'https://erp-23.com',
     'support': 'erp23@brainstation-23.com',
     # Paid app on the Odoo App Store. The store only sells modules published under
     # the Odoo Proprietary License, so OPL-1 rather than LGPL-3. Full text in LICENSE.
