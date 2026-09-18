@@ -3,8 +3,8 @@
 
     <menuitem id="menu_amc_root"
               name="AMC Management"
-              web_icon="amc_management,static/description/icon.png"
-              groups="amc_management.group_amc_user"
+              web_icon="bs_amc_management,static/description/icon.png"
+              groups="bs_amc_management.group_amc_user"
               sequence="86"/>
 
     <menuitem id="menu_amc_contracts"
@@ -57,7 +57,7 @@
     <menuitem id="menu_amc_configuration"
               name="Configuration"
               parent="menu_amc_root"
-              groups="amc_management.group_amc_manager"
+              groups="bs_amc_management.group_amc_manager"
               sequence="90"/>
 
     <menuitem id="menu_amc_site"

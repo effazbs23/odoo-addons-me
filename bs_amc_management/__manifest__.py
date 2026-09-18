@@ -21,11 +21,11 @@ service calendar and accrual accounting.
   term of the order, with sequential-billing control and service report attachments.
 * AMC Schedule report (XLSX): a twelve month provision grid per contract and year.
     """,
-    'author': 'Brain Station 23',
-    'website': 'https://www.brainstation-23.com',
+    'author': 'ERP23',
+    'website': 'https://erp23.com',
     'support': 'erp23@brainstation-23.com',
     'license': 'OPL-1',
-    'price': 5.0,
+    'price': 5.99,
     'currency': 'USD',
     'depends': ['account', 'purchase'],
     'data': [
@@ -53,7 +53,7 @@ service calendar and accrual accounting.
     ],
     'assets': {
         'web.assets_backend': [
-            'amc_management/static/src/js/xlsx_report_action.js',
+            'bs_amc_management/static/src/js/xlsx_report_action.js',
         ],
     },
     'installable': True,

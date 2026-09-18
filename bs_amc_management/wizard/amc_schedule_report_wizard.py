@@ -32,5 +32,5 @@ class AmcScheduleReportWizard(models.TransientModel):
         # config=False: with no external report layout set on the company, report_action
         # otherwise swaps the report for the "configure your document layout" wizard.
         # That layout governs PDF headers and has no bearing on a spreadsheet.
-        return self.env.ref('amc_management.report_amc_schedule').report_action(
+        return self.env.ref('bs_amc_management.report_amc_schedule').report_action(
             [], data=data, config=False)

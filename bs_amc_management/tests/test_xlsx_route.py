@@ -32,7 +32,7 @@ class TestXlsxRoute(HttpCase):
         options = quote(json.dumps({'year': 2025, 'site_ids': []}))
         context = quote(json.dumps({}))
         response = self._download(
-            '/report/xlsx/amc_management.report_amc_schedule?options=%s&context=%s'
+            '/report/xlsx/bs_amc_management.report_amc_schedule?options=%s&context=%s'
             % (options, context))
 
         self.assertEqual(response.status_code, 200)
@@ -42,7 +42,7 @@ class TestXlsxRoute(HttpCase):
         self.assertTrue(response.content.startswith(b'PK'), "an xlsx file is a zip archive")
 
     def test_unknown_report_name_is_not_served(self):
-        response = self.url_open('/report/xlsx/amc_management.does_not_exist')
+        response = self.url_open('/report/xlsx/bs_amc_management.does_not_exist')
         self.assertNotEqual(response.status_code, 200)
 
     def test_pdf_downloads_still_reach_core(self):

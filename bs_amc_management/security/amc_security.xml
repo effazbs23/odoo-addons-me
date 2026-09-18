@@ -33,7 +33,7 @@
 
     <!-- Purchase managers drive the AMC order, so they get the contracts with it. -->
     <record id="purchase.group_purchase_manager" model="res.groups">
-        <field name="implied_ids" eval="[(4, ref('amc_management.group_amc_manager'))]"/>
+        <field name="implied_ids" eval="[(4, ref('bs_amc_management.group_amc_manager'))]"/>
     </record>
 
     <record id="amc_contract_company_rule" model="ir.rule">

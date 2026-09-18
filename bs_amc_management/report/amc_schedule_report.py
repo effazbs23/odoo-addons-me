@@ -27,7 +27,7 @@ COL_SUPPLIER = COL_REQUIRED + 1
 
 
 class AmcScheduleReportXlsx(models.AbstractModel):
-    _name = 'report.amc_management.report_amc_schedule'
+    _name = 'report.bs_amc_management.report_amc_schedule'
     _inherit = 'amc.report.xlsx'
     _description = 'AMC Schedule Report XLSX'
 

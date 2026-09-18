@@ -27,7 +27,7 @@
                             invisible="state != 'validation_pending' or not parent_amc_id"/>
                     <button name="action_create_vendor_bill" type="object" class="btn-primary"
                             string="Create Vendor Bill"
-                            groups="amc_management.group_amc_manager"
+                            groups="bs_amc_management.group_amc_manager"
                             invisible="parent_amc_id or not is_signed or state in ['draft', 'terminated']"/>
                     <button name="action_close" type="object" class="btn-secondary"
                             string="Close"
@@ -35,12 +35,12 @@
                             invisible="parent_amc_id or state != 'in_progress'"/>
                     <button name="action_terminate" type="object" class="btn-secondary"
                             string="Terminate"
-                            groups="amc_management.group_amc_manager"
+                            groups="bs_amc_management.group_amc_manager"
                             confirm="Are you sure you want to terminate this AMC? Every live service period is terminated with it."
                             invisible="parent_amc_id or state in ['draft', 'terminated']"/>
                     <button name="action_reset_to_draft" type="object" class="btn-secondary"
                             string="Reset to Draft"
-                            groups="amc_management.group_amc_manager"
+                            groups="bs_amc_management.group_amc_manager"
                             confirm="Are you sure you want to reset this AMC to draft?"
                             invisible="state == 'draft' or parent_amc_id"/>
                     <button name="action_reset_expired_to_draft" type="object" class="btn-secondary"

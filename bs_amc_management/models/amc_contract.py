@@ -949,7 +949,7 @@ class AmcContract(models.Model):
             'type': 'ir.actions.act_window',
             'res_model': 'ir.attachment',
             'view_mode': 'kanban',
-            'views': [(self.env.ref('amc_management.view_amc_service_report_kanban').id, 'kanban')],
+            'views': [(self.env.ref('bs_amc_management.view_amc_service_report_kanban').id, 'kanban')],
             'target': 'current',
             # The 'id' term is load-bearing: ir.attachment._search silently injects
             # ('res_field', '=', False) unless the domain already mentions res_field or
@@ -1063,10 +1063,10 @@ class AmcContract(models.Model):
     def _cron_send_expiry_reminders(self):
         """Mail the contractor of every Mother AMC expiring in exactly N days."""
         params = self.env['ir.config_parameter'].sudo()
-        reminder_days = params.get_param('amc_management.expiry_reminder_days')
+        reminder_days = params.get_param('bs_amc_management.expiry_reminder_days')
         if not reminder_days or int(reminder_days) <= 0:
             return True
-        template = self.env.ref('amc_management.mail_template_amc_expiry_reminder',
+        template = self.env.ref('bs_amc_management.mail_template_amc_expiry_reminder',
                                 raise_if_not_found=False)
         if not template:
             return True

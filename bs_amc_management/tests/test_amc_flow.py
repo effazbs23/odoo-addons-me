@@ -13,7 +13,7 @@ class TestAmcFlow(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.company = cls.env.company
-        cls.env.user.group_ids |= cls.env.ref('amc_management.group_amc_manager')
+        cls.env.user.group_ids |= cls.env.ref('bs_amc_management.group_amc_manager')
 
         def account(code, name, account_type):
             return cls.env['account.account'].create({
@@ -28,7 +28,7 @@ class TestAmcFlow(TransactionCase):
             'company_id': cls.company.id,
         })
         cls.env['ir.config_parameter'].sudo().set_param(
-            'amc_management.provision_journal_id', cls.journal.id)
+            'bs_amc_management.provision_journal_id', cls.journal.id)
 
         cls.categ = cls.env['product.category'].create({'name': 'AMC Services'})
         cls.categ.with_company(cls.company).property_account_expense_categ_id = cls.expense_account
@@ -382,7 +382,7 @@ class TestAmcFlow(TransactionCase):
                          "config=False keeps the layout configurator out of the way")
         self.assertEqual(action['report_type'], 'xlsx')
         content, extension = self.env['ir.actions.report']._render_xlsx(
-            'amc_management.report_amc_schedule', [], data=action['data'])
+            'bs_amc_management.report_amc_schedule', [], data=action['data'])
         self.assertEqual(extension, 'xlsx')
         self.assertTrue(content.startswith(b'PK'), "an xlsx file is a zip archive")
         self.assertTrue(order.amc_mother_ids.amc_ref)

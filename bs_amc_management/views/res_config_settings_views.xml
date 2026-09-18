@@ -8,8 +8,8 @@
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
-                <app data-string="AMC Management" string="AMC Management" name="amc_management"
-                     groups="amc_management.group_amc_manager">
+                <app data-string="AMC Management" string="AMC Management" name="bs_amc_management"
+                     groups="bs_amc_management.group_amc_manager">
                     <block title="Accounting" name="amc_accounting_setting_container">
                         <setting id="amc_provision_journal"
                                  string="Provision Journal">
@@ -36,7 +36,7 @@
         <field name="name">Settings</field>
         <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
-        <field name="context">{'module': 'amc_management'}</field>
+        <field name="context">{'module': 'bs_amc_management'}</field>
     </record>
 
 </odoo>
