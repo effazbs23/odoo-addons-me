@@ -25,7 +25,7 @@ service calendar and accrual accounting.
     'website': 'https://erp23.com',
     'support': 'erp23@brainstation-23.com',
     'license': 'OPL-1',
-    'price': 5.99,
+    'price': 5.0,
     'currency': 'USD',
     'depends': ['account', 'purchase'],
     'data': [
