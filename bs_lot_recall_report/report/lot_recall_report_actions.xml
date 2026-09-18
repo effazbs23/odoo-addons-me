@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_lot_recall_pdf" model="ir.actions.report">
+        <field name="name">Lot Recall Report</field>
+        <field name="model">lot.recall.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">bs_lot_recall_report.report_lot_recall</field>
+        <field name="report_file">bs_lot_recall_report.report_lot_recall</field>
+        <field name="paperformat_id" ref="paperformat_bs_lot_recall_report"/>
+        <field name="print_report_name">'Recall Report - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_lot_recall_report"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
