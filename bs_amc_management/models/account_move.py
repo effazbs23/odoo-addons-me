@@ -108,7 +108,7 @@ class AccountMove(models.Model):
             'type': 'ir.actions.act_window',
             'res_model': 'ir.attachment',
             'view_mode': 'kanban',
-            'views': [(self.env.ref('amc_management.view_amc_service_report_kanban').id, 'kanban')],
+            'views': [(self.env.ref('bs_amc_management.view_amc_service_report_kanban').id, 'kanban')],
             'domain': [('id', 'in', self.amc_service_report_ids.ids)],
             'context': {'create': False, 'edit': False, 'delete': False},
         }
@@ -126,7 +126,7 @@ class AccountMove(models.Model):
         and ``_amc_expense_account`` on the contract.
         """
         params = self.env['ir.config_parameter'].sudo()
-        journal_id = params.get_param('amc_management.provision_journal_id')
+        journal_id = params.get_param('bs_amc_management.provision_journal_id')
 
         journal = self.env['account.journal'].browse(int(journal_id)).exists() if journal_id else False
         if not journal:

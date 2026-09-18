@@ -10,7 +10,7 @@
             <xpath expr="//header" position="inside">
                 <button name="action_mark_as_signed" type="object" string="Mark as Signed"
                         class="btn-primary"
-                        groups="amc_management.group_amc_manager"
+                        groups="bs_amc_management.group_amc_manager"
                         confirm="Marking the AMC as signed generates its monthly provision journal entries in draft. Continue?"
                         invisible="not is_amc_order or state != 'purchase' or amc_is_signed"/>
             </xpath>

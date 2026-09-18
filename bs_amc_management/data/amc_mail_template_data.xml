@@ -4,7 +4,7 @@
 
         <record id="mail_template_amc_expiry_reminder" model="mail.template">
             <field name="name">AMC: Expiry Reminder</field>
-            <field name="model_id" ref="amc_management.model_amc_contract"/>
+            <field name="model_id" ref="bs_amc_management.model_amc_contract"/>
             <field name="subject">{{ object.company_id.name }}: AMC {{ object.amc_ref or object.name }} expires on {{ format_date(object.end_date) }}</field>
             <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
             <field name="partner_to">{{ object.contractor_id.id }}</field>
