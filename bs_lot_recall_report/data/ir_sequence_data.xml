@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_bs_lot_recall_report" model="ir.sequence">
+        <field name="name">Lot Recall Report</field>
+        <field name="code">lot.recall.report</field>
+        <field name="prefix">RCL/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

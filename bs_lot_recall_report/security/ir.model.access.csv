@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bs_lot_recall_report_user,lot.recall.report.user,model_lot_recall_report,group_recall_report_user,1,0,0,0
+access_bs_lot_recall_report_manager,lot.recall.report.manager,model_lot_recall_report,group_recall_report_manager,1,1,1,1
+access_bs_lot_recall_report_line_user,lot.recall.report.line.user,model_lot_recall_report_line,group_recall_report_user,1,0,0,0
+access_bs_lot_recall_report_line_manager,lot.recall.report.line.manager,model_lot_recall_report_line,group_recall_report_manager,1,1,1,1
